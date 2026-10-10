@@ -1,0 +1,57 @@
+{
+  "register": {
+    "title": "Crea tu cuenta",
+    "subtitle": "Gratis y en un minuto.",
+    "username": {
+      "label": "Nombre de usuario",
+      "help": "Es el nombre que verán tus amigos. Entre 3 y 20 caracteres.",
+      "placeholder": "alex_ruiz",
+      "required": "Escribe un nombre de usuario.",
+      "length": "El nombre de usuario debe tener entre 3 y 20 caracteres.",
+      "chars": "Usa solo letras, números, guion, guion bajo o punto.",
+      "taken": "Ese nombre de usuario no está disponible."
+    },
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "tucorreo{'@'}ejemplo.com",
+      "required": "Escribe tu correo electrónico.",
+      "invalid": "Escribe un correo válido.",
+      "taken": "Ya existe una cuenta con ese correo."
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Al menos 8 caracteres",
+      "required": "Escribe una contraseña.",
+      "min": "La contraseña debe tener al menos 8 caracteres."
+    },
+    "strength": {
+      "text": "Seguridad: {level}. Mezcla letras, números y símbolos.",
+      "level": {
+        "0": "muy débil",
+        "1": "débil",
+        "2": "media",
+        "3": "buena",
+        "4": "fuerte"
+      }
+    },
+    "terms": {
+      "before": "Acepto los",
+      "termsLink": "términos de uso",
+      "and": "y la",
+      "privacyLink": "política de privacidad",
+      "newTab": "(se abre en una pestaña nueva)",
+      "required": "Debes aceptar los términos y la política de privacidad para registrarte."
+    },
+    "submit": "Registrarse",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "login": "Inicia sesión",
+    "failed": "No se pudo crear la cuenta",
+    "failedText": "Inténtalo de nuevo en unos minutos.",
+    "next": {
+      "title": "Qué pasa después",
+      "step1": "Te enviamos un código de 6 caracteres para verificar tu correo.",
+      "step2": "Creas una comunidad o te unes con un código de invitación.",
+      "step3": "Pronosticas el próximo Gran Premio."
+    }
+  }
+}

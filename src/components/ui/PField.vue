@@ -33,7 +33,12 @@ const describedby = computed(
     </label>
     <slot :id="controlId" :describedby="describedby" :invalid="!!error" />
     <p v-if="help" :id="helpId" class="text-muted text-xs leading-4">{{ help }}</p>
-    <p v-if="error" :id="errorId" class="text-err flex items-center gap-1 text-xs leading-4">
+    <p
+      v-if="error"
+      :id="errorId"
+      role="alert"
+      class="text-err flex items-center gap-1 text-xs leading-4"
+    >
       <PIcon name="circle-exclamation" :size="16" />
       <span>{{ error }}</span>
     </p>

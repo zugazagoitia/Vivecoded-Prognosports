@@ -17,5 +17,7 @@ declare module 'vue-router' {
     flag?: string
     /** Landing layout: below 640px the page brings its own header/footer, so AppNav/SiteFooter are hidden. */
     ownMobileChrome?: boolean
+    /** Landing layout: omit the SiteFooter (auth pages). */
+    noFooter?: boolean
   }
 }
