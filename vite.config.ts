@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -54,6 +55,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       VueRouter({ routesFolder: 'src/pages', dts: 'src/typed-router.d.ts' }),
       vue(),
+      tailwindcss(),
       apiOriginPlugin(env.VITE_API_BASE_URL),
       // Source maps to Sentry (CI only, needs SENTRY_AUTH_TOKEN/ORG/PROJECT). Maps never ship in dist/.
       withSentry &&

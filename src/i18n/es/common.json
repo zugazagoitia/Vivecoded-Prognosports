@@ -3,6 +3,7 @@
   "search": "Buscar...",
   "yes": "Sí",
   "no": "No",
+  "theme": { "label": "Tema", "light": "Claro", "dark": "Oscuro", "system": "Sistema" },
   "noDate": "Sin fecha",
   "soon": "Pronto",
   "showing": "Mostrando de {from} a {to} de un total de {total} resultados",

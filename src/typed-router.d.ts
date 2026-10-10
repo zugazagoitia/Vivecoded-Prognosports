@@ -88,6 +88,13 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/dev/tokens': RouteRecordInfo<
+      '/dev/tokens',
+      '/dev/tokens',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/gps/[competicion]/[temporada]/[gp]/': RouteRecordInfo<
       '/gps/[competicion]/[temporada]/[gp]/',
       '/gps/:competicion/:temporada/:gp',
@@ -250,6 +257,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'id'
+    }
+    'src/pages/dev/tokens.vue': {
+      routes:
+        | '/dev/tokens'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
     'src/pages/gps/[competicion]/[temporada]/[gp]/index.vue': {
       routes:

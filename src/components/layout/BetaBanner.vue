@@ -31,8 +31,8 @@ const isBeta = import.meta.env.MODE === 'beta'
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  background: #dbeafe;
-  border-bottom: 1px solid #bfdbfe;
-  color: #2563eb;
+  background: var(--color-info-tint);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-info-fg);
 }
 </style>

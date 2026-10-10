@@ -39,10 +39,10 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
   width: 22rem;
   max-width: calc(100vw - 2rem);
   padding: 0.875rem 1rem;
-  border-radius: var(--radius-lg, 0.75rem);
-  background: var(--surface, #fff);
-  color: var(--text, #111827);
-  box-shadow: var(--shadow-lg, 0 10px 30px rgb(0 0 0 / 0.18));
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-heading);
+  box-shadow: var(--shadow-lg);
 }
 .toast-body {
   display: flex;
@@ -53,20 +53,20 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
   font-weight: 700;
 }
 .toast-desc {
-  color: var(--muted, #6b7280);
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 .toast-icon {
   font-size: 1.5rem;
 }
 .toast-success .toast-icon {
-  color: var(--success, #16a34a);
+  color: var(--color-ok);
 }
 .toast-error .toast-icon {
-  color: var(--danger, #dc2626);
+  color: var(--color-err);
 }
 .toast-info .toast-icon {
-  color: var(--brand, #2563eb);
+  color: var(--color-link);
 }
 .toast-action {
   align-self: flex-start;

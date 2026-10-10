@@ -20,7 +20,7 @@ test.describe('security', () => {
     expect(csp).not.toMatch(/unsafe-(inline|eval)/)
   })
 
-  for (const path of ['/login', '/ruta-que-no-existe', '/home']) {
+  for (const path of ['/login', '/ruta-que-no-existe', '/home', '/dev/tokens']) {
     test(`no CSP violations on ${path}`, async ({ authedPage: page, browserName }) => {
       test.skip(browserName !== 'chromium', 'CSP violations are checked in Chromium')
       await page.route('**/*', async (route) => {

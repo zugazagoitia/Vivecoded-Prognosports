@@ -18,6 +18,7 @@ const fallback: Record<string, string> = {
   'route.admin': 'Administración',
   'route.adminGps': 'Administración · Grandes Premios',
   'route.notFound': 'No se ha encontrado',
+  'route.tokens': 'Fundamentos',
   'route.loggedOut': 'Has cerrado sesión',
 }
 
