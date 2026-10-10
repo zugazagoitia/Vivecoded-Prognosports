@@ -11,6 +11,7 @@ const fallback: Record<string, string> = {
   'route.verify': 'Verificar correo',
   'route.home': 'Inicio',
   'route.gp': 'Gran Premio',
+  'route.gps': 'Grandes Premios',
   'route.predict': 'Pronosticar',
   'route.ranking': 'Clasificación',
   'route.circuits': 'Circuitos',

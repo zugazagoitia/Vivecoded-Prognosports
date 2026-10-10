@@ -3,6 +3,7 @@ import {
   circuits,
   community,
   grandPrixes,
+  nextGrandPrix,
   MOCK_PASSWORD,
   MOCK_RESET_CODE,
   MOCK_TOKEN,
@@ -11,6 +12,13 @@ import {
   season,
   users,
 } from '../../src/mocks/fixtures'
+import {
+  communitySeasonPoints,
+  competitionSeasons,
+  ownTipps,
+  previousSeason,
+  previousSeasonGps,
+} from '../../src/mocks/fixtures/gps'
 import {
   circuitDetail,
   gpPoints,
@@ -117,6 +125,32 @@ export async function mockApi(page: Page): Promise<void> {
       const body = request.postDataJSON() as { token?: string; password?: string }
       if (!body.password) return json(route, 400, null, 'Debes enviar la nueva contraseña.')
       return body.token === MOCK_RESET_CODE ? json(route, 200, null) : json(route, 403, null, 'x')
+    }
+    // GP calendar (G1). Seasons, season points and own predictions need a session.
+    if (method === 'GET' && /^\/competitions\/[^/]+\/seasons$/.test(path)) {
+      return authed ? json(route, 200, competitionSeasons) : json(route, 401, null, 'x')
+    }
+    if (method === 'GET' && /^\/gps\/[^/]+\/next$/.test(path)) {
+      const next = nextGrandPrix()
+      return next ? json(route, 200, next) : json(route, 404, null, 'No hay próximo GP')
+    }
+    if (
+      method === 'GET' &&
+      /^\/gps\/[^/]+\/[^/]+$/.test(path) &&
+      path.endsWith(`/${previousSeason.id}`)
+    ) {
+      return json(route, 200, previousSeasonGps)
+    }
+    if (method === 'GET' && /^\/communities\/[^/]+\/[^/]+\/[^/]+\/points$/.test(path)) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      return json(route, 200, communitySeasonPoints(Number(path.split('/')[4])))
+    }
+    if (
+      method === 'GET' &&
+      /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/[^/]+\/tipps\/[^/]+$/.test(path)
+    ) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      return json(route, 200, ownTipps(Number(path.split('/')[6])))
     }
     // Public endpoints (no token), with the shapes verified against the real API.
     if (method === 'GET' && /^\/seasons\/current\/[^/]+$/.test(path))

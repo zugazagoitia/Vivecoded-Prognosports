@@ -158,6 +158,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/gps/': RouteRecordInfo<
+      '/gps/',
+      '/gps',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/gps/[competicion]/[temporada]/[gp]/': RouteRecordInfo<
       '/gps/[competicion]/[temporada]/[gp]/',
       '/gps/:competicion/:temporada/:gp',
@@ -424,6 +431,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/fundamentos.vue': {
       routes:
         | '/fundamentos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/gps/index.vue': {
+      routes:
+        | '/gps/'
       views:
         | never
       pathParamNames:

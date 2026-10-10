@@ -8,6 +8,7 @@ import data from './es/data.json'
 import errors from './es/errors.json'
 import legal from './es/legal.json'
 import faq from './es/faq.json'
+import gps from './es/gps.json'
 import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
@@ -40,6 +41,7 @@ export const i18n = createI18n({
       ...rules,
       ...circuits,
       faq,
+      ...gps,
       ...landing,
       ...recover,
       ...reset,

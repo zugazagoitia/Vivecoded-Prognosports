@@ -1,0 +1,57 @@
+{
+  "gps": {
+    "title": "Grandes Premios",
+    "home": "Inicio",
+    "subtitle": "{competition} · Temporada {season} · {played} disputados de {total}",
+    "subtitleNoCompetition": "Temporada {season} · {played} disputados de {total}",
+    "season": "Temporada",
+    "search": "Buscar Gran Premio",
+    "searchPlaceholder": "Buscar por país, ciudad o circuito",
+    "filters": "Filtros",
+    "filter": {
+      "all": "Todos",
+      "played": "Disputados",
+      "upcoming": "Por disputar",
+      "sprint": "Con sprint"
+    },
+    "list": "Calendario de Grandes Premios",
+    "monthNoDate": "Sin fecha",
+    "noDate": "Sin fecha",
+    "cardLabel": "{name}, ronda {round}",
+    "cardLabelPoints": "{name}, ronda {round}, {points} puntos, {rank}",
+    "sprint": "Sprint",
+    "suspended": "Suspendido",
+    "suspendedText": "Este Gran Premio se ha suspendido",
+    "pts": "pts",
+    "rank": "{n}.º del GP",
+    "rankLabel": "{n}.º de {total} jugador | {n}.º de {total} jugadores",
+    "noPoints": "Sin puntos",
+    "upcomingText": "Pronósticos hasta 5 min antes de cada sesión",
+    "doneOf": "{done} de {total}",
+    "band": {
+      "now": "Ahora · Ronda {round}",
+      "closes": "Cierra {session} en {time}",
+      "missing": "te falta {pending} de {total} pronósticos | te faltan {pending} de {total} pronósticos",
+      "allDone": "Has hecho todos tus pronósticos",
+      "closed": "Pronósticos cerrados",
+      "cta": "Pronosticar"
+    },
+    "dots": {
+      "label": "Tus pronósticos: {done}, {pending}",
+      "done": "{n} hecho | {n} hechos",
+      "pending": "{n} pendiente | {n} pendientes"
+    },
+    "empty": {
+      "season": {
+        "title": "Esta temporada aún no tiene Grandes Premios",
+        "text": "Cuando se publique el calendario, lo verás aquí."
+      },
+      "noResults": "Ningún Gran Premio coincide con «{q}»",
+      "noResultsFilter": "Ningún Gran Premio coincide con este filtro",
+      "clear": "Quitar filtros"
+    },
+    "error": "los Grandes Premios",
+    "pointsError": "No se han podido cargar tus puntos.",
+    "retry": "Reintentar"
+  }
+}

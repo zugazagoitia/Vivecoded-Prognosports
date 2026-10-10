@@ -9,6 +9,8 @@ export const keys = {
   userCommunities: (user: Id) => ['user-communities', user] as const,
   currentSeason: (competition: Id) => ['current-season', competition] as const,
   seasonCircuits: (season: Id) => ['season-circuits', season] as const,
+  competitionSeasons: (competition: Id) => ['competition-seasons', competition] as const,
+  nextGp: (competition: Id) => ['next-gp', competition] as const,
   gps: (competition: Id, season: Id) => ['gps', competition, season] as const,
   points: (community: Id, competition: Id, season: Id) =>
     ['points', community, competition, season] as const,
