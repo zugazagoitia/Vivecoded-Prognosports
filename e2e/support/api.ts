@@ -57,6 +57,7 @@ export async function mockApi(page: Page): Promise<void> {
         ? json(route, 200, MOCK_TOKEN)
         : json(route, 401, null, 'Usuario o contraseña incorrectos.')
     }
+    if (method === 'POST' && path === '/auth/forgotpassword') return json(route, 200, null)
     // Public endpoints (no token), with the shapes verified against the real API.
     if (method === 'GET' && /^\/seasons\/current\/[^/]+$/.test(path))
       return json(route, 200, season)

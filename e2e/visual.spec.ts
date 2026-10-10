@@ -13,6 +13,7 @@ const PUBLIC_PAGES = [
   { name: 'estados', path: '/dev/estados' },
   { name: 'componentes', path: '/dev/componentes' },
   { name: 'ranknav', path: '/dev/ranknav' },
+  { name: 'recuperar', path: '/recuperar' },
   { name: 'terms', path: '/terms' },
   { name: 'privacy', path: '/privacy' },
   { name: 'faq', path: '/faq' },

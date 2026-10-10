@@ -16,6 +16,6 @@ const hideOnPhone = computed(() => (route.meta.ownMobileChrome ? 'max-[639px]:hi
     <main id="contenido" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter :class="hideOnPhone" />
+    <SiteFooter v-if="!route.meta.noFooter" :class="hideOnPhone" />
   </div>
 </template>
