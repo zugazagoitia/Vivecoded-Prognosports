@@ -2,7 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { EnvError, loadEnv } from './env'
 import { i18n } from './i18n'
+import { isEnabled } from './flags'
+import { mountFlagPanel } from './flags/mount'
 import { createAppRouter } from './router'
+import { setFlagChecker } from './router/flags'
 
 function showFatal(message: string) {
   const el = document.getElementById('app')
@@ -17,7 +20,9 @@ function showFatal(message: string) {
 
 try {
   loadEnv()
+  setFlagChecker(isEnabled)
   createApp(App).use(i18n).use(createAppRouter()).mount('#app')
+  void mountFlagPanel()
 } catch (e) {
   const message = e instanceof EnvError ? e.message : String(e)
   console.error(`[PrognoSports] La app no puede arrancar.\n${message}`)

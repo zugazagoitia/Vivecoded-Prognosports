@@ -10,6 +10,21 @@ interface ImportMetaEnv {
   readonly VITE_GIT_DATE: string
   /** App version, from package.json unless overridden. */
   readonly VITE_APP_VERSION: string
+  /** 'true' in PR previews (set by the previews job, T12): shows the flag panel and badge. */
+  readonly VITE_PREVIEW?: string
+  /** Feature flags (T6): 'true' turns one on; absent means off. See src/flags. */
+  readonly VITE_FF_MY_SEASON?: string
+  readonly VITE_FF_HONOURS?: string
+  readonly VITE_FF_GAP?: string
+  readonly VITE_FF_BUMP?: string
+  readonly VITE_FF_TITLE_RACE?: string
+  readonly VITE_FF_CONSISTENCY?: string
+  readonly VITE_FF_HEAD_TO_HEAD?: string
+  readonly VITE_FF_DISTRIBUTION?: string
+  readonly VITE_FF_HEATMAP?: string
+  readonly VITE_FF_HITS_BY_TYPE?: string
+  readonly VITE_FF_POINTS_BY_SESSION?: string
+  readonly VITE_FF_COMMUNITY_PERCENTILE?: string
 }
 
 interface ImportMeta {
