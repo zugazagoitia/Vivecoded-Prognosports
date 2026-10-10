@@ -1,0 +1,28 @@
+{
+  "circuits": {
+    "title": "Circuitos",
+    "subtitle": "{n} circuito en la temporada {year}, con su historial de Grandes Premios. | {n} circuitos en la temporada {year}, con su historial de Grandes Premios.",
+    "home": "Inicio",
+    "search": "Buscar circuito",
+    "searchPlaceholder": "Buscar...",
+    "filters": "Filtros",
+    "filter": {
+      "all": "Todos",
+      "played": "Disputados en {year}",
+      "sprint": "Con sprint"
+    },
+    "round": "Ronda {n}",
+    "sprint": "Sprint",
+    "played": "Disputado",
+    "emptySeason": {
+      "title": "Aún no hay circuitos",
+      "text": "Cuando se publique el calendario de la temporada, los verás aquí."
+    },
+    "noResults": {
+      "title": "No se ha encontrado lo que buscabas",
+      "text": "Prueba con el nombre del circuito o de la ciudad."
+    },
+    "error": "los circuitos",
+    "list": "Lista de circuitos"
+  }
+}
