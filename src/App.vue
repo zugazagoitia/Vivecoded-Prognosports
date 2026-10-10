@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import BetaBanner from '@/components/layout/BetaBanner.vue'
+import OfflineNotice from '@/components/layout/OfflineNotice.vue'
+import AppToaster from '@/components/ui/AppToaster.vue'
+import ErrorBoundary from '@/components/ui/ErrorBoundary.vue'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import EmptyLayout from '@/layouts/EmptyLayout.vue'
@@ -17,9 +20,13 @@ const layout = computed(() => layouts[route.meta.layout ?? 'app'])
 <template>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <BetaBanner />
+  <OfflineNotice />
   <component :is="layout">
-    <RouterView />
+    <ErrorBoundary :key="route.fullPath">
+      <RouterView />
+    </ErrorBoundary>
   </component>
+  <AppToaster />
   <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">{{ announcement }}</div>
 </template>
 
