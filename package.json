@@ -83,6 +83,7 @@
     "vitest": "^5.0.3",
     "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.13",
-    "web-vitals": "^6.2.3"
+    "web-vitals": "^6.2.3",
+    "wrangler": "4.149.0"
   }
 }

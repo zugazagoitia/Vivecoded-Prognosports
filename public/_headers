@@ -1,0 +1,20 @@
+# Cabeceras de Workers Static Assets (T12, docs/requisitos.md §22.6-22.7).
+# Vite copia public/ a dist/, y Wrangler lee dist/_headers. Límites: 100 reglas, 2000 caracteres/línea.
+# Solo aplican a respuestas de assets estáticos (suficiente: no hay Worker propio).
+
+# Ficheros con hash de Vite: inmutables.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# index.html (raíz y fallback SPA de rutas profundas): siempre revalidar.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+
+# T13 (CSP y cabeceras de seguridad): añadir aquí un bloque `/*`, por ejemplo
+#   /*
+#     Content-Security-Policy: ...
+#     X-Content-Type-Options: nosniff
+#     Referrer-Policy: strict-origin-when-cross-origin
+# Ver docs/deploy.md.
