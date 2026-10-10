@@ -15,5 +15,7 @@ declare module 'vue-router' {
     guards?: GuardName[]
     /** Feature flag name (T6). When off the route answers 404 and its chunk is not downloaded. */
     flag?: string
+    /** Landing layout: below 640px the page brings its own header/footer, so AppNav/SiteFooter are hidden. */
+    ownMobileChrome?: boolean
   }
 }
