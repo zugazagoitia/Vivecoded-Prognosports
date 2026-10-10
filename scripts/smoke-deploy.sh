@@ -32,8 +32,17 @@ fetch "$base/" "$tmp/root" || fail "GET / no devolvió 200"
 grep -q '<div id="app"' "$tmp/root.b" || fail "GET / no devolvió index.html"
 header "$tmp/root.h" cache-control | grep -qi 'no-cache' || fail "index.html sin Cache-Control no-cache"
 
+for h in content-security-policy strict-transport-security x-content-type-options referrer-policy permissions-policy cross-origin-opener-policy; do
+  header "$tmp/root.h" "$h" | grep -q . || fail "/ sin cabecera $h"
+done
+csp="$(header "$tmp/root.h" content-security-policy)"
+echo "$csp" | grep -q "frame-ancestors 'none'" || fail "CSP sin frame-ancestors 'none'"
+if echo "$csp" | grep -qE 'unsafe-(inline|eval)'; then fail "CSP con unsafe-inline/unsafe-eval"; fi
+
 fetch "$base/ranking/x/2026" "$tmp/deep" || fail "ruta profunda no devolvió 200"
 grep -q '<div id="app"' "$tmp/deep.b" || fail "ruta profunda no devolvió index.html (fallback SPA)"
+
+header "$tmp/deep.h" content-security-policy | grep -q . || fail "ruta profunda sin CSP"
 
 asset="$(grep -oE '/assets/[^"]+\.js' "$tmp/root.b" | head -n1 || true)"
 [ -n "$asset" ] || fail "index.html no referencia ningún asset con hash"

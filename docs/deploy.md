@@ -32,7 +32,7 @@ Workers Static Assets admite `_headers` (verificado en local con `wrangler dev` 
 - `/` y `/index.html`: `no-cache`.
 - Rutas profundas (fallback SPA): Static Assets les pone `public, max-age=0, must-revalidate` por defecto (equivalente en la práctica a `no-cache`; no hay regla que case con ellas sin afectar a `/assets/*`).
 - Las cabeceras de `_headers` solo se aplican a respuestas de assets. Sin Worker propio es suficiente.
-- **Hook para T13**: añadir en `public/_headers` un bloque `/*` con `Content-Security-Policy` y demás cabeceras de seguridad (hay un comentario con el lugar). Límites: 100 reglas, 2.000 caracteres por línea. Si una cabecera de `/*` coincide con otra de una regla específica, Cloudflare las une (no las sustituye): evitar duplicar `Cache-Control` en `/*`.
+- **Seguridad (T13)**: el bloque `/*` de `public/_headers` lleva CSP y demás cabeceras de seguridad; ver `docs/security.md`. Límites: 100 reglas, 2.000 caracteres por línea. Si una cabecera de `/*` coincide con otra de una regla específica, Cloudflare las une (no las sustituye): evitar duplicar `Cache-Control` en `/*`.
 
 ## Configuración única (propietario)
 

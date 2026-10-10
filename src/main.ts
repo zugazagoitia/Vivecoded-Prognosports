@@ -1,3 +1,4 @@
+import './lib/zod-csp'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
