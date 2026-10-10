@@ -5,7 +5,7 @@ import { MOCK_PASSWORD, MOCK_TOKEN, users } from '../fixtures'
 export const authHandlers = [
   http.post('*/v2/auth/login', async ({ request }) => {
     const body = (await request.json()) as { username?: string; password?: string }
-    const known = users.some((u) => u.username === body.username)
+    const known = users.some((u) => u.username === body.username || u.email === body.username)
     if (!known || body.password !== MOCK_PASSWORD) {
       return fail(401, 'Usuario o contraseña incorrectos.')
     }

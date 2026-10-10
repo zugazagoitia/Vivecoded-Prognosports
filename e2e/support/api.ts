@@ -86,7 +86,8 @@ export async function mockApi(page: Page): Promise<void> {
     if (method === 'POST' && path === '/auth/login') {
       const body = request.postDataJSON() as { username?: string; password?: string }
       const known =
-        users.some((u) => u.username === body.username) || registered.has(body.username ?? '')
+        users.some((u) => u.username === body.username || u.email === body.username) ||
+        registered.has(body.username ?? '')
       return known && body.password === MOCK_PASSWORD
         ? json(route, 200, MOCK_TOKEN)
         : json(route, 401, null, 'Usuario o contraseña incorrectos.')

@@ -71,7 +71,20 @@ export default defineConfig(({ mode }) => {
       process.env.ANALYZE === 'true' &&
         visualizer({ filename: 'reports/bundle.html', gzipSize: true, brotliSize: true }),
     ],
-    build: { sourcemap: withSentry ? 'hidden' : false },
+    build: {
+      sourcemap: withSentry ? 'hidden' : false,
+      rollupOptions: {
+        output: {
+          // Zod and its CSP config (src/lib/zod-csp.ts) must evaluate together: schemas built at
+          // module scope elsewhere would otherwise probe `new Function` before `jitless` is set (T13).
+          manualChunks(id: string) {
+            if (id.includes('/node_modules/zod/') || id.endsWith('/src/lib/zod-csp.ts'))
+              return 'zod'
+            return undefined
+          },
+        },
+      },
+    },
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
