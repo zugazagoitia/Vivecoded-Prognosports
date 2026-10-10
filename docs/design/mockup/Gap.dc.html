@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diferencia de puntos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:20px;align-items:start}
+@media(max-width:1000px){.lay{grid-template-columns:minmax(0,1fr)}}
+.axis{display:flex;justify-content:space-between;margin:2px 0 0 calc(6% - 18px);width:calc(80% + 36px)}
+.axis .xl{width:36px;padding:2px 0}
+.tbl2{display:flex;flex-direction:column;gap:2px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Gap" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">{{title}}</h2><span class="flag">flag</span></div><span class="t-sm muted">{{sub}}</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Modo"><sc-for list="{{modes}}" as="m" hint-placeholder-count="4"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div></div>
+      <sc-if value="{{chart}}" hint-placeholder-val="{{ true }}">
+      <div class="card-b lay">
+        <div style="min-width:0">
+          <svg viewBox="0 0 1000 420" width="100%" class="chart" role="img" aria-label="{{title}} tras cada GP">
+            <sc-for list="{{bands}}" as="b" hint-placeholder-count="2"><rect x="60" y="{{b.y}}" width="800" height="{{b.h}}" style="fill:{{b.c}}"></rect><text x="68" y="{{b.ty}}" style="fill:{{b.tc}};font-weight:600;letter-spacing:.05em">{{b.l}}</text></sc-for>
+            <sc-for list="{{grid}}" as="g" hint-placeholder-count="6"><line x1="60" x2="860" y1="{{g.y}}" y2="{{g.y}}" style="stroke:{{g.c}};stroke-width:1"></line><text x="52" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+            <line x1="{{selX}}" x2="{{selX}}" y1="10" y2="400" style="stroke:var(--ring);stroke-dasharray:4 4"></line>
+            <sc-for list="{{flags}}" as="f" hint-placeholder-count="3"><text x="{{f.x}}" y="10" text-anchor="middle" style="fill:var(--gold);font-weight:700">▼</text></sc-for>
+            <sc-for list="{{series}}" as="l" hint-placeholder-count="12"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round;stroke-linecap:round"></path></sc-for>
+            <sc-for list="{{dots}}" as="d" hint-placeholder-count="6"><circle cx="{{selX}}" cy="{{d.y}}" r="5" style="fill:{{d.c}};stroke:var(--surface);stroke-width:2"></circle></sc-for>
+            <sc-for list="{{labels}}" as="l" hint-placeholder-count="6"><text x="872" y="{{l.y}}" class="lbl-s" style="fill:var(--h)">{{l.name}} <tspan style="fill:var(--muted);font-weight:500">{{l.v}}</tspan></text></sc-for>
+          </svg>
+          <div class="axis" role="group" aria-label="Elegir Gran Premio"><sc-for list="{{xl}}" as="x" hint-placeholder-count="17"><button type="button" class="xl {{x.cls}}" onClick="{{x.pick}}" aria-label="{{x.full}}">{{x.l}}</button></sc-for></div>
+        </div>
+        <aside class="ftip" aria-live="polite"><b class="hd">Tras {{selName}}</b><sc-for list="{{tip}}" as="t" hint-placeholder-count="6"><span class="r"><i style="background:{{t.c}}"></i><span class="fx">{{t.name}}</span><b class="tn">{{t.v}}</b></span></sc-for><span class="t-cap muted" style="padding-top:6px">Pulsa un GP del eje para cambiar.</span></aside>
+      </div>
+      </sc-if>
+      <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>GP</th><sc-for list="{{tHeads}}" as="h" hint-placeholder-count="6"><th class="r">{{h}}</th></sc-for></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="17"><tr><td>{{r.gp}}</td><sc-for list="{{r.v}}" as="v" hint-placeholder-count="6"><td class="r">{{v}}</td></sc-for></tr></sc-for></tbody></table></div></sc-if>
+      <div class="card-f" style="justify-content:flex-start"><div class="legend"><span><b style="color:var(--gold)">▼</b> cambio de líder</span><span>Gris: resto de la comunidad</span><span>Tú en morado; colores fijos para los 5 primeros</span></div></div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, mode = s.mode || 'leader', sel = s.sel === undefined ? n - 1 : s.sel, me = 'alex', O = P.order;
+    const hl = O.slice(0, 5).filter((id) => id !== me), show = hl.concat([me]);
+    const leadAt = [], leaderId = []; for (let g = 0; g < n; g++) { const b = P.users.slice().sort((a, c) => P.acc[c.id][g] - P.acc[a.id][g])[0]; leadAt[g] = P.acc[b.id][g]; leaderId[g] = b.id; }
+    const val = (id, g) => { if (mode === 'leader') return P.acc[id][g] - leadAt[g]; if (mode === 'me') return P.acc[id][g] - P.acc[me][g]; if (mode === 'cum') return P.acc[id][g]; let a = 0, c = 0; for (let k = Math.max(0, g - 2); k <= g; k++) { a += P.pts[id][k]; c++; } return a / c; };
+    let lo = Infinity, hi = -Infinity; P.users.forEach((u) => { for (let g = 0; g < n; g++) { const v = val(u.id, g); lo = Math.min(lo, v); hi = Math.max(hi, v); } });
+    if (mode === 'leader') hi = 0;
+    const nice = (sp) => [10, 20, 25, 50, 100, 200].find((x) => sp / x <= 7) || 250;
+    const st = nice(hi - lo); lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+    const X = (g) => 60 + g * 800 / (n - 1), Y = (v) => 390 - (v - lo) / (hi - lo) * 370;
+    const order = P.users.map((u) => u.id).sort((a, b) => (show.indexOf(a) >= 0) - (show.indexOf(b) >= 0) || (a === me) - (b === me));
+    const series = order.map((id) => ({ d: P.acc[id].map((x, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(val(id, g)).toFixed(1)).join(''), c: show.indexOf(id) >= 0 ? P.hue(id, hl) : 'var(--c-rest)', w: id === me ? 3.5 : show.indexOf(id) >= 0 ? 2.2 : 1.2 }));
+    const f = (v) => { v = Math.round(v * 10) / 10; return mode === 'cum' || mode === 'rate' ? String(v).replace('.', ',') : v > 0 ? '+' + v : String(v).replace('-', '−'); };
+    const name = (id) => id === me ? 'Tú' : P.byId[id].name.split(' ')[0];
+    const labels = show.map((id) => ({ y: Y(val(id, n - 1)) + 4, name: name(id), v: f(val(id, n - 1)) })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labels.length; i++) if (labels[i].y < labels[i - 1].y + 15) labels[i].y = labels[i - 1].y + 15;
+    const grid = []; for (let v = lo; v <= hi + 0.001; v += st) grid.push({ y: Y(v), ty: Y(v) + 4, l: mode === 'leader' && v === 0 ? 'Líder' : mode === 'me' && v === 0 ? 'Tú' : String(v).replace('-', '−'), c: v === 0 && (mode === 'leader' || mode === 'me') ? 'var(--axis)' : 'var(--grid)' });
+    const bands = mode === 'me' ? [{ y: Y(hi), h: Y(0) - Y(hi), c: 'var(--info-tint)', l: 'POR DELANTE DE TI', ty: Y(hi) + 16, tc: 'var(--info-fg)' }, { y: Y(0), h: Y(lo) - Y(0), c: 'var(--err-tint)', l: 'POR DETRÁS DE TI', ty: Y(lo) - 8, tc: 'var(--err-fg)' }] : [];
+    const flags = []; if (mode === 'leader' || mode === 'cum') for (let g = 1; g < n; g++) if (leaderId[g] !== leaderId[g - 1]) flags.push({ x: X(g) });
+    const T = { leader: ['Diferencia con el líder', 'Puntos que le faltan a cada uno para igualar al líder en cada momento. El líder está en 0.'], me: ['Diferencia contigo', 'Tu línea es el 0: arriba quien te supera, abajo quien va detrás. ¿A quién puedes alcanzar?'], cum: ['Puntos acumulados', 'Total tras cada GP. Muestra la escala real, peor para ver diferencias pequeñas.'], rate: ['Ritmo · media de los últimos 3 GP', 'Quién está en racha, no quién va delante.'] };
+    const tip = show.map((id) => ({ name: name(id), v: f(val(id, sel)), c: P.hue(id, hl), raw: val(id, sel) })).sort((a, b) => b.raw - a.raw);
+    return {
+      title: T[mode][0], sub: T[mode][1], modes: [['leader', 'Con el líder'], ['me', 'Contigo'], ['cum', 'Acumulado'], ['rate', 'Ritmo']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ mode: x[0] }) })),
+      series, labels, grid, bands, flags, selX: X(sel), dots: show.map((id) => ({ y: Y(val(id, sel)), c: P.hue(id, hl) })), selName: P.gps[sel].name, tip,
+      xl: P.gps.slice(0, n).map((g, i) => ({ l: g.code, full: 'Ver tras ' + g.name, cls: i === sel ? 'on' : '', pick: () => this.setState({ sel: i }) })),
+      chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'show_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      tHeads: show.map(name), tRows: P.gps.slice(0, n).map((g, i) => ({ gp: g.name, v: show.map((id) => f(val(id, i))) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

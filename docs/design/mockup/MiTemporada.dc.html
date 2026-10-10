@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mi temporada</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.k5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+@media(max-width:1000px){.k5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface-muted);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.tile .v{font-size:26px;line-height:32px;font-weight:700;color:var(--h)}
+.c3{border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="MiTemporada" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Temporada de Álex Ruiz</h2><span class="flag">flag</span></div><span class="t-sm muted">Cómo te ha ido en cada GP comparado con la comunidad.</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Vista"><sc-for list="{{modes}}" as="m" hint-placeholder-count="2"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div></div>
+      <div class="card-b col g24">
+        <div class="k5"><sc-for list="{{kpis}}" as="k" hint-placeholder-count="5"><div class="tile"><span class="up">{{k.l}}</span><span class="v tn">{{k.v}}</span><span class="t-cap muted">{{k.s}}</span></div></sc-for></div>
+        <sc-if value="{{chart}}" hint-placeholder-val="{{ true }}">
+          <div class="col g8"><b class="hd">{{chartTitle}}</b>
+            <svg viewBox="0 0 1000 330" width="100%" class="chart" role="img" aria-label="{{chartTitle}}">
+              <sc-for list="{{grid}}" as="g" hint-placeholder-count="6"><line class="gl" x1="40" x2="1000" y1="{{g.y}}" y2="{{g.y}}"></line><text x="32" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+              <sc-for list="{{cols}}" as="c" hint-placeholder-count="17"><g><rect x="{{c.x}}" y="{{c.bt}}" width="44" height="{{c.bh}}" rx="4" style="fill:{{c.bc}}"></rect><rect x="{{c.bx}}" y="{{c.vt}}" width="26" height="{{c.vh}}" rx="3" style="fill:{{c.vc}}"></rect><line x1="{{c.x}}" x2="{{c.x2}}" y1="{{c.my}}" y2="{{c.my}}" style="stroke:{{c.mc}};stroke-width:2"></line><text x="{{c.tx}}" y="{{c.ly}}" text-anchor="middle" style="fill:var(--h);font-weight:600">{{c.v}}</text><text x="{{c.tx}}" y="322" text-anchor="middle">{{c.gp}}</text><text x="{{c.tx}}" y="{{c.fy}}" text-anchor="middle" style="fill:var(--gold);font-weight:700">{{c.flag}}</text></g></sc-for>
+            </svg>
+            <div class="legend"><sc-for list="{{legend}}" as="l" hint-placeholder-count="3"><span><i style="width:{{l.w}}px;height:{{l.h}}px;border-radius:2px;display:inline-block;background:{{l.c}}"></i>{{l.t}}</span></sc-for><span><b style="color:var(--gold)">1.º</b> ganaste el GP</span></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>GP</th><th class="r">Tus puntos</th><th class="r">Mediana</th><th class="r">Mín.–máx.</th><th class="r">Percentil</th><th class="r">Puesto</th></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="17"><tr><td>{{r.gp}}</td><td class="r"><b class="hd">{{r.p}}</b></td><td class="r">{{r.md}}</td><td class="r">{{r.rng}}</td><td class="r">{{r.pc}}</td><td class="r">{{r.rk}}.º</td></tr></sc-for></tbody></table></div></sc-if>
+        <div class="grid3" style="gap:12px"><sc-for list="{{cards}}" as="c" hint-placeholder-count="3"><div class="c3"><span class="up">{{c.l}}</span><b class="hd t-head">{{c.v}}</b><span class="t-sm muted">{{c.s}}</span></div></sc-for></div>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'pts', H = 290, Y = (v) => H - v / 100 * 270, Yp = (v) => H - v / 70 * 270;
+    const pcts = [], cols = [];
+    for (let g = 0; g < n; g++) {
+      const vs = P.users.map((u) => P.pts[u.id][g]).sort((a, b) => a - b), mn = vs[0], mx = vs[vs.length - 1], md = P.median(vs), p = P.pts[me][g], x = 48 + g * 56;
+      const pc = Math.round(100 * vs.filter((v) => v < p).length / (vs.length - 1)); pcts.push(pc);
+      const win = P.gpRank[me][g] === 1;
+      if (mode === 'pts') cols.push({ x, x2: x + 44, bx: x + 9, tx: x + 22, bt: Yp(mx), bh: Yp(mn) - Yp(mx), bc: 'var(--surface-muted)', vt: Yp(p), vh: H - Yp(p), vc: win ? 'var(--brand-800)' : 'var(--c-you)', my: Yp(md), mc: 'var(--h)', v: p, ly: Yp(p) - 6, gp: P.gps[g].code, flag: win ? '1.º' : '', fy: Yp(mx) - 8 });
+      else cols.push({ x, x2: x + 44, bx: x + 9, tx: x + 22, bt: 0, bh: 0, bc: 'transparent', vt: Y(pc), vh: H - Y(pc), vc: pc >= 75 ? 'var(--brand-800)' : pc >= 50 ? 'var(--c-you)' : 'var(--brand-300)', my: Y(50), mc: 'var(--axis)', v: pc, ly: Y(pc) - 6, gp: P.gps[g].code, flag: win ? '1.º' : '', fy: 14 });
+    }
+    let streak = 0, best = 0; P.gpRank[me].forEach((r) => { if (r <= 5) { streak++; best = Math.max(best, streak); } else streak = 0; });
+    const bi = pcts.indexOf(Math.max.apply(null, pcts)), wi = pcts.indexOf(Math.min.apply(null, pcts));
+    let easy = 0, em = -1; for (let g = 0; g < n; g++) { const m = P.median(P.users.map((u) => P.pts[u.id][g])); if (m > em) { em = m; easy = g; } }
+    const grid = mode === 'pts' ? [0, 20, 40, 60].map((v) => ({ y: Yp(v), ty: Yp(v) + 4, l: v })) : [0, 25, 50, 75, 100].map((v) => ({ y: Y(v), ty: Y(v) + 4, l: v }));
+    return {
+      modes: [['pts', 'Puntos'], ['pct', 'Percentil']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })), chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'insert_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      kpis: [{ l: 'Posición', v: (O.indexOf(me) + 1) + '.º', s: 'mejor: ' + Math.min.apply(null, P.pos[me]) + '.º' }, { l: 'Puntos', v: P.total[me], s: 'a ' + (P.total[O[0]] - P.total[me]) + ' del líder' }, { l: 'Percentil medio', v: Math.round(pcts.reduce((a, b) => a + b, 0) / n), s: '100 = el mejor en cada GP' }, { l: 'GP ganados', v: P.gpRank[me].filter((r) => r === 1).length, s: 'de ' + n }, { l: 'Mejor racha', v: best, s: 'GP seguidos en el top 5' }],
+      chartTitle: mode === 'pts' ? 'Tus puntos frente al rango de la comunidad' : 'Tu percentil en cada GP', cols, grid,
+      legend: mode === 'pts' ? [{ w: 14, h: 12, c: 'var(--c-you)', t: 'Tus puntos' }, { w: 14, h: 12, c: 'var(--surface-muted)', t: 'Rango de la comunidad (mín.–máx.)' }, { w: 16, h: 2, c: 'var(--h)', t: 'Mediana' }] : [{ w: 14, h: 12, c: 'var(--brand-800)', t: 'Top 25 %' }, { w: 14, h: 12, c: 'var(--c-you)', t: 'Por encima de la mitad' }, { w: 14, h: 12, c: 'var(--brand-300)', t: 'Por debajo de la mitad' }],
+      cards: [{ l: 'Tu mejor GP', v: P.gps[bi].name, s: P.pts[me][bi] + ' pts · mejor que el ' + pcts[bi] + ' %' }, { l: 'Tu peor GP', v: P.gps[wi].name, s: P.pts[me][wi] + ' pts · mejor que el ' + pcts[wi] + ' %' }, { l: 'GP más fácil para todos', v: P.gps[easy].name, s: 'mediana más alta: ' + em + ' pts' }],
+      tRows: P.pts[me].map((p, g) => { const vs = P.users.map((u) => P.pts[u.id][g]); return { gp: P.gps[g].name, p, md: P.median(vs), rng: Math.min.apply(null, vs) + '–' + Math.max.apply(null, vs), pc: pcts[g], rk: P.gpRank[me][g] }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

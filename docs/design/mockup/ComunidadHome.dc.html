@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Comunidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.cimg{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px;flex:none;background:var(--c-you)}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="Comunidades.dc.html">Comunidades</a><span class="i">chevron_right</span><span>Amigos del paddock</span></div>
+
+    <section class="card card-b row g24 wrapf" style="align-items:center">
+      <span class="cimg" style="color:#fff">AP</span>
+      <div class="col fx" style="gap:6px;min-width:260px"><h1 class="t-title">Amigos del paddock</h1><p class="muted">Quienes pronosticamos desde la pandemia. Reglas clásicas, cero piedad.</p>
+        <div class="row g8 wrapf"><span class="tag tg-brand"><span class="i s16">lock</span>Cerrada</span><span class="tag tg-gray">12 jugadores</span><span class="tag tg-gray">Creada por ti · 14 mar 2022</span><span class="tag tg-gray">Fórmula 1 · 2026</span></div></div>
+      <div class="row g8 wrapf"><a class="btn btn-outline" href="ComunidadAjustes.dc.html"><span class="i s16">settings</span>Ajustes</a><a class="btn btn-primary" href="Clasificacion.dc.html"><span class="i s16">leaderboard</span>Ver ranking</a></div>
+    </section>
+
+    <div class="tabs"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="tab {{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+
+    <div class="split">
+      <div class="col g24" style="min-width:0">
+        <sc-if value="{{tMembers}}" hint-placeholder-val="{{ true }}">
+          <section class="card">
+            <div class="card-h"><h2 class="t-head">Miembros</h2>
+              <div class="row g8 wrapf"><div class="iw" style="min-width:200px"><span class="i">search</span><input class="inp" placeholder="Buscar..." aria-label="Buscar miembro" value="{{q}}" onInput="{{onQ}}"></div><button type="button" class="btn btn-outline" onClick="{{toggleDir}}" aria-label="Cambiar el orden"><span class="i s16">{{dirIcon}}</span>{{dirLabel}}</button></div></div>
+            <div class="tw"><table class="tbl tn"><thead><tr><th class="r">Puesto</th><th>Jugador</th><th>Forma (últimos 5 GP)</th><th>Rol</th><th>Singapur</th><th class="r">Puntos</th></tr></thead><tbody>
+              <sc-for list="{{rows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td class="r"><b class="hd">{{r.pos}}.º</b> <span class="mv {{r.mc}}">{{r.mv}}</span></td><td><a class="row g8" href="PerfilUsuario.dc.html" style="color:inherit"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></a></td><td><span class="form"><sc-for list="{{r.form}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}">{{f.v}}</b></sc-for></span></td><td><span class="tag {{r.rtg}}">{{r.role}}</span></td><td><sc-if value="{{r.made}}" hint-placeholder-val="{{ true }}"><span class="tag tg-ok"><span class="i s16">check</span>Al día</span></sc-if><sc-if value="{{r.notMade}}" hint-placeholder-val="{{ false }}"><span class="tag tg-warn">Le falta el sprint</span></sc-if></td><td class="r"><b class="hd">{{r.pts}}</b></td></tr></sc-for>
+            </tbody></table></div>
+            <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="empty"><b class="hd">No se ha encontrado lo que buscabas</b></div></sc-if>
+            <div class="card-f" style="justify-content:space-between"><span class="t-sm muted">{{count}}</span></div>
+          </section>
+        </sc-if>
+        <sc-if value="{{tRules}}" hint-placeholder-val="{{ false }}">
+          <section class="card">
+            <div class="card-h"><h2 class="t-head">Reglas · Clásica 2026</h2><span class="t-sm muted">Temporada 2026</span></div>
+            <div class="tw"><table class="tbl tn"><thead><tr><th>Acierto</th><th class="r">Clasificación</th><th class="r">Sprint</th><th class="r">Carrera</th></tr></thead><tbody><sc-for list="{{rules}}" as="r" hint-placeholder-count="8"><tr><td>{{r.n}}</td><td class="r">{{r.p}}</td><td class="r">{{r.p}}</td><td class="r">{{r.p}}</td></tr></sc-for></tbody><tfoot><tr><td><b class="hd">Máximo por sesión (sin bonus)</b></td><td class="r"><b class="hd">25</b></td><td class="r"><b class="hd">25</b></td><td class="r"><b class="hd">40</b></td></tr></tfoot></table></div>
+            <div class="card-f" style="justify-content:flex-start"><span class="t-sm muted">Los GP con excepciones de reglas lo indican en su página.</span></div>
+          </section>
+        </sc-if>
+        <sc-if value="{{tHist}}" hint-placeholder-val="{{ false }}">
+          <section class="card">
+            <div class="card-h"><h2 class="t-head">Temporadas anteriores</h2></div>
+            <div class="tw"><table class="tbl tn"><thead><tr><th>Temporada</th><th>Campeón</th><th class="r">Puntos</th><th>Tu puesto</th></tr></thead><tbody>
+              <tr><td><b class="hd">2025</b></td><td>Marta Solís</td><td class="r">1.204</td><td>5.º</td></tr>
+              <tr><td><b class="hd">2024</b></td><td>Álex Ruiz</td><td class="r">1.171</td><td><span class="pos p1">1</span></td></tr>
+              <tr><td><b class="hd">2023</b></td><td>Lucía Ferrer</td><td class="r">1.138</td><td>2.º</td></tr>
+            </tbody></table></div>
+            <div class="card-f" style="justify-content:flex-start"><a class="btn btn-soft btn-sm" href="Palmares.dc.html">Ver palmarés <span class="flag">flag</span></a></div>
+          </section>
+        </sc-if>
+      </div>
+
+      <aside class="col g24" style="min-width:0">
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Singapur en la comunidad</h2><a class="t-sm" href="GPDetalle.dc.html">Ver GP</a></div>
+          <div class="card-b col g12"><div class="row sp t-sm"><span class="muted">Han pronosticado el sprint</span><b class="hd tn">8 de 12</b></div><div class="prog"><i style="width:67%"></i></div><div class="row sp t-sm"><span class="muted">Líder del fin de semana</span><b class="hd">Sofía Navas · 15</b></div><div class="row sp t-sm"><span class="muted">Último GP · Azerbaiyán</span><b class="hd">{{lastWin}}</b></div></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Invitar</h2><span class="tag tg-brand">Cerrada</span></div>
+          <div class="card-b col g12">
+            <p class="t-sm muted">Quien tenga este enlace podrá unirse. Si lo regeneras, el anterior deja de funcionar.</p>
+            <div class="row g8"><input class="inp" readonly value="prognosports.com/unirse/PADDOCK-7KQ2" aria-label="Enlace de invitación" style="font-size:13px"><button type="button" class="btn btn-primary btn-ic" onClick="{{copy}}" aria-label="Copiar enlace"><span class="i">{{copyIcon}}</span></button></div>
+            <sc-if value="{{copied}}" hint-placeholder-val="{{ false }}"><div class="alert al-ok" role="status"><span class="i">check_circle</span><span>Enlace copiado.</span></div></sc-if>
+            <button type="button" class="btn btn-outline btn-sm" style="align-self:flex-start"><span class="i s16">autorenew</span>Regenerar enlace</button>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Tu posición</h2></div>
+          <div class="card-b grid2" style="gap:12px"><div class="col" style="gap:0"><span class="t-cap muted">Puesto</span><b class="hd" style="font-size:28px;line-height:34px">4.º</b></div><div class="col" style="gap:0"><span class="t-cap muted">Puntos</span><b class="hd tn" style="font-size:28px;line-height:34px">{{total}}</b></div></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Zona de riesgo</h2></div>
+          <div class="card-b col g8"><p class="t-sm muted">Si sales, dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.</p><button type="button" class="btn btn-outline btn-sm" style="align-self:flex-start;color:var(--err);border-color:var(--err)"><span class="i s16">logout</span>Salir de la comunidad</button></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, tab = s.tab || 0, q = (s.q || '').toLowerCase().trim(), asc = !!s.asc;
+    let rows = P.order.map((id, i) => ({ id, name: P.byId[id].name, ini: P.byId[id].ini, me: id === 'alex' ? 'you' : '', cls: id === 'alex' ? 'me' : '', role: id === 'alex' ? 'Creador' : 'Jugador', rtg: id === 'alex' ? 'tg-brand' : 'tg-gray', form: [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[id][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '' }; }), mv: (() => { const m = P.pos[id][15] - P.pos[id][16]; return m > 0 ? '▲' + m : m < 0 ? '▼' + (-m) : ''; })(), mc: P.pos[id][15] - P.pos[id][16] > 0 ? 'up' : 'dn', made: ['alex', 'ruben', 'javi', 'carmen'].indexOf(id) < 0, since: P.byId[id].since, pts: P.total[id], pos: i + 1 }));
+    rows.forEach((r) => { r.notMade = !r.made; });
+    rows = rows.filter((r) => !q || r.name.toLowerCase().indexOf(q) >= 0);
+    if (asc) rows.reverse();
+    const T = ['Miembros', 'Reglas', 'Temporadas'];
+    return {
+      tabs: T.map((l, i) => ({ label: l, cls: i === tab ? 'on' : '', pick: () => this.setState({ tab: i }) })),
+      tMembers: tab === 0, tRules: tab === 1, tHist: tab === 2,
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }), toggleDir: () => this.setState({ asc: !asc }), dirIcon: asc ? 'arrow_upward' : 'arrow_downward', dirLabel: asc ? 'Ascendente' : 'Descendente',
+      rows, none: rows.length === 0, count: 'Mostrando ' + rows.length + ' de 12 jugadores',
+      rules: P.rules.map((r) => ({ n: r[0], p: r[1] })), total: P.total.alex, lastWin: (() => { const id = P.order.filter((x) => P.gpRank[x][16] === 1)[0]; return P.byId[id].name + ' · ' + P.pts[id][16] + ' pts'; })(),
+      copied: !!s.copied, copyIcon: s.copied ? 'check' : 'content_copy', copy: () => this.setState({ copied: !s.copied })
+    };
+  }
+}
+</script>
+</body>
+</html>

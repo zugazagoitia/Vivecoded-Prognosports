@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Estados del sistema</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.ph{background:var(--page);border-radius:8px;padding:16px;box-shadow:inset 0 0 0 1px var(--border)}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 05</span>
+      <h1 class="t-title">Estados del sistema</h1>
+      <p class="t-body muted" style="max-width:760px">Qué ve la persona cuando no hay datos, cuando algo tarda o cuando algo falla. Los mensajes dicen qué ha pasado, sin culpar, y siempre ofrecen una salida.</p>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Los 3 estados de una sesión</h2><span class="tag tg-brand">Nuevo</span></div><span class="t-sm muted">Clasificación sprint de Singapur vista por la comunidad. Lo que se enseña depende de en qué punto está la sesión.</span></div>
+        <div class="seg" role="group" aria-label="Estado de la sesión"><sc-for list="{{st}}" as="t" hint-placeholder-count="3"><button type="button" class="sg {{t.cls}}" onClick="{{t.pick}}"><span class="i s16">{{t.ic}}</span>{{t.l}}</button></sc-for></div></div>
+      <div class="card-b split" style="align-items:start">
+        <div class="col g12" style="min-width:0">
+          <div class="alert {{al}}"><span class="i">{{alIc}}</span><span><b>{{alT}}</b> {{alD}}</span></div>
+          <div class="tw"><table class="tbl tn"><thead><tr><th>Jugador</th><th class="c">P1</th><th class="c">P2</th><th class="c">P3</th><th class="r">Puntos</th></tr></thead><tbody>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="5"><tr class="{{r.cls}}"><td><b class="hd">{{r.name}}</b></td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="3"><td class="c"><span class="cellp {{c.k}}">{{c.v}}</span></td></sc-for><td class="r"><b class="hd">{{r.pts}}</b></td></tr></sc-for>
+          </tbody></table></div>
+          <sc-if value="{{showReal}}" hint-placeholder-val="{{ false }}"><div class="row g8 wrapf t-sm"><span class="up">Resultado</span><sc-for list="{{real}}" as="d" hint-placeholder-count="3"><span class="tag tg-gray">{{d}}</span></sc-for><span class="muted">· verde exacto, ámbar a una posición, azul a dos, fallo sin color</span></div></sc-if>
+        </div>
+        <div class="col g12">
+          <div class="tl"><sc-for list="{{steps}}" as="t" hint-placeholder-count="3"><div class="tp {{t.cls}}"><b class="hd t-sm">{{t.l}}</b><p class="t-sm muted">{{t.d}}</p></div></sc-for></div>
+          <p class="note">La API ya marca cuándo una sesión está cerrada y si tiene resultados. Los pronósticos ajenos nunca se piden antes del cierre.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3" style="align-items:stretch">
+      <div class="card"><div class="card-h"><h2 class="t-head">Sin comunidad</h2><span class="tag tg-gray">vacío</span></div>
+        <div class="empty"><div class="ic"><span class="i s24">groups</span></div><b class="hd">Aún no estás en ninguna comunidad</b><span class="t-sm">Para pronosticar necesitas jugar con alguien. Crea una o únete con un código.</span><div class="row g8 wrapf ctr"><a class="btn btn-primary btn-sm" href="CrearComunidad.dc.html">Crear comunidad</a><a class="btn btn-outline btn-sm" href="Explorar.dc.html">Explorar</a></div></div></div>
+      <div class="card"><div class="card-h"><h2 class="t-head">Sin resultados de búsqueda</h2><span class="tag tg-gray">vacío</span></div>
+        <div class="empty"><div class="ic"><span class="i s24">search_off</span></div><b class="hd">No se ha encontrado lo que buscabas</b><span class="t-sm">Prueba con otro nombre o quita algún filtro.</span><button type="button" class="btn btn-outline btn-sm">Quitar filtros</button></div></div>
+      <div class="card"><div class="card-h"><h2 class="t-head">Sin resultados todavía</h2><span class="tag tg-gray">vacío</span></div>
+        <div class="empty"><div class="ic"><span class="i s24">hourglass_empty</span></div><b class="hd">Aún no hay resultados de esta sesión</b><span class="t-sm">Los puntos se reparten en cuanto se publican. Te avisaremos.</span><a class="btn btn-soft btn-sm" href="Notificaciones.dc.html">Gestionar avisos</a></div></div>
+    </section>
+
+    <section class="grid2" style="align-items:start">
+      <div class="card"><div class="card-h"><h2 class="t-head">Cargando</h2><span class="tag tg-info">carga</span></div>
+        <div class="card-b col g12">
+          <p class="t-sm muted">Cargando...</p>
+          <div class="skel" style="height:18px;width:40%"></div>
+          <div class="col g8"><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:6px"></div><div class="skel" style="height:14px;flex:1"></div><div class="skel" style="height:14px;width:60px"></div></div><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:6px"></div><div class="skel" style="height:14px;flex:1"></div><div class="skel" style="height:14px;width:60px"></div></div><div class="row"><div class="skel" style="width:28px;height:28px;border-radius:6px"></div><div class="skel" style="height:14px;flex:1"></div><div class="skel" style="height:14px;width:60px"></div></div></div>
+          <p class="note">Los esqueletos reservan el tamaño final para que nada salte. Si la carga pasa de 8 s, aparece «Está tardando más de lo normal» con un botón para reintentar.</p>
+        </div></div>
+      <div class="card"><div class="card-h"><h2 class="t-head">Error al cargar</h2><span class="tag tg-err">error</span></div>
+        <div class="empty"><div class="ic" style="background:var(--err-tint);color:var(--err-fg)"><span class="i s24">cloud_off</span></div><b class="hd">No hemos podido cargar el ranking</b><span class="t-sm">Ha fallado la conexión con el servidor. Tus pronósticos están a salvo.</span><div class="row g8"><button type="button" class="btn btn-primary btn-sm"><span class="i s16">refresh</span>Reintentar</button><a class="btn btn-ghost btn-sm" href="Inicio.dc.html">Ir al inicio</a></div></div></div>
+    </section>
+
+    <section class="col g16">
+      <h2 class="t-sub">Avisos en pantalla</h2>
+      <div class="col g8">
+        <div class="alert al-warn"><span class="i">wifi_off</span><span><b>Sin conexión.</b> Puedes ver lo último que cargaste, pero no guardar pronósticos hasta que vuelva.</span></div>
+        <div class="alert al-warn"><span class="i">lock_clock</span><span><b>Ya no se puede pronosticar.</b> El plazo de la clasificación cerró hoy a las 11:55. Aquí tienes tu pronóstico.</span></div>
+        <div class="alert al-info"><span class="i">science</span><span><b>Estás utilizando PrognoSports Beta.</b> Puede haber errores. <a href="FAQ.dc.html">Cuéntanoslo</a>.</span></div>
+        <div class="alert al-err"><span class="i">error</span><span><b>No se ha guardado.</b> Faltan 2 pilotos por elegir: necesitas 8 y llevas 6.</span></div>
+      </div>
+      <div class="row g16 wrapf" style="align-items:flex-start">
+        <div class="toast"><span class="i" style="color:var(--ok)">check_circle</span><div class="col" style="gap:2px"><b class="hd">Pronóstico guardado</b><span class="muted">Clasificación del GP de Singapur</span></div></div>
+        <div class="toast"><span class="i" style="color:var(--err)">error</span><div class="col" style="gap:2px"><b class="hd">No se ha podido guardar</b><span class="muted">El plazo ya ha cerrado.</span></div></div>
+        <div class="toast"><span class="i" style="color:var(--ring)">content_copy</span><div class="col" style="gap:2px"><b class="hd">Enlace copiado</b><span class="muted">Compártelo con tus amigos.</span></div></div>
+      </div>
+    </section>
+
+    <section class="grid3" style="align-items:stretch">
+      <div class="card"><div class="card-h"><h2 class="t-head">404</h2></div>
+        <div class="empty"><div style="font-size:64px;line-height:64px;font-weight:700;color:var(--ring)">404</div><b class="hd">No se ha encontrado lo que buscabas</b><span class="t-sm">La página no existe o ha cambiado de sitio. Las zonas de administración también responden así a quien no es admin.</span><a class="btn btn-primary btn-sm" href="Inicio.dc.html">Volver al inicio</a></div></div>
+      <div class="card"><div class="card-h"><h2 class="t-head">Sesión caducada</h2></div>
+        <div class="empty"><div class="ic"><span class="i s24">key</span></div><b class="hd">Tu sesión ha caducado</b><span class="t-sm">Inicia sesión otra vez y volverás justo donde estabas.</span><a class="btn btn-primary btn-sm" href="Login.dc.html">Iniciar sesión</a></div></div>
+      <div class="card"><div class="card-h"><h2 class="t-head">Cerrar sesión</h2></div>
+        <div class="empty"><div class="ic" style="background:var(--ok-tint);color:var(--ok-fg)"><span class="i s24">check</span></div><b class="hd">Has cerrado sesión</b><span class="t-sm">Hasta el próximo Gran Premio.</span><a class="btn btn-outline btn-sm" href="Login.dc.html">Volver a entrar</a></div></div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Confirmación de acción destructiva</h2></div>
+      <div class="card-b"><div class="scrim" style="padding:32px"><div class="modal"><div class="card-b col g8"><div class="row g12"><div class="av s40" style="background:var(--err-tint);color:var(--err-fg)"><span class="i">warning</span></div><h3 class="t-head">Cerrar las demás sesiones</h3></div><p class="t-sm muted">Se cerrará la sesión en 3 dispositivos. Esta sesión seguirá abierta.</p></div><div class="card-f"><button type="button" class="btn btn-outline btn-sm">Cancelar</button><button type="button" class="btn btn-danger btn-sm">Cerrar sesiones</button></div></div></div></div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, k = s.k === undefined ? 2 : s.k, me = 'alex';
+    const ids = ['alex', 'sofia', 'marta', 'irene', 'pablo'];
+    const real = P.REAL.cs;
+    const rows = ids.map((id) => { const p = P.pred(id, 'cs'), sc = P.score(p, real), mine = id === me;
+      const cells = p.map((d, i) => k === 0 && !mine ? { v: '•••', k: 'hit-n' } : k === 2 ? { v: d, k: 'hit-' + sc.cells[i].k } : { v: d, k: '' });
+      return { name: P.byId[id].name + (mine ? ' (tú)' : ''), cls: mine ? 'me' : '', cells, pts: k === 2 ? sc.pts : '—' }; });
+    const ST = [['Abierta', 'lock_open'], ['Cerrada', 'lock'], ['Con resultados', 'emoji_events']];
+    const AL = [['al-warn', 'schedule', 'Cierra en 1 h 32 min.', 'Solo ves tu pronóstico; los demás se ocultan hasta el cierre.'], ['al-info', 'visibility', 'Sesión cerrada.', 'Ya se ven todos los pronósticos y el consenso. Los puntos llegan con los resultados.'], ['al-ok', 'check_circle', 'Puntos repartidos.', 'Cada celda dice cuánto acertó cada uno.']];
+    return {
+      st: ST.map((x, i) => ({ l: x[0], ic: x[1], cls: i === k ? 'on' : '', pick: () => this.setState({ k: i }) })),
+      al: AL[k][0], alIc: AL[k][1], alT: AL[k][2], alD: AL[k][3], rows, real, showReal: k === 2,
+      steps: [['Abierta', 'Pronosticas y cambias lo que quieras. Ajenos ocultos.'], ['Cerrada', 'Nadie puede cambiar. Se ven todos los pronósticos.'], ['Con resultados', 'Se publican puntos y aciertos.']].map((x, i) => ({ l: x[0], d: x[1], cls: i < k ? 'done' : i === k ? 'now' : '' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

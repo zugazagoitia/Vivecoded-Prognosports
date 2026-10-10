@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inicio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.cmd{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;padding:20px}
+@media(max-width:900px){.cmd{grid-template-columns:minmax(0,1fr)}}
+.promo{border-radius:8px;background:linear-gradient(160deg,var(--brand-800),var(--brand-900));height:150px;display:flex;align-items:center;justify-content:center}
+.srow{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--border);background:var(--surface)}
+.srow.urg{box-shadow:inset 0 0 0 1px var(--warn);background:var(--warn-tint)}
+.srow.done{background:var(--surface-muted)}
+.dd{width:52px;text-align:center;display:flex;flex-direction:column;flex:none}
+.dd span{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase}.dd b{font-size:22px;line-height:26px;color:var(--h)}
+.near{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:14px}
+.near.me{background:var(--tint);font-weight:700}
+.kp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:20px}
+.kp .k{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}.kp .v{font-size:28px;line-height:34px;font-weight:700;color:var(--h)}
+.act-i{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:20px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="inicio" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="row sp wrapf" style="align-items:flex-end">
+      <div class="col" style="gap:2px"><h1 class="t-title">Hola, Álex</h1><p class="muted">Sábado 10 de octubre · Fórmula 1 2026 · ronda 18 de 24</p></div>
+      <div class="seg" role="group" aria-label="Comunidad"><sc-for list="{{coms}}" as="c" hint-placeholder-count="3"><button type="button" class="sg {{c.cls}}" onClick="{{c.pick}}">{{c.l}}</button></sc-for></div>
+    </div>
+
+    <div class="split">
+      <section class="card cmd" aria-label="Qué tienes que hacer ahora">
+        <div class="col g8">
+          <span class="up">Próximo Gran Premio</span>
+          <h2 class="t-sub" style="font-size:22px;line-height:28px">Gran Premio de Singapur</h2>
+          <div class="promo"><svg viewBox="0 0 400 300" height="110" aria-hidden="true"><path d="M80 210 L140 130 L210 120 L250 80 L330 90 L350 150 L300 200 L250 190 L210 240 L120 250 Z" fill="none" style="stroke:var(--brand-300);stroke-width:8;stroke-linejoin:round"></path></svg></div>
+          <span class="t-sm muted">Marina Bay · 62 vueltas · con sprint</span>
+          <a class="t-sm" href="GPDetalle.dc.html">Ver el fin de semana<span class="i s16" style="vertical-align:-3px">arrow_forward</span></a>
+        </div>
+        <div class="col g12" style="min-width:0">
+          <div class="row sp"><b class="hd t-head">Tus pronósticos</b><span class="t-sm muted tn">{{doneCount}} de 4 hechos</span></div>
+          <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="{{doneCount}}" aria-label="Pronósticos hechos"><i style="width:{{donePct}}%"></i></div>
+          <sc-for list="{{sessions}}" as="s" hint-placeholder-count="4">
+            <div class="srow {{s.cls}}">
+              <div class="dd"><span>{{s.day}}</span><b class="tn">{{s.date}}</b></div>
+              <div class="col fx" style="gap:2px;min-width:0"><b class="hd">{{s.name}}</b><span class="t-sm muted">{{s.time}} · {{s.closeTxt}} <b style="color:{{s.cdc}}">{{s.cd}}</b></span></div>
+              <span class="tag {{s.tg}}">{{s.tag}}</span>
+              <a class="btn {{s.btn}} btn-sm" href="{{s.href}}" style="min-width:116px">{{s.cta}}</a>
+            </div>
+          </sc-for>
+          <div class="row g12 t-sm" style="align-items:center"><span class="avs"><sc-for list="{{avatars}}" as="a" hint-placeholder-count="5"><span class="av s24">{{a}}</span></sc-for></span><span><b class="hd">8 de 12</b> miembros ya han pronosticado el sprint</span></div>
+        </div>
+      </section>
+
+      <aside class="col g16" style="min-width:0">
+        <section class="card kp">
+          <div class="col" style="gap:0"><span class="k">Puesto</span><span class="v tn">{{pos}}.º</span><span class="mv {{mvCls}}">{{mvText}}</span></div>
+          <div class="col" style="gap:0"><span class="k">Puntos</span><span class="v tn">{{total}}</span><span class="t-cap muted">a {{gapLead}} del líder</span></div>
+          <div class="col" style="gap:0"><span class="k">Media por GP</span><span class="v tn">{{avg}}</span><span class="t-cap muted">comunidad: {{cavg}}</span></div>
+          <div class="col" style="gap:0"><span class="k">GP ganados</span><span class="v tn">{{wins}}</span><span class="t-cap muted">de 17 disputados</span></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Tu entorno en el ranking</h2><a class="t-sm" href="Clasificacion.dc.html">Ranking</a></div>
+          <div class="card-b col" style="gap:2px;padding-top:8px">
+            <sc-for list="{{near}}" as="r" hint-placeholder-count="5"><div class="near {{r.cls}}"><span class="tn" style="width:22px;font-weight:700">{{r.pos}}</span><span class="fx ell">{{r.name}}</span><span class="t-cap muted tn">{{r.gap}}</span><b class="hd tn" style="width:40px;text-align:right">{{r.pts}}</b></div></sc-for>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">{{chartTitle}}</h2><span class="t-sm muted">{{chartSub}}</span></div><div class="seg" role="group" aria-label="Comparar"><sc-for list="{{cmp}}" as="c" hint-placeholder-count="3"><button type="button" class="sg {{c.cls}}" onClick="{{c.pick}}">{{c.l}}</button></sc-for></div></div>
+      <div class="card-b col g8">
+        <svg viewBox="0 0 1000 250" width="100%" class="chart" role="img" aria-label="{{chartAria}}">
+          <sc-for list="{{ticks}}" as="t" hint-placeholder-count="4"><line class="gl" x1="56" x2="880" y1="{{t.y}}" y2="{{t.y}}"></line><text x="48" y="{{t.ty}}" text-anchor="end">{{t.l}}</text></sc-for>
+          <line class="ax" x1="56" x2="880" y1="{{zeroY}}" y2="{{zeroY}}" style="opacity:{{zeroOp}}"></line>
+          <sc-for list="{{lines}}" as="l" hint-placeholder-count="2"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-dasharray:{{l.dash}};stroke-linejoin:round"></path><text x="890" y="{{l.y}}" class="lbl-s" style="fill:var(--h)">{{l.name}} {{l.v}}</text></sc-for>
+        </svg>
+        <span class="t-cap muted" style="padding-left:8px">Tus puntos por GP, por sesión</span>
+        <svg viewBox="0 0 1000 120" width="100%" class="chart" role="img" aria-label="Tus puntos en cada GP desglosados por sesión">
+          <sc-for list="{{bars}}" as="b" hint-placeholder-count="17"><g><sc-for list="{{b.segs}}" as="g" hint-placeholder-count="3"><rect x="{{b.x}}" y="{{g.y}}" width="30" height="{{g.h}}" rx="2" style="fill:{{g.c}}"></rect></sc-for><text x="{{b.tx}}" y="116" text-anchor="middle">{{b.code}}</text></g></sc-for>
+        </svg>
+        <div class="row sp wrapf"><div class="legend"><sc-for list="{{cats}}" as="c" hint-placeholder-count="5"><span><i style="width:12px;height:12px;border-radius:2px;display:inline-block;background:{{c.c}}"></i>{{c.l}}</span></sc-for></div><a class="btn btn-ghost btn-sm" href="Clasificacion.dc.html">Ir al ranking<span class="i s16">arrow_forward</span></a></div>
+      </div>
+    </section>
+
+    <div class="grid3" style="align-items:stretch">
+      <div class="card">
+        <div class="card-h"><div class="row g8"><h2 class="t-head">Mi temporada</h2><span class="flag">flag</span></div><a class="t-sm" href="MiTemporada.dc.html">Abrir</a></div>
+        <div class="card-b col g8"><div class="mbars" style="height:64px" role="img" aria-label="Tus puntos en los 17 GP"><sc-for list="{{mini}}" as="b" hint-placeholder-count="17"><i class="{{b.cls}}" style="height:{{b.h}}%"></i></sc-for></div><div class="row sp t-sm"><span class="muted">Mejor GP</span><b class="hd">{{bestName}} · {{best}} pts</b></div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><div class="row g8"><h2 class="t-head">Palmarés</h2><span class="flag">flag</span></div><a class="t-sm" href="Palmares.dc.html">Abrir</a></div>
+        <div class="card-b col g8"><div class="row g16"><div class="col" style="gap:0"><b class="hd" style="font-size:28px;line-height:34px">1</b><span class="t-cap muted">título (2024)</span></div><div class="col" style="gap:0"><b class="hd tn" style="font-size:28px;line-height:34px">{{wins}}</b><span class="t-cap muted">GP ganados en 2026</span></div></div><div class="row g8 wrapf"><span class="tag tg-brand"><span class="i s16">emoji_events</span>Campeón 2024</span><span class="tag tg-gray">2.º en 2023</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h2 class="t-head">Actividad</h2></div>
+        <div class="card-b col g12">
+          <div class="act-i"><span class="av s24">SN</span><span><b class="hd">Sofía</b> ha clavado la clasificación sprint. <span class="muted">ayer</span></span></div>
+          <div class="act-i"><span class="av s24">LF</span><span><b class="hd">Lucía</b> ha subido al 2.º puesto. <span class="muted">hace 2 semanas</span></span></div>
+          <div class="act-i"><span class="av s24">DM</span><span><b class="hd">Dani</b> ha cambiado su pronóstico de la carrera. <span class="muted">hace 1 h</span></span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, cmp = s.cmp || 'leader', com = s.com || 0;
+    const me = 'alex', pos = P.order.indexOf(me) + 1, lead = P.order[0];
+    const SS = [['VIE', '9', 'Clasificación sprint', '17:30', 'Terminada', '', 'done', 'tg-gray', 'Hecho · 11 pts', 'btn-ghost', 'Ver resultados', 'Resultados.dc.html'],
+      ['SÁB', '10', 'Sprint', '12:00', 'cierra en', '1 h 32 min', 'urg', 'tg-warn', 'Cierra pronto', 'btn-primary', 'Pronosticar', 'Pronosticar.dc.html'],
+      ['SÁB', '10', 'Clasificación', '16:00', 'cierra en', '5 h 32 min', '', 'tg-ok', 'Hecho', 'btn-outline', 'Editar', 'Pronosticar.dc.html'],
+      ['DOM', '11', 'Carrera', '15:00', 'cierra en', '1 d 3 h', '', 'tg-gray', 'Pendiente', 'btn-primary', 'Pronosticar', 'Pronosticar.dc.html']];
+    const sessions = SS.map((x) => ({ day: x[0], date: x[1], name: x[2], time: x[3] + ' (tu hora)', closeTxt: x[4], cd: x[5], cdc: x[6] === 'urg' ? 'var(--warn-fg)' : 'var(--h)', cls: x[6], tg: x[7], tag: x[8], btn: x[9], cta: x[10], href: x[11] }));
+    const mv = P.pos[me][n - 2] - P.pos[me][n - 1];
+    const avg = P.total[me] / n, cavg = P.users.reduce((a, u) => a + P.total[u.id], 0) / P.users.length / n;
+    const wins = P.gpRank[me].filter((r) => r === 1).length;
+    const near = P.order.slice(Math.max(0, pos - 3), pos + 2).map((id) => ({ pos: P.order.indexOf(id) + 1, name: id === me ? 'Tú' : P.byId[id].name, cls: id === me ? 'me' : '', pts: P.total[id], gap: id === me ? '' : (P.total[id] > P.total[me] ? '+' : '−') + Math.abs(P.total[id] - P.total[me]) }));
+    // gráfico
+    const X0 = 56, X1 = 880, Y0 = 16, Y1 = 230, X = (g) => X0 + (X1 - X0) * g / (n - 1);
+    const leadAt = [], avgAt = []; for (let g = 0; g < n; g++) { leadAt[g] = Math.max.apply(null, P.users.map((u) => P.acc[u.id][g])); avgAt[g] = P.users.reduce((a, u) => a + P.acc[u.id][g], 0) / P.users.length; }
+    const rival = P.order[pos - 2] || P.order[1];
+    let ser = [], inv = false;
+    if (cmp === 'leader') ser = [{ name: 'Tú', v: P.acc[me].map((v, g) => v - leadAt[g]), c: 'var(--c-you)', w: 3, dash: 'none' }, { name: 'Media', v: avgAt.map((v, g) => v - leadAt[g]), c: 'var(--c-rest)', w: 2, dash: '5 4' }];
+    else if (cmp === 'rival') ser = [{ name: P.byId[rival].name.split(' ')[0], v: P.acc[rival].map((v, g) => v - P.acc[me][g]), c: 'var(--c-2)', w: 3, dash: 'none' }, { name: 'Media', v: avgAt.map((v, g) => v - P.acc[me][g]), c: 'var(--c-rest)', w: 2, dash: '5 4' }];
+    else { inv = true; ser = [{ name: 'Tú', v: P.pos[me], c: 'var(--c-you)', w: 3, dash: 'none' }, { name: 'Líder', v: P.pos[lead].map(() => 1), c: 'var(--c-rest)', w: 1.5, dash: '3 4' }]; }
+    let lo = 0, hi = 0; ser.forEach((x) => x.v.forEach((v) => { lo = Math.min(lo, v); hi = Math.max(hi, v); }));
+    if (inv) { lo = 1; hi = 12; }
+    const span = (hi - lo) || 1, Y = (v) => inv ? Y0 + (v - 1) / 11 * (Y1 - Y0) : Y0 + (hi - v) / span * (Y1 - Y0);
+    const fmt = (v) => inv ? v + '.º' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(Math.round(v));
+    const lines = ser.map((x) => ({ d: x.v.map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v).toFixed(1)).join(''), c: x.c, w: x.w, dash: x.dash, name: x.name, v: fmt(x.v[n - 1]), y: Y(x.v[n - 1]) + 4 }));
+    if (lines.length > 1 && Math.abs(lines[0].y - lines[1].y) < 16) lines[1].y = lines[0].y + (lines[1].y >= lines[0].y ? 16 : -16);
+    const ticks = []; if (inv) [1, 4, 8, 12].forEach((r) => ticks.push({ y: Y(r), ty: Y(r) + 4, l: r + '.º' })); else { const st = span > 120 ? 50 : 20; for (let v = Math.ceil(lo / st) * st; v <= hi; v += st) if (v !== 0) ticks.push({ y: Y(v), ty: Y(v) + 4, l: String(v).replace('-', '−') }); }
+    const T = { leader: ['Tu diferencia con el líder', 'El líder está siempre en 0; la línea discontinua es la media de la comunidad.'], rival: ['Tú contra ' + P.byId[rival].name + ', justo delante', 'Por encima de 0, te saca ventaja; por debajo, vas por delante.'], pos: ['Tu puesto tras cada GP', 'El 1.º está arriba.'] };
+    const KS = ['q', 'cs', 'sp', 'r', 'bonus'], CN = { q: 'Clasificación', cs: 'Clasif. sprint', sp: 'Sprint', r: 'Carrera', bonus: 'Bonus' };
+    const bars = []; for (let g = 0; g < n; g++) { const o = P.bySess[me][g]; let y = 100; const segs = []; KS.forEach((k) => { const v = o[k] || 0; if (!v) return; const h = v / 62 * 92; y -= h; segs.push({ y: y.toFixed(1), h: Math.max(1, h - 1).toFixed(1), c: P.sessColor[k] }); }); bars.push({ x: X(g) - 15, tx: X(g), code: P.gps[g].code, segs }); }
+    const mp = P.pts[me], mx = Math.max.apply(null, mp);
+    return {
+      coms: ['Amigos del paddock', 'Oficina F1', 'Peña Madring'].map((l, i) => ({ l, cls: i === com ? 'on' : '', pick: () => this.setState({ com: i }) })),
+      sessions, doneCount: 2, donePct: 50, avatars: ['MS', 'LF', 'SN', 'IC', 'DM'],
+      pos, mvText: mv > 0 ? '▲ ' + mv + ' desde Azerbaiyán' : mv < 0 ? '▼ ' + (-mv) + ' desde Azerbaiyán' : '= sin cambios', mvCls: mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq',
+      total: P.total[me], gapLead: P.total[lead] - P.total[me], avg: avg.toFixed(1).replace('.', ','), cavg: cavg.toFixed(1).replace('.', ','), wins, near,
+      cmp: [['leader', 'Con el líder'], ['rival', 'Con el de delante'], ['pos', 'Posición']].map((x) => ({ l: x[1], cls: x[0] === cmp ? 'on' : '', pick: () => this.setState({ cmp: x[0] }) })),
+      chartTitle: T[cmp][0], chartSub: T[cmp][1], chartAria: T[cmp][0] + '. Tras 17 GP: ' + lines[0].v, lines, ticks, zeroY: inv ? -10 : Y(0), zeroOp: inv ? 0 : 1, bars,
+      cats: KS.map((k) => ({ l: CN[k], c: P.sessColor[k] })),
+      mini: mp.map((v, i) => ({ h: Math.round(v / mx * 100), cls: P.gpRank[me][i] === 1 ? 'w' : '' })), best: mx, bestName: P.gps[mp.indexOf(mx)].name
+    };
+  }
+}
+</script>
+</body>
+</html>

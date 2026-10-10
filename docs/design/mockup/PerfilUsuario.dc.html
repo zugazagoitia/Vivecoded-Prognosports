@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Perfil de Marta Solís</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.hero{display:flex;gap:24px;align-items:center;flex-wrap:wrap;padding:24px}
+.bigav{width:88px;height:88px;border-radius:50%;background:var(--c-2);color:#fff;font-size:30px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.score{display:grid;grid-template-columns:minmax(0,1fr) 220px minmax(0,1fr);align-items:center;gap:16px;background:var(--surface-muted);border-radius:8px;padding:16px 20px}
+.big{font-size:44px;line-height:48px;font-weight:700}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="RankingResumen.dc.html">Ranking</a><span class="i">chevron_right</span><span>Marta Solís</span></div>
+    <section class="card hero">
+      <span class="bigav">MS</span>
+      <div class="col fx" style="gap:4px;min-width:260px"><h1 class="t-title">Marta Solís</h1><span class="muted">@martas · Valencia · desde 2022</span><p class="t-sm" style="max-width:560px">Si llueve, apuesto por Alonso.</p><div class="row g8 wrapf"><span class="tag tg-brand"><span class="i s16">emoji_events</span>Campeona 2025</span><span class="tag tg-ok">{{pos}}.ª en Amigos del paddock</span><span class="tag tg-gray">Nivel 8 · Maestra de estrategia</span></div></div>
+      <a class="btn btn-primary" href="CaraACara.dc.html"><span class="i s16">compare_arrows</span>Cara a cara completo</a>
+    </section>
+    <section class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Vuestro duelo en 2026</h2><span class="t-sm muted">Quién sumó más puntos en cada GP</span></div></div>
+      <div class="card-b col g16">
+        <div class="score"><div class="col" style="align-items:flex-end;gap:0"><span class="t-sm muted">Tú · {{myPos}}.º</span><b class="hd" style="font-size:20px;color:var(--c-you)">{{myTot}} pts</b></div><div class="row g12" style="justify-content:center;align-items:baseline"><b class="big tn" style="color:var(--c-you)">{{wa}}</b><span class="t-sm muted">{{ties}}</span><b class="big tn" style="color:var(--c-2)">{{wb}}</b></div><div class="col" style="gap:0"><span class="t-sm muted">Marta · {{pos}}.ª</span><b class="hd" style="font-size:20px;color:var(--c-2)">{{herTot}} pts</b></div></div>
+        <svg viewBox="0 0 1000 170" width="100%" class="chart" role="img" aria-label="Diferencia acumulada con Marta: {{endLabel}}"><line x1="0" x2="1000" y1="{{zeroY}}" y2="{{zeroY}}" style="stroke:var(--axis);stroke-dasharray:4 4"></line><path d="{{area}}" style="fill:var(--tint)"></path><path d="{{line}}" fill="none" style="stroke:var(--c-you);stroke-width:2.5"></path><text x="996" y="{{endY}}" text-anchor="end" class="lbl-s" style="fill:var(--h)">{{endLabel}}</text></svg>
+        <div class="row g24 wrapf"><div class="col g4"><span class="up">Tu forma</span><span class="form"><sc-for list="{{fa}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}">{{f.v}}</b></sc-for></span></div><div class="col g4"><span class="up">Su forma</span><span class="form"><sc-for list="{{fb}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}">{{f.v}}</b></sc-for></span></div></div>
+      </div></section>
+    <section class="grid4" style="gap:16px">
+      <div class="card kpi"><span class="k">Puntos 2026</span><span class="v tn">{{herTot}}</span><span class="d">líder</span></div>
+      <div class="card kpi"><span class="k">Media por GP</span><span class="v tn">{{herAvg}}</span><span class="d">tú: {{myAvg}}</span></div>
+      <div class="card kpi"><span class="k">GP ganados</span><span class="v tn">{{herWins}}</span><span class="d">tú: {{myWins}}</span></div>
+      <div class="card kpi"><span class="k">Comunidades en común</span><span class="v tn">1</span><span class="d">Amigos del paddock</span></div>
+    </section>
+    <div class="alert al-info"><span class="i">visibility</span><span>Sus pronósticos solo se ven en sesiones ya cerradas. <a href="Resultados.dc.html">Ver sus pronósticos de Azerbaiyán</a></span></div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1350}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const id = 'marta', A = P.pts[me], B = P.pts[id];
+    let wa = 0, wb = 0, ti = 0, cum = 0; const c = A.map((v, g) => { const d = v - B[g]; if (d > 0) wa++; else if (d < 0) wb++; else ti++; return (cum += d); });
+    const lo = Math.min(0, Math.min.apply(null, c)), hi = Math.max(0, Math.max.apply(null, c)), sp = Math.max(10, hi - lo), Y = (v) => 10 + (hi - v) / sp * 150, X = (g) => 10 + g * 980 / (n - 1);
+    const line = c.map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+    const form = (u) => [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[u][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '' }; });
+    return {
+      pos: O.indexOf(id) + 1, myPos: O.indexOf(me) + 1, myTot: P.total[me], herTot: P.total[id], wa, wb, ties: ti ? ti + ' empates' : 'sin empates',
+      line, area: line + ' L' + X(n - 1) + ' ' + Y(0) + ' L' + X(0) + ' ' + Y(0) + ' Z', zeroY: Y(0), endY: Y(cum) + (cum >= 0 ? -8 : 16), endLabel: cum > 0 ? '+' + cum + ' para ti' : cum < 0 ? Math.abs(cum) + ' para Marta' : 'Empate',
+      fa: form(me), fb: form(id), herAvg: (P.total[id] / n).toFixed(1).replace('.', ','), myAvg: (P.total[me] / n).toFixed(1).replace('.', ','), herWins: P.gpRank[id].filter((r) => r === 1).length, myWins: P.gpRank[me].filter((r) => r === 1).length
+    };
+  }
+}
+</script>
+</body>
+</html>

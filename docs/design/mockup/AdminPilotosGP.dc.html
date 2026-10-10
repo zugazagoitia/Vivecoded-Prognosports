@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pilotos del GP</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.lay{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:1100px){.lay{grid-template-columns:minmax(0,1fr)}}
+.pl{display:flex;align-items:center;gap:8px;width:100%;min-height:36px;padding:0 10px;border-radius:6px;font:inherit;font-size:13px;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--border);color:var(--body)}
+.pl.on{background:var(--tint);border-color:var(--ring)}.pl.free{background:var(--warn-tint)}
+.tc{overflow:hidden}
+.tc .th{padding:10px 12px;color:#fff;font-weight:700;font-size:14px;display:flex;justify-content:space-between}
+.sl{display:flex;gap:4px}
+.sl .b{flex:1;display:flex;align-items:center;gap:8px;min-height:40px;padding:0 10px;border-radius:6px;font:inherit;font-size:13px;text-align:left;cursor:pointer;background:var(--surface-muted);border:1px solid var(--border);color:var(--h)}
+.sl .b.empty{border-style:dashed;color:var(--muted);background:var(--surface)}
+.sl .b.chg{background:var(--warn-tint);border-color:var(--warn)}
+.sl .x{width:40px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;color:var(--muted)}
+.banner{display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:8px;font-size:14px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="gps" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="crumb"><a href="AdminGPs.dc.html">Grandes Premios</a><span class="i">chevron_right</span><a href="AdminGPEditar.dc.html">Singapur</a><span class="i">chevron_right</span><span>Pilotos</span></div>
+<div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Pilotos del GP de Singapur</h1><p class="muted">1. Elige un piloto de la lista · 2. Pulsa el hueco de su equipo. × vacía un hueco.</p></div>
+  <div class="row g8 wrapf" style="align-items:flex-end"><div class="field"><label class="lbl" for="cl">Clonar de</label><select id="cl" class="sel" style="width:auto"><option>Azerbaiyán (ronda 17)</option><option>Italia (ronda 15)</option></select></div><button type="button" class="btn btn-soft" onClick="{{reset}}"><span class="i s16">content_copy</span>Clonar</button></div></div>
+<div class="banner" style="background:{{bBg}};color:{{bFg}}"><span class="i">{{bIcon}}</span><b class="tn">{{count}}/22 pilotos</b><span>{{diffText}}</span></div>
+<div class="lay">
+  <section class="card card-b col" style="gap:6px"><b class="hd">Pilotos de 2026</b><span class="t-cap muted">{{selText}}</span>
+    <sc-for list="{{pool}}" as="p" hint-placeholder-count="23"><button type="button" class="pl {{p.cls}}" onClick="{{p.pick}}" aria-pressed="{{p.on}}"><span class="tn muted" style="width:28px;font-weight:700">#{{p.no}}</span><span class="fx">{{p.name}}</span><span class="t-cap muted">{{p.where}}</span></button></sc-for>
+  </section>
+  <div class="grid3" style="gap:14px;align-items:start">
+    <sc-for list="{{teams}}" as="t" hint-placeholder-count="11"><section class="card tc"><div class="th" style="background:{{t.c}}"><span>{{t.name}}</span><span class="tn" style="font-weight:500">{{t.n}}/2</span></div><div class="col g8" style="padding:10px">
+      <sc-for list="{{t.slots}}" as="x" hint-placeholder-count="2"><div class="sl"><button type="button" class="b {{x.cls}}" onClick="{{x.pick}}" aria-label="{{x.aria}}"><span class="fx">{{x.label}}</span><sc-if value="{{x.chg}}" hint-placeholder-val="{{ false }}"><span class="tag tg-warn">Cambio</span></sc-if></button><button type="button" class="x" onClick="{{x.clear}}" aria-label="Vaciar hueco"><span class="i s16">close</span></button></div></sc-for>
+    </div></section></sc-for>
+  </div>
+</div>
+<div class="row end g8"><button type="button" class="btn btn-outline" onClick="{{reset}}">Deshacer cambios</button><button type="button" class="btn btn-primary" disabled="{{cantSave}}">Guardar pilotos</button></div>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const DRV = P.drivers.concat([{ code: 'TSU', name: 'Yuki Tsunoda', no: 22, team: null }]);
+    const base = () => P.drivers.map((d, i) => i);
+    const sl = s.slots || base(), sel = s.sel === undefined ? 22 : s.sel, orig = base();
+    const where = (i) => { const k = sl.indexOf(i); return k < 0 ? '' : P.teams[Math.floor(k / 2)].name; };
+    const teamIdx = {}; P.teams.forEach((t, k) => { teamIdx[t.name] = k; });
+    // reordenar huecos por equipo (2 por equipo en el orden de P.teams)
+    const pool = DRV.map((d, i) => { const w = where(i), on = sel === i; return { no: d.no, name: d.name, where: w || 'sin equipo', on, cls: on ? 'on' : (!w ? 'free' : ''), pick: () => this.setState({ sel: on ? -1 : i }) }; });
+    const teams = P.teams.map((t, k) => { const slots = [0, 1].map((j) => { const idx = k * 2 + j, d = sl[idx], ch = d !== orig[idx];
+      return { label: d == null ? 'Hueco libre' : DRV[d].name + ' #' + DRV[d].no, cls: d == null ? 'empty' : ch ? 'chg' : '', chg: ch && d != null, aria: t.name + ', hueco ' + (j + 1) + ': ' + (d == null ? 'libre' : DRV[d].name),
+        pick: () => { if (sel < 0 || sel == null) return; const a = sl.slice(), prev = a.indexOf(sel); if (prev >= 0) a[prev] = null; a[idx] = sel; this.setState({ slots: a, sel: -1 }); },
+        clear: () => { const a = sl.slice(); a[idx] = null; this.setState({ slots: a }); } }; });
+      return { name: t.name, c: t.color, n: slots.filter((x) => x.cls !== 'empty').length, slots }; });
+    const count = sl.filter((x) => x != null).length, ok = count === 22;
+    const ch = []; sl.forEach((d, idx) => { if (d !== orig[idx]) ch.push(P.teams[Math.floor(idx / 2)].name + ': ' + (orig[idx] != null ? DRV[orig[idx]].last || DRV[orig[idx]].name : '—') + ' → ' + (d != null ? DRV[d].name.split(' ').slice(-1)[0] : 'hueco libre')); });
+    return {
+      pool, teams, count, selText: sel >= 0 && sel != null ? 'Seleccionado: ' + DRV[sel].name + '. Ahora pulsa un hueco.' : 'Pulsa un piloto para seleccionarlo.',
+      diffText: ch.length ? ch.length + ' cambio' + (ch.length > 1 ? 's' : '') + ' respecto a Azerbaiyán · ' + ch.join(' · ') : 'Sin cambios respecto a Azerbaiyán',
+      bBg: ok ? (ch.length ? 'var(--warn-tint)' : 'var(--ok-tint)') : 'var(--err-tint)', bFg: ok ? (ch.length ? 'var(--warn-fg)' : 'var(--ok-fg)') : 'var(--err-fg)', bIcon: ok ? (ch.length ? 'swap_horiz' : 'check_circle') : 'error',
+      cantSave: !ok, reset: () => this.setState({ slots: null, sel: -1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

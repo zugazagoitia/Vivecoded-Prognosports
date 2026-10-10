@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Preguntas frecuentes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.acc{border-bottom:1px solid var(--border)}.acc:last-child{border-bottom:0}
+.acc button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;background:transparent;border:0;cursor:pointer;text-align:left;font-weight:600;color:var(--h);font-size:16px}
+.acc button:hover{background:var(--surface-muted)}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" user="out" active="faq" hint-size="100%,56px"></dc-import>
+  <main class="pg-main md">
+    <div class="crumb"><a href="Landing.dc.html">Inicio</a><span class="i">chevron_right</span><span>Preguntas frecuentes</span></div>
+    <div class="col g8"><h1 class="t-title">Preguntas frecuentes</h1><p class="muted">Lo que más nos preguntan. Si no encuentras la tuya, escríbenos al final de la página.</p></div>
+    <div class="iw"><span class="i">search</span><input class="inp" placeholder="Buscar..." aria-label="Buscar en las preguntas frecuentes" value="{{q}}" onInput="{{onQ}}"></div>
+    <div class="row g8 wrapf"><sc-for list="{{cats}}" as="c" hint-placeholder-count="4"><button type="button" class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+    <div class="card" style="overflow:hidden">
+      <sc-for list="{{items}}" as="q" hint-placeholder-count="7">
+        <div class="acc"><button type="button" onClick="{{q.pick}}" aria-expanded="{{q.open}}"><span class="col" style="gap:2px"><span>{{q.q}}</span><span class="t-cap muted" style="font-weight:500">{{q.cat}}</span></span><span class="i">{{q.icon}}</span></button><sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}"><p class="muted" style="padding:0 20px 20px;max-width:680px">{{q.a}}</p></sc-if></div>
+      </sc-for>
+      <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="empty"><div class="ic"><span class="i s24">search_off</span></div><b class="hd">No se ha encontrado lo que buscabas</b></div></sc-if>
+    </div>
+    <div class="card card-b row sp wrapf g16" style="background:var(--tint);box-shadow:none">
+      <div class="col" style="gap:2px"><b class="hd t-head">¿No encuentras tu respuesta?</b><span class="t-sm" style="color:var(--tint-fg)">Escríbenos y te respondemos en unos días.</span></div>
+      <div class="row g8"><span class="t-sm hd">contacto@prognosports.com</span><button type="button" class="btn btn-primary btn-sm"><span class="i s16">content_copy</span>Copiar correo</button></div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {}, q = (s.q || '').toLowerCase().trim(), cat = s.cat || 0, open = s.open === undefined ? 0 : s.open;
+    const C = ['Todas', 'Primeros pasos', 'Pronósticos', 'Puntos y ranking', 'Cuenta'];
+    const I = [
+      [1, '¿Qué es PrognoSports?', 'Una web para pronosticar el orden de llegada de las carreras con tus amigos y compararos en un ranking. No es un sitio de apuestas: no se juega dinero.'],
+      [1, '¿Cómo me uno a una comunidad?', 'Si es abierta, pulsa Unirme. Si es cerrada, necesitas el código o el enlace de invitación que te pase quien la administra.'],
+      [2, '¿Hasta cuándo puedo pronosticar?', 'Hasta cinco minutos antes de que empiece cada sesión. Puedes cambiar el pronóstico las veces que quieras antes del cierre.'],
+      [2, '¿Puedo ver lo que han pronosticado los demás?', 'Sí, pero solo cuando se cierra el plazo de esa sesión, para que nadie copie.'],
+      [2, '¿Qué pasa si me olvido de pronosticar?', 'Esa sesión te da cero puntos. Activa los avisos por correo o Telegram para que no se te pase.'],
+      [3, '¿Cómo se reparten los puntos?', 'Por posición exacta o por quedarte a una o dos posiciones. Cada comunidad elige su reparto; mira «Cómo se puntúa».'],
+      [3, '¿Cuándo se publican los puntos?', 'En cuanto se cargan los resultados de la sesión. Recibirás un aviso cuando estén repartidos.'],
+      [3, '¿Cuenta la vuelta rápida?', 'Se muestra en los resultados, pero no se pronostica ni da puntos.'],
+      [4, '¿Cómo cambio mi contraseña o mi correo?', 'En Ajustes, dentro de «Seguridad». Para cambiar el correo te pediremos tu contraseña actual.'],
+      [4, '¿Puedo recibir avisos por Telegram?', 'Sí. Vincula tu cuenta en Ajustes › Notificaciones y elige qué avisos quieres por cada canal.']
+    ].filter((x) => (cat === 0 || x[0] === cat) && (!q || (x[1] + x[2]).toLowerCase().indexOf(q) >= 0));
+    return {
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value, open: -1 }),
+      cats: C.map((l, i) => ({ label: l, cls: i === cat ? 'on' : '', pick: () => this.setState({ cat: i, open: -1 }) })),
+      items: I.map((x, i) => ({ q: x[1], a: x[2], cat: C[x[0]], open: open === i, icon: open === i ? 'remove' : 'add', pick: () => this.setState({ open: open === i ? -1 : i }) })),
+      none: I.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

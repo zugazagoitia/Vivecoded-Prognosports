@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Palmarés</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.champ{border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;color:inherit;text-decoration:none}
+.champ:hover{border-color:var(--ring);text-decoration:none}
+.champ.live{background:var(--tint);border-color:var(--ring)}
+.lay{display:grid;grid-template-columns:420px minmax(0,1fr);gap:28px;align-items:start}
+@media(max-width:1000px){.lay{grid-template-columns:minmax(0,1fr)}}
+.gold{display:inline-flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:var(--gold);color:#fff}
+.slope{position:relative;aspect-ratio:700/420;max-width:100%}
+.nm{position:absolute;transform:translateY(-50%);border:0;background:transparent;font:inherit;font-size:12px;padding:2px 4px;border-radius:4px;cursor:pointer;white-space:nowrap;color:var(--muted)}
+.nm.on{color:var(--h);font-weight:700}.nm:hover{background:var(--surface-hover)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Palmares" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Palmarés de Amigos del paddock</h2><span class="flag">flag</span></div><span class="t-sm muted">Todas las temporadas de la comunidad. Cada tarjeta abre su ranking.</span></div></div>
+      <div class="card-b col g24">
+        <div class="grid4" style="gap:12px"><sc-for list="{{champs}}" as="c" hint-placeholder-count="4"><a class="champ {{c.cls}}" href="RankingResumen.dc.html"><span class="row sp"><b class="hd t-head">F1 {{c.year}}</b><span class="t-cap muted">{{c.status}}</span></span><span class="row g8" style="margin-top:4px"><span class="i" style="color:{{c.ic}}">emoji_events</span><b class="hd" style="font-size:18px">{{c.name}}</b></span><span class="t-sm muted tn">{{c.pts}} pts · {{c.margin}}</span><span class="t-cap muted">2.º {{c.second}} · 3.º {{c.third}}</span></a></sc-for></div>
+        <div class="lay">
+          <div class="col g8"><b class="hd">Medallero (temporadas cerradas)</b>
+            <table class="tbl tn"><thead><tr><th>Jugador</th><th class="c">1.º</th><th class="c">2.º</th><th class="c">3.º</th><th class="r">GP ganados</th></tr></thead><tbody><sc-for list="{{medals}}" as="m" hint-placeholder-count="8"><tr class="{{m.cls}}"><td><b class="hd">{{m.name}}</b></td><td class="c"><sc-if value="{{m.hasG}}" hint-placeholder-val="{{ false }}"><span class="gold">{{m.g}}</span></sc-if><sc-if value="{{m.noG}}" hint-placeholder-val="{{ true }}"><span class="muted">·</span></sc-if></td><td class="c">{{m.s}}</td><td class="c">{{m.b}}</td><td class="r">{{m.wins}}</td></tr></sc-for></tbody></table>
+            <span class="t-cap muted">GP ganados: suma de todas las temporadas, también la actual.</span>
+          </div>
+          <div class="col g8" style="min-width:0"><b class="hd">Posición final por temporada <span class="muted" style="font-weight:400">· pulsa un nombre para resaltarlo</span></b>
+            <div class="slope">
+              <svg viewBox="0 0 700 420" class="chart" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">
+                <sc-for list="{{years}}" as="y" hint-placeholder-count="4"><line x1="{{y.x}}" x2="{{y.x}}" y1="24" y2="410" style="stroke:var(--grid)"></line><text x="{{y.x}}" y="14" text-anchor="middle" style="font-weight:600;fill:var(--h)">{{y.l}}</text></sc-for>
+                <sc-for list="{{slopes}}" as="l" hint-placeholder-count="12"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round"></path></sc-for>
+                <sc-for list="{{pts}}" as="p" hint-placeholder-count="20"><g><circle cx="{{p.x}}" cy="{{p.y}}" r="10" style="fill:{{p.c}};stroke:var(--surface);stroke-width:2"></circle><text x="{{p.x}}" y="{{p.ty}}" text-anchor="middle" style="fill:#fff;font-size:10px;font-weight:700">{{p.v}}</text></g></sc-for>
+              </svg>
+              <sc-for list="{{names}}" as="nm" hint-placeholder-count="12"><button type="button" class="nm {{nm.cls}}" onClick="{{nm.pick}}" aria-pressed="{{nm.on}}" style="left:calc({{nm.x}}% + 14px);top:{{nm.y}}%">{{nm.l}}</button></sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const hlState = s.hl || ['marta', 'lucia'];
+    const YRS = [2023, 2024, 2025, 2026], ord = { 2023: P.past[2023], 2024: P.past[2024], 2025: P.past[2025], 2026: O };
+    const ptsOf = (y, i) => y === 2026 ? P.total[O[i]] : P.pastPts[y][i];
+    const champs = YRS.slice().reverse().map((y) => { const L = ord[y], live = y === 2026; return { year: y, status: live ? 'en curso · 17/24' : 'cerrada', name: P.byId[L[0]].name, pts: ptsOf(y, 0), margin: '+' + (ptsOf(y, 0) - ptsOf(y, 1)) + ' sobre el 2.º', second: P.byId[L[1]].name.split(' ')[0], third: P.byId[L[2]].name.split(' ')[0], cls: live ? 'live' : '', ic: live ? 'var(--muted)' : 'var(--gold)' }; });
+    const T = {}; P.users.forEach((u) => { T[u.id] = { g: 0, s: 0, b: 0, wins: P.gpRank[u.id].filter((r) => r === 1).length + Math.round((u.skill - 24) / 4) }; });
+    [2023, 2024, 2025].forEach((y) => { T[ord[y][0]].g++; T[ord[y][1]].s++; T[ord[y][2]].b++; });
+    const medals = Object.keys(T).filter((id) => T[id].g + T[id].s + T[id].b > 0 || T[id].wins >= 5).sort((a, b) => T[b].g - T[a].g || T[b].s - T[a].s || T[b].b - T[a].b || T[b].wins - T[a].wins).map((id) => ({ name: P.byId[id].name + (id === me ? ' (tú)' : ''), cls: id === me ? 'me' : '', g: T[id].g, hasG: T[id].g > 0, noG: !T[id].g, s: T[id].s || '·', b: T[id].b || '·', wins: T[id].wins }));
+    const X = [60, 250, 440, 630], Y = (r) => 44 + (r - 1) * 33;
+    const hl = hlState.filter((id) => id !== me);
+    const on = (id) => id === me || hl.indexOf(id) >= 0;
+    const col = (id) => on(id) ? P.hue(id, hl) : 'var(--border-input)';
+    const posOf = (id) => YRS.map((y) => { const i = ord[y].indexOf(id); return i < 0 ? null : i + 1; });
+    const ids = P.users.map((u) => u.id).sort((a, b) => on(a) - on(b) || (a === me) - (b === me));
+    const slopes = ids.map((id) => { let d = '', m = 'M'; posOf(id).forEach((p, k) => { if (p == null) { m = 'M'; return; } d += m + X[k] + ' ' + Y(p); m = 'L'; }); return { d, c: col(id), w: id === me ? 3.5 : on(id) ? 2.5 : 1.2 }; });
+    const pts = []; ids.filter(on).forEach((id) => posOf(id).forEach((p, k) => { if (p != null) pts.push({ x: X[k], y: Y(p), ty: Y(p) + 4, v: p, c: col(id) }); }));
+    return {
+      champs, medals, years: YRS.map((y, k) => ({ x: X[k], l: y === 2026 ? '2026 (actual)' : String(y) })), slopes, pts,
+      names: O.map((id) => ({ l: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], x: (X[3] / 700 * 100).toFixed(1), y: (Y(O.indexOf(id) + 1) / 420 * 100).toFixed(1), on: on(id), cls: on(id) ? 'on' : '',
+        pick: () => { if (id === me) return; const h = hlState.slice(), i = h.indexOf(id); if (i >= 0) h.splice(i, 1); else { h.push(id); if (h.length > 5) h.shift(); } this.setState({ hl: h }); } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

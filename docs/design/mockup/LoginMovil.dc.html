@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Iniciar sesión móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="mroot" style="min-height:844px">
+  <header class="mhead"><a class="btn btn-ghost btn-ic" href="LandingMovil.dc.html" aria-label="Volver"><span class="i s24">arrow_back</span></a><span class="fx"></span><button type="button" class="btn btn-ghost btn-ic" onClick="{{toggle}}" aria-label="Cambiar tema claro u oscuro"><span class="i">{{themeIcon}}</span></button></header>
+  <div class="body" style="gap:24px;padding-top:24px">
+    <div class="col g8"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="48" height="48" style="width:48px;height:48px;object-fit:contain"><h1 class="t-sub">Iniciar sesión</h1><p class="t-sm muted">Entra para pronosticar con tu comunidad.</p></div>
+    <div class="alert al-info"><span class="i">info</span><span>Inicia sesión para pronosticar el GP de Singapur.</span></div>
+    <div class="field"><label class="lbl" for="lm1">Correo electrónico</label><input id="lm1" class="inp" type="email" value="alex@correo.com" style="min-height:48px"></div>
+    <div class="field"><div class="row sp"><label class="lbl" for="lm2">Contraseña</label><a class="t-cap" href="Recuperar.dc.html">¿Has olvidado tu contraseña?</a></div><input id="lm2" class="inp" type="password" value="contraseña" style="min-height:48px"></div>
+    <button type="button" class="btn btn-primary btn-lg btn-block" style="min-height:48px">Iniciar sesión</button>
+    <button type="button" class="btn btn-outline btn-block" style="min-height:48px"><span class="i">send</span>Continuar con Telegram</button>
+    <p class="t-sm muted" style="text-align:center">¿No tienes cuenta? <a href="Registro.dc.html"><b>Regístrate</b></a></p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._h = (e) => this.setState({ dark: e.detail === 'dark' });
+    window.addEventListener('pg-theme', this._h);
+    try { this.setState({ dark: window.pgTheme && window.pgTheme() === 'dark' }); } catch (e) {}
+  }
+  componentWillUnmount() { window.removeEventListener('pg-theme', this._h); }
+  renderVals() {
+    const dark = !!(this.state && this.state.dark);
+    return { themeIcon: dark ? 'light_mode' : 'dark_mode', toggle: () => { try { const t = window.pgToggleTheme(); this.setState({ dark: t === 'dark' }); } catch (e) {} } };
+  }
+}
+</script>
+</body>
+</html>

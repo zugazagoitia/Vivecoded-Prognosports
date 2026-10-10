@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fundamentos visuales</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.sw-c{height:56px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.sw-n{font-size:11px;line-height:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px var(--border)}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" admin="{{ false }}" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 01</span>
+      <h1 class="t-title">Fundamentos</h1>
+      <p class="t-body muted" style="max-width:720px">Todo sale de los tokens del design system actual. Los colores de interfaz son los del design system. Para datos se añaden tres familias con par claro/oscuro: series (tú y 5 resaltados), escala secuencial y estados de acierto.</p>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Color de marca</h2><span class="t-sm muted">Dos escalas moradas: <b class="hd">brand</b> para el logo y los enfoques, <b class="hd">brand-accent</b> para la acción principal.</span></div>
+      <div class="card-b col g24">
+        <div class="col g8"><span class="up">brand · logo, foco, enlaces</span>
+          <div style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px">
+            <sc-for list="{{brand}}" as="s" hint-placeholder-count="10"><div class="col" style="gap:4px"><div class="sw-c" style="background:{{s.hex}}"></div><span class="sw-n">{{s.n}}<br>{{s.hex}}</span></div></sc-for>
+          </div></div>
+        <div class="col g8"><span class="up">brand-accent · botón principal</span>
+          <div style="display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px">
+            <sc-for list="{{acc}}" as="s" hint-placeholder-count="10"><div class="col" style="gap:4px"><div class="sw-c" style="background:{{s.hex}}"></div><span class="sw-n">{{s.n}}<br>{{s.hex}}</span></div></sc-for>
+          </div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Colores semánticos</h2><span class="t-sm muted">Cada token tiene valor claro y oscuro. Cambia el tema para verlos mover.</span></div>
+      <div class="card-b grid4" style="gap:16px">
+        <sc-for list="{{sem}}" as="s" hint-placeholder-count="12">
+          <div class="row" style="align-items:center"><div style="width:44px;height:44px;border-radius:8px;background:{{s.v}};box-shadow:inset 0 0 0 1px var(--border);flex:none"></div><div class="col" style="gap:0;min-width:0"><b class="t-sm hd">{{s.n}}</b><span class="t-cap muted">{{s.d}}</span></div></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Foco + contexto</h2><span class="t-sm muted">La regla de todos los gráficos con jugadores. Pulsa los chips para resaltar.</span></div><span class="tag tg-brand">Regla</span></div>
+      <div class="card-b split" style="align-items:start">
+        <div class="col g12" style="min-width:0">
+          <svg viewBox="0 0 640 220" width="100%" class="chart" role="img" aria-label="Ejemplo de foco y contexto: tu línea en morado, resaltados en color y resto en gris">
+            <sc-for list="{{fcLines}}" as="l" hint-placeholder-count="10"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round;stroke-linecap:round"></path></sc-for>
+            <sc-for list="{{fcLabels}}" as="l" hint-placeholder-count="4"><g><circle cx="540" cy="{{l.cy}}" r="4" style="fill:{{l.c}};stroke:var(--surface);stroke-width:2"></circle><text x="550" y="{{l.y}}" class="lbl-s" style="fill:var(--h)">{{l.n}}</text></g></sc-for>
+          </svg>
+          <div class="row g8 wrapf"><span class="up" style="margin-right:4px">Resaltar</span><sc-for list="{{fcChips}}" as="c" hint-placeholder-count="9"><button type="button" class="pchip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}"><i style="background:{{c.c}}"></i>{{c.n}}</button></sc-for></div>
+        </div>
+        <div class="col g12">
+          <div class="rowt"><span class="i" style="color:var(--c-you)">person</span><p class="t-sm"><b class="hd">Tú, siempre en morado</b> y con el trazo más grueso (3–4 px). Nunca cambia de color.</p></div>
+          <div class="rowt"><span class="i" style="color:var(--c-2)">palette</span><p class="t-sm"><b class="hd">Hasta 5 resaltados</b> con colores fijos en este orden. El color sigue al jugador, no a su puesto: un filtro no repinta a nadie.</p></div>
+          <div class="rowt"><span class="i muted">blur_on</span><p class="t-sm"><b class="hd">El resto en gris</b>, fino y por detrás. Da contexto sin competir.</p></div>
+          <div class="rowt"><span class="i" style="color:var(--ring)">label</span><p class="t-sm"><b class="hd">Etiquetas directas</b> al final de cada línea resaltada; separadas al menos 13 px.</p></div>
+          <div class="row g8 wrapf" style="padding-top:4px"><sc-for list="{{series}}" as="c" hint-placeholder-count="7"><span class="col" style="gap:2px;align-items:center"><span style="width:36px;height:20px;border-radius:4px;background:{{c.v}}"></span><span class="t-cap muted mono" style="padding:0">{{c.n}}</span></span></sc-for></div>
+        </div>
+      </div>
+      <div class="card-f" style="justify-content:flex-start;flex-wrap:wrap;gap:16px"><span class="up">Escala secuencial</span><span class="row g8" style="gap:2px"><span class="sq1" style="width:28px;height:16px;border-radius:2px"></span><span class="sq2" style="width:28px;height:16px;border-radius:2px"></span><span class="sq3" style="width:28px;height:16px;border-radius:2px"></span><span class="sq4" style="width:28px;height:16px;border-radius:2px"></span><span class="sq5" style="width:28px;height:16px;border-radius:2px"></span><span class="sq6" style="width:28px;height:16px;border-radius:2px"></span><span class="sq7" style="width:28px;height:16px;border-radius:2px"></span></span><span class="t-sm muted">Un solo tono, de claro (menos) a oscuro (más). Clases <span class="mono">.sq1</span>…<span class="mono">.sq7</span> con texto legible en ambos temas.</span></div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Estados</h2></div>
+        <div class="card-b col g8">
+          <div class="alert al-ok"><span class="i">check_circle</span><span><b>Éxito.</b> Pronóstico guardado.</span></div>
+          <div class="alert al-warn"><span class="i">schedule</span><span><b>Atención.</b> La sesión cierra en 12 minutos.</span></div>
+          <div class="alert al-err"><span class="i">error</span><span><b>Error.</b> No se ha podido guardar el pronóstico.</span></div>
+          <div class="alert al-info"><span class="i">info</span><span><b>Información.</b> Los resultados se publican al terminar la sesión.</span></div>
+          <p class="note">Un color de estado siempre lleva icono y palabra. Rojo y verde nunca van solos.</p>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Aciertos</h2><span class="t-sm muted">Se usan en pronósticos y resultados</span></div>
+        <div class="card-b col g8">
+          <div class="row"><span class="cellp hit-ex">5</span><span class="t-sm"><b class="hd">Exacto.</b> Piloto en la posición pronosticada.</span></div>
+          <div class="row"><span class="cellp hit-1">3</span><span class="t-sm"><b class="hd">A una posición.</b> Una más o una menos.</span></div>
+          <div class="row"><span class="cellp hit-2">1</span><span class="t-sm"><b class="hd">A dos posiciones.</b></span></div>
+          <div class="row"><span class="cellp hit-x">0</span><span class="t-sm"><b class="hd">Fallo.</b> Sin color: lo que importa es ver quién acierta.</span></div>
+          <div class="row"><span class="cellp hit-n">–</span><span class="t-sm"><b class="hd">Sin pronóstico</b> o sin resultado todavía.</span></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Tipografía</h2><span class="t-sm muted">Una sola familia: Inter. El énfasis va en el peso, no en el tamaño.</span></div>
+      <div class="card-b col g16">
+        <sc-for list="{{type}}" as="t" hint-placeholder-count="6">
+          <div class="row sp wrapf" style="border-bottom:1px solid var(--border);padding-bottom:12px;align-items:baseline"><span style="font-size:{{t.size}};line-height:{{t.lh}};font-weight:{{t.w}};color:var(--h)">{{t.sample}}</span><span class="t-cap muted tn">{{t.spec}}</span></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <div class="grid3">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Radios</h2></div>
+        <div class="card-b col g16">
+          <div class="row"><div style="width:48px;height:32px;border-radius:4px;background:var(--tint)"></div><span class="t-sm"><b class="hd">4 px</b> · etiquetas, alertas, casillas</span></div>
+          <div class="row"><div style="width:48px;height:32px;border-radius:6px;background:var(--tint)"></div><span class="t-sm"><b class="hd">6 px</b> · botones, campos, enlaces</span></div>
+          <div class="row"><div style="width:48px;height:32px;border-radius:8px;background:var(--tint)"></div><span class="t-sm"><b class="hd">8 px</b> · tarjetas, tablas, menús</span></div>
+          <div class="row"><div style="width:48px;height:32px;border-radius:999px;background:var(--tint)"></div><span class="t-sm"><b class="hd">Píldora</b> · chips, avatares, interruptores</span></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Elevación</h2></div>
+        <div class="card-b col g16" style="background:var(--page);border-radius:0 0 8px 8px">
+          <div class="card card-b t-sm"><b class="hd">Tarjeta</b><br>sombra + anillo del 5 %</div>
+          <div class="menu t-sm" style="min-width:0"><b class="hd" style="padding:6px 10px">Menú o tooltip</b></div>
+          <div class="btn btn-outline" style="align-self:flex-start">Control con sombra sm</div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Espaciado</h2></div>
+        <div class="card-b col g8">
+          <sc-for list="{{space}}" as="s" hint-placeholder-count="5"><div class="row"><div style="width:{{s.px}}px;height:12px;border-radius:2px;background:var(--ring)"></div><span class="t-sm tn"><b class="hd">{{s.px}} px</b> · {{s.use}}</span></div></sc-for>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Iconos</h2><span class="t-sm muted">En el canvas se dibujan con Material Symbols como sustituto. En la app, un único set: Font Awesome 6 auto-hospedado, sin Material Icons.</span></div>
+      <div class="card-b" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px">
+        <sc-for list="{{icons}}" as="ic" hint-placeholder-count="16"><div class="col" style="align-items:center;gap:6px;padding:12px 4px;border-radius:8px;background:var(--surface-muted)"><span class="i s24" style="color:var(--tint-fg)">{{ic.n}}</span><span class="t-cap muted" style="text-align:center">{{ic.l}}</span></div></sc-for>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Logo</h2></div>
+      <div class="card-b row g32 wrapf">
+        <div class="row g16" style="padding:20px 28px;border-radius:8px;background:#fff;box-shadow:inset 0 0 0 1px #e5e7eb"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="40" height="40" style="width:40px;height:40px;object-fit:contain"><b style="font-size:20px;color:#111827">PrognoSports</b></div>
+        <div class="row g16" style="padding:20px 28px;border-radius:8px;background:#111827"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="40" height="40" style="width:40px;height:40px;object-fit:contain"><b style="font-size:20px;color:#f3f4f6">PrognoSports</b></div>
+        <p class="t-sm muted" style="flex:1 1 280px">La marca es el icono más el nombre en Inter 600, siempre en una palabra con dos mayúsculas. En la barra superior el icono mide 28 px.</p>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sc = (pre, hexes) => ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'].map((n, i) => ({ n: pre + n, hex: hexes[i] }));
+    const S = (n, v, d) => ({ n, v: 'var(--' + v + ')', d });
+    const P = window.PG, st = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const hl = (st.hl || O.slice(0, 3)).filter((id) => id !== me);
+    const on = (id) => id === me || hl.indexOf(id) >= 0;
+    const top = []; for (let g = 0; g < n; g++) top[g] = Math.max.apply(null, P.users.map((u) => P.acc[u.id][g]));
+    let lo = 0; P.users.forEach((u) => P.acc[u.id].forEach((v, g) => { lo = Math.min(lo, v - top[g]); }));
+    const X = (g) => 10 + g * 520 / (n - 1), Y = (v, g) => 14 + (v - top[g]) / lo * 190;
+    const ids = P.users.map((u) => u.id).sort((a, b) => on(a) - on(b) || (a === me) - (b === me));
+    const fcLines = ids.map((id) => ({ d: P.acc[id].map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v, g).toFixed(1)).join(''), c: on(id) ? P.hue(id, hl) : 'var(--c-rest)', w: id === me ? 3.5 : on(id) ? 2.2 : 1 }));
+    const fcLabels = ids.filter(on).map((id) => ({ cy: Y(P.acc[id][n - 1], n - 1), y: Y(P.acc[id][n - 1], n - 1) + 4, n: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], c: P.hue(id, hl) })).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < fcLabels.length; i++) if (fcLabels[i].y < fcLabels[i - 1].y + 13) fcLabels[i].y = fcLabels[i - 1].y + 13;
+    return {
+      fcLines, fcLabels, series: [['--c-you', 'tú'], ['--c-2', '2'], ['--c-3', '3'], ['--c-4', '4'], ['--c-5', '5'], ['--c-6', '6'], ['--c-rest', 'resto']].map((x) => ({ v: 'var(' + x[0] + ')', n: x[1] })),
+      fcChips: O.slice(0, 9).map((id) => ({ n: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], on: on(id), cls: on(id) ? 'on' : '', c: on(id) ? P.hue(id, hl) : 'var(--c-rest)', pick: () => { if (id === me) return; const c = hl.slice(); const i = c.indexOf(id); if (i >= 0) c.splice(i, 1); else { c.push(id); if (c.length > 5) c.shift(); } this.setState({ hl: c }); } })),
+      brand: sc('', ['#f5f0fa', '#ebe1f5', '#d7c3eb', '#c3a5e1', '#a18acc', '#693ba7', '#5d34a0', '#4c2b7a', '#3a215e', '#281742']),
+      acc: sc('', ['#f8f2fe', '#f0e4fd', '#e1cafb', '#d2aff9', '#c395f7', '#8e4aec', '#7e3edb', '#6636aa', '#4d2980', '#331b56']),
+      sem: [S('page', 'page', 'Fondo de la app'), S('surface', 'surface', 'Tarjetas y barra'), S('surface-muted', 'surface-muted', 'Cabeceras de tabla'), S('surface-input', 'surface-input', 'Campos'), S('text-heading', 'h', 'Títulos'), S('text-body', 'body', 'Texto'), S('text-muted', 'muted', 'Ayudas y metadatos'), S('border', 'border', 'Separadores'), S('primary', 'primary', 'Acción principal'), S('tint', 'tint', 'Fondo suave de marca'), S('link', 'link', 'Enlaces'), S('focus-ring', 'ring', 'Foco y selección')],
+      type: [
+        { sample: 'Pronostica la parrilla', size: '36px', lh: '40px', w: 600, spec: 'título · 36/40 · 600 (24 en móvil)' },
+        { sample: 'Grandes Premios 2026', size: '24px', lh: '32px', w: 600, spec: 'subtítulo · 24/32 · 600' },
+        { sample: 'Pilotos disponibles', size: '20px', lh: '28px', w: 600, spec: 'cabecera de bloque · 20/28 · 600' },
+        { sample: 'Elige ocho pilotos y ordénalos antes del cierre.', size: '16px', lh: '24px', w: 400, spec: 'cuerpo · 16/24 · 400' },
+        { sample: 'Cierra el viernes a las 12:25 (hora de Madrid)', size: '14px', lh: '20px', w: 400, spec: 'cuerpo pequeño · 14/20 · tablas, tags, navegación' },
+        { sample: 'ÚLTIMA ACTUALIZACIÓN HACE 5 MIN', size: '12px', lh: '16px', w: 600, spec: 'mayúsculas · 12/16 · 600 · solo cabeceras y etiquetas' }
+      ],
+      space: [{ px: 8, use: 'dentro de controles' }, { px: 12, use: 'celdas y tarjetas compactas' }, { px: 16, use: 'huecos entre bloques' }, { px: 20, use: 'relleno de tarjeta' }, { px: 24, use: 'separación de secciones' }, { px: 32, use: 'separación de páginas' }],
+      icons: [['home', 'Inicio'], ['flag', 'Gran Premio'], ['leaderboard', 'Ranking'], ['groups', 'Comunidad'], ['person', 'Perfil'], ['notifications', 'Avisos'], ['schedule', 'Cierre'], ['lock', 'Cerrado'], ['emoji_events', 'Trofeo'], ['timer', 'Vuelta rápida'], ['route', 'Circuito'], ['sports_score', 'Meta'], ['tune', 'Filtros'], ['table_chart', 'Tabla'], ['share', 'Compartir'], ['content_copy', 'Copiar']].map((x) => ({ n: x[0], l: x[1] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

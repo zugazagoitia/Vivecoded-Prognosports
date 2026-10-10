@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Barra superior</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0;font-family:Inter,system-ui,sans-serif}
+.nav .only-s{display:none}
+@media(max-width:900px){.nav .nl-d{display:none}.nav .only-s{display:inline-flex}.nav .comm{display:none}}
+.dot-n{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--err);box-shadow:0 0 0 2px var(--surface)}
+</style>
+</helmet>
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="{{homeHref}}"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="28" height="28">PrognoSports</a>
+    <nav aria-label="Principal" style="display:flex;gap:2px;margin-left:12px" class="nl-d">
+      <sc-for list="{{links}}" as="l" hint-placeholder-count="5">
+        <a class="nl {{l.cls}}" href="{{l.href}}">{{l.label}}</a>
+      </sc-for>
+    </nav>
+    <span class="fx"></span>
+    <sc-if value="{{isOut}}" hint-placeholder-val="{{ false }}">
+      <button type="button" class="btn btn-ghost btn-sm btn-ic" onClick="{{toggle}}" aria-label="Cambiar tema claro u oscuro"><span class="i">{{themeIcon}}</span></button>
+      <a class="btn btn-ghost btn-sm nl-d" href="Login.dc.html">Iniciar sesión</a>
+      <a class="btn btn-primary btn-sm" href="Registro.dc.html">Registrarse</a>
+    </sc-if>
+    <sc-if value="{{isIn}}" hint-placeholder-val="{{ true }}">
+      <button type="button" class="btn btn-outline btn-sm comm" aria-label="Cambiar de comunidad" style="max-width:220px"><span class="i s16" style="color:var(--ring)">groups</span><span class="ell">Amigos del paddock</span><span class="i s16">expand_more</span></button>
+      <a class="btn btn-ghost btn-sm btn-ic" href="Notificaciones.dc.html" aria-label="Notificaciones" style="position:relative"><span class="i">notifications</span><span class="dot-n"></span></a>
+      <button type="button" class="btn btn-ghost btn-sm btn-ic" onClick="{{toggle}}" aria-label="Cambiar tema claro u oscuro"><span class="i">{{themeIcon}}</span></button>
+      <a href="Perfil.dc.html" aria-label="Mi perfil" style="display:inline-flex;margin-left:4px"><span class="av you">ÁR</span></a>
+    </sc-if>
+  </div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","default":"inicio","options":["inicio","gps","ranking","comunidades","circuitos","admin","ninguno"]},"user":{"editor":"enum","default":"in","options":["in","out"]},"admin":{"editor":"boolean","default":false},"$preview":{"width":1440,"height":56}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._h = (e) => this.setState({ dark: e.detail === 'dark' });
+    window.addEventListener('pg-theme', this._h);
+    try { this.setState({ dark: window.pgTheme && window.pgTheme() === 'dark' }); } catch (e) {}
+  }
+  componentWillUnmount() { window.removeEventListener('pg-theme', this._h); }
+  renderVals() {
+    const a = this.props.active || 'inicio';
+    const out = (this.props.user || 'in') === 'out';
+    const L = out
+      ? [['Cómo se puntúa', 'Reglas.dc.html', 'reglas'], ['Circuitos', 'Circuitos.dc.html', 'circuitos'], ['Preguntas frecuentes', 'FAQ.dc.html', 'faq']]
+      : [['Inicio', 'Inicio.dc.html', 'inicio'], ['Grandes Premios', 'GPLista.dc.html', 'gps'], ['Ranking', 'RankingResumen.dc.html', 'ranking'], ['Comunidades', 'Comunidades.dc.html', 'comunidades'], ['Circuitos', 'Circuitos.dc.html', 'circuitos']];
+    if (!out && this.props.admin) L.push(['Administración', 'AdminPanel.dc.html', 'admin']);
+    const dark = !!(this.state && this.state.dark);
+    return {
+      isOut: out, isIn: !out,
+      homeHref: out ? 'Landing.dc.html' : 'Inicio.dc.html',
+      themeIcon: dark ? 'light_mode' : 'dark_mode',
+      toggle: () => { try { const t = window.pgToggleTheme(); this.setState({ dark: t === 'dark' }); } catch (e) {} },
+      links: L.map((l) => ({ label: l[0], href: l[1], cls: l[2] === a ? 'on' : '' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

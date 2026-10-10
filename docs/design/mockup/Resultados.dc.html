@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Resultados de la sesión</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.cellp.hid{background:var(--surface-muted);color:var(--muted);font-weight:500;letter-spacing:.1em}
+.cellp.mine{background:var(--surface);box-shadow:inset 0 0 0 1px var(--border);color:var(--h)}
+.cellp.vis{background:var(--surface);box-shadow:inset 0 0 0 1px var(--border);color:var(--h)}
+.cellp{min-width:48px;gap:4px}
+.cellp .tm{width:3px;height:14px;border-radius:2px;display:inline-block}
+.real td{background:var(--brand-900);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .real td{background:var(--brand-200);color:var(--brand-900)}}
+:root[data-theme="dark"] .real td{background:var(--brand-200);color:var(--brand-900)}
+.real .cellp{color:inherit;font-weight:700}
+.lgk{width:16px;height:12px;border-radius:3px;display:inline-block}
+.banner{display:flex;gap:10px;align-items:center;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPLista.dc.html">Grandes Premios</a><span class="i">chevron_right</span><a href="GPDetalle.dc.html">Azerbaiyán</a><span class="i">chevron_right</span><span>Resultados</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end">
+      <div class="col" style="gap:2px"><h1 class="t-title">{{sessTitle}} · pronósticos y resultados</h1><p class="muted">Gran Premio de Azerbaiyán · Ronda 17 · Amigos del paddock</p></div>
+      <div class="row g8 wrapf">
+        <div class="seg" role="group" aria-label="Sesión"><sc-for list="{{sess}}" as="x" hint-placeholder-count="2"><button type="button" class="sg {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div>
+        <div class="seg" role="group" aria-label="Vista"><button type="button" class="sg {{v0}}" onClick="{{pv0}}">Comunidad</button><button type="button" class="sg {{v1}}" onClick="{{pv1}}">Tu desglose</button></div>
+      </div>
+    </div>
+
+    <sc-if value="{{isCom}}" hint-placeholder-val="{{ true }}">
+      <section class="card">
+        <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Toda la comunidad</h2><span class="t-sm muted">La misma tabla cambia según el momento de la sesión.</span></div><div class="seg" role="group" aria-label="Momento"><sc-for list="{{states}}" as="x" hint-placeholder-count="3"><button type="button" class="sg {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div></div>
+        <div class="card-b" style="padding-bottom:0"><div class="banner" style="background:{{bBg}};color:{{bFg}}"><span class="i">{{bIcon}}</span><span>{{banner}}</span></div></div>
+        <div class="tw"><table class="tbl tn">
+          <thead><tr><th>Pos.</th><th>Jugador</th><sc-for list="{{heads}}" as="h" hint-placeholder-count="8"><th class="c">{{h}}</th></sc-for><th class="r">Exactos</th><th class="r">Sesión</th><th class="r">Total</th></tr></thead>
+          <tbody>
+            <sc-if value="{{showReal}}" hint-placeholder-val="{{ true }}"><tr class="real"><td></td><td><b>Resultado real</b></td><sc-for list="{{real}}" as="c" hint-placeholder-count="8"><td class="c"><span class="cellp"><i class="tm" style="background:{{c.c}}"></i>{{c.code}}</span></td></sc-for><td></td><td></td><td></td></tr></sc-if>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+              <tr class="{{r.cls}}"><td><b class="hd">{{r.pos}}</b></td><td><a class="row g8" href="PerfilUsuario.dc.html" style="color:inherit"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd ell">{{r.name}}</b></a></td>
+                <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="8"><td class="c"><span class="cellp {{c.k}}" title="{{c.t}}"><i class="tm" style="background:{{c.c}}"></i>{{c.code}}</span></td></sc-for>
+                <td class="r">{{r.ex}}</td><td class="r"><b class="hd">{{r.pts}}</b></td><td class="r muted">{{r.total}}</td></tr>
+            </sc-for>
+          </tbody></table></div>
+        <div class="card-f" style="justify-content:flex-start"><div class="legend"><sc-for list="{{legend}}" as="l" hint-placeholder-count="4"><span><i class="lgk" style="background:{{l.bg}};box-shadow:inset 0 0 0 1px {{l.bd}}"></i>{{l.t}}</span></sc-for><span>La raya de color es el equipo del piloto</span></div></div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isMine}}" hint-placeholder-val="{{ false }}">
+      <div class="grid4" style="gap:16px">
+        <div class="card kpi"><span class="k">Puntos de la sesión</span><span class="v tn">{{myPts}}</span><span class="d">de {{max}} posibles</span></div>
+        <div class="card kpi"><span class="k">Exactos</span><span class="v tn">{{myEx}}</span><span class="d">5 puntos cada uno</span></div>
+        <div class="card kpi"><span class="k">A una o dos posiciones</span><span class="v tn">{{myNear}}</span><span class="d">3 y 1 puntos</span></div>
+        <div class="card kpi"><span class="k">Puesto en la sesión</span><span class="v tn">{{myRank}}.º</span><span class="d">de 12 jugadores</span></div>
+      </div>
+      <div class="split">
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Tu pronóstico frente al resultado</h2></div>
+          <div class="tw"><table class="tbl tn"><thead><tr><th>Pos.</th><th>Resultado real</th><th>Tu pronóstico</th><th>Diferencia</th><th class="r">Puntos</th></tr></thead>
+            <tbody><sc-for list="{{mine}}" as="r" hint-placeholder-count="8"><tr><td><span class="pos">{{r.p}}</span></td><td><span class="row g8"><span class="team" style="background:{{r.rc}};height:18px"></span><b class="hd">{{r.real}}</b></span></td><td><span class="row g8"><span class="team" style="background:{{r.pc}};height:18px"></span><b class="hd">{{r.pick}}</b></span></td><td><span class="cellp {{r.k}}">{{r.diff}}</span></td><td class="r"><b class="hd">{{r.pts}}</b></td></tr></sc-for></tbody></table></div>
+        </section>
+        <aside class="col g24" style="min-width:0">
+          <section class="card"><div class="card-h"><h2 class="t-head">Bonus del GP</h2></div><div class="card-b col g8"><div class="row sp"><span class="t-sm muted">Más aciertos en el GP</span><b class="hd">{{gpWinner}}</b></div><span class="t-sm muted">Quien más aciertos consigue en el fin de semana gana 5 extra; si hay empate, lo comparten. Se confirma cuando cierran todas las sesiones.</span></div></section>
+          <section class="card"><div class="card-h"><h2 class="t-head">Simula otro resultado</h2></div><div class="card-b col g8"><span class="t-sm muted">¿Y si VER hubiera acabado 2.º? Prueba escenarios sin guardar nada.</span><a class="btn btn-soft btn-sm" href="Simulador.dc.html" style="align-self:flex-start">Abrir el simulador</a></div></section>
+        </aside>
+      </div>
+    </sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, k = s.k || 'r', st = s.st || 'res', view = s.v || 0;
+    const n = P.SESS[k][2], real = P.REAL[k], col = (c) => P.drv(c).color;
+    const g = 16;
+    let data = P.users.map((u, i) => { const p = P.pred(u.id, k), sc = P.score(p, real); return { u, p, sc, made: u.id !== 'ruben' }; });
+    data.forEach((d) => { if (!d.made) d.sc = { pts: 0, ex: 0, cells: [] }; });
+    if (st === 'res') data.sort((a, b) => b.sc.pts - a.sc.pts || b.sc.ex - a.sc.ex); else data.sort((a, b) => P.order.indexOf(a.u.id) - P.order.indexOf(b.u.id));
+    const KS = { ex: 'hit-ex', '1': 'hit-1', '2': 'hit-2', x: 'hit-x' }, TT = { ex: 'Exacto', '1': 'A una posición', '2': 'A dos posiciones', x: 'Fallo' };
+    let pos = 0, last = null;
+    const rows = data.map((d, i) => {
+      const me = d.u.id === 'alex';
+      if (st === 'res' && d.made && d.sc.pts !== last) { pos = i + 1; last = d.sc.pts; }
+      const cells = []; for (let j = 0; j < n; j++) {
+        const c = d.p[j];
+        if (!d.made) { cells.push({ k: 'hid', code: '—', c: 'transparent', t: 'Sin pronóstico' }); continue; }
+        if (st === 'pre') { cells.push(me ? { k: 'mine', code: c, c: col(c), t: 'Tu pronóstico' } : { k: 'hid', code: '•••', c: 'transparent', t: 'Oculto hasta el cierre' }); continue; }
+        if (st === 'open') { cells.push({ k: 'vis', code: c, c: col(c), t: (j + 1) + '.º: ' + c }); continue; }
+        const x = d.sc.cells[j], rj = real.indexOf(c);
+        cells.push({ k: KS[x.k], code: c, c: x.k === 'ex' ? 'rgba(255,255,255,.7)' : col(c), t: TT[x.k] + (rj >= 0 && x.k !== 'ex' ? ' (acabó ' + (rj + 1) + '.º)' : '') });
+      }
+      return { pos: st === 'res' ? (d.made ? pos + '.º' : '—') : (i + 1) + '.º', name: d.u.name + (me ? ' (tú)' : ''), ini: d.u.ini, me: me ? 'you' : '', cls: me ? 'me' : '', cells,
+        ex: st === 'res' && d.made ? d.sc.ex : '—', pts: st === 'res' ? d.sc.pts : '—', total: P.acc[d.u.id][g - 1] + (st === 'res' ? d.sc.pts : 0) };
+    });
+    const made = data.filter((d) => d.made).length, top = data[0];
+    const B = { pre: ['Los pronósticos se verán al cierre, el domingo 26 a las 12:55. ' + made + ' de 12 ya han pronosticado.', 'var(--info-tint)', 'var(--info-fg)', 'visibility_off'],
+      open: ['Pronósticos cerrados y visibles. Esperando el resultado oficial de la sesión.', 'var(--warn-tint)', 'var(--warn-fg)', 'hourglass_top'],
+      res: ['Resultado confirmado. Gana la sesión ' + top.u.name + ' con ' + top.sc.pts + ' puntos.', 'var(--ok-tint)', 'var(--ok-fg)', 'emoji_events'] };
+    const L = st === 'res' ? [['var(--hit-ex)', 'var(--hit-ex)', 'Exacto · 5'], ['var(--hit-1)', 'var(--hit-1)', 'A una posición · 3'], ['var(--hit-2)', 'var(--hit-2)', 'A dos posiciones · 1'], ['transparent', 'var(--border)', 'Fallo · 0 (sin color)']]
+      : st === 'pre' ? [['var(--surface-muted)', 'var(--border)', 'Oculto hasta el cierre'], ['var(--surface)', 'var(--border)', 'Tu pronóstico (solo lo ves tú)']] : [['var(--surface)', 'var(--border)', 'Pronóstico de cada jugador']];
+    const me = data.filter((d) => d.u.id === 'alex')[0], mp = me.p;
+    let near = 0; const mine = real.map((c, i) => { const j = mp.indexOf(c), dd = j < 0 ? 9 : Math.abs(j - i); const kk = dd === 0 ? ['hit-ex', 5, 'Exacto'] : dd === 1 ? ['hit-1', 3, (j > i ? 'Lo pusiste 1 más abajo' : 'Lo pusiste 1 más arriba')] : dd === 2 ? ['hit-2', 1, 'A dos posiciones'] : ['hit-x', 0, j < 0 ? 'No lo pusiste' : 'Lejos']; if (dd === 1 || dd === 2) near++;
+      return { p: i + 1, real: c, rc: col(c), pick: mp[i], pc: col(mp[i]), k: kk[0], diff: kk[2], pts: kk[1] }; });
+    const ranked = data.filter((d) => d.made).sort((a, b) => b.sc.pts - a.sc.pts);
+    return {
+      sessTitle: P.SESS[k][0], sess: [['r', 'Carrera'], ['q', 'Clasificación']].map((x) => ({ l: x[1], cls: x[0] === k ? 'on' : '', pick: () => this.setState({ k: x[0] }) })),
+      v0: view === 0 ? 'on' : '', v1: view === 1 ? 'on' : '', pv0: () => this.setState({ v: 0 }), pv1: () => this.setState({ v: 1 }), isCom: view === 0, isMine: view === 1,
+      states: [['pre', 'Antes del cierre'], ['open', 'Pronósticos visibles'], ['res', 'Con resultados']].map((x) => ({ l: x[1], cls: x[0] === st ? 'on' : '', pick: () => this.setState({ st: x[0] }) })),
+      banner: B[st][0], bBg: B[st][1], bFg: B[st][2], bIcon: B[st][3],
+      heads: real.map((c, i) => (i + 1) + '.º'), showReal: st === 'res', real: real.map((c) => ({ code: c, c: col(c) })), rows, legend: L.map((l) => ({ bg: l[0], bd: l[1], t: l[2] })),
+      myPts: me.sc.pts, myEx: me.sc.ex, myNear: near, max: n * 5, myRank: ranked.findIndex((d) => d.u.id === 'alex') + 1, mine,
+      gpWinner: (() => { const mx = Math.max.apply(null, P.users.map((u) => P.hits[u.id][g])); return P.users.filter((u) => P.hits[u.id][g] === mx).map((u) => u.name.split(' ')[0]).join(' y ') + ' · ' + mx + ' aciertos'; })(),
+    };
+  }
+}
+</script>
+</body>
+</html>

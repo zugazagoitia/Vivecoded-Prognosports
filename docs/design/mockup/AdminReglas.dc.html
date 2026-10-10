@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reglas de puntuación</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.lay{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:1100px){.lay{grid-template-columns:minmax(0,1fr)}}
+.rs{display:flex;flex-direction:column;gap:2px;width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font:inherit;text-align:left;cursor:pointer;color:inherit}
+.rs.on{border-color:var(--ring);background:var(--tint)}
+.pi{width:64px;min-height:34px;text-align:center;padding:0 6px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="reglas" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Reglas de puntuación</h1><p class="muted">Conjuntos de reglas que pueden usar las comunidades. Se crean y se borran; no se editan.</p></div><button type="button" class="btn btn-primary" onClick="{{newSet}}"><span class="i s16">add</span>Nuevo conjunto</button></div>
+<div class="lay">
+  <section class="card card-b col g8"><b class="hd">Conjuntos</b><sc-for list="{{sets}}" as="r" hint-placeholder-count="4"><button type="button" class="rs {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.on}}"><span class="row sp"><b class="hd">{{r.n}}</b><span class="tag {{r.tg}}">{{r.vis}}</span></span><span class="t-cap muted">de {{r.by}} · usado por {{r.u}} comunidades</span></button></sc-for></section>
+  <div class="col g20" style="gap:20px;min-width:0">
+    <sc-if value="{{isView}}" hint-placeholder-val="{{ true }}">
+      <section class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">{{cur.n}}</h2><span class="t-sm muted">{{cur.desc}}</span></div><button type="button" class="btn btn-outline btn-sm" disabled="{{cur.used}}" style="color:var(--err);border-color:var(--err)" title="{{cur.delTip}}"><span class="i s16">delete</span>Eliminar</button></div>
+        <div class="tw"><table class="tbl tn"><thead><tr><th>Concepto</th><sc-for list="{{sessH}}" as="h" hint-placeholder-count="4"><th class="r">{{h}}</th></sc-for></tr></thead><tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="8"><tr><td>{{r.n}}</td><sc-for list="{{r.v}}" as="v" hint-placeholder-count="4"><td class="r">{{v}}</td></sc-for></tr></sc-for></tbody><tfoot><tr><td><b class="hd">Máximo por sesión</b></td><sc-for list="{{maxs}}" as="m" hint-placeholder-count="4"><td class="r"><b class="hd">{{m}}</b></td></sc-for></tr></tfoot></table></div>
+        <sc-if value="{{cur.used}}" hint-placeholder-val="{{ true }}"><div class="card-f" style="justify-content:flex-start"><span class="t-sm muted"><span class="i s16" style="vertical-align:-3px">lock</span> No se puede eliminar: lo usan {{cur.u}} comunidades.</span></div></sc-if>
+      </section>
+      <section class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Uso y excepciones</h2><span class="t-sm muted">Comunidades que lo usan y GP con reglas distintas</span></div></div>
+        <div class="tw"><table class="tbl"><thead><tr><th>Comunidad</th><th>Temporada</th><th>Excepciones por GP</th></tr></thead><tbody><sc-for list="{{uses}}" as="u" hint-placeholder-count="4"><tr><td><b class="hd">{{u.c}}</b></td><td>{{u.y}}</td><td>{{u.e}}</td></tr></sc-for></tbody></table></div></section>
+    </sc-if>
+    <sc-if value="{{isNew}}" hint-placeholder-val="{{ false }}">
+      <section class="card"><div class="card-h"><h2 class="t-head">Nuevo conjunto de reglas</h2><button type="button" class="btn btn-ghost btn-sm" onClick="{{cancel}}">Cancelar</button></div>
+        <div class="card-b grid2" style="gap:16px"><div class="field"><label class="lbl" for="rn">Nombre</label><input id="rn" class="inp" value="Mi conjunto"></div><div class="field"><label class="lbl" for="rv">Visibilidad</label><select id="rv" class="sel"><option>Público: cualquier comunidad puede usarlo</option><option>Privado</option></select></div><div class="field" style="grid-column:1/-1"><label class="lbl" for="rd">Descripción</label><input id="rd" class="inp" placeholder="Para qué sirve este conjunto"></div></div>
+        <div class="tw"><table class="tbl tn"><thead><tr><th>Concepto</th><sc-for list="{{sessH}}" as="h" hint-placeholder-count="4"><th class="c">{{h}}</th></sc-for></tr></thead><tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="8"><tr><td>{{r.n}}</td><sc-for list="{{r.v}}" as="v" hint-placeholder-count="4"><td class="c"><input class="inp pi" value="{{v}}" inputmode="numeric" aria-label="{{r.n}}"></td></sc-for></tr></sc-for></tbody></table></div>
+        <div class="card-f"><span class="t-sm muted fx">Pilotos que se pronostican: 3 · 5 · 5 · 8 por sesión.</span><button type="button" class="btn btn-primary btn-sm">Crear conjunto</button></div></section>
+    </sc-if>
+  </div>
+</div>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const SETS = [['Clásica 2026', 'Público', 'tg-ok', 'PrognoSports', 4, '5 por posición exacta, 3 a una y 1 a dos. Bonus de 5 al mejor del GP.', [5, 3, 3, 1, 1, 0, 0, 5]], ['Solo podio', 'Público', 'tg-ok', 'Hugo Prieto', 1, 'Premia acertar el podio exacto.', [10, 4, 4, 0, 0, 0, 0, 5]], ['Doble puntuación', 'Privado', 'tg-gray', 'Irene Campos', 2, 'Todo vale el doble en la carrera.', [5, 3, 3, 1, 1, 0, 0, 10]], ['Prueba interna', 'Privado', 'tg-gray', 'Admin', 0, 'Para pruebas del equipo.', [1, 1, 1, 1, 1, 0, 0, 0]]];
+    const i = s.i || 0, mode = s.mode || 'view', cur = SETS[i], N = [3, 5, 5, 8];
+    const C = ['Posición exacta', 'Posición siguiente', 'Posición anterior', 'Siguiente de la siguiente', 'Anterior de la anterior', 'Del podio, fuera del podio', 'No está en los resultados', 'Bonus al mejor del GP'];
+    const mult = cur[0] === 'Doble puntuación' ? [1, 1, 1, 2] : [1, 1, 1, 1];
+    const rows = C.map((c, k) => ({ n: c, v: N.map((x, j) => k === 7 ? (j === 3 ? cur[6][7] : '—') : cur[6][k] * mult[j]) }));
+    return {
+      sets: SETS.map((r, k) => ({ n: r[0], vis: r[1], tg: r[2], by: r[3], u: r[4], on: k === i && mode === 'view', cls: k === i && mode === 'view' ? 'on' : '', pick: () => this.setState({ i: k, mode: 'view' }) })),
+      isView: mode === 'view', isNew: mode === 'new', newSet: () => this.setState({ mode: 'new' }), cancel: () => this.setState({ mode: 'view' }),
+      cur: { n: cur[0], desc: cur[5], u: cur[4], used: cur[4] > 0, delTip: cur[4] > 0 ? 'En uso' : 'Eliminar conjunto' },
+      sessH: ['Clasif. sprint', 'Sprint', 'Clasificación', 'Carrera'], rows, maxs: N.map((x, j) => x * cur[6][0] * mult[j]),
+      uses: cur[4] ? [['Amigos del paddock', '2026', 'Ninguna'], ['Oficina F1', '2026', 'Mónaco: carrera doble'], ['Liga Pública', '2026', 'Ninguna'], ['Peña Madring', '2026', 'Ninguna']].slice(0, cur[4]).map((u) => ({ c: u[0], y: u[1], e: u[2] })) : []
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Distribución de puntos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.rg{display:grid;grid-template-columns:160px minmax(0,1fr) 130px;align-items:end;gap:12px;height:48px;border-bottom:1px solid var(--border)}
+.rg.me{background:var(--tint)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Distribucion" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">{{title}}</h2><span class="flag">flag</span></div><span class="t-sm muted">{{sub}}</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Vista"><sc-for list="{{modes}}" as="m" hint-placeholder-count="2"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div></div>
+      <sc-if value="{{showHist}}" hint-placeholder-val="{{ true }}">
+        <div class="card-b col g8">
+          <svg viewBox="0 0 1000 340" width="100%" class="chart" role="img" aria-label="Histograma de puntos por GP de la comunidad con los tuyos encima">
+            <sc-for list="{{grid}}" as="g" hint-placeholder-count="5"><line class="gl" x1="50" x2="980" y1="{{g.y}}" y2="{{g.y}}"></line><text x="42" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+            <sc-for list="{{bins}}" as="b" hint-placeholder-count="13"><g><rect x="{{b.x}}" y="{{b.y}}" width="62" height="{{b.h}}" rx="3" style="fill:var(--surface-muted);stroke:var(--border)"></rect><rect x="{{b.x}}" y="{{b.my}}" width="62" height="{{b.mh}}" rx="3" style="fill:var(--c-you)"></rect><text x="{{b.tx}}" y="318" text-anchor="middle">{{b.l}}</text></g></sc-for>
+            <line x1="{{medX}}" x2="{{medX}}" y1="10" y2="296" style="stroke:var(--h);stroke-width:2;stroke-dasharray:6 4"></line><text x="{{medTx}}" y="20" class="lbl-s" style="fill:var(--h)">Mediana comunidad {{med}}</text>
+            <line x1="{{myX}}" x2="{{myX}}" y1="30" y2="296" style="stroke:var(--c-you);stroke-width:2"></line><text x="{{myTx}}" y="40" class="lbl-s" style="fill:var(--c-you)">Tu mediana {{myMed}}</text>
+            <text x="515" y="336" text-anchor="middle" style="font-weight:600">Puntos en un GP</text>
+          </svg>
+          <div class="legend"><span><i style="width:14px;height:12px;border-radius:2px;display:inline-block;background:var(--surface-muted);box-shadow:inset 0 0 0 1px var(--border)"></i>Todas las puntuaciones de la comunidad ({{nAll}})</span><span><i style="width:14px;height:12px;border-radius:2px;display:inline-block;background:var(--c-you)"></i>Las tuyas ({{nMine}})</span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{showRidge}}" hint-placeholder-val="{{ false }}">
+        <div class="card-b col" style="gap:0">
+          <sc-for list="{{ridges}}" as="r" hint-placeholder-count="12"><div class="rg {{r.cls}}"><span class="t-sm" style="padding-bottom:6px;font-weight:{{r.w}}">{{r.name}}</span><svg viewBox="0 0 650 46" width="100%" height="46" preserveAspectRatio="none" aria-hidden="true"><path d="{{r.area}}" style="fill:{{r.fill}};stroke:{{r.stroke}};stroke-width:1.5"></path><line x1="{{r.mx}}" x2="{{r.mx}}" y1="0" y2="46" style="stroke:var(--h);stroke-width:2"></line></svg><span class="t-cap muted" style="padding-bottom:6px">med. {{r.med}} · {{r.min}}–{{r.max}}</span></div></sc-for>
+          <div class="rg" style="height:auto;border:0;padding-top:6px"><span></span><span class="row sp t-cap muted"><span>0</span><span>15</span><span>30</span><span>45</span><span>65 pts</span></span><span></span></div>
+        </div>
+      </sc-if>
+      <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>Jugador</th><th class="r">Mínimo</th><th class="r">Mediana</th><th class="r">Máximo</th><th class="r">GP por encima de 40</th></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td>{{r.name}}</td><td class="r">{{r.min}}</td><td class="r"><b class="hd">{{r.med}}</b></td><td class="r">{{r.max}}</td><td class="r">{{r.hi}}</td></tr></sc-for></tbody></table></div></sc-if>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'hist';
+    const all = []; P.users.forEach((u) => P.pts[u.id].forEach((v) => all.push(v))); const mine = P.pts[me];
+    const B = 13, cnt = new Array(B).fill(0), mc = new Array(B).fill(0);
+    all.forEach((v) => cnt[Math.min(B - 1, Math.floor(v / 5))]++); mine.forEach((v) => mc[Math.min(B - 1, Math.floor(v / 5))]++);
+    const mx = Math.ceil(Math.max.apply(null, cnt) / 10) * 10, Y = (c) => 296 - c / mx * 280, bx = (i) => 54 + i * 71;
+    const px = (v) => 54 + v / 5 * 71;
+    const stats = (id) => { const v = P.pts[id]; return { min: Math.min.apply(null, v), max: Math.max.apply(null, v), med: P.median(v), hi: v.filter((x) => x > 40).length }; };
+    const ridges = O.map((id) => { const v = P.pts[id], h = new Array(B).fill(0); v.forEach((p) => h[Math.min(B - 1, Math.floor(p / 5))]++); const mh = Math.max.apply(null, h); let d = 'M0 46'; h.forEach((c, i) => { d += ' L' + ((i * 5 + 2.5) * 10).toFixed(1) + ' ' + (46 - c / mh * 42).toFixed(1); }); d += ' L650 46 Z'; const st = stats(id);
+      return { name: P.byId[id].name + (id === me ? ' (tú)' : ''), cls: id === me ? 'me' : '', w: id === me ? 700 : 400, area: d, fill: id === me ? 'var(--tint)' : 'var(--surface-muted)', stroke: id === me ? 'var(--c-you)' : 'var(--c-rest)', mx: st.med * 10, med: st.med, min: st.min, max: st.max }; });
+    const T = { hist: ['¿Cómo de buena es una puntuación?', 'Todas las puntuaciones de la temporada agrupadas de 5 en 5, con las tuyas encima.'], ridge: ['Distribución por jugador', 'Picos estrechos = regular; anchos = irregular. La raya es la mediana.'] };
+    const md = P.median(all), mm = P.median(mine);
+    return {
+      title: T[mode][0], sub: T[mode][1], modes: [['hist', 'Comunidad y tú'], ['ridge', 'Por jugador']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })),
+      showHist: mode === 'hist' && !s.tb, showRidge: mode === 'ridge' && !s.tb, chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'insert_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      bins: cnt.map((c, i) => ({ x: bx(i), y: Y(c), h: 296 - Y(c), my: Y(mc[i]), mh: 296 - Y(mc[i]), tx: bx(i) + 31, l: (i * 5) + '–' + (i * 5 + 4) })),
+      grid: [0, 0.25, 0.5, 0.75, 1].map((f) => ({ y: Y(f * mx), ty: Y(f * mx) + 4, l: Math.round(f * mx) })),
+      medX: px(md), medTx: px(md) + 6, med: md, myX: px(mm), myTx: px(mm) + 6, myMed: mm, nAll: all.length, nMine: mine.length, ridges,
+      tRows: O.map((id) => Object.assign({ name: P.byId[id].name, cls: id === me ? 'me' : '' }, stats(id)))
+    };
+  }
+}
+</script>
+</body>
+</html>

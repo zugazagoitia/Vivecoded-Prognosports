@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Comunidades (admin)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.ro{background:var(--surface-muted);color:var(--muted)}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="comunidades" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="row sp wrapf"><div class="col" style="gap:2px"><h1 class="t-title">Comunidades</h1><p class="muted">Consulta de comunidades. Solo lectura.</p></div><div class="row g8 wrapf"></div></div><div class="alert al-info"><span class="i">lock</span><span>La API no permite editar ni eliminar comunidades.</span></div>
+<section class="card"><div class="tw"><table class="tbl tn"><thead><tr><th>Comunidad</th><th>Acceso</th><th class="r">Jugadores</th><th>Reglas</th><th></th></tr></thead><tbody><sc-for list="{{rows}}" as="c" hint-placeholder-count="6"><tr><td><b class="hd">{{c.n}}</b></td><td><span class="tag {{c.tg}}">{{c.a}}</span></td><td class="r">{{c.p}}</td><td>{{c.r}}</td><td class="r"><a class="btn btn-ghost btn-sm" href="ComunidadHome.dc.html">Ver</a></td></tr></sc-for></tbody></table></div></section>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N;
+    return { rows: [['Amigos del paddock', 'Cerrada', 12, 'Clásica 2026'], ['Oficina F1', 'Cerrada', 31, 'Clásica 2026'], ['Liga Pública', 'Abierta', 204, 'Clásica 2026'], ['Solo podio', 'Cerrada', 9, 'Solo podio']].map((x) => ({ n: x[0], a: x[1], tg: x[1] === 'Abierta' ? 'tg-ok' : 'tg-brand', p: x[2], r: x[3] })) };
+  }
+}
+</script>
+</body>
+</html>

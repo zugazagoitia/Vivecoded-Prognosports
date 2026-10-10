@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Landing móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.lhm{background:linear-gradient(180deg,rgba(40,23,66,.55) 0%,rgba(40,23,66,.96) 70%),url(/_blob/bf0336da0dc7784eb8d27bd46efc11be) center/cover;padding:56px 16px 40px}
+.sec{padding:40px 16px;display:flex;flex-direction:column;gap:16px}
+</style>
+</helmet>
+<div class="mroot">
+  <header class="mhead">
+    <img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="28" height="28" style="width:28px;height:28px;object-fit:contain"><b class="hd fx">PrognoSports</b>
+    <a class="btn btn-ghost btn-sm" href="Login.dc.html">Entrar</a>
+    <a class="btn btn-primary btn-sm" href="Registro.dc.html">Registrarse</a>
+  </header>
+
+  <section class="lhm">
+    <div class="col g16">
+      <span class="tag pill" style="align-self:flex-start;background:rgba(255,255,255,.14);color:#f0e4fd">Temporada 2026 en marcha</span>
+      <h1 style="font-size:30px;line-height:36px;font-weight:600;color:#fff;letter-spacing:-.01em;text-wrap:balance">Pronostica resultados de carreras con tus amigos y compite por ser el mejor</h1>
+      <p style="color:#ebe1f5">Elige la parrilla antes de cada sesión, suma puntos y sigue el ranking de tu comunidad.</p>
+      <a class="btn btn-lg btn-block" href="Registro.dc.html" style="background:#fff;color:#4c2b7a;min-height:48px">Registrarse gratis</a>
+      <a class="btn btn-block" href="Reglas.dc.html" style="background:transparent;border-color:#c3a5e1;color:#fff;min-height:48px">Cómo se puntúa</a>
+    </div>
+  </section>
+
+  <section class="sec">
+    <span class="up">Cómo funciona</span>
+    <div class="col g16">
+      <div class="row" style="align-items:flex-start"><span class="av s40 you">1</span><div class="col" style="gap:2px"><b class="hd">Únete o crea una comunidad</b><span class="t-sm muted">Abierta o con invitación, con sus propias reglas.</span></div></div>
+      <div class="row" style="align-items:flex-start"><span class="av s40 you">2</span><div class="col" style="gap:2px"><b class="hd">Pronostica cada sesión</b><span class="t-sm muted">Hasta cinco minutos antes de que empiece.</span></div></div>
+      <div class="row" style="align-items:flex-start"><span class="av s40 you">3</span><div class="col" style="gap:2px"><b class="hd">Suma y compara</b><span class="t-sm muted">Mira quién sube y quién baja tras cada GP.</span></div></div>
+    </div>
+  </section>
+
+  <section class="sec" style="background:var(--surface);box-shadow:0 1px 0 var(--border),0 -1px 0 var(--border)">
+    <span class="up">Ranking en vivo</span>
+    <h2 class="t-sub">Sabes siempre cómo vas</h2>
+    <div class="card flat" style="overflow:hidden"><table class="tbl tn"><tbody>
+      <sc-for list="{{top}}" as="r" hint-placeholder-count="5"><tr class="{{r.cls}}"><td><span class="pos {{r.pc}}">{{r.p}}</span></td><td><b class="hd t-sm">{{r.name}}</b></td><td class="r"><b class="hd">{{r.pts}}</b></td></tr></sc-for>
+    </tbody></table></div>
+  </section>
+
+  <section class="sec">
+    <span class="up">Todo lo que necesitas</span>
+    <div class="col g12">
+      <sc-for list="{{feats}}" as="f" hint-placeholder-count="6"><div class="card card-b row" style="align-items:flex-start"><span class="av s40"><span class="i">{{f.icon}}</span></span><div class="col" style="gap:2px"><b class="hd">{{f.title}}</b><span class="t-sm muted">{{f.text}}</span></div></div></sc-for>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:8px">
+    <div class="card hero" style="padding:32px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px">
+      <h2 style="font-size:24px;line-height:30px;font-weight:600;color:#fff;text-wrap:balance">¿Preparado para comenzar? ¡Regístrate y pruébalo gratis!</h2>
+      <a class="btn btn-block" href="Registro.dc.html" style="background:#fff;color:#4c2b7a;min-height:48px">Crear mi cuenta</a>
+    </div>
+  </section>
+
+  <footer class="foot" style="padding:24px 16px"><div class="col g12"><span class="brand"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="28" height="28">PrognoSports</span><div class="row g16 wrapf t-sm"><a href="FAQ.dc.html">Preguntas</a><a href="Reglas.dc.html">Reglas</a><a href="Circuitos.dc.html">Circuitos</a><a href="Legal.dc.html">Legal</a></div><span class="t-cap tn">v2.0.0 · build 4f2a9c1</span></div></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":2800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG;
+    return {
+      top: P.order.slice(0, 5).map((id, i) => ({ p: i + 1, pc: i < 3 ? 'p' + (i + 1) : '', name: P.byId[id].name, pts: P.total[id], cls: id === 'alex' ? 'me' : '' })),
+      feats: [['Pronósticos ordenados', 'format_list_numbered', 'Sin arrastrar: toca y ordena.'], ['Comunidades', 'groups', 'Con tus amigos, tu oficina o tu peña.'], ['Estadísticas', 'leaderboard', 'Evolución, regularidad y duelos.'], ['Avisos a tiempo', 'notifications_active', 'Correo o Telegram antes del cierre.']].map((f) => ({ title: f[0], icon: f[1], text: f[2] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

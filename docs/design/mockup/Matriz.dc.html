@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Matriz por Gran Premio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.mx{border-collapse:separate;border-spacing:2px;width:100%;min-width:1100px;font-variant-numeric:tabular-nums}
+.mx th{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-align:center;padding:6px 0}
+.mx th.fut{color:var(--border-input)}
+.mx td{height:32px;text-align:center;font-size:13px;border-radius:4px;color:var(--h)}
+.mx td.nm{text-align:left;white-space:nowrap;padding:0 8px;font-weight:500;color:var(--body)}
+.mx tr.me td.nm{font-weight:700;color:var(--h)}
+.mx tr.me td{box-shadow:inset 0 -2px 0 var(--c-you)}
+.mx td.fut{background:var(--surface-muted);opacity:.5}
+.mx td.tot{text-align:right;font-weight:700;padding-right:8px}
+.mx tfoot td{color:var(--muted);font-size:12px;border-top:2px solid var(--border)}
+.ctl{display:flex;align-items:center;gap:8px}
+.ramp{display:inline-flex;gap:2px}.ramp i{width:22px;height:12px;display:inline-block}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Matriz" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Resultados por Gran Premio</h2><span class="t-sm muted">Una tabla en lugar de cuatro: elige qué muestra cada celda y cómo se colorea.</span></div></div>
+      <div class="card-b row g24 wrapf" style="padding-top:0">
+        <div class="ctl"><span class="up">Métrica</span><div class="seg" role="group" aria-label="Métrica"><sc-for list="{{metrics}}" as="m" hint-placeholder-count="5"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div></div>
+        <div class="ctl"><span class="up">Color</span><div class="seg" role="group" aria-label="Color"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div></div>
+      </div>
+      <div class="tw" style="padding:0 12px 12px"><table class="mx">
+        <thead><tr><th style="text-align:left;padding-left:8px">Jugador</th><sc-for list="{{heads}}" as="h" hint-placeholder-count="24"><th class="{{h.cls}}" title="{{h.full}}">{{h.l}}</th></sc-for><th style="text-align:right;padding-right:8px">{{totLabel}}</th></tr></thead>
+        <tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td class="nm"><span class="muted" style="display:inline-block;width:22px">{{r.pos}}</span>{{r.name}}</td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="24"><td class="{{c.cls}}" title="{{c.t}}" style="background:{{c.bg}};color:{{c.fg}};font-weight:{{c.w}}">{{c.v}}</td></sc-for><td class="tot">{{r.tot}}</td></tr></sc-for></tbody>
+        <tfoot><tr><td class="nm up">Media</td><sc-for list="{{avgRow}}" as="a" hint-placeholder-count="24"><td>{{a}}</td></sc-for><td></td></tr></tfoot>
+      </table></div>
+      <div class="card-f" style="justify-content:flex-start"><div class="legend"><span>{{lg}}</span><sc-if value="{{showRamp}}" hint-placeholder-val="{{ true }}"><span>{{lo}} <span class="ramp"><sc-for list="{{ramp}}" as="c" hint-placeholder-count="7"><i style="background:{{c}}"></i></sc-for></span> {{hi}}</span></sc-if><span>Negrita: el mejor del GP</span><span>Columnas atenuadas: GP pendientes</span></div></div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, NG = P.gps.length, metric = s.m || 'pts', mode = s.c || 'heat';
+    const low = metric === 'gpRank' || metric === 'rank';
+    const val = (id, g) => metric === 'pts' ? P.pts[id][g] : metric === 'cum' ? P.acc[id][g] : metric === 'gpRank' ? P.gpRank[id][g] : metric === 'rank' ? P.pos[id][g] : P.hits[id][g];
+    const mn = [], mx = []; for (let g = 0; g < n; g++) { const vs = P.users.map((u) => val(u.id, g)); mn[g] = Math.min.apply(null, vs); mx[g] = Math.max.apply(null, vs); }
+    const RAMP = [1, 2, 3, 4, 5, 6, 7].map((k) => 'var(--seq-' + k + ')');
+    const rows = P.order.map((id, i) => {
+      const cells = []; for (let g = 0; g < NG; g++) {
+        if (g >= n) { cells.push({ cls: 'fut', v: '', bg: '', fg: '', w: 400, t: P.gps[g].name + ' · pendiente' }); continue; }
+        const v = val(id, g); let t = mx[g] === mn[g] ? 1 : (v - mn[g]) / (mx[g] - mn[g]); if (low) t = 1 - t;
+        const best = low ? v === mn[g] : v === mx[g]; const c = { cls: '', v, bg: '', fg: '', w: best ? 700 : 400, t: P.gps[g].name + ': ' + v };
+        if (mode === 'heat') { const k = Math.min(6, Math.floor(t * 6.99)); c.cls = 'sq' + (k + 1); c.bg = ''; c.fg = ''; }
+        else if (mode === 'best' && best) { c.bg = 'var(--primary)'; c.fg = 'var(--on-primary)'; }
+        cells.push(c);
+      }
+      const tot = metric === 'hits' ? P.hits[id].reduce((a, b) => a + b, 0) : metric === 'gpRank' ? P.gpRank[id].filter((x) => x === 1).length + ' vict.' : metric === 'rank' ? (i + 1) + '.º' : P.total[id];
+      return { pos: i + 1, name: P.byId[id].name + (id === 'alex' ? ' (tú)' : ''), cls: id === 'alex' ? 'me' : '', cells, tot };
+    });
+    const avgRow = []; for (let g = 0; g < NG; g++) { if (g >= n || low) { avgRow.push(''); continue; } avgRow.push(Math.round(P.users.reduce((a, u) => a + val(u.id, g), 0) / P.users.length)); }
+    const ML = [['pts', 'Puntos del GP'], ['cum', 'Acumulado'], ['gpRank', 'Puesto en el GP'], ['rank', 'Puesto en la general'], ['hits', 'Aciertos']];
+    const LG = { pts: ['Puntos en cada GP', 'menos', 'más'], cum: ['Puntos acumulados tras cada GP', 'menos', 'más'], gpRank: ['Puesto obtenido en cada GP', 'peor', 'mejor'], rank: ['Puesto en la general tras cada GP', 'peor', 'mejor'], hits: ['Aciertos en cada GP', 'menos', 'más'] };
+    return {
+      metrics: ML.map((x) => ({ l: x[1], cls: x[0] === metric ? 'on' : '', pick: () => this.setState({ m: x[0] }) })),
+      modes: [['none', 'Sin color'], ['heat', 'Escala'], ['best', 'Solo el mejor']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ c: x[0] }) })),
+      heads: P.gps.map((g, i) => ({ l: g.code, full: g.name, cls: i >= n ? 'fut' : '' })), rows, avgRow,
+      totLabel: metric === 'hits' ? 'Total' : metric === 'gpRank' ? 'Vict.' : metric === 'rank' ? 'Ahora' : 'Puntos',
+      lg: LG[metric][0], lo: LG[metric][1], hi: LG[metric][2], ramp: RAMP, showRamp: mode === 'heat'
+    };
+  }
+}
+</script>
+</body>
+</html>

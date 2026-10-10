@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Explorar comunidades</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.cimg{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex:none}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="Comunidades.dc.html">Comunidades</a><span class="i">chevron_right</span><span>Explorar</span></div>
+    <div class="row sp wrapf"><div class="col" style="gap:2px"><h1 class="t-title">Explorar comunidades</h1><p class="muted">Únete a una abierta o pide el código de una cerrada.</p></div><a class="btn btn-primary" href="CrearComunidad.dc.html"><span class="i s16">add</span>Crear comunidad</a></div>
+
+    <div class="card">
+      <div class="card-h" style="padding-bottom:0;border-bottom:0"><div class="tabs fx" style="border-bottom:0;width:100%"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button type="button" class="tab {{t.cls}}" onClick="{{t.pick}}">{{t.label}}<span class="tag tg-gray pill">{{t.n}}</span></button></sc-for></div></div>
+      <div class="card-b row wrapf g16" style="border-top:1px solid var(--border)">
+        <div class="iw fx" style="min-width:240px"><span class="i">search</span><input class="inp" placeholder="Buscar..." aria-label="Buscar comunidad" value="{{q}}" onInput="{{onQ}}"></div>
+        <div class="field" style="flex-direction:row;align-items:center;gap:8px"><label class="lbl" for="ord">Ordenar</label><select id="ord" class="sel" style="width:auto"><option>Más jugadores</option><option>Más recientes</option><option>Nombre (A-Z)</option></select></div>
+      </div>
+      <div class="tw"><table class="tbl tn"><thead><tr><th>Comunidad</th><th>Acceso</th><th class="r">Jugadores</th><th>Reglas</th><th>Creada</th><th class="r"></th></tr></thead><tbody>
+        <sc-for list="{{rows}}" as="c" hint-placeholder-count="8"><tr class="{{c.cls}}"><td><span class="row g12"><span class="cimg" style="background:{{c.color}}">{{c.ini}}</span><span class="col" style="gap:0"><b class="hd">{{c.name}}</b><span class="t-cap muted">por {{c.owner}}</span></span></span></td><td><span class="tag {{c.tg}}"><span class="i s16">{{c.icon}}</span>{{c.priv}}</span></td><td class="r">{{c.n}}</td><td>{{c.rule}}</td><td>{{c.date}}</td><td class="r"><sc-if value="{{c.mine}}" hint-placeholder-val="{{ false }}"><a class="btn btn-soft btn-sm" href="ComunidadHome.dc.html">Abrir</a></sc-if><sc-if value="{{c.open}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-primary btn-sm">Unirme</button></sc-if><sc-if value="{{c.closed}}" hint-placeholder-val="{{ false }}"><a class="btn btn-outline btn-sm" href="Invitacion.dc.html"><span class="i s16">key</span>Tengo un código</a></sc-if></td></tr></sc-for>
+      </tbody></table></div>
+      <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="empty"><div class="ic"><span class="i s24">search_off</span></div><b class="hd">No se ha encontrado lo que buscabas</b></div></sc-if>
+      <div class="card-f" style="justify-content:space-between"><span class="t-sm muted">{{count}}</span><div class="pager"><button type="button" class="pgb" aria-label="Anterior"><span class="i s16">chevron_left</span></button><button type="button" class="pgb on">1</button><button type="button" class="pgb">2</button><button type="button" class="pgb" aria-label="Siguiente"><span class="i s16">chevron_right</span></button></div></div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {}, tab = s.tab || 0, q = (s.q || '').toLowerCase().trim();
+    const col = ['#693ba7', '#2a78d6', '#eb6834', '#1baf7a', '#e87ba4', '#eda100'];
+    const A = [
+      ['Amigos del paddock', 'Álex Ruiz', 'c', 12, 'Clásica 2026', 'mar 2022', true], ['Oficina F1', 'Irene Campos', 'a', 31, 'Clásica 2026', 'feb 2024', true], ['Peña Madring', 'Hugo Prieto', 'c', 8, 'Solo carrera', 'ene 2026', true],
+      ['Tifosi de barrio', 'Lola Marín', 'a', 54, 'Clásica 2026', 'mar 2023', false], ['Pit lane Valencia', 'Raúl Pons', 'c', 17, 'Clásica 2026', 'abr 2025', false], ['Parrilla Norte', 'Ainhoa Etxeberria', 'a', 26, 'Doble puntuación', 'mar 2025', false],
+      ['Boxes y cañas', 'Tomás Rey', 'a', 9, 'Solo carrera', 'jun 2026', false], ['Los del DRS', 'Clara Soto', 'c', 14, 'Clásica 2026', 'sep 2024', false], ['Racing Club Sevilla', 'Manu Leal', 'a', 41, 'Clásica 2026', 'ene 2024', false], ['Curva 13', 'Eva Roca', 'c', 11, 'Clásica 2026', 'mar 2026', false]
+    ].map((c, i) => ({ name: c[0], owner: c[1], open: c[2] === 'a' && !c[6], closed: c[2] === 'c' && !c[6], mine: c[6], tg: c[2] === 'a' ? 'tg-ok' : 'tg-brand', icon: c[2] === 'a' ? 'public' : 'lock', priv: c[2] === 'a' ? 'Abierta' : 'Cerrada', n: c[3], rule: c[4], date: c[5], ini: c[0].split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase(), color: col[i % 6], cls: c[6] ? 'me' : '', _a: c[2] === 'a' }));
+    const f = A.filter((c) => (tab === 0 || (tab === 1 && c._a) || (tab === 2 && !c._a) || (tab === 3 && c.mine)) && (!q || (c.name + c.owner).toLowerCase().indexOf(q) >= 0));
+    const T = [['Todas', A.length], ['Abiertas', A.filter((c) => c._a).length], ['Cerradas', A.filter((c) => !c._a).length], ['Mis comunidades', 3]];
+    return {
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }),
+      tabs: T.map((t, i) => ({ label: t[0], n: t[1], cls: i === tab ? 'on' : '', pick: () => this.setState({ tab: i }) })),
+      rows: f, none: f.length === 0, count: 'Mostrando de ' + (f.length ? 1 : 0) + ' a ' + f.length + ' de un total de ' + f.length + ' resultados'
+    };
+  }
+}
+</script>
+</body>
+</html>

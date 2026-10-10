@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Catálogo de componentes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.lab2{font-size:12px;line-height:16px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 02</span>
+      <h1 class="t-title">Componentes</h1>
+      <p class="t-body muted" style="max-width:720px">Piezas que se repiten en todas las pantallas. Cada una existe en la app como un componente Vue con accesibilidad de teclado resuelta (Reka UI) y estilos de los tokens.</p>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Botones</h2><span class="t-sm muted">Un solo botón principal por vista. Verbo en infinitivo.</span></div>
+      <div class="card-b col g24">
+        <div class="row wrapf g16">
+          <button type="button" class="btn btn-primary">Pronosticar</button>
+          <button type="button" class="btn btn-soft">Ver ranking</button>
+          <button type="button" class="btn btn-outline">Cancelar</button>
+          <button type="button" class="btn btn-ghost">Volver arriba</button>
+          <button type="button" class="btn btn-danger">Salir de la comunidad</button>
+          <button type="button" class="btn btn-ok">Publicar resultados</button>
+        </div>
+        <div class="row wrapf g16">
+          <button type="button" class="btn btn-primary"><span class="i s16">add</span>Crear comunidad</button>
+          <button type="button" class="btn btn-outline btn-sm"><span class="i s16">content_copy</span>Copiar enlace</button>
+          <button type="button" class="btn btn-primary btn-lg">Registrarse</button>
+          <button type="button" class="btn btn-outline btn-ic" aria-label="Filtros"><span class="i">tune</span></button>
+          <button type="button" class="btn btn-primary dis" disabled>Guardar pronóstico</button>
+          <button type="button" class="btn btn-primary"><span class="i s16">progress_activity</span>Guardando...</button>
+        </div>
+        <p class="note">Estados: normal, hover (un tono más oscuro), foco (anillo de 2 px en brand-500), pulsado (95 %), desactivado (50 %), cargando (icono y texto «Guardando...»). Altura mínima 40 px; 44 px en móvil.</p>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Campos</h2></div>
+        <div class="card-b col g16">
+          <div class="field"><label class="lbl" for="c1">Nombre de usuario</label><input id="c1" class="inp" value="alex_ruiz"><span class="help">Entre 3 y 20 caracteres.</span></div>
+          <div class="field"><label class="lbl" for="c2">Correo electrónico</label><input id="c2" class="inp bad" value="alex@correo"><span class="errt"><span class="i s16">error</span>Escribe un correo válido.</span></div>
+          <div class="field"><label class="lbl" for="c3">Buscar</label><div class="iw"><span class="i">search</span><input id="c3" class="inp" placeholder="Buscar..."></div></div>
+          <div class="field"><label class="lbl" for="c4">Zona horaria</label><select id="c4" class="sel"><option>Europe/Madrid (UTC+2)</option></select></div>
+          <div class="field"><label class="lbl" for="c5">Biografía</label><textarea id="c5" class="txt">Fan de Fórmula 1 desde 2005.</textarea></div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Selección</h2></div>
+        <div class="card-b col g16">
+          <div class="chk"><span class="bx on"><span class="i">check</span></span><span>Acepto los términos de uso y la política de privacidad</span></div>
+          <div class="chk"><span class="bx"></span><span>Recordarme en este dispositivo</span></div>
+          <div class="row"><button type="button" class="sw {{swCls}}" onClick="{{toggleSw}}" role="switch" aria-checked="{{swOn}}" aria-label="Avisos por correo"></button><span class="t-sm">Avisos por correo <b class="hd">{{swText}}</b></span></div>
+          <div class="row g16"><span class="row g8"><span class="rad on"></span><span class="t-sm">Abierta</span></span><span class="row g8"><span class="rad"></span><span class="t-sm">Cerrada</span></span></div>
+          <hr class="hr">
+          <div class="col g8"><span class="lab2">Pestañas</span>
+            <div class="tabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="4"><button type="button" role="tab" class="tab {{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+            <p class="t-sm muted">Mostrando: <b class="hd">{{tabName}}</b></p>
+          </div>
+          <div class="col g8"><span class="lab2">Segmentado y chips</span>
+            <div class="row wrapf"><div class="seg"><button type="button" class="sg on">Puntos</button><button type="button" class="sg">Acumulado</button><button type="button" class="sg">Posición</button></div></div>
+            <div class="row wrapf g8"><span class="chip on">Pasados</span><span class="chip">Próximos</span><span class="chip">Todos</span><span class="chip"><span class="i s16">sports_score</span>Con sprint</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Etiquetas y estados</h2></div>
+        <div class="card-b col g16">
+          <div class="row wrapf g8"><span class="tag tg-brand">Cerrada</span><span class="tag tg-ok"><span class="i s16">check</span>Pronosticado</span><span class="tag tg-warn"><span class="i s16">schedule</span>Cierra en 2 h</span><span class="tag tg-err">Suspendido</span><span class="tag tg-info">Sprint</span><span class="tag tg-gray">Sin fecha</span><span class="tag tg-solid pill">Admin</span></div>
+          <div class="row wrapf g8"><span class="flag"><span class="i s16">flag</span>Feature flag</span><span class="t-sm muted">Marca las pantallas activables en el frontend.</span></div>
+          <div class="col g8">
+            <div class="alert al-brand"><span class="i">emoji_events</span><span><b>Has subido dos puestos.</b> Ahora eres 4.º en Amigos del paddock.</span></div>
+            <div class="alert al-warn"><span class="i">schedule</span><span><b>Cierre en 12 min.</b> Aún no has pronosticado la clasificación.</span></div>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Avatares y piloto</h2></div>
+        <div class="card-b col g16">
+          <div class="row g8"><span class="av s24">MS</span><span class="av">LF</span><span class="av s40 you">ÁR</span><span class="av s56">DM</span><span class="t-sm muted">24, 32, 40 y 56 px. Tú, siempre en morado sólido.</span></div>
+          <div class="col g8">
+            <button type="button" class="drv"><span class="team" style="background:#ff8000"></span><span class="no">4</span><span class="fx"><b class="hd t-sm">Lando Norris</b><br><span class="t-cap muted">McLaren</span></span><span class="tag tg-gray">NOR</span></button>
+            <button type="button" class="drv sel"><span class="team" style="background:#27c4b0"></span><span class="no">63</span><span class="fx"><b class="hd t-sm">George Russell</b><br><span class="t-cap muted">Mercedes</span></span><span class="tag tg-brand">P1</span></button>
+            <div class="slot"><span class="n">3</span>Arrastra un piloto o pulsa para elegir</div>
+          </div>
+          <div class="countdown"><div class="cd"><b>01</b><span>días</span></div><div class="cd"><b>04</b><span>horas</span></div><div class="cd"><b>12</b><span>min</span></div><div class="cd"><b>30</b><span>s</span></div></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Piezas de datos</h2><span class="t-sm muted">Añadidas en la revisión frente al canvas viejo. Todas están en uso en las pantallas.</span></div><span class="tag tg-brand">Nuevo</span></div>
+      <div class="card-b grid3" style="gap:24px;align-items:start">
+        <div class="col g8"><span class="lab2">Forma · últimos 5 GP</span><span class="form"><b class="p">3</b><b>7</b><b class="w">1</b><b>5</b><b class="p">2</b></span><span class="note">Puesto en cada GP. Morado sólido = ganó el GP, suave = podio. <span class="mono">.form</span></span></div>
+        <div class="col g8"><span class="lab2">Movimiento</span><span class="row g16"><span class="mv up">▲2</span><span class="mv dn">▼1</span><span class="mv eq">—</span></span><span class="note">Puestos ganados o perdidos tras el último GP. Flecha + número, nunca solo color. <span class="mono">.mv</span></span></div>
+        <div class="col g8"><span class="lab2">Celdas de acierto</span><span class="row g8"><span class="cellp hit-ex">NOR</span><span class="cellp hit-1">RUS</span><span class="cellp hit-2">LEC</span><span class="cellp hit-x">PIA</span></span><span class="note">Exacto 5 · a una 3 · a dos 1 · fallo sin color. <span class="mono">.hit-ex .hit-1 .hit-2 .hit-x</span></span></div>
+        <div class="col g8"><span class="lab2">Progreso del pronóstico</span><div class="row sp t-sm"><span class="muted">Carrera</span><b class="hd tn">{{progN}} de 8 pilotos</b></div><div class="prog"><i style="width:{{progW}}%"></i></div><div class="row g8"><button type="button" class="btn btn-outline btn-sm" onClick="{{progDn}}" aria-label="Quitar piloto"><span class="i s16">remove</span></button><button type="button" class="btn btn-outline btn-sm" onClick="{{progUp}}" aria-label="Añadir piloto"><span class="i s16">add</span></button></div></div>
+        <div class="col g8"><span class="lab2">Huecos del pronóstico</span>
+          <div class="slot full"><span class="n">1</span><span class="team" style="width:4px;height:24px;border-radius:2px;background:#ff8000"></span><b class="hd t-sm fx">Lando Norris</b><span class="i s16 muted">drag_indicator</span></div>
+          <button type="button" class="slot {{slotCls}}" onClick="{{slotPick}}" style="font:inherit;text-align:left;cursor:pointer;width:100%"><span class="n">2</span>{{slotText}}</button>
+          <span class="note">En escritorio se arrastra; también se pulsa un hueco vacío y se elige piloto.</span></div>
+        <div class="col g8"><span class="lab2">Lista de validaciones</span><div class="checks"><span class="c ok"><span class="i">check_circle</span>Sesiones con fecha y cierre</span><span class="c ok"><span class="i">check_circle</span>22 de 22 pilotos</span><span class="c warn"><span class="i">warning</span>Falta la imagen promocional</span><span class="c err"><span class="i">error</span>Resultados de la carrera sin publicar</span></div></div>
+        <div class="col g8" style="grid-column:span 2;min-width:0"><span class="lab2">Eje pulsable + tooltip fijo</span>
+          <div class="row g16" style="align-items:flex-start;flex-wrap:wrap"><div class="col fx" style="gap:4px;min-width:260px"><svg viewBox="0 0 400 90" width="100%" class="chart" role="img" aria-label="Ejemplo de eje pulsable"><line x1="{{axX}}" x2="{{axX}}" y1="4" y2="86" style="stroke:var(--ring);stroke-dasharray:4 4"></line><path d="{{axMe}}" fill="none" style="stroke:var(--c-you);stroke-width:3"></path><path d="{{axOt}}" fill="none" style="stroke:var(--c-2);stroke-width:2"></path></svg>
+            <div class="row" style="justify-content:space-between;gap:0" role="group" aria-label="Elegir Gran Premio"><sc-for list="{{axL}}" as="x" hint-placeholder-count="5"><button type="button" class="xl {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div></div>
+            <div class="ftip" aria-live="polite"><b class="hd">Tras {{axName}}</b><span class="r"><i style="background:var(--c-2)"></i><span class="fx">Marta</span><b class="tn">{{axV2}}</b></span><span class="r"><i style="background:var(--c-you)"></i><span class="fx">Tú</span><b class="tn">{{axV1}}</b></span></div></div>
+          <span class="note">Pulsar un GP del eje fija la línea y el panel; con teclado, Tab y Enter. <span class="mono">.xl .ftip</span></span></div>
+        <div class="col g8"><span class="lab2">Chips para resaltar</span><div class="row g8 wrapf"><sc-for list="{{chips}}" as="c" hint-placeholder-count="5"><button type="button" class="pchip {{c.cls}}" aria-pressed="{{c.on}}" onClick="{{c.pick}}"><i style="background:{{c.c}}"></i>{{c.n}}</button></sc-for></div><span class="note">Hasta 5. Cada uno conserva su color mientras está resaltado. <span class="mono">.pchip</span></span></div>
+        <div class="col g8" style="grid-column:span 2;min-width:0"><span class="lab2">Barra de guardado fija</span><div class="savebar" style="position:relative;bottom:auto"><span class="i s16">edit_note</span><span class="fx t-sm">Tienes 3 cambios sin guardar</span><button type="button" class="btn btn-ghost btn-sm">Descartar</button><button type="button" class="btn btn-primary btn-sm">Guardar cambios</button></div><span class="note">Aparece solo con cambios pendientes y se queda pegada abajo. Invierte el tema para destacar. <span class="mono">.savebar</span></span></div>
+        <div class="col g8"><span class="lab2">Hoja inferior móvil</span><div style="position:relative;height:220px;border-radius:12px;overflow:hidden;background:var(--page);box-shadow:inset 0 0 0 1px var(--border)"><sc-if value="{{sheet}}" hint-placeholder-val="{{ true }}"><button type="button" class="sheet-scrim" onClick="{{sheetTog}}" aria-label="Cerrar"></button><div class="sheet" role="dialog" aria-label="Elegir piloto"><span class="handle"></span><b class="hd t-sm">Posición 2 · elige piloto</b><div class="row g8 wrapf"><span class="chip">RUS</span><span class="chip">LEC</span><span class="chip">PIA</span><span class="chip">VER</span></div></div></sc-if><sc-if value="{{noSheet}}" hint-placeholder-val="{{ false }}"><div class="card-b"><button type="button" class="btn btn-soft btn-sm" onClick="{{sheetTog}}">Abrir hoja</button></div></sc-if></div><span class="note">Para elegir piloto en móvil. <span class="mono">.sheet</span></span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head">Tabla</h2><span class="t-sm muted">Cabecera en mayúsculas pequeñas, números tabulares, tu fila resaltada, forma y movimiento; desplazamiento horizontal dentro del contenedor.</span></div>
+      <div class="tw"><table class="tbl tn"><thead><tr><th>Pos.</th><th>Jugador</th><th class="r">Puntos</th><th class="r">Aciertos</th><th>Forma</th><th class="r"></th></tr></thead><tbody>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="4"><tr class="{{r.cls}}"><td><span class="pos {{r.pc}}">{{r.p}}</span></td><td><span class="row g8"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></span></td><td class="r"><b class="hd">{{r.pts}}</b></td><td class="r">{{r.hits}}</td><td><span class="form"><sc-for list="{{r.form}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}">{{f.v}}</b></sc-for></span></td><td class="r"><span class="mv {{r.mvc}}">{{r.mv}}</span></td></tr></sc-for>
+      </tbody></table></div>
+      <div class="card-f" style="justify-content:space-between"><span class="t-sm muted">Mostrando de 1 a 4 de un total de 12 resultados</span><div class="pager"><button type="button" class="pgb" aria-label="Anterior"><span class="i s16">chevron_left</span></button><button type="button" class="pgb on">1</button><button type="button" class="pgb">2</button><button type="button" class="pgb">3</button><button type="button" class="pgb" aria-label="Siguiente"><span class="i s16">chevron_right</span></button></div></div>
+    </section>
+
+    <div class="grid3">
+      <section class="card"><div class="card-h"><h2 class="t-head">Menú</h2></div>
+        <div class="card-b"><div class="menu"><span class="mh">Fórmula 1</span><button type="button" class="mi on"><span class="i">check</span>Temporada 2026</button><button type="button" class="mi"><span class="i">history</span>Temporada 2025</button><hr class="hr" style="margin:4px 0"><button type="button" class="mi"><span class="i">logout</span>Cerrar sesión</button></div></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Tooltip y aviso</h2></div>
+        <div class="card-b col g16"><div class="tip" style="align-self:flex-start"><b>Marta Solís</b> · GP de Italia<br>38 puntos · 7 aciertos</div>
+          <div class="toast"><span class="i" style="color:var(--ok)">check_circle</span><div class="col" style="gap:2px"><b class="hd">Pronóstico guardado</b><span class="muted">Puedes cambiarlo hasta 5 minutos antes.</span></div></div></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Modal</h2></div>
+        <div class="card-b"><div class="scrim"><div class="modal"><div class="card-b col g8"><h3 class="t-head">¿Salir de la comunidad?</h3><p class="t-sm muted">Dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.</p></div><div class="card-f"><button type="button" class="btn btn-outline btn-sm">Cancelar</button><button type="button" class="btn btn-danger btn-sm">Salir</button></div></div></div></div></section>
+    </div>
+
+    <div class="grid3">
+      <section class="card"><div class="card-h"><h2 class="t-head">Estado vacío</h2></div><div class="empty"><div class="ic"><span class="i s24">groups</span></div><b class="hd">Aún no estás en ninguna comunidad</b><span class="t-sm">Crea una o únete con un código de invitación.</span><button type="button" class="btn btn-primary btn-sm">Crear comunidad</button></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Cargando</h2></div><div class="card-b col g8"><div class="skel" style="height:20px;width:60%"></div><div class="skel" style="height:14px"></div><div class="skel" style="height:14px;width:85%"></div><div class="skel" style="height:80px;margin-top:8px"></div><span class="note">Esqueletos con la forma del contenido. Cargando...</span></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Progreso y KPI</h2></div><div class="card-b col g16"><div class="col g8"><div class="row sp t-sm"><span>Aciertos del GP</span><b class="hd">62 %</b></div><div class="bar"><i style="width:62%"></i></div></div><div class="kpi" style="padding:0"><span class="k">Puntos totales</span><span class="v tn">612</span><span class="d">+38 en el último GP</span></div></div></section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const sw = s.sw !== false, tab = s.tab || 0;
+    const P = window.PG;
+    const names = ['Todas', 'Abiertas', 'Cerradas', 'Mis comunidades'];
+    const pn = s.pn === undefined ? 5 : s.pn, ax = s.ax === undefined ? 4 : s.ax, gi = [12, 13, 14, 15, 16], me = 'alex';
+    const hl = (s.hl || ['marta', 'lucia']).filter((x) => x !== me);
+    const accM = gi.map((g) => P.acc.marta[g]), accA = gi.map((g) => P.acc.alex[g]); const lo = Math.min.apply(null, accA), hi = Math.max.apply(null, accM);
+    const AX = (k) => 20 + k * 90, AY = (v) => 80 - (v - lo) / (hi - lo) * 70;
+    const top = P.order.slice(0, 4).map((id, i) => {
+      const u = P.byId[id], n = P.N, mv = P.pos[id][n - 2] - P.pos[id][n - 1];
+      return { p: i + 1, pc: i < 3 ? 'p' + (i + 1) : '', name: u.name, ini: u.ini, me: u.me ? 'you' : '', cls: u.me ? 'me' : '', pts: P.total[id], hits: P.hits[id].reduce((a, b) => a + b, 0),
+        form: [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[id][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '' }; }),
+        mv: mv > 0 ? '▲' + mv : mv < 0 ? '▼' + (-mv) : '—', mvc: mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq' };
+    });
+    return {
+      swCls: sw ? 'on' : '', swOn: sw, swText: sw ? 'activados' : 'desactivados',
+      toggleSw: () => this.setState({ sw: !sw }),
+      tabName: names[tab],
+      tabs: names.map((n, i) => ({ label: n, cls: i === tab ? 'on' : '', pick: () => this.setState({ tab: i }) })),
+      rows: top,
+      progN: pn, progW: Math.round(pn / 8 * 100), progUp: () => this.setState({ pn: Math.min(8, pn + 1) }), progDn: () => this.setState({ pn: Math.max(0, pn - 1) }),
+      slotCls: s.slot ? 'pick' : '', slotText: s.slot ? 'Elige piloto para la posición 2' : 'Pulsa para elegir piloto', slotPick: () => this.setState({ slot: !s.slot }),
+      axX: AX(ax), axMe: accA.map((v, k) => (k ? 'L' : 'M') + AX(k) + ' ' + AY(v).toFixed(1)).join(''), axOt: accM.map((v, k) => (k ? 'L' : 'M') + AX(k) + ' ' + AY(v).toFixed(1)).join(''),
+      axL: gi.map((g, k) => ({ l: P.gps[g].code, cls: k === ax ? 'on' : '', pick: () => this.setState({ ax: k }) })), axName: P.gps[gi[ax]].name, axV1: accA[ax], axV2: accM[ax],
+      chips: P.order.slice(0, 5).map((id) => { const on = id === me || hl.indexOf(id) >= 0; return { n: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], on, cls: on ? 'on' : '', c: on ? P.hue(id, hl) : 'var(--c-rest)', pick: () => { if (id === me) return; const c = hl.slice(); const i = c.indexOf(id); if (i >= 0) c.splice(i, 1); else c.push(id); this.setState({ hl: c }); } }; }),
+      sheet: !!s.sh, noSheet: !s.sh, sheetTog: () => this.setState({ sh: !s.sh })
+    };
+  }
+}
+</script>
+</body>
+</html>

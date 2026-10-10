@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Invitación a una comunidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.cimg{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px;flex:none}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main lg">
+    <div class="col" style="gap:2px"><h1 class="t-title">Invitación a una comunidad</h1><p class="muted">Tres cosas pueden pasar al abrir un enlace de invitación.</p></div>
+    <div class="grid3" style="align-items:stretch">
+      <section class="card">
+        <div class="card-h"><span class="tag tg-ok">Enlace válido</span></div>
+        <div class="card-b col g16" style="align-items:flex-start">
+          <span class="cimg" style="background:#eb6834">OF</span>
+          <div class="col g4"><span class="up">Te han invitado a</span><h2 class="t-sub">Oficina F1</h2><p class="t-sm muted">Invitación de Irene Campos · 31 jugadores · Fórmula 1 2026</p></div>
+          <div class="card flat card-b col g8" style="width:100%;background:var(--surface-muted)"><span class="up">Reglas</span><span class="t-sm">Clásica 2026: 5 puntos por acierto exacto, 3 a una posición y 1 a dos.</span></div>
+          <button type="button" class="btn btn-primary btn-lg btn-block">Unirme a la comunidad</button>
+          <a class="btn btn-ghost btn-block" href="Comunidades.dc.html">Ahora no</a>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><span class="tag tg-err">Enlace caducado</span></div>
+        <div class="empty" style="padding-block:48px"><div class="ic" style="background:var(--err-tint);color:var(--err-fg)"><span class="i s24">link_off</span></div><b class="hd">Esta invitación ya no funciona</b><span class="t-sm">Quien la creó ha generado un enlace nuevo. Pídele el actual.</span><a class="btn btn-outline btn-sm" href="Comunidades.dc.html">Probar con un código</a></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><span class="tag tg-info">Ya eres miembro</span></div>
+        <div class="empty" style="padding-block:48px"><div class="ic" style="background:var(--ok-tint);color:var(--ok-fg)"><span class="i s24">check</span></div><b class="hd">Ya juegas en Amigos del paddock</b><span class="t-sm">No hace falta unirse otra vez.</span><a class="btn btn-primary btn-sm" href="ComunidadHome.dc.html">Ir a la comunidad</a></div>
+      </section>
+    </div>
+    <div class="card card-b row g16 wrapf" style="align-items:center;background:var(--tint);box-shadow:none"><span class="i s24" style="color:var(--tint-fg)">login</span><p class="t-sm fx" style="color:var(--tint-fg);min-width:240px"><b>Si no has iniciado sesión</b>, te pedimos entrar o crear cuenta y volvemos a esta misma invitación sin perder el código.</p><a class="btn btn-primary btn-sm" href="Login.dc.html">Iniciar sesión</a></div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

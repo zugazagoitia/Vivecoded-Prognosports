@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Menú de administración</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0;font-family:Inter,system-ui,sans-serif}</style>
+</helmet>
+<nav class="side-nav" aria-label="Administración">
+  <sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+    <div class="col" style="gap:2px">
+      <span class="mh">{{g.title}}</span>
+      <sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+        <a class="mi {{it.cls}}" href="{{it.href}}"><span class="i">{{it.icon}}</span>{{it.label}}</a>
+      </sc-for>
+    </div>
+  </sc-for>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","default":"panel","options":["panel","gps","circuitos","pilotos","reglas","usuarios","comunidades","notificaciones","calculos"]},"$preview":{"width":260,"height":760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.active || 'panel';
+    const G = [
+      ['General', [['panel', 'Panel', 'dashboard', 'AdminPanel']]],
+      ['Temporada', [['gps', 'Grandes Premios', 'flag', 'AdminGPs'], ['calculos', 'Cálculo de puntos', 'calculate', 'AdminCalculos']]],
+      ['Catálogo', [['circuitos', 'Circuitos', 'route', 'AdminCircuitos'], ['pilotos', 'Pilotos y equipos', 'sports_motorsports', 'AdminPilotos'], ['reglas', 'Reglas de puntuación', 'rule', 'AdminReglas']]],
+      ['Personas', [['usuarios', 'Usuarios', 'person', 'AdminUsuarios'], ['comunidades', 'Comunidades', 'groups', 'AdminComunidades'], ['notificaciones', 'Notificaciones', 'campaign', 'AdminNotificaciones']]]
+    ];
+    return { groups: G.map((g) => ({ title: g[0], items: g[1].map((x) => ({ label: x[1], icon: x[2], href: x[3] + '.dc.html', cls: x[0] === a ? 'on' : '' })) })) };
+  }
+}
+</script>
+</body>
+</html>

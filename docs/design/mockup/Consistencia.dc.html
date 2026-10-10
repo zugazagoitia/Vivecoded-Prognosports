@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Regularidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:24px;align-items:start}
+@media(max-width:1000px){.lay{grid-template-columns:minmax(0,1fr)}}
+.plot{position:relative;height:520px;margin:0 0 30px 56px;border-left:1px solid var(--axis);border-bottom:1px solid var(--axis)}
+.q{position:absolute;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+.mline{position:absolute;border-color:var(--border-input);border-style:dashed;border-width:0}
+.dot{position:absolute;border-radius:50%;transform:translate(-50%,-50%);border:2px solid var(--surface);cursor:pointer;padding:0}
+.dot.on{box-shadow:0 0 0 3px var(--ring)}
+.dl{position:absolute;transform:translateY(-50%);font-size:12px;white-space:nowrap;pointer-events:none;color:var(--body)}
+.tk{position:absolute;font-size:11px;color:var(--axis-txt)}
+.srow{display:flex;justify-content:space-between;font-size:14px;border-bottom:1px solid var(--border);padding-bottom:8px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Consistencia" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Perfil de juego</h2><span class="flag">flag</span></div><span class="t-sm muted">Media por GP frente a regularidad. Arriba a la derecha, quien puntúa alto y siempre. Pulsa un punto.</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Medida"><sc-for list="{{modes}}" as="m" hint-placeholder-count="2"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div></div>
+      <sc-if value="{{chart}}" hint-placeholder-val="{{ true }}">
+      <div class="card-b lay">
+        <div class="plot" role="group" aria-label="Gráfico de dispersión: media por GP y regularidad">
+          <i class="mline" style="left:{{mx}}%;top:0;bottom:0;border-left-width:1px"></i><i class="mline" style="top:{{my}}%;left:0;right:0;border-top-width:1px"></i>
+          <span class="q" style="right:10px;top:8px">Regular y alto</span><span class="q" style="left:10px;top:8px">Regular, pero bajo</span><span class="q" style="right:10px;bottom:8px">Alto, pero irregular</span><span class="q" style="left:10px;bottom:8px">Irregular y bajo</span>
+          <sc-for list="{{xt}}" as="t" hint-placeholder-count="6"><span class="tk" style="left:{{t.x}}%;bottom:-22px;transform:translateX(-50%)">{{t.l}}</span></sc-for>
+          <sc-for list="{{yt}}" as="t" hint-placeholder-count="5"><span class="tk" style="top:{{t.y}}%;left:-50px;transform:translateY(-50%)">{{t.l}}</span></sc-for>
+          <sc-for list="{{dots}}" as="d" hint-placeholder-count="12"><button type="button" class="dot {{d.cls}}" onClick="{{d.pick}}" aria-label="{{d.aria}}" aria-pressed="{{d.on}}" style="left:{{d.x}}%;top:{{d.y}}%;width:{{d.s}}px;height:{{d.s}}px;background:{{d.c}}"></button><span class="dl" style="left:calc({{d.x}}% + 12px);top:{{d.y}}%;font-weight:{{d.w}}">{{d.name}}</span></sc-for>
+        </div>
+        <aside class="col g12" style="border-left:1px solid var(--border);padding-left:20px">
+          <span class="up">Seleccionado</span><b class="hd t-sub" style="font-size:22px">{{selName}}</b><span class="tag tg-brand" style="align-self:flex-start">{{selQuad}}</span>
+          <sc-for list="{{selStats}}" as="t" hint-placeholder-count="5"><div class="srow"><span class="muted">{{t.l}}</span><b class="hd tn">{{t.v}}</b></div></sc-for>
+          <span class="t-cap muted">Arriba = más regular (desviación típica más baja). Líneas discontinuas: medias de la comunidad.</span>
+        </aside>
+      </div>
+      </sc-if>
+      <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>Jugador</th><th class="r">Media</th><th class="r">Desv. típica</th><th>Perfil</th></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td>{{r.name}}</td><td class="r">{{r.m}}</td><td class="r">{{r.sd}}</td><td>{{r.q}}</td></tr></sc-for></tbody></table></div></sc-if>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'pts', sel = s.sel || me;
+    const src = (id) => mode === 'pts' ? P.pts[id] : P.hits[id];
+    const st = P.users.map((u) => { const v = src(u.id), m = v.reduce((a, b) => a + b, 0) / n, sd = Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / n); return { id: u.id, m, sd, min: Math.min.apply(null, v), max: Math.max.apply(null, v) }; });
+    const xs = st.map((o) => o.m), ys = st.map((o) => o.sd);
+    const x0 = Math.min.apply(null, xs) * 0.94, x1 = Math.max.apply(null, xs) * 1.04, y0 = Math.min.apply(null, ys) * 0.9, y1 = Math.max.apply(null, ys) * 1.06;
+    const X = (v) => (v - x0) / (x1 - x0) * 100, Y = (v) => (v - y0) / (y1 - y0) * 100;
+    const mxv = xs.reduce((a, b) => a + b, 0) / xs.length, myv = ys.reduce((a, b) => a + b, 0) / ys.length;
+    const quad = (o) => o.m >= mxv ? (o.sd <= myv ? 'Regular y alto' : 'Alto, pero irregular') : (o.sd <= myv ? 'Regular, pero bajo' : 'Irregular y bajo');
+    const f = (v) => v.toFixed(1).replace('.', ',');
+    const so = st.filter((o) => o.id === sel)[0];
+    const step = mode === 'pts' ? 2 : 0.2, xt = []; for (let v = Math.ceil(x0 / step) * step; v <= x1; v += step) xt.push({ x: X(v), l: f(v) });
+    const ys2 = mode === 'pts' ? 1 : 0.2, yt = []; for (let w = Math.ceil(y0 / ys2) * ys2; w <= y1; w += ys2) yt.push({ y: Y(w), l: 'σ ' + f(w) });
+    return {
+      modes: [['pts', 'Puntos'], ['hits', 'Aciertos']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })), chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'insert_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      mx: X(mxv), my: Y(myv), xt, yt,
+      dots: st.map((o) => { const isMe = o.id === me, on = o.id === sel; return { x: X(o.m).toFixed(1), y: Y(o.sd).toFixed(1), s: isMe ? 20 : 14, c: isMe ? 'var(--c-you)' : on ? 'var(--c-2)' : 'var(--c-rest)', cls: on ? 'on' : '', on, w: isMe || on ? 700 : 400,
+        name: isMe ? 'Tú' : P.byId[o.id].name.split(' ')[0], aria: P.byId[o.id].name + ': media ' + f(o.m) + ', desviación ' + f(o.sd), pick: () => this.setState({ sel: o.id }) }; }),
+      selName: P.byId[sel].name + (sel === me ? ' (tú)' : ''), selQuad: quad(so),
+      selStats: [{ l: 'Media por GP', v: f(so.m) }, { l: 'Desviación típica', v: f(so.sd) }, { l: 'Mejor GP', v: so.max }, { l: 'Peor GP', v: so.min }, { l: 'GP disputados', v: n }],
+      tRows: st.slice().sort((a, b) => a.sd - b.sd).map((o) => ({ name: P.byId[o.id].name, cls: o.id === me ? 'me' : '', m: f(o.m), sd: f(o.sd), q: quad(o) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

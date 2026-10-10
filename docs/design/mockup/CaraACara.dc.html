@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cara a cara</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.score{display:grid;grid-template-columns:minmax(0,1fr) 240px minmax(0,1fr);align-items:center;gap:16px;background:var(--surface-muted);border-radius:8px;padding:16px 20px}
+.big{font-size:44px;line-height:48px;font-weight:700}
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start}
+@media(max-width:1000px){.lay{grid-template-columns:minmax(0,1fr)}.score{grid-template-columns:1fr}}
+.tape{display:grid;grid-template-columns:44px minmax(0,1fr) minmax(0,1fr) 44px;gap:4px;align-items:center}
+.tape i{display:block;height:10px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="CaraACara" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Cara a cara</h2><span class="flag">flag</span></div><span class="t-sm muted">Tú contra quien elijas, GP a GP: ¿quién gana vuestros duelos?</span></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div>
+      <div class="card-b col g20" style="gap:20px">
+        <div class="row g8 wrapf" role="group" aria-label="Rival"><span class="up" style="margin-right:4px">Rival</span><sc-for list="{{rivals}}" as="r" hint-placeholder-count="11"><button type="button" class="pchip {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.on}}">{{r.name}}</button></sc-for></div>
+        <div class="score" aria-label="Marcador de duelos">
+          <div class="col" style="align-items:flex-end;gap:0"><span class="t-sm muted">{{aPos}}.º en la general · {{aTot}} pts</span><b class="hd" style="font-size:22px;color:var(--c-you)">Tú</b></div>
+          <div class="row g12" style="justify-content:center;align-items:baseline"><b class="big tn" style="color:var(--c-you)">{{wa}}</b><span class="t-sm muted">{{ties}}</span><b class="big tn" style="color:var(--c-2)">{{wb}}</b></div>
+          <div class="col" style="gap:0"><span class="t-sm muted">{{bPos}}.º en la general · {{bTot}} pts</span><b class="hd" style="font-size:22px;color:var(--c-2)">{{bName}}</b></div>
+        </div>
+        <sc-if value="{{chart}}" hint-placeholder-val="{{ true }}">
+        <div class="lay">
+          <div class="col g8" style="min-width:0">
+            <b class="hd">Quién gana cada GP y por cuánto</b>
+            <svg viewBox="0 0 800 300" width="100%" class="chart" role="img" aria-label="Diferencia de puntos en cada GP entre tú y {{bName}}">
+              <text x="6" y="16" style="fill:var(--c-you);font-weight:700">GANAS TÚ ↑</text><text x="6" y="270" style="fill:var(--c-2);font-weight:700">GANA {{bUpper}} ↓</text>
+              <line class="ax" x1="0" x2="800" y1="140" y2="140"></line>
+              <sc-for list="{{bars}}" as="b" hint-placeholder-count="17"><g><rect x="{{b.x}}" y="{{b.y}}" width="26" height="{{b.h}}" rx="3" style="fill:{{b.c}}"></rect><text x="{{b.tx}}" y="{{b.ly}}" text-anchor="middle" style="fill:var(--h);font-size:10px">{{b.v}}</text><text x="{{b.tx}}" y="296" text-anchor="middle" style="font-size:10px">{{b.gp}}</text></g></sc-for>
+            </svg>
+            <b class="hd" style="margin-top:8px">Diferencia acumulada</b>
+            <svg viewBox="0 0 800 160" width="100%" class="chart" role="img" aria-label="Diferencia acumulada: {{endLabel}}">
+              <line x1="0" x2="800" y1="{{zeroY}}" y2="{{zeroY}}" style="stroke:var(--axis);stroke-dasharray:4 4"></line><text x="796" y="{{zeroTy}}" text-anchor="end">empate</text>
+              <path d="{{area}}" style="fill:var(--tint)"></path><path d="{{line}}" fill="none" style="stroke:var(--c-you);stroke-width:2.5;stroke-linejoin:round"></path>
+              <text x="{{endX}}" y="{{endY}}" text-anchor="end" class="lbl-s" style="fill:var(--h)">{{endLabel}}</text>
+            </svg>
+          </div>
+          <div class="col g12"><b class="hd">Comparativa</b>
+            <sc-for list="{{tape}}" as="t" hint-placeholder-count="6"><div class="col" style="gap:4px"><span class="t-cap muted" style="text-align:center">{{t.label}}</span><div class="tape"><b class="tn" style="text-align:right;font-weight:{{t.wa}}">{{t.a}}</b><span class="row" style="justify-content:flex-end"><i style="width:{{t.pa}}%;background:var(--c-you);border-radius:3px 0 0 3px"></i></span><span class="row"><i style="width:{{t.pb}}%;background:var(--c-2);border-radius:0 3px 3px 0"></i></span><b class="tn" style="font-weight:{{t.wb}}">{{t.b}}</b></div></div></sc-for>
+          </div>
+        </div>
+        </sc-if>
+        <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>GP</th><th class="r">Tú</th><th class="r">{{bName}}</th><th class="r">Diferencia</th><th class="r">Acumulado</th></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="17"><tr><td>{{r.gp}}</td><td class="r">{{r.a}}</td><td class="r">{{r.b}}</td><td class="r"><b class="hd">{{r.d}}</b></td><td class="r">{{r.c}}</td></tr></sc-for></tbody></table></div></sc-if>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1350}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const rid = s.rv && P.byId[s.rv] ? s.rv : O[0] === me ? O[1] : O[0];
+    const A = P.pts[me], Bp = P.pts[rid];
+    let wa = 0, wb = 0, ti = 0; const diffs = A.map((v, g) => { const d = v - Bp[g]; if (d > 0) wa++; else if (d < 0) wb++; else ti++; return d; });
+    const maxd = Math.max(20, Math.max.apply(null, diffs.map(Math.abs)));
+    const dx = 800 / n;
+    const bars = diffs.map((d, g) => { const h = Math.max(2, Math.abs(d) / maxd * 110), x = g * dx + 8; return { x, tx: x + 13, y: d >= 0 ? 140 - h : 140, h, c: d >= 0 ? 'var(--c-you)' : 'var(--c-2)', v: (d > 0 ? '+' : '') + String(d).replace('-', '−'), ly: d >= 0 ? 140 - h - 4 : 140 + h + 12, gp: P.gps[g].code }; });
+    let cum = 0; const pts = diffs.map((d) => (cum += d));
+    const lo = Math.min(0, Math.min.apply(null, pts)), hi = Math.max(0, Math.max.apply(null, pts)), sp = Math.max(10, hi - lo);
+    const Y = (v) => 10 + (hi - v) / sp * 140, X = (g) => g * dx + 21;
+    const line = pts.map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+    const stt = (id) => ({ tot: P.total[id], avg: Math.round(P.total[id] / n), wins: P.gpRank[id].filter((x) => x === 1).length, pod: P.gpRank[id].filter((x) => x <= 3).length, best: Math.max.apply(null, P.pts[id]), hits: P.hits[id].reduce((a, b) => a + b, 0) });
+    const sa = stt(me), sb = stt(rid), bn = P.byId[rid].name.split(' ')[0];
+    return {
+      rivals: O.filter((id) => id !== me).map((id) => ({ name: P.byId[id].name, on: id === rid, cls: id === rid ? 'on' : '', pick: () => this.setState({ rv: id }) })), chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'insert_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      aPos: O.indexOf(me) + 1, bPos: O.indexOf(rid) + 1, aTot: P.total[me], bTot: P.total[rid], bName: bn, bUpper: bn.toUpperCase(), wa, wb, ties: ti ? ti + ' empate' + (ti > 1 ? 's' : '') : 'sin empates',
+      bars, line, area: line + ' L' + X(n - 1).toFixed(1) + ' ' + Y(0).toFixed(1) + ' L' + X(0).toFixed(1) + ' ' + Y(0).toFixed(1) + ' Z', zeroY: Y(0), zeroTy: Y(0) - 4, endX: 796, endY: Y(cum) + (cum >= 0 ? -8 : 16),
+      endLabel: cum > 0 ? '+' + cum + ' para ti' : cum < 0 ? Math.abs(cum) + ' para ' + bn : 'Empate',
+      tape: [['Puntos', 'tot'], ['Media por GP', 'avg'], ['GP ganados', 'wins'], ['Podios en GP', 'pod'], ['Mejor GP', 'best'], ['Aciertos', 'hits']].map((k) => { const a = sa[k[1]], b = sb[k[1]], m = Math.max(a, b, 1); return { label: k[0], a, b, pa: Math.round(a / m * 100), pb: Math.round(b / m * 100), wa: a >= b ? 700 : 400, wb: b >= a ? 700 : 400 }; }),
+      tRows: diffs.map((d, g) => ({ gp: P.gps[g].name, a: A[g], b: Bp[g], d: (d > 0 ? '+' : '') + String(d).replace('-', '−'), c: String(pts[g]).replace('-', '−') }))
+    };
+  }
+}
+</script>
+</body>
+</html>

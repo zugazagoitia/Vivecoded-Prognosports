@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Feature flags</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--tint-fg);background:var(--tint);padding:1px 6px;border-radius:4px}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 06</span>
+      <h1 class="t-title">Feature flags</h1>
+      <p class="t-body muted" style="max-width:760px">Doce estadísticas se activan sin tocar el backend. Apagadas, desaparecen del todo: sin enlace, sin ruta, sin peticiones y sin peso en el paquete principal. Se definen por entorno y están apagadas por defecto en producción.</p>
+    </div>
+
+    <section class="grid2" style="align-items:start">
+      <div class="card">
+        <div class="card-h"><h2 class="t-head">Panel de previews</h2><span class="tag tg-warn">Solo en previews y desarrollo</span></div>
+        <div class="card-b col g8">
+          <p class="t-sm muted">En las previews de cada pull request aparece este panel flotante para revisar una propuesta sin afectar a producción. Los valores viven en el navegador del revisor.</p>
+          <sc-for list="{{flags}}" as="f" hint-placeholder-count="12">
+            <div class="row" style="padding:8px 0;border-bottom:1px solid var(--border)"><button type="button" class="sw {{f.cls}}" role="switch" aria-checked="{{f.on}}" aria-label="{{f.name}}" onClick="{{f.pick}}"></button><div class="col fx" style="gap:0"><b class="hd t-sm">{{f.name}}</b><span class="mono" style="align-self:flex-start;margin-top:2px">{{f.key}}</span></div><span class="tag {{f.tg}}">{{f.state}}</span></div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="col g16">
+        <div class="card">
+          <div class="card-h"><h2 class="t-head">Qué cambia en la interfaz</h2><span class="t-sm muted">{{count}} de 12 activas</span></div>
+          <div class="card-b col g12">
+            <div class="col g8"><span class="up">Pestañas del ranking</span>
+              <div class="tabs" style="flex-wrap:wrap"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="7"><span class="tab {{t.cls}}">{{t.l}}</span></sc-for></div>
+              <sc-for list="{{subs}}" as="t" hint-placeholder-count="4"><div class="row g8 wrapf"><span class="t-cap muted" style="width:72px">{{t.l}}</span><sc-for list="{{t.items}}" as="i" hint-placeholder-count="3"><span class="tag {{i.tg}}">{{i.l}}</span></sc-for></div></sc-for>
+              <span class="t-cap muted">Una pestaña sin ninguna vista activa desaparece. Resumen, Clasificación y Matriz no dependen de ningún flag.</span></div>
+            <div class="col g8"><span class="up">Bloques de Inicio</span>
+              <div class="row wrapf g8"><span class="tag tg-brand">Próximo GP</span><span class="tag tg-brand">Mis pronósticos</span><span class="tag tg-brand">Resumen de puntos</span><sc-if value="{{homeA}}" hint-placeholder-val="{{ true }}"><span class="flag">Mi temporada</span></sc-if><sc-if value="{{homeB}}" hint-placeholder-val="{{ true }}"><span class="flag">Palmarés</span></sc-if><sc-if value="{{homeC}}" hint-placeholder-val="{{ true }}"><span class="flag">Puntos por sesión</span></sc-if></div></div>
+            <div class="col g8"><span class="up">Mis comunidades</span><div class="row wrapf g8"><span class="tag tg-brand">Lista de comunidades</span><sc-if value="{{commP}}" hint-placeholder-val="{{ true }}"><span class="flag">Percentil entre comunidades</span></sc-if></div></div>
+            <p class="note">Con un flag apagado, la ruta responde 404 y no se pide ningún dato asociado.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h2 class="t-head">Cómo se marca en los diseños</h2></div>
+          <div class="card-b col g8"><div class="row g8"><span class="flag"><span class="i s16">flag</span>Feature flag</span><span class="t-sm">aparece junto al título de cada pantalla controlada por un flag.</span></div>
+            <p class="t-sm muted">En producción el sello no se muestra; solo se ve en previews para que el equipo sepa qué está detrás de un interruptor.</p></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h2 class="t-head">Datos que necesita cada una</h2></div>
+          <div class="tw"><table class="tbl"><thead><tr><th>Pantalla</th><th>Datos de la API v2</th></tr></thead><tbody>
+            <tr><td><b class="hd">Mi temporada</b></td><td class="muted">puntos y aciertos por GP, resumen del usuario</td></tr>
+            <tr><td><b class="hd">Palmarés</b></td><td class="muted">ganadores por sesión y por GP, resumen por temporada</td></tr>
+            <tr><td><b class="hd">Gap · Bump</b></td><td class="muted">puntos acumulados y clasificación por GP</td></tr>
+            <tr><td><b class="hd">Regularidad · Distribución</b></td><td class="muted">puntos por GP de todos los usuarios</td></tr>
+            <tr><td><b class="hd">Cara a cara</b></td><td class="muted">puntos y aciertos por GP de dos usuarios</td></tr>
+            <tr><td><b class="hd">Mapa de calor · Aciertos por tipo</b></td><td class="muted">hitsBySession: aciertos por tipo de sesión</td></tr>
+            <tr><td><b class="hd">Lucha por el título</b></td><td class="muted">puntos acumulados por GP, GP pendientes y máximo por GP de las reglas activas</td></tr>
+            <tr><td><b class="hd">Puntos por sesión</b></td><td class="muted">pointsBySession y bonusPoints</td></tr>
+            <tr><td><b class="hd">Percentil entre comunidades</b></td><td class="muted">clasificación de cada comunidad del usuario (puesto y miembros)</td></tr>
+          </tbody></table></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const F = [['Mi temporada', 'VITE_FF_MY_SEASON', true], ['Palmarés', 'VITE_FF_HONOURS', true], ['Diferencia de puntos (Gap)', 'VITE_FF_GAP', true], ['Posición en la general (Bump)', 'VITE_FF_BUMP', false], ['Lucha por el título', 'VITE_FF_TITLE_RACE', true], ['Regularidad', 'VITE_FF_CONSISTENCY', true], ['Cara a cara', 'VITE_FF_HEAD_TO_HEAD', false], ['Distribución de puntos', 'VITE_FF_DISTRIBUTION', true], ['Mapa de calor por GP', 'VITE_FF_HEATMAP', false], ['Aciertos por tipo', 'VITE_FF_HITS_BY_TYPE', true], ['Puntos por sesión', 'VITE_FF_POINTS_BY_SESSION', true], ['Percentil entre comunidades', 'VITE_FF_COMMUNITY_PERCENTILE', false]];
+    const on = F.map((f, i) => (s['f' + i] === undefined ? f[2] : s['f' + i]));
+    const G = [['Por GP', [['Matriz', -1], ['Mapa de calor', 8], ['Distribución', 7], ['Por sesión', 10]]], ['Evolución', [['Gap', 2], ['Bump', 3], ['Título', 4]]], ['Aciertos', [['Por tipo', 9], ['Regularidad', 5]]], ['Comparar', [['Cara a cara', 6], ['Mi temporada', 0]]]];
+    const vis = (k) => k < 0 || on[k];
+    const tabs = [['Resumen', true], ['Clasificación', true], ['Por GP', true], ['Evolución', G[1][1].some((x) => vis(x[1]))], ['Aciertos', G[2][1].some((x) => vis(x[1]))], ['Comparar', G[3][1].some((x) => vis(x[1]))], ['Palmarés', on[1]]];
+    return {
+      flags: F.map((f, i) => ({ name: f[0], key: f[1], on: on[i], cls: on[i] ? 'on' : '', tg: on[i] ? 'tg-ok' : 'tg-gray', state: on[i] ? 'Activa' : 'Apagada', pick: () => this.setState({ ['f' + i]: !on[i] }) })),
+      count: on.filter(Boolean).length, tabs: tabs.map((t, i) => ({ l: t[0], cls: t[1] ? (i === 0 ? 'on' : '') : 'off' })).filter((t) => t.cls !== 'off'),
+      subs: G.map((g) => ({ l: g[0], items: g[1].map((x) => ({ l: x[0], tg: vis(x[1]) ? 'tg-brand' : 'tg-gray' })) })),
+      homeA: on[0], homeB: on[1], homeC: on[10], commP: on[11]
+    };
+  }
+}
+</script>
+</body>
+</html>

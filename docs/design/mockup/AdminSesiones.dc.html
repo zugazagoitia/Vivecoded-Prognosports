@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sesiones, parrilla y resultados</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}
+@media(max-width:1100px){.lay{grid-template-columns:minmax(0,1fr)}}
+.tlw{position:relative}
+.day{display:grid;grid-template-columns:90px minmax(0,1fr);border-top:1px solid var(--border);min-height:72px}
+.trk{position:relative;height:72px}
+.hl{position:absolute;top:0;bottom:0;border-left:1px solid var(--grid)}
+.blk{position:absolute;top:10px;height:52px;border-radius:6px;padding:4px 8px;font:inherit;font-size:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:center;overflow:hidden;box-sizing:border-box}
+.blk.pred{background:var(--tint);color:var(--tint-fg);border:2px solid var(--brand-300)}
+.blk.free{background:var(--surface-muted);color:var(--muted);border:2px solid var(--border)}
+.blk.on{background:var(--primary);color:var(--on-primary);border-color:var(--brand-800)}
+.cl{position:absolute;top:4px;height:64px;border-left:2px solid var(--err)}
+.hrs{position:relative;height:20px;margin-left:90px}
+.hrs span{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--axis-txt)}
+.ro{display:flex;align-items:center;min-height:38px;padding:0 10px;border-radius:6px;background:var(--surface-muted);color:var(--h)}
+.gr{display:grid;grid-template-columns:40px minmax(0,1fr) 110px minmax(0,1fr);gap:8px;align-items:center}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="gps" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="crumb"><a href="AdminGPs.dc.html">Grandes Premios</a><span class="i">chevron_right</span><a href="AdminGPEditar.dc.html">Singapur</a><span class="i">chevron_right</span><span>Sesiones</span></div>
+<div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Sesiones del fin de semana</h1><p class="muted">Gran Premio de Singapur · 9–11 de octubre</p></div><div class="seg" role="group" aria-label="Zona horaria"><sc-for list="{{tz}}" as="x" hint-placeholder-count="2"><button type="button" class="sg {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div></div>
+<div class="tabs" role="tablist"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" role="tab" class="tab {{t.cls}}" aria-selected="{{t.on}}" onClick="{{t.pick}}">{{t.l}}</button></sc-for></div>
+
+<sc-if value="{{tCal}}" hint-placeholder-val="{{ true }}">
+<div class="lay">
+  <section class="card card-b col g8"><span class="t-sm muted">Pulsa una sesión para editarla. La raya roja marca el cierre de pronósticos (5 minutos antes).</span>
+    <div class="hrs"><sc-for list="{{hours}}" as="h" hint-placeholder-count="7"><span style="left:{{h.x}}%">{{h.l}}</span></sc-for></div>
+    <sc-for list="{{days}}" as="d" hint-placeholder-count="3"><div class="day"><div class="col" style="justify-content:center;gap:0"><b class="hd t-sm">{{d.name}}</b><span class="t-cap muted">{{d.date}}</span></div><div class="trk"><sc-for list="{{hours}}" as="h" hint-placeholder-count="7"><i class="hl" style="left:{{h.x}}%"></i></sc-for><sc-for list="{{d.blocks}}" as="b" hint-placeholder-count="2"><button type="button" class="blk {{b.cls}}" onClick="{{b.pick}}" style="left:{{b.x}}%;width:{{b.w}}%"><b>{{b.name}}</b><span>{{b.time}}</span></button><i class="cl" style="left:{{b.cx}}%;display:{{b.cd}}" title="Cierre de pronósticos"></i></sc-for></div></div></sc-for>
+    <div class="legend" style="padding-top:8px"><span><i style="width:14px;height:12px;border-radius:3px;display:inline-block;background:var(--tint);box-shadow:inset 0 0 0 1px var(--brand-300)"></i>Con pronóstico</span><span><i style="width:14px;height:12px;border-radius:3px;display:inline-block;background:var(--surface-muted);box-shadow:inset 0 0 0 1px var(--border)"></i>Libres (sin pronóstico)</span><span><i style="width:2px;height:12px;display:inline-block;background:var(--err)"></i>Cierre</span></div>
+  </section>
+  <section class="card"><div class="card-h"><h2 class="t-head">{{sel.name}}</h2></div><div class="card-b col g12">
+    <div class="field"><span class="lbl">Código</span><span class="ro">{{sel.code}}</span></div>
+    <div class="field"><label class="lbl" for="si">Inicio ({{tzShort}})</label><input id="si" class="inp" value="{{sel.start}}"></div>
+    <div class="field"><label class="lbl" for="sd">Duración</label><input id="sd" class="inp" value="{{sel.dur}}"></div>
+    <div class="field"><span class="lbl">Cierre de pronósticos</span><span class="ro">{{sel.close}}</span></div>
+    <div class="field"><span class="lbl">Qué se pronostica</span><span class="ro">{{sel.what}}</span></div>
+    <div class="alert al-info" style="padding:8px 10px"><span class="i s16">info</span><span class="t-sm">{{sel.uses}}</span></div>
+    <div class="row g8"><button type="button" class="btn btn-primary btn-sm">Guardar sesión</button><button type="button" class="btn btn-outline btn-sm" style="color:var(--err);border-color:var(--err)">Eliminar</button></div>
+  </div></section>
+</div>
+</sc-if>
+
+<sc-if value="{{tGrid}}" hint-placeholder-val="{{ false }}">
+  <section class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Parrilla de salida · Carrera</h2><span class="t-sm muted">Según la clasificación. Marca quién sale desde el pit lane y añade una nota si hay sanción.</span></div><span class="tag tg-warn">Borrador</span></div>
+    <div class="card-b col g8">
+      <div class="gr up"><span>Pos.</span><span>Piloto</span><span>Pit lane</span><span>Nota de incidencia</span></div>
+      <sc-for list="{{grid}}" as="g" hint-placeholder-count="10"><div class="gr"><span class="pos">{{g.p}}</span><select class="sel" aria-label="Piloto en P{{g.p}}"><option>{{g.name}}</option></select><label class="row g8 t-sm"><input type="checkbox" checked="{{g.pit}}" style="width:18px;height:18px;accent-color:var(--primary)">Pit lane</label><input class="inp" value="{{g.note}}" placeholder="Opcional" aria-label="Nota de incidencia P{{g.p}}"></div></sc-for>
+      <span class="t-cap muted">Mostrando 10 de 22 posiciones.</span>
+    </div>
+    <div class="card-f" style="justify-content:space-between"><label class="row g8 t-sm"><input type="checkbox" checked="" style="width:18px;height:18px;accent-color:var(--primary)">Avisar a los jugadores del cambio de parrilla</label><button type="button" class="btn btn-primary btn-sm">Publicar parrilla</button></div></section>
+</sc-if>
+
+<sc-if value="{{tRes}}" hint-placeholder-val="{{ false }}">
+  <section class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Resultado oficial</h2><span class="t-sm muted">Al guardar se calculan los puntos de todas las comunidades.</span></div><div class="seg" role="group" aria-label="Sesión"><sc-for list="{{rs}}" as="x" hint-placeholder-count="4"><button type="button" class="sg {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div></div>
+    <div class="card-b col g8">
+      <sc-for list="{{res}}" as="r" hint-placeholder-count="8"><div class="row g8"><span class="pos">{{r.p}}</span><select class="sel" aria-label="Posición {{r.p}}"><option>{{r.v}}</option><option>Elegir piloto</option></select></div></sc-for>
+      <div class="field" style="max-width:360px"><label class="lbl" for="fl">Vuelta rápida (solo informativa)</label><select id="fl" class="sel"><option>Elegir piloto</option><option>NOR · Lando Norris</option></select></div>
+      <sc-if value="{{done}}" hint-placeholder-val="{{ false }}"><div class="alert al-ok"><span class="i">check_circle</span><span>Resultado guardado y puntos calculados el viernes a las 18:42. Si lo cambias, se recalculará.</span></div></sc-if>
+      <sc-if value="{{pending}}" hint-placeholder-val="{{ true }}"><div class="alert al-warn"><span class="i">schedule</span><span>La sesión aún no se ha disputado. Podrás guardar el resultado cuando termine.</span></div></sc-if>
+    </div>
+    <div class="card-f"><button type="button" class="btn btn-outline btn-sm">Vaciar</button><button type="button" class="btn btn-primary btn-sm" disabled="{{pending}}">Guardar y calcular</button></div></section>
+</sc-if>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const S = [['Libres 1', 'FP1', 0, 17.5, 60, 0, ''], ['Clasif. sprint', 'SPRINT_QUALY', 0, 23.5, 45, 1, 'Los 3 primeros'], ['Sprint', 'SPRINT', 1, 18, 40, 1, 'Los 5 primeros'], ['Clasificación', 'QUALIFY', 1, 22, 60, 1, 'Los 5 primeros'], ['Carrera', 'RACE', 2, 21, 120, 1, 'Los 8 primeros']];
+    const DAYS = [['Viernes', '9 oct'], ['Sábado', '10 oct'], ['Domingo', '11 oct']];
+    const local = s.tz !== 'me', off = local ? 0 : -6, H0 = local ? 14 : 8, SPAN = 12, t = s.t || 0, sel = s.sel === undefined ? 2 : s.sel;
+    const X = (h) => (h - H0) / SPAN * 100, hm = (h) => { h = ((h % 24) + 24) % 24; const H = Math.floor(h), M = Math.round((h - H) * 60); return (H < 10 ? '0' : '') + H + ':' + (M < 10 ? '0' : '') + M; };
+    const hours = []; for (let h = H0; h <= H0 + SPAN; h += 2) hours.push({ x: X(h), l: hm(h) });
+    const days = DAYS.map((d, k) => ({ name: d[0], date: d[1], blocks: S.map((x, i) => [x, i]).filter((o) => o[0][2] === k).map((o) => { const x = o[0], i = o[1], st = x[3] + off; return { name: x[0], time: hm(st) + '–' + hm(st + x[4] / 60), x: X(st).toFixed(2), w: Math.max(9, x[4] / 60 / SPAN * 100).toFixed(2), cls: (x[5] ? 'pred' : 'free') + (i === sel ? ' on' : ''), cx: X(st - 5 / 60).toFixed(2), cd: x[5] ? 'block' : 'none', pick: () => this.setState({ sel: i }) }; }) }));
+    const x = S[sel], st = x[3] + off;
+    const RS = ['cs', 'sp', 'q', 'r'], rk = s.rk || 'cs', rn = P.SESS[rk][2];
+    return {
+      tz: [['local', 'Hora del circuito (UTC+8)'], ['me', 'Tu hora (UTC+2)']].map((o) => ({ l: o[1], cls: (o[0] === 'local') === local ? 'on' : '', pick: () => this.setState({ tz: o[0] }) })),
+      tabs: ['Calendario', 'Parrilla', 'Resultados'].map((l, i) => ({ l, on: i === t, cls: i === t ? 'on' : '', pick: () => this.setState({ t: i }) })), tCal: t === 0, tGrid: t === 1, tRes: t === 2,
+      hours, days, tzShort: local ? 'hora de Singapur' : 'tu hora',
+      sel: { name: x[0], code: x[1], start: DAYS[x[2]][0] + ' ' + DAYS[x[2]][1] + ' · ' + hm(st), dur: x[4] + ' min', close: x[5] ? '5 min antes · ' + hm(st - 5 / 60) : 'No tiene pronóstico', what: x[5] ? x[6] : '—', uses: x[5] ? 'La usan 47 comunidades: 286 pronósticos guardados.' : 'Ninguna comunidad la usa.' },
+      grid: P.GRID.slice(0, 10).map((c, i) => ({ p: i + 1, name: c + ' · ' + P.drv(c).name, pit: false, note: c === 'ALO' ? 'Retrasado 3 puestos por bloquear' : '' })),
+      rs: RS.map((k) => ({ l: P.SESS[k][1], cls: k === rk ? 'on' : '', pick: () => this.setState({ rk: k }) })),
+      res: P.REAL[rk].slice(0, rn).map((c, i) => ({ p: i + 1, v: rk === 'cs' ? c + ' · ' + P.drv(c).name : 'Elegir piloto' })), done: rk === 'cs', pending: rk !== 'cs'
+    };
+  }
+}
+</script>
+</body>
+</html>

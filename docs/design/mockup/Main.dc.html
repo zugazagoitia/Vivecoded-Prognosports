@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Portada y mapa del rediseño</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.gl a{display:flex;gap:10px;align-items:baseline;padding:6px 8px;border-radius:6px;color:var(--body);font-size:14px;line-height:20px}
+.gl a:hover{background:var(--surface-muted);color:var(--h);text-decoration:none}
+.gl a span.c{font-size:12px;font-weight:700;color:var(--tint-fg);min-width:34px;font-variant-numeric:tabular-nums}
+.gl a em{font-style:normal;margin-left:auto;font-size:11px;color:var(--muted)}
+</style>
+</helmet>
+<div class="pg">
+  <header class="nav">
+    <div class="nav-in">
+      <span class="brand"><img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="28" height="28">PrognoSports</span>
+      <span class="tag tg-brand">Rediseño · mockup</span>
+      <span class="fx"></span>
+      <button type="button" class="btn btn-outline btn-sm" onClick="{{toggle}}" aria-label="Cambiar entre tema claro y oscuro"><span class="i s16">{{themeIcon}}</span>{{themeLabel}}</button>
+    </div>
+  </header>
+
+  <main class="pg-main" style="gap:32px">
+    <section class="card" style="overflow:hidden">
+      <div class="hero" style="padding:48px 40px;display:flex;gap:40px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1 1 420px;min-width:0;display:flex;flex-direction:column;gap:16px">
+          <span class="up" style="color:var(--brand-200)">Mockup completo · escritorio y móvil · claro y oscuro</span>
+          <h1 style="font-size:48px;line-height:52px;font-weight:600;color:#fff;letter-spacing:-.02em;text-wrap:balance">Pronostica la parrilla. Gana a tus amigos.</h1>
+          <p style="font-size:18px;line-height:28px;color:var(--brand-100);max-width:560px">Rediseño de PrognoSports con el design system actual: 77 pantallas, desde la landing hasta el back-office, sobre la API v2 sin cambios.</p>
+          <div class="row wrapf">
+            <a class="btn btn-lg" href="Landing.dc.html" style="background:#fff;color:var(--brand-700)">Ver la landing<span class="i">arrow_forward</span></a>
+            <a class="btn btn-lg btn-outline" href="Pronosticar.dc.html" style="background:transparent;border-color:var(--brand-300);color:#fff">Ir a pronosticar</a>
+          </div>
+        </div>
+        <div style="flex:1 1 280px;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+          <div style="padding:16px;border-radius:8px;background:rgba(255,255,255,.1)"><div style="font-size:32px;font-weight:700;color:#fff">77</div><div class="t-sm" style="color:var(--brand-100)">pantallas diseñadas</div></div>
+          <div style="padding:16px;border-radius:8px;background:rgba(255,255,255,.1)"><div style="font-size:32px;font-weight:700;color:#fff">12</div><div class="t-sm" style="color:var(--brand-100)">estadísticas con feature flag</div></div>
+          <div style="padding:16px;border-radius:8px;background:rgba(255,255,255,.1)"><div style="font-size:32px;font-weight:700;color:#fff">13</div><div class="t-sm" style="color:var(--brand-100)">pantallas de administración</div></div>
+          <div style="padding:16px;border-radius:8px;background:rgba(255,255,255,.1)"><div style="font-size:32px;font-weight:700;color:#fff">0</div><div class="t-sm" style="color:var(--brand-100)">cambios en el backend</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid3">
+      <div class="card card-b col">
+        <span class="i s24" style="color:var(--ring)">palette</span>
+        <h2 class="t-head">Design system, sin inventar</h2>
+        <p class="t-sm muted">Inter, morado de marca, radios de 4/6/8 px, tarjetas con sombra y anillo, tuteo y minúsculas. Las únicas piezas nuevas son las de datos: gráficos, matriz y calendario.</p>
+      </div>
+      <div class="card card-b col">
+        <span class="i s24" style="color:var(--ring)">contrast</span>
+        <h2 class="t-head">Interruptor global claro/oscuro</h2>
+        <p class="t-sm muted">El botón de tema de la barra superior (y el de esta portada) cambia todas las pantallas a la vez. En producción se guarda en el navegador y respeta el ajuste del sistema.</p>
+      </div>
+      <div class="card card-b col">
+        <span class="i s24" style="color:var(--ring)">flag</span>
+        <h2 class="t-head">Lo que va con feature flag</h2>
+        <p class="t-sm muted">Las pantallas marcadas con <span class="flag">flag</span> se activan desde el frontend sin tocar la API: Mi temporada, Palmarés, Gap, Bump, Lucha por el título, Regularidad, Cara a cara, Distribución, Mapa de calor, Aciertos por tipo, Puntos por sesión y Percentil entre comunidades.</p>
+      </div>
+    </section>
+
+    <section class="col g16">
+      <div class="row sp wrapf">
+        <h2 class="t-sub">Mapa de pantallas</h2>
+        <span class="t-sm muted">Nuevo en esta revisión: R0, R12, R13 y la pestaña de navegación del ranking. <span class="flag">flag</span> = detrás de feature flag.</span>
+      </div>
+      <div class="grid3 gl" style="align-items:start">
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="6">
+          <div class="card" style="padding:12px">
+            <div class="row" style="padding:4px 8px 8px"><span class="i" style="color:var(--ring)">{{g.icon}}</span><h3 class="t-head" style="font-size:16px">{{g.title}}</h3></div>
+            <sc-for list="{{g.items}}" as="it" hint-placeholder-count="5">
+              <a href="{{it.href}}"><span class="c">{{it.code}}</span>{{it.label}}<em>{{it.note}}</em></a>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section class="card card-b col g16">
+      <h2 class="t-sub">Decisiones que se ven en las pantallas</h2>
+      <div class="grid2" style="gap:16px 40px">
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Barra superior en escritorio y tab bar en móvil.</b> Cinco destinos fijos: Inicio, Grandes Premios, Ranking, Comunidades y Perfil. Administración aparece solo para admin.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Foco + contexto.</b> Tú siempre en morado, hasta cinco jugadores resaltados con color fijo (chips para elegirlos) y el resto en gris. Cada gráfico tiene 2 a 4 modos y un eje de GP pulsable.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Pronosticar como prefieras.</b> En escritorio arrastras pilotos a los huecos; también tocas un hueco vacío y eliges piloto, o copias el pronóstico de otra sesión. En móvil, hoja inferior. Todo funciona con teclado.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Vueltas rápidas solo se muestran.</b> No se pronostican ni puntúan. Los usuarios, en administración, son de solo lectura.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Aciertos que se leen de un vistazo.</b> Celdas sólidas: verde exacto, ámbar a una posición, azul a dos y los fallos sin color. Cada gráfico tiene además tabla y etiquetas directas.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Datos ficticios coherentes.</b> Temporada 2026, comunidad «Amigos del paddock», 12 jugadores y tú eres Álex Ruiz en todas las pantallas.</p></div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._h = (e) => this.setState({ dark: e.detail === 'dark' });
+    window.addEventListener('pg-theme', this._h);
+    try { this.setState({ dark: window.pgTheme && window.pgTheme() === 'dark' }); } catch (e) {}
+  }
+  componentWillUnmount() { window.removeEventListener('pg-theme', this._h); }
+  renderVals() {
+    const dark = !!(this.state && this.state.dark);
+    const G = (title, icon, items) => ({ title, icon, items: items.map((x) => ({ code: x[0], label: x[1], href: x[2] + '.dc.html', note: x[3] || '' })) });
+    return {
+      themeIcon: dark ? 'light_mode' : 'dark_mode',
+      themeLabel: dark ? 'Tema claro' : 'Tema oscuro',
+      toggle: () => { try { const t = window.pgToggleTheme(); this.setState({ dark: t === 'dark' }); } catch (e) {} },
+      groups: [
+        G('Guía y fundamentos', 'menu_book', [['01', 'Fundamentos', 'Fundamentos'], ['02', 'Componentes', 'Componentes'], ['03', 'Navegación', 'Navegacion'], ['04', 'Lenguaje de gráficos', 'Graficos'], ['05', 'Estados del sistema', 'Estados'], ['06', 'Feature flags', 'Flags']]),
+        G('Público', 'public', [['P1', 'Landing', 'Landing', 'móvil'], ['P2', 'Cómo se puntúa', 'Reglas'], ['P3', 'Circuitos', 'Circuitos'], ['P4', 'Detalle de circuito', 'CircuitoDetalle'], ['P5', 'Preguntas frecuentes', 'FAQ'], ['P6', 'Términos y privacidad', 'Legal']]),
+        G('Acceso', 'lock', [['A1', 'Iniciar sesión', 'Login', 'móvil'], ['A2', 'Registro', 'Registro'], ['A3', 'Recuperar contraseña', 'Recuperar'], ['A4', 'Nueva contraseña', 'Restablecer'], ['A5', 'Verificación de correo', 'Verificar']]),
+        G('Inicio y comunidades', 'home', [['H1', 'Inicio', 'Inicio', 'móvil'], ['H2', 'Mis comunidades', 'Comunidades', 'flag'], ['H3', 'Explorar comunidades', 'Explorar'], ['H4', 'Crear comunidad', 'CrearComunidad'], ['H5', 'Comunidad', 'ComunidadHome'], ['H6', 'Ajustes de la comunidad', 'ComunidadAjustes'], ['H7', 'Invitación', 'Invitacion']]),
+        G('Grandes Premios', 'flag', [['G1', 'Calendario', 'GPLista'], ['G2', 'Fin de semana', 'GPDetalle', 'móvil'], ['G3', 'Pronosticar', 'Pronosticar', 'móvil'], ['G4', 'Pronósticos de la comunidad', 'ParrillaComunidad'], ['G5', 'Resultados y puntos', 'Resultados'], ['G6', 'Simulador de puntos', 'Simulador']]),
+        G('Ranking y estadísticas', 'leaderboard', [['R0', 'Resumen del ranking', 'RankingResumen', 'nuevo'], ['R1', 'Clasificación', 'Clasificacion', 'móvil'], ['R2', 'Matriz por GP', 'Matriz'], ['R3', 'Mi temporada', 'MiTemporada', 'flag'], ['R4', 'Palmarés', 'Palmares', 'flag'], ['R5', 'Diferencia de puntos', 'Gap', 'flag'], ['R6', 'Posición en la general', 'Bump', 'flag'], ['R7', 'Regularidad', 'Consistencia', 'flag'], ['R8', 'Cara a cara', 'CaraACara', 'flag'], ['R9', 'Distribución', 'Distribucion', 'flag'], ['R10', 'Mapa de calor por GP', 'HeatmapGP', 'flag'], ['R11', 'Aciertos por tipo', 'AciertosTipo', 'flag'], ['R12', 'Lucha por el título', 'Titulo', 'flag'], ['R13', 'Puntos por sesión', 'Sesiones', 'flag']]),
+        G('Perfil y ajustes', 'person', [['U1', 'Mi perfil', 'Perfil', 'móvil'], ['U2', 'Perfil de otro usuario', 'PerfilUsuario'], ['U3', 'Ajustes de cuenta', 'Ajustes', 'móvil'], ['U4', 'Notificaciones', 'Notificaciones']]),
+        G('Administración', 'admin_panel_settings', [['M1', 'Panel', 'AdminPanel', 'móvil'], ['M2', 'Grandes Premios', 'AdminGPs'], ['M3', 'Editar Gran Premio', 'AdminGPEditar'], ['M4', 'Pilotos del GP', 'AdminPilotosGP'], ['M5', 'Sesiones y resultados', 'AdminSesiones'], ['M6', 'Circuitos', 'AdminCircuitos'], ['M7', 'Editar circuito', 'AdminCircuitoEditar'], ['M8', 'Pilotos y equipos', 'AdminPilotos'], ['M9', 'Reglas de puntuación', 'AdminReglas'], ['M10', 'Usuarios', 'AdminUsuarios'], ['M11', 'Comunidades', 'AdminComunidades'], ['M12', 'Notificaciones', 'AdminNotificaciones'], ['M13', 'Cálculo de puntos', 'AdminCalculos']])
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

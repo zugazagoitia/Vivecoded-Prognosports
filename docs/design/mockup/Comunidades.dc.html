@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mis comunidades</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.cm{display:flex;flex-direction:column;gap:14px;padding:20px}.cm.act{box-shadow:var(--card-shadow),0 0 0 2px var(--ring)}
+.cimg{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;flex:none}
+.pr{display:grid;grid-template-columns:220px 120px 90px minmax(0,1fr) 170px;align-items:center;min-height:72px;border-bottom:1px solid var(--border);gap:0}
+.pr.h{min-height:0;padding:8px 0;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+@media(max-width:1000px){.pr{grid-template-columns:180px 80px minmax(0,1fr)}.pr .hide-n{display:none}}
+.strip{position:relative;height:40px;margin:0 20px}
+.strip .ln{position:absolute;left:0;right:0;top:19px;height:2px;background:var(--surface-muted)}
+.strip .q4{position:absolute;left:75%;right:0;top:13px;height:14px;border-radius:3px;background:var(--tint)}
+.strip .o{position:absolute;top:16px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--c-rest);opacity:.6}
+.strip .y{position:absolute;top:10px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--c-you);box-shadow:0 0 0 2px var(--surface)}
+.strip .yl{position:absolute;top:-8px;width:32px;margin-left:-16px;text-align:center;font-size:11px;font-weight:700;color:var(--tint-fg)}
+.tile{background:var(--surface-muted);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><span>Comunidades</span></div>
+    <div class="row sp wrapf"><div class="col" style="gap:2px"><h1 class="t-title">Comunidades</h1><p class="muted">Juegas en 3 comunidades. La activa es la que ves en Inicio y en el ranking.</p></div><div class="row g8 wrapf"><a class="btn btn-outline" href="Explorar.dc.html"><span class="i s16">travel_explore</span>Explorar</a><a class="btn btn-primary" href="CrearComunidad.dc.html"><span class="i s16">add</span>Crear comunidad</a></div></div>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Tú en todas tus comunidades</h2><span class="flag">flag</span></div><span class="t-sm muted">Cada comunidad puntúa distinto, así que se comparan por percentil: 100 = primero, 0 = último.</span></div><div class="seg" role="group" aria-label="Temporada"><sc-for list="{{seasons}}" as="y" hint-placeholder-count="3"><button type="button" class="sg {{y.cls}}" onClick="{{y.pick}}">{{y.l}}</button></sc-for></div></div>
+      <div style="padding:0 20px">
+        <div class="pr h"><span>Comunidad</span><span class="hide-n">Reglas</span><span style="text-align:right">Puesto</span><span style="padding-left:20px">Percentil · 0 a 100</span><span class="hide-n">Evolución</span></div>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+          <div class="pr">
+            <span class="col" style="gap:0"><a href="ComunidadHome.dc.html" class="hd" style="font-weight:600">{{r.name}}</a><span class="t-cap muted">{{r.members}} jugadores</span></span>
+            <span class="hide-n"><span class="tag tg-gray">{{r.rule}}</span></span>
+            <span style="text-align:right"><b class="hd tn" style="font-size:18px">{{r.pos}}.º</b><span class="t-cap muted">/{{r.members}}</span></span>
+            <span class="strip" role="img" aria-label="Percentil {{r.pct}} en {{r.name}}"><i class="ln"></i><i class="q4"></i><sc-for list="{{r.others}}" as="o" hint-placeholder-count="10"><i class="o" style="left:{{o}}%"></i></sc-for><i class="y" style="left:{{r.pct}}%"></i><b class="yl" style="left:{{r.pct}}%">{{r.pct}}</b></span>
+            <span class="row g8 hide-n"><svg width="100" height="32" aria-hidden="true"><path d="{{r.spark}}" fill="none" style="stroke:var(--c-you);stroke-width:1.5;stroke-linejoin:round"></path></svg><span class="mv {{r.tc}}">{{r.trend}}</span></span>
+          </div>
+        </sc-for>
+        <p class="t-cap muted" style="padding:10px 0 4px">Puntos grises: el resto de miembros. Zona sombreada: el cuartil superior.</p>
+      </div>
+      <div class="card-b grid3" style="gap:12px">
+        <div class="tile"><span class="up">Donde mejor te va</span><b class="hd t-head">{{bestName}}</b><span class="t-sm muted">percentil {{bestPct}}</span></div>
+        <div class="tile"><span class="up">Percentil medio</span><b class="hd t-head tn">{{avgPct}}</b><span class="t-sm muted">en 3 comunidades</span></div>
+        <div class="tile"><span class="up">Mismo pronóstico, distintas reglas</span><span class="t-sm">Tus pronósticos son los mismos en todas: la diferencia la explican las reglas y los rivales.</span></div>
+      </div>
+    </section>
+
+    <div class="split-r">
+      <div class="grid2" style="gap:16px;align-items:start">
+        <sc-for list="{{list}}" as="c" hint-placeholder-count="3">
+          <article class="card cm {{c.cls}}">
+            <div class="row" style="align-items:flex-start"><span class="cimg" style="background:{{c.color}}">{{c.ini}}</span><div class="col fx" style="gap:2px"><b class="hd t-head">{{c.name}}</b><span class="t-sm muted">Creada por {{c.owner}} · {{c.since}}</span></div><sc-if value="{{c.active}}" hint-placeholder-val="{{ false }}"><span class="tag tg-solid">Activa</span></sc-if></div>
+            <div class="row g8 wrapf"><span class="tag {{c.ptg}}"><span class="i s16">{{c.picon}}</span>{{c.priv}}</span><span class="tag tg-gray">{{c.members}} jugadores</span><span class="tag tg-gray">{{c.rule}}</span></div>
+            <div class="grid3" style="gap:8px"><div class="col" style="gap:0"><span class="t-cap muted">Tu puesto</span><b class="hd" style="font-size:20px">{{c.pos}}.º</b></div><div class="col" style="gap:0"><span class="t-cap muted">Puntos</span><b class="hd tn" style="font-size:20px">{{c.pts}}</b></div><div class="col" style="gap:0"><span class="t-cap muted">Líder</span><b class="hd ell" style="font-size:16px;line-height:28px">{{c.lead}}</b></div></div>
+            <div class="row sp t-sm" style="padding-top:8px;border-top:1px solid var(--border)"><span class="muted">Singapur</span><span class="tag {{c.ptgS}}">{{c.pend}}</span></div>
+            <div class="row g8"><a class="btn btn-soft btn-sm fx" href="ComunidadHome.dc.html">Abrir</a><sc-if value="{{c.canActivate}}" hint-placeholder-val="{{ false }}"><button type="button" class="btn btn-outline btn-sm">Hacer activa</button></sc-if></div>
+          </article>
+        </sc-for>
+        <a class="card cm" href="CrearComunidad.dc.html" style="align-items:center;justify-content:center;text-align:center;min-height:240px;border:2px dashed var(--border-input);box-shadow:none;background:transparent"><span class="av s56"><span class="i s24">add</span></span><b class="hd">Crear otra comunidad</b><span class="t-sm muted">Con tus reglas y tus amigos</span></a>
+      </div>
+
+      <aside class="col g24">
+        <div class="card">
+          <div class="card-h"><h2 class="t-head">Unirme con un código</h2></div>
+          <form class="card-b col g12" onSubmit="{{join}}">
+            <p class="t-sm muted">Pega el código o el enlace de invitación que te hayan pasado.</p>
+            <div class="field"><label class="lbl" for="cod">Código de invitación</label><div class="iw"><span class="i">key</span><input id="cod" class="inp" placeholder="PADDOCK-7KQ2" value="{{code}}" onInput="{{onCode}}"></div></div>
+            <sc-if value="{{codeBad}}" hint-placeholder-val="{{ false }}"><span class="errt"><span class="i s16">error</span>Este código no es válido o ha caducado.</span></sc-if>
+            <button type="submit" class="btn btn-primary btn-block">Unirme</button>
+          </form>
+        </div>
+        <div class="card card-b col g8" style="background:var(--tint);box-shadow:none">
+          <b class="hd">¿Buscas más rivales?</b>
+          <p class="t-sm" style="color:var(--tint-fg)">Explora las comunidades abiertas y entra con un clic.</p>
+          <a class="btn btn-outline btn-sm" href="Explorar.dc.html" style="align-self:flex-start">Ver comunidades abiertas</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, code = s.code || '', season = s.y || 2026;
+    const C = [
+      ['Amigos del paddock', 'AP', 'var(--c-you)', 'Tú', 'Cerrada', 'lock', 'tg-brand', 12, 'Clásica 2026', P.order.indexOf('alex') + 1, P.total.alex, P.byId[P.order[0]].name, true, 'desde 2022', 'Te faltan 2', 'tg-warn'],
+      ['Oficina F1', 'OF', 'var(--c-6)', 'Irene Campos', 'Abierta', 'public', 'tg-ok', 31, 'Clásica 2026', 9, 538, 'Pablo Ortega', false, 'desde 2024', 'Te faltan 2', 'tg-warn'],
+      ['Peña Madring', 'PM', 'var(--c-2)', 'Hugo Prieto', 'Cerrada', 'lock', 'tg-brand', 8, 'Solo carrera', 2, 301, 'Hugo Prieto', false, 'desde 2026', 'Te falta 1', 'tg-warn']
+    ];
+    const r = P.rng(season * 31 + 7);
+    const rows = C.map((c, i) => {
+      const m = c[7], pos = season === 2026 ? c[9] : 1 + Math.floor(r() * m * 0.5), pct = Math.round(100 * (m - pos) / (m - 1));
+      const others = []; for (let k = 1; k <= m; k++) if (k !== pos) others.push(Math.round(100 * (m - k) / (m - 1)));
+      const ev = []; let v = Math.max(5, Math.min(95, pct + (r() - 0.5) * 40)); for (let g = 0; g < 10; g++) { v = Math.max(0, Math.min(100, v + (pct - v) * 0.3 + (r() - 0.5) * 18)); ev.push(v); } ev.push(pct);
+      const spark = ev.map((x, g) => (g ? 'L' : 'M') + (g * 10) + ' ' + (30 - x * 0.28).toFixed(1)).join('');
+      const tr = Math.round(ev[ev.length - 1] - ev[ev.length - 4]);
+      return { name: c[0], members: m, rule: c[8], pos, pct, others, spark, trend: tr > 0 ? '▲ ' + tr : tr < 0 ? '▼ ' + (-tr) : '=', tc: tr > 0 ? 'up' : tr < 0 ? 'dn' : 'eq' };
+    });
+    const best = rows.slice().sort((a, b) => b.pct - a.pct)[0];
+    return {
+      seasons: [2026, 2025, 2024].map((y) => ({ l: String(y), cls: y === season ? 'on' : '', pick: () => this.setState({ y }) })),
+      rows, bestName: best.name, bestPct: best.pct, avgPct: Math.round(rows.reduce((a, x) => a + x.pct, 0) / rows.length),
+      list: C.map((c) => ({ name: c[0], ini: c[1], color: c[2], owner: c[3], priv: c[4], picon: c[5], ptg: c[6], members: c[7], rule: c[8], pos: c[9], pts: c[10], lead: c[11], active: c[12], canActivate: !c[12], cls: c[12] ? 'act' : '', since: c[13], pend: c[14], ptgS: c[15] })),
+      code, onCode: (e) => this.setState({ code: e.target.value, bad: false }), codeBad: !!s.bad,
+      join: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ bad: code.length > 0 }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

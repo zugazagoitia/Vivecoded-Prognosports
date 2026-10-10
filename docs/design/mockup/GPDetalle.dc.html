@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fin de semana de carrera</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.hero{display:grid;grid-template-columns:300px minmax(0,1fr);border-radius:8px;overflow:hidden;box-shadow:var(--card-shadow),0 0 0 1px var(--card-ring);background:var(--surface)}
+@media(max-width:900px){.hero{grid-template-columns:minmax(0,1fr)}}
+.promo{background:linear-gradient(160deg,var(--brand-800),var(--brand-900));display:flex;align-items:center;justify-content:center;min-height:180px;position:relative}
+.promo span{position:absolute;left:14px;bottom:12px;font-size:11px;color:var(--brand-200);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+.tline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:20px}
+@media(max-width:700px){.tline{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:16px}}
+.ts{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:0;background:transparent;text-align:left;cursor:pointer;border-radius:8px;font:inherit;color:inherit;position:relative}
+.ts:hover{background:var(--surface-hover)}
+.ts.on{background:var(--tint)}
+.ts .bar{height:4px;border-radius:999px;background:var(--surface-muted)}
+.ts .bar.done{background:var(--ok)}.ts .bar.now{background:var(--warn)}
+.gridr{display:flex;gap:14px}
+.gcol{display:flex;flex-direction:column;gap:8px;flex:1}
+.gs{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;background:var(--surface-muted);font-size:13px;min-height:34px}
+.gs .p{width:24px;color:var(--muted);font-weight:700;font-size:12px}
+.mini{display:flex;align-items:flex-end;gap:10px;height:80px}
+.mini div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end;height:100%}
+.mini i{display:block;width:70%;border-radius:4px 4px 0 0;background:var(--c-you)}
+.avs{display:flex}.avs .av{margin-left:-6px;box-shadow:0 0 0 2px var(--surface)}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPLista.dc.html">Grandes Premios</a><span class="i">chevron_right</span><span>Singapur</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end">
+      <div class="col" style="gap:6px"><div class="row g8 wrapf"><span class="tag tg-solid">Ronda 18 de 24</span><span class="tag tg-info">Con sprint</span><span class="tag tg-warn"><span class="i s16">schedule</span>En curso</span></div><h1 class="t-title">Gran Premio de Singapur</h1><p class="muted">Marina Bay Street Circuit · 9–11 de octubre de 2026</p></div>
+      <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Zona horaria"><button type="button" class="sg {{tz0}}" onClick="{{setMine}}">Mi hora</button><button type="button" class="sg {{tz1}}" onClick="{{setCircuit}}">Hora del circuito</button></div><a class="btn btn-outline btn-sm" href="GPDetalle.dc.html" aria-label="GP anterior: Azerbaiyán"><span class="i s16">chevron_left</span>AZE</a><a class="btn btn-outline btn-sm" href="GPDetalle.dc.html" aria-label="GP siguiente: Estados Unidos">USA<span class="i s16">chevron_right</span></a></div>
+    </div>
+
+    <section class="hero" aria-label="Sesiones del fin de semana">
+      <div class="promo"><svg viewBox="0 0 400 300" height="130" aria-hidden="true"><path d="M80 210 L140 130 L210 120 L250 80 L330 90 L350 150 L300 200 L250 190 L210 240 L120 250 Z" fill="none" style="stroke:var(--brand-300);stroke-width:8;stroke-linejoin:round"></path></svg><span>Imagen promocional del GP</span></div>
+      <div class="col" style="gap:0;min-width:0">
+        <div class="row sp wrapf" style="padding:16px 20px 0"><b class="hd t-head">Sesiones del fin de semana</b><span class="t-sm muted">Pronósticos {{doneCount}} de 4 · cierre 5 min antes · {{tzName}}</span></div>
+        <div class="tline" role="tablist">
+          <sc-for list="{{sessions}}" as="x" hint-placeholder-count="4">
+            <button type="button" role="tab" aria-selected="{{x.on}}" class="ts {{x.cls}}" onClick="{{x.pick}}"><span class="bar {{x.bar}}"></span><b class="hd">{{x.name}}</b><span class="t-cap muted">{{x.when}}</span><span class="tag {{x.tg}}" style="align-self:flex-start">{{x.state}}</span></button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <div class="split">
+      <div class="col g24" style="min-width:0">
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">{{cur.name}} · tu pronóstico</h2><span class="tag {{cur.tg}}">{{cur.state}}</span></div>
+          <div class="card-b col g12">
+            <sc-if value="{{cur.hasPred}}" hint-placeholder-val="{{ true }}">
+              <div class="row g8 wrapf"><sc-for list="{{cur.pred}}" as="c" hint-placeholder-count="5"><span class="gs" style="background:var(--surface-muted)"><span class="p">{{c.p}}</span><span class="team" style="background:{{c.col}};height:18px"></span><b class="hd">{{c.code}}</b><sc-if value="{{c.hasPts}}" hint-placeholder-val="{{ false }}"><span class="cellp {{c.k}}" style="min-width:22px;height:20px">{{c.pts}}</span></sc-if></span></sc-for></div>
+            </sc-if>
+            <sc-if value="{{cur.noPred}}" hint-placeholder-val="{{ false }}"><div class="alert al-warn"><span class="i">edit_calendar</span><span><b>Aún no has pronosticado esta sesión.</b> {{cur.closeTxt}}</span></div></sc-if>
+            <div class="row g8 wrapf"><a class="btn {{cur.btn}}" href="{{cur.href}}"><span class="i s16">{{cur.icon}}</span>{{cur.cta}}</a><sc-if value="{{cur.closed}}" hint-placeholder-val="{{ false }}"><a class="btn btn-outline" href="ParrillaComunidad.dc.html"><span class="i s16">groups</span>Parrilla y consenso</a></sc-if><sc-if value="{{cur.closed}}" hint-placeholder-val="{{ false }}"><a class="btn btn-ghost" href="Resultados.dc.html">Tabla de la comunidad</a></sc-if></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Parrilla de salida · {{gridOf}}</h2><span class="t-sm muted">Según la clasificación correspondiente</span></div>
+          <div class="card-b col g12">
+            <div class="gridr">
+              <div class="gcol"><sc-for list="{{gl}}" as="g" hint-placeholder-count="10"><div class="gs"><span class="p">{{g.p}}</span><span class="team" style="background:{{g.color}};height:16px"></span><b class="hd">{{g.code}}</b><span class="muted ell t-sm">{{g.last}}</span></div></sc-for></div>
+              <div class="gcol" style="padding-top:21px"><sc-for list="{{gr}}" as="g" hint-placeholder-count="10"><div class="gs"><span class="p">{{g.p}}</span><span class="team" style="background:{{g.color}};height:16px"></span><b class="hd">{{g.code}}</b><span class="muted ell t-sm">{{g.last}}</span></div></sc-for></div>
+            </div>
+            <div class="col g8" style="border-top:1px dashed var(--border-input);padding-top:10px"><span class="up">Pit lane</span><div class="row g8 wrapf"><span class="tag tg-gray">PER · cambio de unidad de potencia</span><span class="tag tg-gray">BOT · cambio de alerón</span></div></div>
+            <div class="alert al-info" style="padding:8px 10px"><span class="i s16">notifications</span><span class="t-sm">Si la organización cambia la parrilla, te avisamos por Telegram y correo.</span></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="col g24" style="min-width:0">
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">La comunidad</h2></div>
+          <div class="card-b col g12"><div class="row g12" style="align-items:center"><span class="avs"><sc-for list="{{avatars}}" as="a" hint-placeholder-count="5"><span class="av s24">{{a}}</span></sc-for></span><span class="t-sm"><b class="hd">8 de 12</b> han pronosticado el sprint</span></div><div class="row sp t-sm"><span class="muted">Líder del fin de semana</span><b class="hd">Sofía Navas · 15</b></div><div class="row sp t-sm"><span class="muted">Tus puntos hasta ahora</span><b class="hd tn">11</b></div></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Circuito</h2><a class="t-sm" href="CircuitoDetalle.dc.html">Ver más</a></div>
+          <div class="card-b col g8">
+            <div class="row sp"><span class="t-sm muted">Longitud de vuelta</span><b class="hd t-sm tn">4,940 km</b></div>
+            <div class="row sp"><span class="t-sm muted">Vueltas</span><b class="hd t-sm tn">62</b></div>
+            <div class="row sp"><span class="t-sm muted">Distancia total</span><b class="hd t-sm tn">306,1 km</b></div>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Tu historial en Marina Bay</h2></div>
+          <div class="card-b col g8"><div class="mini" role="img" aria-label="Tus puntos en Singapur: 2023 31, 2024 44, 2025 28"><sc-for list="{{hist}}" as="h" hint-placeholder-count="3"><div><b class="hd t-sm tn">{{h.v}}</b><i style="height:{{h.h}}px"></i><span class="t-cap muted">{{h.y}}</span></div></sc-for></div><span class="t-sm muted">Tu mejor resultado aquí: 2.º del GP en 2024.</span></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Reglas de este GP</h2></div>
+          <div class="card-b col g8"><span class="t-sm">Clásica 2026 · sin excepciones</span><div class="row g8 wrapf"><span class="cellp hit-ex">5 exacta</span><span class="cellp hit-1">3 a ±1</span><span class="cellp hit-2">1 a ±2</span><span class="tag tg-brand">+5 bonus</span></div><a class="btn btn-soft btn-sm" href="Reglas.dc.html" style="align-self:flex-start">Ver reglas completas</a></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, circuit = s.tz === 'c', T = (a, b) => (circuit ? b : a), sel = s.sel === undefined ? 1 : s.sel;
+    const keys = ['cs', 'sp', 'q', 'r'];
+    const S = [
+      { name: 'Clasificación sprint', when: T('Vie 9 · 17:30', 'Vie 9 · 23:30'), state: 'Terminada · 11 pts', tg: 'tg-gray', bar: 'done', closed: true, mine: ['LEC', 'NOR', 'RUS'], closeTxt: '' },
+      { name: 'Sprint', when: T('Sáb 10 · 12:00', 'Sáb 10 · 18:00'), state: 'Cierra en 1 h 32 min', tg: 'tg-warn', bar: 'now', closed: false, mine: null, closeTxt: 'Cierra hoy a las ' + T('11:55', '17:55') + '.' },
+      { name: 'Clasificación', when: T('Sáb 10 · 16:00', 'Sáb 10 · 22:00'), state: 'Hecho · editable', tg: 'tg-ok', bar: '', closed: false, mine: ['NOR', 'RUS', 'PIA', 'LEC', 'ANT'], closeTxt: '' },
+      { name: 'Carrera', when: T('Dom 11 · 15:00', 'Dom 11 · 21:00'), state: 'Abierta', tg: 'tg-gray', bar: '', closed: false, mine: null, closeTxt: 'Cierra el domingo a las ' + T('14:55', '20:55') + '.' }
+    ];
+    const c = S[sel], k = keys[sel];
+    const sc = c.closed ? P.score(c.mine, P.REAL[k]) : null;
+    const pred = c.mine ? c.mine.map((code, i) => ({ p: (i + 1) + '.º', code, col: P.drv(code).color, hasPts: !!sc, pts: sc ? sc.cells[i].p : '', k: sc ? ({ ex: 'hit-ex', '1': 'hit-1', '2': 'hit-2', x: 'hit-x' })[sc.cells[i].k] : '' })) : [];
+    const cur = { name: c.name, state: c.state, tg: c.tg, hasPred: !!c.mine, noPred: !c.mine, pred, closeTxt: c.closeTxt, closed: c.closed,
+      cta: c.closed ? 'Ver resultados' : c.mine ? 'Editar pronóstico' : 'Pronosticar', href: c.closed ? 'Resultados.dc.html' : 'Pronosticar.dc.html', btn: c.closed || c.mine ? 'btn-outline' : 'btn-primary', icon: c.closed ? 'emoji_events' : 'edit_note' };
+    const grid = P.GRID.map((code, i) => { const d = P.drv(code); return { p: 'P' + (i + 1), code, last: d.last, color: d.color }; });
+    return {
+      tz0: circuit ? '' : 'on', tz1: circuit ? 'on' : '', setMine: () => this.setState({ tz: 'm' }), setCircuit: () => this.setState({ tz: 'c' }),
+      tzName: circuit ? 'hora de Singapur (UTC+8)' : 'tu hora (Madrid, UTC+2)', doneCount: 2,
+      sessions: S.map((x, i) => ({ name: x.name, when: x.when, state: x.state, tg: x.tg, bar: x.bar, on: i === sel, cls: i === sel ? 'on' : '', pick: () => this.setState({ sel: i }) })),
+      cur, gridOf: sel <= 1 ? 'sprint' : 'carrera',
+      gl: grid.filter((g, i) => i % 2 === 0 && i < 20), gr: grid.filter((g, i) => i % 2 === 1 && i < 20),
+      avatars: ['MS', 'LF', 'SN', 'IC', 'DM'],
+      hist: [[2023, 31], [2024, 44], [2025, 28]].map((h) => ({ y: h[0], v: h[1], h: Math.round(h[1] / 44 * 56) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

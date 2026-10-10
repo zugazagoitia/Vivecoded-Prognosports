@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Usuarios (admin)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.ro{background:var(--surface-muted);color:var(--muted)}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="usuarios" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="row sp wrapf"><div class="col" style="gap:2px"><h1 class="t-title">Usuarios</h1><p class="muted">Consulta de cuentas. Solo lectura.</p></div><div class="row g8 wrapf"></div></div><div class="alert al-info"><span class="i">lock</span><span>La API no permite editar ni eliminar usuarios, así que esta pantalla es de consulta.</span></div>
+<section class="card"><div class="card-b row g8 wrapf"><div class="iw fx" style="min-width:220px"><span class="i">search</span><input class="inp" placeholder="Buscar por nombre o correo" aria-label="Buscar"></div></div><div class="tw"><table class="tbl tn"><thead><tr><th>Usuario</th><th>Correo</th><th>Alta</th><th class="r">Comunidades</th><th>Estado</th></tr></thead><tbody><sc-for list="{{rows}}" as="u" hint-placeholder-count="12"><tr><td><span class="row g8"><span class="av s24 {{u.me}}">{{u.ini}}</span><b class="hd">{{u.name}}</b></span></td><td>{{u.mail}}</td><td>{{u.d}}</td><td class="r">{{u.c}}</td><td><span class="tag tg-ok">Verificado</span></td></tr></sc-for></tbody></table></div><div class="card-f" style="justify-content:flex-start"><span class="t-sm muted">Mostrando 12 de 312</span></div></section>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N;
+    return { rows: P.users.map((u, i) => ({ name: u.name, ini: u.ini, me: u.me ? 'you' : '', mail: u.id + '@ejemplo.com', d: 'mar 2024', c: 1 + (i % 3) })) };
+  }
+}
+</script>
+</body>
+</html>

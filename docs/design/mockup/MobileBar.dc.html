@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cabecera móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0;font-family:Inter,system-ui,sans-serif}.mh-t{font-size:17px;line-height:24px;font-weight:600;color:var(--h)}</style>
+</helmet>
+<header class="mhead">
+  <sc-if value="{{back}}" hint-placeholder-val="{{ false }}">
+    <a class="btn btn-ghost btn-ic" href="{{backHref}}" aria-label="Volver"><span class="i s24">arrow_back</span></a>
+  </sc-if>
+  <sc-if value="{{home}}" hint-placeholder-val="{{ true }}">
+    <img src="/_blob/2931b89ed5a9278ad577f4648e494d46" alt="" width="28" height="28" style="width:28px;height:28px;object-fit:contain">
+  </sc-if>
+  <span class="mh-t fx ell">{{title}}</span>
+  <button type="button" class="btn btn-ghost btn-ic" onClick="{{toggle}}" aria-label="Cambiar tema claro u oscuro"><span class="i">{{themeIcon}}</span></button>
+  <a class="btn btn-ghost btn-ic" href="Notificaciones.dc.html" aria-label="Notificaciones" style="position:relative"><span class="i">notifications</span><span style="position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--err);box-shadow:0 0 0 2px var(--surface)"></span></a>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"title":{"editor":"text","default":"PrognoSports"},"back":{"editor":"boolean","default":false},"backHref":{"editor":"text","default":"Inicio.dc.html"},"$preview":{"width":390,"height":56}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._h = (e) => this.setState({ dark: e.detail === 'dark' });
+    window.addEventListener('pg-theme', this._h);
+    try { this.setState({ dark: window.pgTheme && window.pgTheme() === 'dark' }); } catch (e) {}
+  }
+  componentWillUnmount() { window.removeEventListener('pg-theme', this._h); }
+  renderVals() {
+    const dark = !!(this.state && this.state.dark);
+    const back = !!this.props.back;
+    return {
+      title: this.props.title || 'PrognoSports', back: back, home: !back,
+      backHref: this.props.backHref || 'Inicio.dc.html',
+      themeIcon: dark ? 'light_mode' : 'dark_mode',
+      toggle: () => { try { const t = window.pgToggleTheme(); this.setState({ dark: t === 'dark' }); } catch (e) {} }
+    };
+  }
+}
+</script>
+</body>
+</html>

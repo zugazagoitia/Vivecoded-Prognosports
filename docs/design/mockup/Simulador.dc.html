@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Simulador de puntos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.sl{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;box-shadow:0 0 0 1px var(--border);background:var(--surface);min-height:48px}
+.sl .ic{background:none;border:1px solid var(--border);border-radius:6px;width:32px;height:32px;cursor:pointer;color:var(--body);display:flex;align-items:center;justify-content:center;padding:0}
+.sl .ic:disabled{opacity:.35;cursor:default}
+.sl .sel{width:auto;min-width:0;height:34px;font-weight:600}
+.mv{font-size:12px;font-weight:700;width:30px;text-align:right}
+.big{font-size:56px;line-height:60px;font-weight:700;color:var(--h)}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPDetalle.dc.html">Singapur</a><span class="i">chevron_right</span><span>Simulador</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Simulador de puntos</h1><p class="muted">Carrera de Singapur · ordena un resultado posible y mira qué pasaría. No se guarda nada.</p></div>
+      <div class="row g8 wrapf"><span class="t-sm muted">Escenarios</span><sc-for list="{{scen}}" as="x" hint-placeholder-count="4"><button type="button" class="chip {{x.cls}}" onClick="{{x.run}}">{{x.l}}</button></sc-for></div></div>
+
+    <div class="grid2" style="gap:24px;align-items:start">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Resultado posible</h2><span class="t-sm muted">A la derecha, tus puntos por posición</span></div>
+        <div class="card-b col g8">
+          <sc-for list="{{slots}}" as="x" hint-placeholder-count="8">
+            <div class="sl"><span class="pos">{{x.p}}</span><span class="team" style="background:{{x.color}};height:22px"></span>
+              <select class="sel fx" aria-label="Piloto en {{x.p}}.ª posición" onChange="{{x.change}}"><sc-for list="{{x.opts}}" as="o" hint-placeholder-count="22"><option value="{{o.code}}" selected="{{o.on}}">{{o.code}} · {{o.name}}</option></sc-for></select>
+              <span class="cellp {{x.k}}" title="{{x.t}}">{{x.pts}}</span>
+              <button type="button" class="ic" aria-label="Subir" disabled="{{x.noUp}}" onClick="{{x.up}}"><span class="i s16">arrow_upward</span></button><button type="button" class="ic" aria-label="Bajar" disabled="{{x.noDown}}" onClick="{{x.down}}"><span class="i s16">arrow_downward</span></button>
+            </div>
+          </sc-for>
+          <div class="row g8 wrapf t-sm muted" style="padding-top:4px"><span>Tu pronóstico:</span><sc-for list="{{mine}}" as="c" hint-placeholder-count="8"><b class="hd">{{c}}</b></sc-for></div>
+        </div>
+      </section>
+
+      <div class="col g24">
+        <section class="card card-b row g24 wrapf" style="align-items:center">
+          <div class="col" style="gap:0"><span class="k up">Tus puntos</span><b class="big tn">{{total}}</b><span class="t-sm muted">de 40 · {{ex}} exactos</span></div>
+          <div class="col fx" style="gap:6px;min-width:200px"><div class="row sp t-sm"><span class="muted">Puesto en la sesión</span><b class="hd">{{sesRank}}.º de 12</b></div><div class="row sp t-sm"><span class="muted">En la general</span><b class="hd">{{genFrom}}.º → {{genTo}}.º <span style="color:{{genC}}">{{genMv}}</span></b></div><div class="row sp t-sm"><span class="muted">Distancia al líder</span><b class="hd tn">{{gapTo}}</b></div></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">La general con este resultado</h2><span class="t-sm muted">Orientativo: sin sprint ni bonus</span></div>
+          <div class="tw"><table class="tbl tn"><thead><tr><th>Pos.</th><th></th><th>Jugador</th><th class="r">Carrera</th><th class="r">Total</th></tr></thead><tbody>
+            <sc-for list="{{rank}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td><span class="pos {{r.pc}}">{{r.p}}</span></td><td><span class="mv" style="color:{{r.mc}}">{{r.mv}}</span></td><td><span class="row g8"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></span></td><td class="r">+{{r.add}}</td><td class="r"><b class="hd">{{r.tot}}</b></td></tr></sc-for>
+          </tbody></table></div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = 8, last = P.N - 1;
+    const myPick = ['NOR', 'RUS', 'PIA', 'LEC', 'VER', 'ANT', 'HAM', 'ALO'];
+    const SC = [['grid', 'Como la parrilla', P.GRID.slice(0, n)], ['sprint', 'Como el sprint', P.REAL.sp.concat(['VER', 'HAM', 'ALO'])], ['mine', 'Tu pronóstico', myPick], ['caos', 'Caos', ['ALO', 'SAI', 'HAM', 'NOR', 'GAS', 'RUS', 'HAD', 'LEC']]];
+    const sim = s.sim || SC[0][2];
+    const set = (a, sc) => this.setState({ sim: a, sc: sc || null });
+    const mv = (i, j) => { if (j < 0 || j >= n) return; const a = sim.slice(); const t = a[i]; a[i] = a[j]; a[j] = t; set(a); };
+    const sc = P.score(myPick, sim), K = { ex: 'hit-ex', '1': 'hit-1', '2': 'hit-2', x: 'hit-x' };
+    const myPts = {}; myPick.forEach((c, i) => { myPts[c] = sc.cells[i]; });
+    const slots = sim.map((c, i) => { const d = P.drv(c), cell = myPts[c]; return { p: i + 1, color: d.color, k: cell ? K[cell.k] : 'hit-x', pts: cell ? cell.p : 0, t: cell ? 'Lo pusiste ' + (myPick.indexOf(c) + 1) + '.º' : 'No lo pusiste',
+      opts: P.drivers.map((o) => ({ code: o.code, name: o.last, on: o.code === c })), noUp: i === 0, noDown: i === n - 1, up: () => mv(i, i - 1), down: () => mv(i, i + 1),
+      change: (e) => { const v = e && e.target ? e.target.value : c; if (!P.drv(v)) return; const a = sim.slice(); const j = a.indexOf(v); if (j >= 0) a[j] = a[i]; a[i] = v; set(a); } }; });
+    const rows = P.users.map((u) => { const p = u.id === 'alex' ? myPick : P.pred(u.id, 'r'); const add = P.score(p, sim).pts; return { u, add, before: P.total[u.id], tot: P.total[u.id] + add }; });
+    const ses = rows.slice().sort((a, b) => b.add - a.add);
+    rows.sort((a, b) => b.tot - a.tot);
+    const meRow = rows.filter((r) => r.u.id === 'alex')[0], to = rows.indexOf(meRow) + 1, from = P.order.indexOf('alex') + 1, d = from - to;
+    return {
+      scen: SC.map((x) => ({ l: x[1], cls: s.sc === x[0] || (!s.sc && !s.sim && x[0] === 'grid') ? 'on' : '', run: () => set(x[2].slice(), x[0]) })),
+      slots, mine: myPick, total: sc.pts, ex: sc.ex, sesRank: ses.indexOf(ses.filter((r) => r.u.id === 'alex')[0]) + 1,
+      genFrom: from, genTo: to, genMv: d > 0 ? '▲' + d : d < 0 ? '▼' + (-d) : '=', genC: d > 0 ? 'var(--ok-fg)' : d < 0 ? 'var(--err-fg)' : 'var(--muted)',
+      gapTo: to === 1 ? 'Líder' : '−' + (rows[0].tot - meRow.tot),
+      rank: rows.map((r, i) => { const was = P.order.indexOf(r.u.id), m = was - i; return { p: i + 1, pc: i < 3 ? 'p' + (i + 1) : '', name: r.u.name, ini: r.u.ini, me: r.u.id === 'alex' ? 'you' : '', cls: r.u.id === 'alex' ? 'me' : '', add: r.add, tot: r.tot, mv: m > 0 ? '▲' + m : m < 0 ? '▼' + (-m) : '', mc: m > 0 ? 'var(--ok-fg)' : 'var(--err-fg)' }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

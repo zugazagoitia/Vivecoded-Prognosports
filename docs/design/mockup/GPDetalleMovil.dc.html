@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fin de semana móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.sc{display:flex;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border)}.sc:last-child{border-bottom:0}.sc.act{background:var(--tint)}
+.sc .ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex:none}
+details.card>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;min-height:52px;cursor:pointer;font-weight:600;color:var(--h)}
+details.card>summary::-webkit-details-marker{display:none}
+details[open]>summary .chev{transform:rotate(180deg)}
+.gl{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;padding:0 16px 16px}
+.gl .g{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:6px;background:var(--surface-muted);font-size:13px}
+.gl .g:nth-child(even){margin-top:12px}
+.cons{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:center}
+.bar{display:flex;gap:2px;height:26px}.bar span{border-radius:4px;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap}
+.k1{background:var(--brand-700);color:#fff}.k2{background:var(--brand-400);color:#fff}.k3{background:var(--brand-200);color:var(--brand-900)}.k0{background:var(--surface-muted);color:var(--muted)}
+</style>
+</helmet>
+<div class="mroot" style="min-height:1800px">
+  <dc-import name="MobileBar" title="GP de Singapur" back="true" backHref="GPLista.dc.html" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="col" style="gap:6px"><div class="row g8 wrapf"><span class="tag tg-solid">Ronda 18</span><span class="tag tg-info">Sprint</span><span class="tag tg-warn">En curso</span></div><span class="t-sm muted">Marina Bay · 9–11 oct 2026</span></div>
+    <div class="seg" role="group" aria-label="Zona horaria" style="width:100%"><button type="button" class="sg {{tz0}} fx" onClick="{{setMine}}">Mi hora</button><button type="button" class="sg {{tz1}} fx" onClick="{{setCircuit}}">Hora del circuito</button></div>
+    <div class="col g8"><div class="row sp t-sm"><span class="muted">Tus pronósticos</span><b class="hd">2 de 4</b></div><div class="prog"><i style="width:50%"></i></div></div>
+    <section class="card">
+      <sc-for list="{{sessions}}" as="s" hint-placeholder-count="4">
+        <div class="sc {{s.cls}}"><span class="ic" style="background:{{s.bg}};color:{{s.fg}}"><span class="i">{{s.icon}}</span></span><div class="col fx" style="gap:2px;min-width:0"><b class="hd">{{s.name}}</b><span class="t-cap muted">{{s.when}}</span><span class="tag {{s.tg}}" style="align-self:flex-start">{{s.state}}</span></div><a class="btn {{s.btn}} btn-sm" href="{{s.href}}" style="min-height:40px">{{s.cta}}</a></div>
+      </sc-for>
+    </section>
+    <details class="card" open="">
+      <summary>Parrilla del sprint <span class="i chev">expand_more</span></summary>
+      <div class="gl"><sc-for list="{{grid}}" as="g" hint-placeholder-count="20"><div class="g"><b class="tn muted" style="width:26px">{{g.p}}</b><span class="team" style="background:{{g.color}};height:14px"></span><b class="hd">{{g.code}}</b></div></sc-for></div>
+      <div style="padding:0 16px 16px" class="col g8"><span class="up">Pit lane</span><div class="row g8 wrapf"><span class="tag tg-gray">PER</span><span class="tag tg-gray">BOT</span></div></div>
+    </details>
+    <details class="card">
+      <summary>Consenso · Clasif. sprint <span class="i chev">expand_more</span></summary>
+      <div class="col g8" style="padding:0 16px 16px"><sc-for list="{{cons}}" as="r" hint-placeholder-count="3"><div class="cons"><b class="hd tn">{{r.pos}}</b><div class="bar"><sc-for list="{{r.segs}}" as="g" hint-placeholder-count="3"><span class="{{g.k}}" style="width:{{g.w}}%">{{g.l}}</span></sc-for></div></div></sc-for><a class="btn btn-soft btn-sm btn-block" href="ParrillaComunidad.dc.html" style="min-height:44px">Ver parrilla y consenso</a></div>
+    </details>
+    <details class="card">
+      <summary>Circuito y tu historial <span class="i chev">expand_more</span></summary>
+      <div class="col g8" style="padding:0 16px 16px"><div class="row sp t-sm"><span class="muted">Longitud</span><b class="hd tn">4,940 km</b></div><div class="row sp t-sm"><span class="muted">Vueltas</span><b class="hd tn">62</b></div><div class="row sp t-sm"><span class="muted">Tus puntos aquí</span><b class="hd tn">31 · 44 · 28</b></div></div>
+    </details>
+    <section class="card card-b row g12" style="align-items:center"><span class="avs"><span class="av s24">MS</span><span class="av s24">LF</span><span class="av s24">SN</span><span class="av s24">IC</span></span><span class="t-sm"><b class="hd">8 de 12</b> ya han pronosticado el sprint</span></section>
+  </div>
+  <dc-import name="TabBar" active="gps" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, c = s.tz === 'c', T = (a, b) => (c ? b : a);
+    const preds = P.users.map((u) => P.pred(u.id, 'cs'));
+    const cons = [0, 1, 2].map((i) => { const cnt = {}; preds.forEach((p) => { cnt[p[i]] = (cnt[p[i]] || 0) + 1; }); const arr = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+      return { pos: (i + 1) + '.º', segs: arr.slice(0, 3).map((x, j) => ({ k: 'k' + (j + 1), w: (cnt[x] / 12 * 100).toFixed(1), l: cnt[x] >= 2 ? x : '' })) }; });
+    return {
+      tz0: c ? '' : 'on', tz1: c ? 'on' : '', setMine: () => this.setState({ tz: 'm' }), setCircuit: () => this.setState({ tz: 'c' }),
+      sessions: [
+        { name: 'Clasificación sprint', when: T('Vie 9 · 17:30', 'Vie 9 · 23:30'), state: 'Terminada · 11 pts', tg: 'tg-gray', icon: 'check_circle', bg: 'var(--ok-tint)', fg: 'var(--ok-fg)', cta: 'Resultados', href: 'Resultados.dc.html', btn: 'btn-outline', cls: '' },
+        { name: 'Sprint', when: T('Sáb 10 · 12:00', 'Sáb 10 · 18:00'), state: 'Cierra en 1 h 32 min', tg: 'tg-warn', icon: 'edit_calendar', bg: 'var(--warn-tint)', fg: 'var(--warn-fg)', cta: 'Pronosticar', href: 'PronosticarMovil.dc.html', btn: 'btn-primary', cls: 'act' },
+        { name: 'Clasificación', when: T('Sáb 10 · 16:00', 'Sáb 10 · 22:00'), state: 'Hecho · editable', tg: 'tg-ok', icon: 'check', bg: 'var(--ok-tint)', fg: 'var(--ok-fg)', cta: 'Editar', href: 'PronosticarMovil.dc.html', btn: 'btn-outline', cls: '' },
+        { name: 'Carrera', when: T('Dom 11 · 15:00', 'Dom 11 · 21:00'), state: 'Pendiente', tg: 'tg-gray', icon: 'schedule', bg: 'var(--surface-muted)', fg: 'var(--muted)', cta: 'Pronosticar', href: 'PronosticarMovil.dc.html', btn: 'btn-outline', cls: '' }
+      ],
+      grid: P.GRID.slice(0, 20).map((code, i) => ({ p: 'P' + (i + 1), code, color: P.drv(code).color })), cons
+    };
+  }
+}
+</script>
+</body>
+</html>

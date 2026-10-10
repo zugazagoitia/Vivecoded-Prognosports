@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Lucha por el título</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.rr{display:grid;grid-template-columns:30px 160px minmax(0,1fr) 120px;gap:10px;align-items:center;min-height:34px}
+.rr .tr{position:relative;height:18px}
+.rr .a{position:absolute;left:0;height:18px;border-radius:3px 0 0 3px}
+.rr .b{position:absolute;height:18px;border-radius:0 3px 3px 0}
+.rr .mx{position:absolute;top:1px;font-size:11px;color:var(--muted);white-space:nowrap}
+.leadl{position:absolute;top:-6px;bottom:-6px;border-left:2px dashed var(--gold)}
+.nd{display:grid;grid-template-columns:170px 100px 120px minmax(0,1fr) 130px;gap:8px 16px;align-items:center}
+.nd .bar{position:relative;height:22px;background:var(--surface-muted);border-radius:4px}
+.nd .bar i{position:absolute;left:0;top:6px;height:10px;border-radius:3px;background:var(--brand-300)}
+.nd .bar b{position:absolute;top:1px;height:20px;border-left:3px solid var(--h)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Titulo" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">{{title}}</h2><span class="flag">flag</span></div><span class="t-sm muted">{{sub}}</span></div>
+        <div class="seg" role="group" aria-label="Vista"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div></div>
+      <div class="card-b col g16">
+        <div class="row g8 wrapf"><span class="tag tg-brand">Quedan {{left}} GP</span><span class="tag tg-gray">Máximo en juego: {{maxRem}} pts</span><span class="tag tg-gray">{{alive}} jugadores aún pueden ser campeones</span></div>
+        <sc-if value="{{isRange}}" hint-placeholder-val="{{ true }}">
+          <div class="col" style="gap:4px;position:relative">
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="12"><div class="rr" style="opacity:{{r.op}}"><b class="hd tn" style="text-align:right">{{r.pos}}</b><span class="t-sm ell" style="font-weight:{{r.w}}">{{r.name}}</span>
+              <span class="tr"><i class="a" style="width:{{r.cur}}%;background:{{r.c}}"></i><i class="b" style="left:calc({{r.cur}}% + 2px);width:{{r.rest}}%;background:{{r.c2}}"></i><span class="mx" style="left:calc({{r.end}}% + 8px)">máx. {{r.max}}</span><i class="leadl" style="left:{{leadX}}%"></i></span>
+              <span class="tag {{r.tg}}" style="justify-self:start">{{r.tag}}</span></div></sc-for>
+          </div>
+          <div class="legend"><span><i style="width:14px;height:10px;display:inline-block;background:var(--c-you)"></i>Puntos actuales</span><span><i style="width:14px;height:10px;display:inline-block;background:var(--tint)"></i>Puntos aún en juego</span><span><i style="width:2px;height:12px;display:inline-block;border-left:2px dashed var(--gold)"></i>Líder hoy · {{leadPts}}</span></div>
+        </sc-if>
+        <sc-if value="{{isProj}}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 1000 420" width="100%" class="chart" role="img" aria-label="Proyección de puntos a final de temporada">
+            <rect x="{{nowX}}" y="10" width="{{futW}}" height="380" style="fill:var(--surface-muted)"></rect><text x="{{nowTx}}" y="26" style="font-weight:600;letter-spacing:.05em">PROYECCIÓN</text>
+            <sc-for list="{{grid}}" as="g" hint-placeholder-count="5"><line class="gl" x1="56" x2="860" y1="{{g.y}}" y2="{{g.y}}"></line><text x="48" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+            <sc-for list="{{proj}}" as="p" hint-placeholder-count="6"><g><path d="{{p.band}}" style="fill:{{p.c}};opacity:.12"></path><path d="{{p.d}}" fill="none" style="stroke:{{p.c}};stroke-width:{{p.w}}"></path><path d="{{p.dp}}" fill="none" style="stroke:{{p.c}};stroke-width:{{p.w}};stroke-dasharray:6 5"></path><text x="872" y="{{p.ly}}" class="lbl-s" style="fill:var(--h)">{{p.name}} <tspan style="fill:var(--muted);font-weight:500">≈ {{p.end}}</tspan></text></g></sc-for>
+            <sc-for list="{{xl}}" as="x" hint-placeholder-count="24"><text x="{{x.x}}" y="410" text-anchor="middle" style="font-size:10px;fill:{{x.c}}">{{x.l}}</text></sc-for>
+          </svg>
+          <span class="t-cap muted">Línea discontinua: ritmo medio de los últimos 5 GP. Banda: entre su peor y su mejor GP recientes.</span>
+        </sc-if>
+        <sc-if value="{{isNeed}}" hint-placeholder-val="{{ false }}">
+          <div class="nd"><span class="up">Jugador</span><span class="up" style="text-align:right">Dif. líder</span><span class="up" style="text-align:right">Necesita por GP</span><span class="up">Frente a su media</span><span class="up">Dificultad</span>
+            <sc-for list="{{need}}" as="r" hint-placeholder-count="10"><span class="t-sm" style="font-weight:{{r.w}}">{{r.name}}</span><span class="t-sm muted tn" style="text-align:right">{{r.gap}}</span><b class="hd tn" style="text-align:right;font-size:16px">{{r.req}}</b><span class="bar"><i style="width:{{r.avgW}}%"></i><b style="left:{{r.reqW}}%;border-color:{{r.rc}}"></b></span><span class="tag {{r.tg}}" style="justify-self:start">{{r.diff}}</span></sc-for>
+          </div>
+          <span class="t-cap muted">Barra: su media por GP. Raya: puntos por GP que necesita para alcanzar al líder si este mantiene su media.</span>
+        </sc-if>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'range', NG = P.gps.length, left = NG - n;
+    const maxGP = (g) => (P.gps[g].sprint ? 15 + 25 : 0) + 25 + 40 + 5;
+    let maxRem = 0; for (let g = n; g < NG; g++) maxRem += maxGP(g);
+    const L = O[0], top = P.total[L] + maxRem;
+    let alive = 0;
+    const rows = O.map((id, i) => { const mx = P.total[id] + maxRem, ok = mx >= P.total[L]; if (ok) alive++;
+      return { pos: i + 1, name: P.byId[id].name + (id === me ? ' (tú)' : ''), w: id === me ? 700 : 500, cur: (P.total[id] / top * 100).toFixed(1), rest: (maxRem / top * 100).toFixed(1), end: (mx / top * 100).toFixed(1), max: mx, op: ok ? 1 : 0.45,
+        c: id === me ? 'var(--c-you)' : 'var(--brand-300)', c2: id === me ? 'var(--brand-200)' : 'var(--tint)', tag: i === 0 ? 'Líder' : ok ? 'Puede ganar' : 'Sin opciones', tg: i === 0 ? 'tg-brand' : ok ? 'tg-ok' : 'tg-gray' }; });
+    const X0 = 56, X1 = 860, X = (g) => X0 + g * (X1 - X0) / (NG - 1);
+    const sel = O.slice(0, 5); if (sel.indexOf(me) < 0) sel.push(me); const hl = sel.filter((id) => id !== me);
+    const pr = sel.map((id) => { const rec = P.pts[id].slice(n - 5), pace = rec.reduce((a, b) => a + b, 0) / 5; return { id, pace, end: Math.round(P.total[id] + pace * left), hi: P.total[id] + Math.max.apply(null, rec) * left, lo: P.total[id] + Math.min.apply(null, rec) * left }; });
+    const yMax = Math.ceil(Math.max.apply(null, pr.map((p) => p.hi)) / 200) * 200, Y = (v) => 390 - v / yMax * 370;
+    const proj = pr.map((p) => { const id = p.id; return { name: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], c: P.hue(id, hl), w: id === me ? 3 : 2, end: p.end, ly: Y(p.end) + 4,
+      d: P.acc[id].map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v).toFixed(1)).join(''), dp: 'M' + X(n - 1).toFixed(1) + ' ' + Y(P.total[id]).toFixed(1) + ' L' + X(NG - 1).toFixed(1) + ' ' + Y(p.end).toFixed(1),
+      band: 'M' + X(n - 1).toFixed(1) + ' ' + Y(P.total[id]).toFixed(1) + ' L' + X(NG - 1).toFixed(1) + ' ' + Y(p.hi).toFixed(1) + ' L' + X(NG - 1).toFixed(1) + ' ' + Y(p.lo).toFixed(1) + ' Z' }; }).sort((a, b) => a.ly - b.ly);
+    for (let i = 1; i < proj.length; i++) if (proj[i].ly < proj[i - 1].ly + 15) proj[i].ly = proj[i - 1].ly + 15;
+    const leadAvg = P.total[L] / n;
+    const need = O.slice(1, 11).map((id) => { const gap = P.total[L] - P.total[id], req = leadAvg + gap / left, avg = P.total[id] / n, r = req / avg, cap = 70;
+      const diff = req > cap ? 'Casi imposible' : r > 1.35 ? 'Muy difícil' : r > 1.15 ? 'Difícil' : 'Posible';
+      return { name: P.byId[id].name + (id === me ? ' (tú)' : ''), w: id === me ? 700 : 500, gap: '−' + gap, req: Math.round(req), avgW: Math.min(100, avg / cap * 100).toFixed(1), reqW: Math.min(100, req / cap * 100).toFixed(1), rc: req > cap ? 'var(--err)' : 'var(--h)', diff, tg: diff === 'Posible' ? 'tg-ok' : diff === 'Difícil' ? 'tg-warn' : diff === 'Muy difícil' ? 'tg-warn' : 'tg-err' }; });
+    const T = { range: ['¿Quién puede ser campeón?', 'Puntos actuales más todos los que quedan en juego. Si la barra no llega a la línea del líder, ya no hay opciones.'], proj: ['Proyección a final de temporada', 'Si cada uno mantiene el ritmo de los últimos 5 GP, así acabaría la temporada.'], need: ['¿Cuánto necesitas por GP?', 'Puntos por GP necesarios para alcanzar al líder, frente a la media de cada uno.'] };
+    return {
+      title: T[mode][0], sub: T[mode][1], modes: [['range', 'En juego'], ['proj', 'Proyección'], ['need', 'Lo que necesitas']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })),
+      isRange: mode === 'range', isProj: mode === 'proj', isNeed: mode === 'need', left, maxRem, alive, rows, leadX: (P.total[L] / top * 100).toFixed(1), leadPts: P.total[L],
+      proj, grid: [0, 0.25, 0.5, 0.75, 1].map((f) => ({ y: Y(f * yMax), ty: Y(f * yMax) + 4, l: Math.round(f * yMax) })), nowX: X(n - 1), nowTx: X(n - 1) + 8, futW: X(NG - 1) - X(n - 1),
+      xl: P.gps.map((g, i) => ({ x: X(i), l: g.code, c: i < n ? 'var(--axis-txt)' : 'var(--border-input)' })), need
+    };
+  }
+}
+</script>
+</body>
+</html>

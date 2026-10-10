@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Aciertos por sesión</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.row3{display:grid;grid-template-columns:160px minmax(0,1fr) 120px;gap:12px;align-items:center;min-height:32px;padding:0 6px;border-radius:4px}
+.row3.me{background:var(--tint)}
+.stk{display:flex;gap:2px;height:18px}.stk i{display:block;border-radius:2px}
+.gridp{display:grid;grid-template-columns:160px repeat(4,minmax(0,1fr));gap:4px 8px;align-items:center}
+.cellr{height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surface-muted)}
+.cellr.best{background:var(--tint);box-shadow:inset 0 0 0 2px var(--ring)}
+.cellr i{border-radius:50%;display:block;background:var(--brand-400)}
+.cellr.me i{background:var(--c-you)}
+.db{display:grid;grid-template-columns:200px minmax(0,1fr) 120px;gap:16px;align-items:center}
+.track{position:relative;height:28px}
+.track .ln{position:absolute;left:0;right:0;top:13px;height:1px;background:var(--grid)}
+.track .seg2{position:absolute;top:12px;height:4px;border-radius:2px}
+.track .avg{position:absolute;top:7px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--surface);box-shadow:inset 0 0 0 3px var(--c-rest)}
+.track .mine{position:absolute;top:6px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:var(--c-you);box-shadow:0 0 0 2px var(--surface)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="AciertosTipo" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">{{title}}</h2><span class="flag">flag</span></div><span class="t-sm muted">{{sub}}</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Vista"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><button type="button" class="btn btn-outline btn-sm" onClick="{{toggleTbl}}"><span class="i s16">{{tIcon}}</span>{{tLabel}}</button></div></div>
+      <div class="card-b col g12">
+        <div class="legend"><sc-for list="{{cats}}" as="c" hint-placeholder-count="4"><span><i style="width:12px;height:12px;border-radius:2px;display:inline-block;background:{{c.c}}"></i>{{c.l}}</span></sc-for></div>
+        <sc-if value="{{isCount}}" hint-placeholder-val="{{ true }}">
+          <div class="col" style="gap:4px"><sc-for list="{{countRows}}" as="r" hint-placeholder-count="12"><div class="row3 {{r.cls}}"><span class="t-sm" style="font-weight:{{r.w}}">{{r.name}}</span><span class="stk"><sc-for list="{{r.segs}}" as="g" hint-placeholder-count="4"><i style="width:{{g.w}}%;background:{{g.c}}" title="{{g.t}}"></i></sc-for></span><span class="t-sm tn"><b class="hd">{{r.total}}</b> <span class="muted">· {{r.rate}} %</span></span></div></sc-for></div>
+        </sc-if>
+        <sc-if value="{{isGrid}}" hint-placeholder-val="{{ false }}">
+          <div class="gridp"><span></span><sc-for list="{{cats}}" as="c" hint-placeholder-count="4"><span class="up" style="text-align:center">{{c.l}}</span></sc-for>
+            <sc-for list="{{gridRows}}" as="r" hint-placeholder-count="12"><span class="t-sm" style="font-weight:{{r.w}}">{{r.name}}</span><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="4"><span class="cellr {{c.cls}}" title="{{c.t}}"><i style="width:{{c.d}}px;height:{{c.d}}px"></i><span class="t-sm tn" style="width:40px;font-weight:{{c.fw}}">{{c.v}} %</span></span></sc-for></sc-for>
+          </div>
+          <span class="t-cap muted">Tamaño del círculo = % de acierto. Recuadro: el mejor de la comunidad en esa sesión.</span>
+        </sc-if>
+        <sc-if value="{{isMe}}" hint-placeholder-val="{{ false }}">
+          <div class="db"><span></span><span class="row sp t-cap muted"><span>0 %</span><span>25 %</span><span>50 %</span><span>75 %</span><span>100 %</span></span><span class="up">Diferencia</span></div>
+          <sc-for list="{{meRows}}" as="r" hint-placeholder-count="4"><div class="db"><b class="hd">{{r.label}}</b><span class="track"><i class="ln"></i><i class="seg2" style="left:{{r.l}}%;width:{{r.wd}}%;background:{{r.lc}}"></i><i class="avg" style="left:{{r.avg}}%" title="Media de la comunidad"></i><i class="mine" style="left:{{r.me}}%" title="Tú"></i></span><b class="hd" style="color:{{r.dc}}">{{r.diff}}</b></div></sc-for>
+          <div class="legend"><span><i style="width:12px;height:12px;border-radius:50%;display:inline-block;background:var(--c-you)"></i>Tu % de acierto</span><span><i style="width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:inset 0 0 0 3px var(--c-rest)"></i>Media de la comunidad</span></div>
+        </sc-if>
+        <sc-if value="{{table}}" hint-placeholder-val="{{ false }}"><div class="tw"><table class="tbl tn"><thead><tr><th>Jugador</th><sc-for list="{{cats}}" as="c" hint-placeholder-count="4"><th class="r">{{c.l}}</th></sc-for><th class="r">Total</th></tr></thead><tbody><sc-for list="{{tRows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td>{{r.name}}</td><sc-for list="{{r.v}}" as="v" hint-placeholder-count="4"><td class="r">{{v}}</td></sc-for><td class="r"><b class="hd">{{r.total}}</b></td></tr></sc-for></tbody></table></div></sc-if>
+        <div class="alert al-info" style="padding:8px 12px"><span class="i s16">database</span><span class="t-sm">Datos de la API: <code>hitsBySession</code> y <code>hitPercentageBySession</code> por GP, con el tipo de sesión como clave.</span></div>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'count', K = ['cs', 'sp', 'q', 'r'];
+    const sprints = P.gps.slice(0, n).filter((g) => g.sprint).length;
+    const att = { cs: 3 * sprints, sp: 5 * sprints, q: 5 * n, r: 8 * n };
+    const data = O.map((id) => { const h = { cs: 0, sp: 0, q: 0, r: 0 }; P.hitsSess[id].forEach((o) => K.forEach((k) => { h[k] += o[k] || 0; })); const tot = K.reduce((a, k) => a + h[k], 0), at = K.reduce((a, k) => a + att[k], 0); return { id, h, tot, rate: tot / at }; });
+    data.sort((a, b) => b.tot - a.tot);
+    const mx = data[0].tot, best = {}; K.forEach((k) => { best[k] = Math.max.apply(null, data.map((d) => d.h[k] / att[k])); });
+    const nm = (id) => P.byId[id].name + (id === me ? ' (tú)' : '');
+    const mine = data.filter((d) => d.id === me)[0];
+    const T = { count: ['Aciertos por sesión', 'Cuántos aciertos suma cada uno y en qué tipo de sesión.'], grid: ['% de acierto por sesión', 'Compara tasas, no totales: ¿quién es el especialista en clasificación o en carrera?'], me: ['Tus puntos fuertes', 'Tu % de acierto frente a la media de la comunidad en cada tipo de sesión.'] };
+    return {
+      title: T[mode][0], sub: T[mode][1], modes: [['count', 'Totales'], ['grid', '% por sesión'], ['me', 'Tú vs. comunidad']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })), chart: !s.tb, table: !!s.tb, toggleTbl: () => this.setState({ tb: !s.tb }), tIcon: s.tb ? 'insert_chart' : 'table_chart', tLabel: s.tb ? 'Ver gráfico' : 'Ver como tabla',
+      isCount: mode === 'count' && !s.tb, isGrid: mode === 'grid' && !s.tb, isMe: mode === 'me' && !s.tb,
+      cats: K.map((k) => ({ l: P.SESS[k][1], c: P.sessColor[k] })),
+      countRows: data.map((d) => ({ name: nm(d.id), cls: d.id === me ? 'me' : '', w: d.id === me ? 700 : 500, total: d.tot, rate: Math.round(d.rate * 100), segs: K.map((k) => ({ w: (d.h[k] / mx * 100).toFixed(2), c: P.sessColor[k], t: P.SESS[k][0] + ': ' + d.h[k] + ' de ' + att[k] })) })),
+      gridRows: data.map((d) => ({ name: nm(d.id), w: d.id === me ? 700 : 500, cells: K.map((k) => { const r = d.h[k] / att[k], top = r === best[k]; return { d: Math.round(6 + r * 40), v: Math.round(r * 100), fw: top ? 700 : 400, cls: (top ? 'best ' : '') + (d.id === me ? 'me' : ''), t: P.SESS[k][0] + ': ' + d.h[k] + '/' + att[k] }; }) })),
+      meRows: K.map((k) => { const avg = data.reduce((a, d) => a + d.h[k] / att[k], 0) / data.length * 100, m = mine.h[k] / att[k] * 100, df = Math.round(m - avg);
+        return { label: P.SESS[k][0], avg: avg.toFixed(1), me: m.toFixed(1), l: Math.min(avg, m).toFixed(1), wd: Math.abs(m - avg).toFixed(1), lc: m >= avg ? 'var(--brand-300)' : 'var(--err-tint)', diff: (df > 0 ? '+' : df < 0 ? '−' : '') + Math.abs(df) + ' pts %', dc: df >= 0 ? 'var(--ok-fg)' : 'var(--err-fg)' }; }),
+      tRows: data.map((d) => ({ name: nm(d.id), cls: d.id === me ? 'me' : '', v: K.map((k) => d.h[k]), total: d.tot }))
+    };
+  }
+}
+</script>
+</body>
+</html>

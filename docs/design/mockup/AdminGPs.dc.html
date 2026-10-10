@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Grandes Premios (admin)</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.ck{display:inline-flex;gap:6px}.ck .i{font-size:18px}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="gps" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Grandes Premios</h1><p class="muted">Calendario 2026 · 24 rondas</p></div><a class="btn btn-primary" href="AdminGPEditar.dc.html"><span class="i s16">add</span>Nuevo GP</a></div>
+<section class="card">
+  <div class="card-b row g12 wrapf"><div class="iw fx" style="min-width:220px"><span class="i">search</span><input class="inp" placeholder="Buscar GP o circuito" aria-label="Buscar"></div><select class="sel" style="width:auto" aria-label="Temporada"><option>2026</option><option>2025</option></select><div class="row g8"><sc-for list="{{chips}}" as="c" hint-placeholder-count="3"><button type="button" class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.l}} <span class="muted tn">{{c.n}}</span></button></sc-for></div></div>
+  <div class="tw"><table class="tbl tn"><thead><tr><th>Ronda</th><th>Gran Premio</th><th>Fecha</th><th>Formato</th><th>Preparación</th><th>Estado</th><th></th></tr></thead>
+    <tbody><sc-for list="{{rows}}" as="g" hint-placeholder-count="10"><tr><td>{{g.r}}</td><td><b class="hd">GP de {{g.name}}</b><br><span class="t-cap muted">{{g.circuit}}</span></td><td>{{g.date}}</td><td>{{g.fmt}}</td><td><span class="ck" aria-label="{{g.aria}}"><sc-for list="{{g.ck}}" as="k" hint-placeholder-count="4"><span class="i" title="{{k.t}}" style="color:{{k.c}}">{{k.i}}</span></sc-for></span></td><td><span class="tag {{g.tg}}">{{g.st}}</span></td><td class="r"><a class="btn btn-ghost btn-sm" href="AdminGPEditar.dc.html">Editar</a></td></tr></sc-for></tbody></table></div>
+  <div class="card-f" style="justify-content:flex-start"><div class="legend"><span>Preparación:</span><span><span class="i s16">schedule</span>sesiones</span><span><span class="i s16">group</span>pilotos</span><span><span class="i s16">image</span>imagen</span><span><span class="i s16">emoji_events</span>resultados</span><span>Verde = completo, ámbar = pendiente</span></div></div>
+</section>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const f = s.f || 'all';
+    const all = P.gps.map((g, i) => { const done = g.done, nx = g.next, fut = !done && !nx; const ok = [true, i < 19, i < 18, done]; return { r: g.r, name: g.name, circuit: g.circuit, date: g.date, fmt: g.sprint ? 'Sprint' : 'Normal', st: done ? 'Disputado' : nx ? 'En curso' : i < 19 ? 'Publicado' : 'Borrador', tg: done ? 'tg-gray' : nx ? 'tg-warn' : i < 19 ? 'tg-info' : 'tg-gray', inc: !ok[0] || !ok[1] || !ok[2],
+      ck: ['schedule', 'group', 'image', 'emoji_events'].map((ic, k) => ({ i: ic, c: ok[k] ? 'var(--ok)' : k === 3 && !done ? 'var(--border-input)' : 'var(--warn)', t: ['Sesiones', 'Pilotos', 'Imagen', 'Resultados'][k] + (ok[k] ? ': completo' : ': pendiente') })), aria: ok.filter(Boolean).length + ' de 4 apartados completos' }; });
+    const rows = all.filter((g) => f === 'all' || (f === 'inc' ? g.inc : g.tg === 'tg-warn' || g.tg === 'tg-info' || g.tg === 'tg-gray' && g.st === 'Borrador')).slice(14, 24);
+    return { rows: f === 'all' ? all.slice(14, 24) : all.filter((g) => f === 'inc' ? g.inc : !g.inc && g.st !== 'Disputado'),
+      chips: [['all', 'Todos', 24], ['inc', 'Incompletos', all.filter((g) => g.inc).length], ['ok', 'Listos', all.filter((g) => !g.inc && g.st !== 'Disputado').length]].map((x) => ({ l: x[1], n: x[2], cls: x[0] === f ? 'on' : '', pick: () => this.setState({ f: x[0] }) })) };
+  }
+}
+</script>
+</body>
+</html>

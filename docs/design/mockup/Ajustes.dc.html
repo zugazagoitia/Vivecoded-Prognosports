@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ajustes de la cuenta</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.toc a{display:block;padding:6px 10px;border-radius:6px;font-size:14px;color:var(--muted)}.toc a:hover{background:var(--surface-muted);color:var(--h);text-decoration:none}
+.sw{border:0;background:transparent;cursor:pointer;display:inline-flex;padding:4px;border-radius:6px}
+.pend{border:1px dashed var(--border-input);background:transparent;box-shadow:none}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="perfil" hint-size="100%,56px"></dc-import>
+  <main class="pg-main lg">
+    <div class="col" style="gap:2px"><h1 class="t-title">Ajustes de la cuenta</h1><p class="muted">Tus datos, seguridad y avisos.</p></div>
+    <div class="side-l" style="grid-template-columns:200px minmax(0,1fr)">
+      <nav class="toc sticky col" style="gap:2px" aria-label="En esta página"><a href="#datos">Perfil</a><a href="#foto">Foto</a><a href="#correo">Correo y contraseña</a><a href="#sesiones">Sesiones abiertas</a><a href="#telegram">Telegram</a><a href="#avisos">Avisos</a><a href="#otros">Otros ajustes</a></nav>
+      <div class="col g24" style="min-width:0">
+        <section id="datos" class="card"><div class="card-h"><h2 class="t-head">Perfil</h2><span class="t-sm muted">Lo que ven los demás en tu perfil</span></div><div class="card-b grid2" style="gap:16px">
+          <div class="field"><label class="lbl" for="f1">Nombre</label><input id="f1" class="inp" value="Álex Ruiz" onInput="{{dirty}}"></div>
+          <div class="field"><label class="lbl" for="f2">Nombre de usuario</label><input id="f2" class="inp" value="alexruiz" onInput="{{dirty}}"></div>
+          <div class="field" style="grid-column:1/-1"><label class="lbl" for="f3">Biografía</label><textarea id="f3" class="txt" rows="3" onInput="{{dirty}}">Pronostico desde el sofá con el café en la mano. Fan de las carreras en mojado y de las estrategias a una parada.</textarea><span class="help tn">108/160</span></div>
+          <div class="field"><label class="lbl" for="f4">Localización</label><input id="f4" class="inp" value="Madrid" onInput="{{dirty}}"></div>
+          <div class="field"><label class="lbl" for="f5">Fecha de nacimiento</label><input id="f5" class="inp" value="14/05/1991" onInput="{{dirty}}"></div>
+          <div class="field" style="grid-column:1/-1"><label class="lbl" for="f6">Zona horaria</label><select id="f6" class="sel" onChange="{{dirty}}"><option>Europa/Madrid (UTC+2 en verano)</option><option>América/Ciudad de México</option></select><span class="help">Las horas de sesión y de cierre se muestran en esta zona.</span></div>
+        </div></section>
+        <section id="foto" class="card"><div class="card-h"><h2 class="t-head">Foto de perfil</h2></div><div class="card-b row g24 wrapf"><span class="av s40 you" style="width:80px;height:80px;font-size:28px">ÁR</span><div class="col g8"><p class="t-sm muted">JPG o PNG, hasta 2 MB. La recortarás antes de subirla.</p><div class="row g8"><button type="button" class="btn btn-primary btn-sm"><span class="i s16">upload</span>Subir foto</button><button type="button" class="btn btn-outline btn-sm">Quitar</button></div></div></div></section>
+        <section id="correo" class="card"><div class="card-h"><h2 class="t-head">Correo y contraseña</h2></div><div class="card-b grid2" style="gap:16px">
+          <div class="field" style="grid-column:1/-1"><label class="lbl" for="e1">Correo electrónico</label><div class="row g8"><input id="e1" class="inp" value="alex.ruiz@ejemplo.com"><button type="button" class="btn btn-outline">Cambiar</button></div><span class="help">Te enviaremos un código al nuevo correo para confirmarlo.</span></div>
+          <div class="field"><label class="lbl" for="p1">Contraseña actual</label><input id="p1" type="password" class="inp" value="secreto123"></div><span></span>
+          <div class="field"><label class="lbl" for="p2">Contraseña nueva</label><input id="p2" type="password" class="inp"><span class="help">Al menos 8 caracteres.</span></div>
+          <div class="field"><label class="lbl" for="p3">Repite la nueva</label><input id="p3" type="password" class="inp"></div>
+        </div><div class="card-f"><button type="button" class="btn btn-outline btn-sm">Cambiar contraseña</button></div></section>
+        <section id="sesiones" class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Sesiones abiertas</h2><span class="t-sm muted">Dispositivos con tu cuenta iniciada</span></div><button type="button" class="btn btn-outline btn-sm" onClick="{{closeOthers}}">Cerrar las demás</button></div>
+          <div class="tw"><table class="tbl"><thead><tr><th>Sesión</th><th>Creada</th><th>Última actividad</th><th></th></tr></thead><tbody><sc-for list="{{tokens}}" as="t" hint-placeholder-count="3"><tr><td><span class="row g8"><span class="i">{{t.icon}}</span>{{t.n}}</span></td><td>{{t.c}}</td><td><sc-if value="{{t.cur}}" hint-placeholder-val="{{ false }}"><span class="tag tg-ok">Esta sesión</span></sc-if><sc-if value="{{t.other}}" hint-placeholder-val="{{ true }}">{{t.l}}</sc-if></td><td class="r"><sc-if value="{{t.other}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn btn-ghost btn-sm" onClick="{{t.close}}">Cerrar</button></sc-if></td></tr></sc-for></tbody></table></div></section>
+        <section id="telegram" class="card"><div class="card-h"><h2 class="t-head">Telegram</h2><span class="tag tg-ok"><span class="i s16">check</span>Vinculado como @alexruiz</span></div><div class="card-b row sp wrapf"><p class="t-sm muted" style="max-width:520px">Recibes por Telegram los avisos que marques abajo.</p><button type="button" class="btn btn-outline btn-sm">Desvincular</button></div></section>
+        <section id="avisos" class="card"><div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Avisos</h2><span class="t-sm muted">Elige qué recibes y por dónde</span></div></div>
+          <div class="tw"><table class="tbl"><thead><tr><th>Aviso</th><th class="c">Correo</th><th class="c">Telegram</th></tr></thead><tbody><sc-for list="{{prefs}}" as="p" hint-placeholder-count="5"><tr><td><b class="hd">{{p.n}}</b><br><span class="t-cap muted">{{p.d}}</span></td><sc-for list="{{p.ch}}" as="c" hint-placeholder-count="2"><td class="c"><button type="button" role="switch" aria-checked="{{c.on}}" aria-label="{{c.label}}" class="sw" onClick="{{c.tog}}"><span class="i s24" style="color:{{c.col}}">{{c.icon}}</span></button></td></sc-for></tr></sc-for></tbody></table></div></section>
+        <section id="otros" class="card pend"><div class="card-h"><h2 class="t-head">Otros ajustes</h2><span class="tag tg-warn">Por confirmar</span></div><div class="card-b col g8"><span class="t-sm">La app actual tiene secciones de <b>privacidad</b> y de <b>nombres de los equipos</b>. Falta confirmar qué guardan en la API antes de diseñarlas (requisitos 3.4 y 3.7).</span></div></section>
+        <sc-if value="{{isDirty}}" hint-placeholder-val="{{ true }}"><div class="savebar" role="region" aria-label="Cambios sin guardar"><span class="fx t-sm">Tienes cambios sin guardar</span><button type="button" class="btn btn-ghost btn-sm" onClick="{{discard}}">Descartar</button><button type="button" class="btn btn-primary btn-sm" onClick="{{save}}">Guardar cambios</button></div></sc-if>
+        <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}"><div class="alert al-ok" role="status"><span class="i">check_circle</span><span>Cambios guardados.</span></div></sc-if>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+const NT = [['Información', 'Novedades y avisos generales de PrognoSports', [1, 0]], ['Pre-alerta de sesión', 'El día antes de cada sesión con pronóstico', [1, 1]], ['Alerta de sesión', 'Minutos antes del cierre si aún no has pronosticado', [0, 1]], ['Cambios en la parrilla', 'Si la organización cambia una parrilla publicada', [0, 1]], ['Puntos repartidos', 'Cuando se calculan los puntos de una sesión', [1, 1]]];
+    const st = s.pr || NT.map((x) => x[2]), CH = ['correo', 'Telegram'];
+    const prefs = NT.map((x, i) => ({ n: x[0], d: x[1], ch: [0, 1].map((k) => ({ on: !!st[i][k], l: k ? 'Telegram' : 'Correo', label: x[0] + ' por ' + CH[k], icon: st[i][k] ? 'toggle_on' : 'toggle_off', col: st[i][k] ? 'var(--ring)' : 'var(--muted)', cls: st[i][k] ? 'on' : '',
+      tog: () => { const c = st.map((r) => r.slice()); c[i][k] = c[i][k] ? 0 : 1; this.setState({ pr: c, dirty: true, saved: false }); } })) }));
+    const T = s.tok || [['desktop_windows', 'Chrome en macOS', '2 oct 2026', '', true], ['smartphone', 'Safari en iPhone', '14 sep 2026', 'hace 2 h', false], ['tablet', 'Firefox en Android', '3 jun 2026', 'hace 3 semanas', false]];
+    return {
+      prefs, isDirty: !!s.dirty, saved: !!s.saved, dirty: () => this.setState({ dirty: true, saved: false }), discard: () => this.setState({ dirty: false, pr: null }), save: () => this.setState({ dirty: false, saved: true }),
+      tokens: T.map((t, i) => ({ icon: t[0], n: t[1], c: t[2], l: t[3], cur: t[4], other: !t[4], close: () => this.setState({ tok: T.filter((x, k) => k !== i) }) })),
+      closeOthers: () => this.setState({ tok: T.filter((t) => t[4]) })
+    };
+  }
+}
+</script>
+</body>
+</html>

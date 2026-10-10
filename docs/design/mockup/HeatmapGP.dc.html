@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mapa de calor</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.hm{border-collapse:separate;border-spacing:2px;width:100%;min-width:1000px;font-variant-numeric:tabular-nums}
+.hm th{font-size:11px;font-weight:600;color:var(--muted);text-align:center;padding:4px 0}
+.hm td{height:32px;text-align:center;font-size:12px;border-radius:4px}
+.hm td.nm{text-align:left;padding:0 8px;white-space:nowrap;font-size:13px;color:var(--body)}
+.hm tr.me td.nm{font-weight:700;color:var(--h)}
+.hm td.win{box-shadow:inset 0 0 0 2px var(--gold);font-weight:700}
+.hm td.side{text-align:left;padding-left:10px}
+.sb{display:inline-block;height:10px;border-radius:0 3px 3px 0;vertical-align:middle;margin-right:6px}
+.md{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:56px;gap:2px}
+.md i{width:60%;border-radius:3px 3px 0 0;background:var(--brand-300);display:block}
+.ramp{display:inline-flex;gap:2px}.ramp i{width:22px;height:12px;display:inline-block}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="HeatmapGP" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">Mapa de calor de la temporada</h2><span class="flag">flag</span></div><span class="t-sm muted">Un solo tono: más oscuro, mejor. Legible para daltónicos y en modo oscuro. Borde dorado: ganador del GP.</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Métrica"><sc-for list="{{metrics}}" as="m" hint-placeholder-count="3"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><div class="seg" role="group" aria-label="Orden"><sc-for list="{{sorts}}" as="m" hint-placeholder-count="2"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div></div></div>
+      <div class="tw" style="padding:0 12px 12px"><table class="hm">
+        <thead><tr><th></th><sc-for list="{{heads}}" as="h" hint-placeholder-count="17"><th title="{{h.full}}">{{h.l}}</th></sc-for><th style="text-align:left;padding-left:10px">{{sideLabel}}</th></tr></thead>
+        <tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td class="nm">{{r.name}}</td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="17"><td class="{{c.cls}}" title="{{c.t}}">{{c.v}}</td></sc-for><td class="side"><span class="sb" style="width:{{r.bar}}px;background:{{r.bc}}"></span><span class="t-sm tn">{{r.side}}</span></td></tr></sc-for></tbody>
+        <tfoot><tr><td class="nm up" style="vertical-align:bottom">Mediana del GP</td><sc-for list="{{meds}}" as="m" hint-placeholder-count="17"><td><div class="md"><span class="t-cap muted tn">{{m.v}}</span><i style="height:{{m.h}}px"></i></div></td></sc-for><td class="side t-cap muted">Dificultad: más baja = más difícil</td></tr></tfoot>
+      </table></div>
+      <div class="card-f" style="justify-content:flex-start"><div class="legend"><span>{{lo}} <span class="ramp"><sc-for list="{{ramp}}" as="c" hint-placeholder-count="7"><i class="{{c}}"></i></sc-for></span> {{hi}}</span><span><i style="width:18px;height:12px;border-radius:2px;display:inline-block;box-shadow:inset 0 0 0 2px var(--gold)"></i>Ganador del GP</span></div></div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const metric = s.m || 'pct', sort = s.o || 'total';
+    const maxG = []; for (let g = 0; g < n; g++) maxG[g] = Math.max.apply(null, P.users.map((u) => P.pts[u.id][g]));
+    const t = (id, g) => metric === 'pct' ? P.pts[id][g] / maxG[g] : metric === 'rank' ? 1 - (P.gpRank[id][g] - 1) / 11 : P.hits[id][g] / 14;
+    const lab = (id, g) => metric === 'pct' ? Math.round(100 * P.pts[id][g] / maxG[g]) : metric === 'rank' ? P.gpRank[id][g] : P.hits[id][g];
+    const sd = (id) => { const v = []; for (let g = 0; g < n; g++) v.push(t(id, g)); const m = v.reduce((a, b) => a + b, 0) / n; return Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / n); };
+    let ids = O.slice(); if (sort === 'cons') ids.sort((a, b) => sd(a) - sd(b));
+    const maxT = P.total[O[0]];
+    const rows = ids.map((id) => ({ name: P.byId[id].name + (id === me ? ' (tú)' : ''), cls: id === me ? 'me' : '',
+      cells: P.pts[id].map((v, g) => { const k = Math.max(0, Math.min(6, Math.floor(Math.pow(t(id, g), 1.6) * 6.99))); return { cls: 'sq' + (k + 1) + (P.gpRank[id][g] === 1 ? ' win' : ''), v: lab(id, g), t: P.gps[g].name + ': ' + v + ' pts, ' + P.gpRank[id][g] + '.º del GP' }; }),
+      bar: sort === 'cons' ? Math.round(Math.max(4, 100 - sd(id) * 300)) : Math.round(100 * P.total[id] / maxT), bc: id === me ? 'var(--c-you)' : 'var(--brand-300)', side: sort === 'cons' ? 'σ ' + Math.round(sd(id) * 100) : P.total[id] }));
+    const meds = []; for (let g = 0; g < n; g++) { const md = P.median(P.users.map((u) => P.pts[u.id][g])); meds.push({ v: md, h: Math.round(md * 0.6) }); }
+    const LB = { pct: ['0 %', '100 % del ganador'], rank: ['último', '1.º'], hits: ['0', '14 aciertos'] };
+    return {
+      metrics: [['pct', '% del ganador'], ['rank', 'Puesto en el GP'], ['hits', 'Aciertos']].map((x) => ({ l: x[1], cls: x[0] === metric ? 'on' : '', pick: () => this.setState({ m: x[0] }) })),
+      sorts: [['total', 'Por puntos'], ['cons', 'Por regularidad']].map((x) => ({ l: x[1], cls: x[0] === sort ? 'on' : '', pick: () => this.setState({ o: x[0] }) })),
+      heads: P.gps.slice(0, n).map((g) => ({ l: g.code, full: g.name })), rows, meds, sideLabel: sort === 'cons' ? 'Regularidad' : 'Total',
+      lo: LB[metric][0], hi: LB[metric][1], ramp: [1, 2, 3, 4, 5, 6, 7].map((k) => 'sq' + k)
+    };
+  }
+}
+</script>
+</body>
+</html>

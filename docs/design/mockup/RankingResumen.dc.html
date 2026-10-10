@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ranking · resumen</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.podium{display:flex;align-items:flex-end;gap:8px;height:180px}
+.podium div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.podium i{width:100%;border-radius:6px 6px 0 0;display:flex;justify-content:center;padding-top:8px;font-style:normal;font-size:20px;font-weight:700}
+.pb{width:80px;height:6px;border-radius:999px;background:var(--surface-muted);display:inline-block;overflow:hidden;vertical-align:middle}.pb i{display:block;height:100%;border-radius:999px}
+.next{background:var(--tint);border-radius:8px;padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="RankingResumen" hint-size="100%,170px"></dc-import>
+
+    <section class="grid4" style="gap:16px">
+      <div class="card kpi"><span class="k">Tu posición</span><span class="v tn">{{pos}}.º</span><span class="mv {{mvCls}}">{{mvText}}</span></div>
+      <div class="card kpi"><span class="k">Tus puntos</span><span class="v tn">{{total}}</span><span class="d">a {{gap}} del líder</span></div>
+      <div class="card kpi"><span class="k">Media por GP</span><span class="v tn">{{avg}}</span><span class="d">mejor que el {{pct}} % de la comunidad</span></div>
+      <div class="card kpi"><span class="k">GP ganados</span><span class="v tn">{{wins}}</span><span class="d">de 17 disputados</span></div>
+    </section>
+
+    <div class="split">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Clasificación</h2><a class="t-sm" href="Clasificacion.dc.html">Ver completa</a></div>
+        <div class="tw"><table class="tbl tn">
+          <thead><tr><th>Pos.</th><th>Jugador</th><th>Forma (últimos 5 GP)</th><th class="r">Puntos</th><th class="r">Dif. líder</th></tr></thead>
+          <tbody><sc-for list="{{rows}}" as="r" hint-placeholder-count="10"><tr class="{{r.cls}}">
+            <td><b class="hd">{{r.p}}</b> <span class="mv {{r.mc}}">{{r.mv}}</span></td>
+            <td><a class="row g8" href="PerfilUsuario.dc.html" style="color:inherit"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></a></td>
+            <td><span class="form"><sc-for list="{{r.form}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}" title="{{f.t}}">{{f.v}}</b></sc-for></span></td>
+            <td class="r"><span class="row g8 end"><span class="pb"><i style="width:{{r.bar}}%;background:{{r.bc}}"></i></span><b class="hd">{{r.pts}}</b></span></td>
+            <td class="r muted">{{r.gap}}</td></tr></sc-for></tbody></table></div>
+        <div class="card-f" style="justify-content:flex-start"><span class="t-cap muted">Forma: puesto en cada uno de los últimos 5 GP. Morado lleno = ganó el GP.</span></div>
+      </section>
+
+      <aside class="col g16" style="min-width:0">
+        <section class="card card-b col g12"><h2 class="t-head">Podio</h2>
+          <div class="podium"><sc-for list="{{podium}}" as="p" hint-placeholder-count="3"><div><b class="hd t-sm" style="text-align:center">{{p.name}}</b><span class="t-cap muted tn">{{p.pts}} pts</span><i style="height:{{p.h}}px;background:{{p.bg}};color:{{p.fg}}">{{p.pos}}</i></div></sc-for></div>
+        </section>
+        <section class="card card-b col g8"><h2 class="t-head">Último GP · Azerbaiyán</h2>
+          <div class="row sp t-sm"><span class="muted">Ganador</span><b class="hd">{{lastWinner}}</b></div>
+          <div class="row sp t-sm"><span class="muted">Tus puntos</span><b class="hd">{{lastMine}}</b></div>
+          <div class="row sp t-sm"><span class="muted">Media de la comunidad</span><b class="hd tn">{{lastAvg}}</b></div>
+          <a class="t-sm" href="Resultados.dc.html">Ver el GP<span class="i s16" style="vertical-align:-3px">arrow_forward</span></a>
+        </section>
+        <section class="next"><span class="up" style="color:var(--tint-fg)">Próximo Gran Premio</span><b class="hd t-head">Singapur · ronda 18</b><span class="t-sm" style="color:var(--tint-fg)">El sprint cierra en 1 h 32 min</span><a class="btn btn-primary btn-sm" href="Pronosticar.dc.html" style="align-self:flex-start">Pronosticar</a></section>
+      </aside>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Lucha por el título · diferencia con el líder</h2><span class="t-sm muted">Los 5 primeros y tú. El líder de cada momento está en 0.</span></div><a class="t-sm" href="Gap.dc.html">Ver evolución</a></div>
+      <div class="card-b">
+        <svg viewBox="0 0 1100 260" width="100%" class="chart" role="img" aria-label="Diferencia con el líder tras cada GP de los 5 primeros y tú">
+          <sc-for list="{{grid}}" as="g" hint-placeholder-count="4"><line class="gl" x1="56" x2="900" y1="{{g.y}}" y2="{{g.y}}"></line><text x="48" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+          <sc-for list="{{xl}}" as="x" hint-placeholder-count="17"><text x="{{x.x}}" y="252" text-anchor="middle">{{x.l}}</text></sc-for>
+          <sc-for list="{{lines}}" as="l" hint-placeholder-count="6"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round;stroke-linecap:round"></path><circle cx="900" cy="{{l.ey}}" r="4" style="fill:{{l.c}}"></circle><text x="912" y="{{l.ly}}" class="lbl-s" style="fill:var(--h)">{{l.name}} <tspan style="fill:var(--muted);font-weight:500">{{l.v}}</tspan></text></sc-for>
+        </svg>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1650}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, n = P.N, me = 'alex', O = P.order, lead = O[0], pos = O.indexOf(me) + 1;
+    const mv = P.pos[me][n - 2] - P.pos[me][n - 1], avg = P.total[me] / n;
+    const avgs = P.users.map((u) => P.total[u.id] / n);
+    const rows = O.slice(0, 10).map((id, i) => { const m = P.pos[id][n - 2] - P.pos[id][n - 1]; return { p: i + 1, name: P.byId[id].name + (id === me ? ' (tú)' : ''), ini: P.byId[id].ini, me: id === me ? 'you' : '', cls: id === me ? 'me' : '',
+      mv: m > 0 ? '▲' + m : m < 0 ? '▼' + (-m) : '', mc: m > 0 ? 'up' : 'dn', pts: P.total[id], gap: i === 0 ? '—' : '−' + (P.total[lead] - P.total[id]), bar: Math.round(P.total[id] / P.total[lead] * 100), bc: id === me ? 'var(--c-you)' : 'var(--brand-300)',
+      form: [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[id][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '', t: P.gps[g].name + ': ' + v + '.º' }; }) }; });
+    const ph = [130, 160, 100], ord = [1, 0, 2];
+    const podium = ord.map((i, k) => ({ name: P.byId[O[i]].name.split(' ')[0], pts: P.total[O[i]], pos: i + 1, h: ph[k], bg: i === 0 ? 'var(--primary)' : 'var(--tint)', fg: i === 0 ? 'var(--on-primary)' : 'var(--tint-fg)' }));
+    const L = n - 1, win = O.filter((id) => P.gpRank[id][L] === 1)[0];
+    // gráfico
+    const top = O.slice(0, 5); if (top.indexOf(me) < 0) top.push(me);
+    const leadAt = []; for (let g = 0; g < n; g++) leadAt[g] = Math.max.apply(null, P.users.map((u) => P.acc[u.id][g]));
+    let lo = 0; top.forEach((id) => P.acc[id].forEach((v, g) => { lo = Math.min(lo, v - leadAt[g]); }));
+    lo = Math.floor(lo / 20) * 20;
+    const X = (g) => 56 + g * (844 / (n - 1)), Y = (v) => 14 + (0 - v) / (0 - lo) * 216;
+    const hl = top.filter((id) => id !== me);
+    const lines = top.map((id) => { const d = P.acc[id].map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v - leadAt[g]).toFixed(1)).join(''); const e = P.acc[id][n - 1] - leadAt[n - 1];
+      return { d, c: P.hue(id, hl), w: id === me ? 3.5 : 2, name: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], v: e === 0 ? 'líder' : String(e).replace('-', '−'), ey: Y(e), ly: Y(e) + 4 }; }).sort((a, b) => a.ly - b.ly);
+    for (let i = 1; i < lines.length; i++) if (lines[i].ly < lines[i - 1].ly + 15) lines[i].ly = lines[i - 1].ly + 15;
+    const grid = []; for (let v = 0; v >= lo; v -= 20) grid.push({ y: Y(v), ty: Y(v) + 4, l: v === 0 ? 'Líder' : String(v).replace('-', '−') });
+    return {
+      pos, mvText: mv > 0 ? '▲ ' + mv + ' desde el GP anterior' : mv < 0 ? '▼ ' + (-mv) + ' desde el GP anterior' : '= sin cambios', mvCls: mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq',
+      total: P.total[me], gap: P.total[lead] - P.total[me], avg: avg.toFixed(1).replace('.', ','), pct: Math.round(100 * avgs.filter((x) => x < avg).length / (avgs.length - 1)),
+      wins: P.gpRank[me].filter((r) => r === 1).length, rows, podium,
+      lastWinner: P.byId[win].name + ' · ' + P.pts[win][L] + ' pts', lastMine: P.pts[me][L] + ' pts (' + P.gpRank[me][L] + '.º)', lastAvg: (P.users.reduce((a, u) => a + P.pts[u.id][L], 0) / P.users.length).toFixed(1).replace('.', ','),
+      lines, grid, xl: P.gps.slice(0, n).map((g, i) => ({ x: X(i), l: g.code }))
+    };
+  }
+}
+</script>
+</body>
+</html>

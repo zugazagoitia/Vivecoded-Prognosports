@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Crear comunidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--border-input);background:var(--surface);cursor:pointer;border:0;text-align:left;width:100%}
+.opt.on{box-shadow:inset 0 0 0 2px var(--ring);background:var(--tint)}
+.up-img{width:96px;height:96px;border-radius:16px;border:2px dashed var(--border-input);display:flex;align-items:center;justify-content:center;color:var(--muted);flex:none;background:var(--surface-muted)}
+.num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.pi{width:64px;min-height:36px;text-align:center;padding:0 6px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main lg">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="Comunidades.dc.html">Comunidades</a><span class="i">chevron_right</span><span>Crear</span></div>
+    <div class="col" style="gap:2px"><h1 class="t-title">Crear comunidad</h1><p class="muted">Cuatro pasos y listo. Después podrás cambiar la imagen y la invitación; el nombre, el acceso y las reglas quedan fijados.</p></div>
+
+    <div class="split-r">
+      <form class="col g24" onSubmit="{{noop}}" style="min-width:0">
+        <section class="card">
+          <div class="card-h"><div class="row g12"><span class="num">1</span><h2 class="t-head">Datos básicos</h2></div></div>
+          <div class="card-b row g24 wrapf" style="align-items:flex-start">
+            <div class="col g8" style="align-items:center"><div class="up-img"><span class="i s32">add_photo_alternate</span></div><button type="button" class="btn btn-outline btn-sm">Subir imagen</button><span class="help">Máx. 2 MB · JPG o PNG</span></div>
+            <div class="col g16 fx" style="min-width:260px">
+              <div class="field"><label class="lbl" for="cn">Nombre de la comunidad</label><input id="cn" class="inp" value="{{name}}" onInput="{{onName}}" maxlength="40"><span class="help tn">{{nameLen}}/40</span></div>
+              <div class="field"><label class="lbl" for="cd">Descripción</label><textarea id="cd" class="txt" placeholder="Cuéntales de qué va...">Quienes pronosticamos desde la pandemia. Reglas clásicas, cero piedad.</textarea></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><div class="row g12"><span class="num">2</span><h2 class="t-head">Quién puede entrar</h2></div></div>
+          <div class="card-b grid2" style="gap:12px">
+            <button type="button" class="opt {{oOpen}}" onClick="{{pickOpen}}"><span class="rad {{oOpen}}"></span><span class="col" style="gap:2px"><b class="hd">Abierta</b><span class="t-sm muted">Cualquiera puede unirse desde «Explorar». Aparece en el buscador.</span></span></button>
+            <button type="button" class="opt {{oClosed}}" onClick="{{pickClosed}}"><span class="rad {{oClosed}}"></span><span class="col" style="gap:2px"><b class="hd">Cerrada</b><span class="t-sm muted">Solo con código o enlace de invitación. No aparece en el buscador.</span></span></button>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><div class="row g12"><span class="num">3</span><h2 class="t-head">Competición</h2></div></div>
+          <div class="card-b grid2" style="gap:16px">
+            <div class="field"><label class="lbl" for="co">Competición</label><select id="co" class="sel"><option>Fórmula 1</option></select></div>
+            <div class="field"><label class="lbl" for="te">Temporada</label><select id="te" class="sel"><option>2026 (en curso)</option><option>2027</option></select></div>
+            <p class="t-sm muted" style="grid-column:1/-1">La comunidad juega la temporada completa con las reglas que elijas abajo.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><div class="row g12"><span class="num">4</span><h2 class="t-head">Reglas de puntuación</h2></div></div>
+          <div class="card-b col g16">
+            <div class="grid2" style="gap:12px">
+              <button type="button" class="opt {{rExist}}" onClick="{{pickExist}}"><span class="rad {{rExist}}"></span><span class="col" style="gap:2px"><b class="hd">Usar unas reglas existentes</b><span class="t-sm muted">Públicas o tuyas.</span></span></button>
+              <button type="button" class="opt {{rNew}}" onClick="{{pickNew}}"><span class="rad {{rNew}}"></span><span class="col" style="gap:2px"><b class="hd">Crear unas nuevas</b><span class="t-sm muted">Decide cuánto vale cada acierto.</span></span></button>
+            </div>
+            <sc-if value="{{isExist}}" hint-placeholder-val="{{ true }}">
+              <div class="field"><label class="lbl" for="rs">Conjunto de reglas</label><select id="rs" class="sel"><option>Clásica 2026 · pública · 5 / 3 / 1</option><option>Solo carrera · pública</option><option>Doble puntuación · de Ainhoa E.</option></select></div>
+              <div class="card flat" style="overflow:hidden"><table class="tbl tn"><thead><tr><th>Acierto</th><th class="r">Puntos</th></tr></thead><tbody><sc-for list="{{rules}}" as="r" hint-placeholder-count="8"><tr><td>{{r.n}}</td><td class="r"><b class="hd">{{r.p}}</b></td></tr></sc-for></tbody></table></div>
+            </sc-if>
+            <sc-if value="{{isNew}}" hint-placeholder-val="{{ false }}">
+              <div class="field"><label class="lbl" for="rn">Nombre de las reglas</label><input id="rn" class="inp" value="Reglas de mi peña"></div>
+              <div class="card flat" style="overflow:auto"><table class="tbl tn"><thead><tr><th>Acierto</th><th class="c">Clasificación</th><th class="c">Sprint</th><th class="c">Carrera</th></tr></thead><tbody>
+                <sc-for list="{{newRules}}" as="r" hint-placeholder-count="8"><tr><td>{{r.n}}</td><td class="c"><input class="inp pi" value="{{r.q}}" aria-label="{{r.n}} en clasificación"></td><td class="c"><input class="inp pi" value="{{r.s}}" aria-label="{{r.n}} en sprint"></td><td class="c"><input class="inp pi" value="{{r.r}}" aria-label="{{r.n}} en carrera"></td></tr></sc-for>
+              </tbody></table></div>
+              <div class="alert al-info"><span class="i">info</span><span>Máximo teórico por sesión: 25 en clasificación, 25 en sprint y 40 en carrera. Se actualiza mientras editas.</span></div>
+            </sc-if>
+          </div>
+        </section>
+
+        <div class="row end g12"><a class="btn btn-outline" href="Comunidades.dc.html">Cancelar</a><button type="submit" class="btn btn-primary btn-lg">Crear comunidad</button></div>
+      </form>
+
+      <aside class="card sticky" style="min-width:0">
+        <div class="card-h"><h2 class="t-head">Vista previa</h2></div>
+        <div class="card-b col g12">
+          <div class="row"><span class="av s56 you">{{ini}}</span><div class="col" style="gap:0"><b class="hd t-head">{{name}}</b><span class="t-sm muted">por Álex Ruiz · ahora</span></div></div>
+          <div class="row g8 wrapf"><span class="tag {{ptg}}"><span class="i s16">{{picon}}</span>{{priv}}</span><span class="tag tg-gray">1 jugador</span><span class="tag tg-gray">Fórmula 1 · 2026</span></div>
+          <hr class="hr">
+          <div class="col g8"><span class="up">Después de crearla</span>
+            <div class="rowt"><span class="i s16" style="color:var(--ok)">check_circle</span><span class="t-sm">Recibes un enlace de invitación para copiar.</span></div>
+            <div class="rowt"><span class="i s16" style="color:var(--ok)">check_circle</span><span class="t-sm">Quedas como creador: puedes cambiar la imagen y regenerar la invitación.</span></div>
+            <div class="rowt"><span class="i s16" style="color:var(--ok)">check_circle</span><span class="t-sm">Puedes pronosticar el próximo GP al momento.</span></div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, name = s.name === undefined ? 'Los del paddock' : s.name;
+    const open = !!s.open, nw = !!s.nw;
+    return {
+      name: name || 'Tu comunidad', nameLen: name.length, onName: (e) => this.setState({ name: e.target.value }),
+      ini: (name || 'TC').split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase(),
+      noop: (e) => { if (e && e.preventDefault) e.preventDefault(); },
+      oOpen: open ? 'on' : '', oClosed: open ? '' : 'on', pickOpen: () => this.setState({ open: true }), pickClosed: () => this.setState({ open: false }),
+      priv: open ? 'Abierta' : 'Cerrada', picon: open ? 'public' : 'lock', ptg: open ? 'tg-ok' : 'tg-brand',
+      rExist: nw ? '' : 'on', rNew: nw ? 'on' : '', pickExist: () => this.setState({ nw: false }), pickNew: () => this.setState({ nw: true }), isExist: !nw, isNew: nw,
+      rules: P.rules.map((r) => ({ n: r[0], p: r[1] })),
+      newRules: [['Posición exacta', 5, 5, 5], ['Posición siguiente', 3, 3, 3], ['Posición anterior', 3, 3, 3], ['Siguiente de la siguiente', 1, 1, 1], ['Anterior de la anterior', 1, 1, 1], ['Del podio, fuera del podio', 0, 0, 0], ['Fuera de resultados', 0, 0, 0], ['Bonus del GP', 5, 5, 5]].map((r) => ({ n: r[0], q: r[1], s: r[2], r: r[3] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

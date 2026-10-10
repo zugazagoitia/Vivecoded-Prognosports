@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clasificación móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.mine{background:var(--primary);color:var(--on-primary);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.rw{width:100%;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 12px;border:0;border-top:1px solid var(--border);background:var(--surface);font:inherit;text-align:left;cursor:pointer;color:inherit}
+.rw.me{background:var(--tint)}
+.det{padding:4px 12px 14px 50px;display:flex;flex-direction:column;gap:10px}
+.det.me{background:var(--tint)}
+.sel2{display:flex;gap:8px}
+</style>
+</helmet>
+<div class="mroot" style="min-height:1600px">
+  <dc-import name="MobileBar" title="Ranking" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="sel2"><label class="sr" for="mc">Comunidad</label><select id="mc" class="sel fx" style="min-height:44px"><option>Amigos del paddock</option><option>Oficina F1</option></select><label class="sr" for="ms">Temporada</label><select id="ms" class="sel" style="width:auto;min-height:44px"><option>2026</option><option>2025</option></select></div>
+    <div class="seg" role="group" aria-label="Vista" style="width:100%"><sc-for list="{{tabs}}" as="t" hint-placeholder-count="3"><button type="button" class="sg fx {{t.cls}}" onClick="{{t.pick}}" style="justify-content:center;min-height:40px">{{t.l}}</button></sc-for></div>
+    <div class="mine"><b style="font-size:30px;line-height:36px" class="tn">{{pos}}.º</b><span class="col fx" style="gap:0"><b>Tu posición</b><span class="t-sm" style="opacity:.85">a {{gap}} pts del líder · {{mvText}}</span></span><b class="tn" style="font-size:18px">{{total}}</b></div>
+
+    <sc-if value="{{t0}}" hint-placeholder-val="{{ true }}">
+      <section class="card" style="overflow:hidden">
+        <div class="row t-cap muted" style="padding:8px 12px;gap:10px"><span style="width:28px">POS.</span><span class="fx">JUGADOR</span><span style="width:56px;text-align:right">PUNTOS</span><span style="width:20px"></span></div>
+        <sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+          <button type="button" class="rw {{r.cls}}" onClick="{{r.pick}}" aria-expanded="{{r.open}}"><b class="tn" style="width:28px;font-size:15px">{{r.pos}}</b><span class="col fx" style="gap:0;min-width:0"><b class="hd ell" style="font-size:15px">{{r.name}}</b><span class="t-cap muted">{{r.gap}} <span class="mv {{r.mc}}">{{r.mv}}</span></span></span><b class="tn" style="width:56px;text-align:right">{{r.total}}</b><span class="i s16 muted">{{r.chev}}</span></button>
+          <sc-if value="{{r.open}}" hint-placeholder-val="{{ false }}"><div class="det {{r.cls}}"><div class="grid3" style="gap:8px"><div class="col" style="gap:0"><span class="up">Media</span><b class="hd">{{r.avg}}</b></div><div class="col" style="gap:0"><span class="up">Vict.</span><b class="hd">{{r.wins}}</b></div><div class="col" style="gap:0"><span class="up">Forma</span><span class="form"><sc-for list="{{r.form}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}">{{f.v}}</b></sc-for></span></div></div><div class="mbars" style="height:44px" role="img" aria-label="Puntos por GP"><sc-for list="{{r.bars}}" as="b" hint-placeholder-count="17"><i class="{{b.c}}" style="height:{{b.h}}%"></i></sc-for></div><span class="t-cap muted">Puntos en cada GP · AUS → AZE</span></div></sc-if>
+        </sc-for>
+      </section>
+    </sc-if>
+    <sc-if value="{{t1}}" hint-placeholder-val="{{ false }}">
+      <section class="card card-b col g8"><b class="hd">Diferencia con el líder</b>
+        <svg viewBox="0 0 340 200" width="100%" class="chart" role="img" aria-label="Diferencia con el líder de los 5 primeros y tú"><line class="ax" x1="4" x2="280" y1="10" y2="10"></line><sc-for list="{{lines}}" as="l" hint-placeholder-count="6"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round"></path><text x="286" y="{{l.y}}" class="lbl-s" style="fill:var(--h);font-size:11px">{{l.n}}</text></sc-for></svg>
+        <a class="btn btn-soft btn-sm" href="Gap.dc.html">Ver todas las vistas</a></section>
+    </sc-if>
+    <sc-if value="{{t2}}" hint-placeholder-val="{{ false }}">
+      <section class="card"><div class="tw"><table class="tbl tn"><thead><tr><th>Jugador</th><sc-for list="{{heads}}" as="h" hint-placeholder-count="5"><th class="c">{{h}}</th></sc-for></tr></thead><tbody><sc-for list="{{matrix}}" as="r" hint-placeholder-count="12"><tr class="{{r.cls}}"><td><b class="hd">{{r.name}}</b></td><sc-for list="{{r.cells}}" as="c" hint-placeholder-count="5"><td class="c {{c.k}}" style="border-radius:4px">{{c.v}}</td></sc-for></tr></sc-for></tbody></table></div><div class="card-f" style="justify-content:flex-start"><span class="t-cap muted">Últimos 5 GP · desliza para ver más</span></div></section>
+    </sc-if>
+  </div>
+  <dc-import name="TabBar" active="ranking" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, O = P.order, me = 'alex', t = s.t || 0, open = s.open === undefined ? me : s.open, lead = O[0];
+    const mv = P.pos[me][n - 2] - P.pos[me][n - 1];
+    const rows = O.map((id, i) => { const m = P.pos[id][n - 2] - P.pos[id][n - 1], isO = open === id, mxv = Math.max.apply(null, P.pts[id]); return { pos: i + 1, name: P.byId[id].name + (id === me ? ' (tú)' : ''), cls: id === me ? 'me' : '', gap: i === 0 ? 'Líder' : '−' + (P.total[lead] - P.total[id]) + ' del líder', mv: m > 0 ? '▲' + m : m < 0 ? '▼' + (-m) : '', mc: m > 0 ? 'up' : 'dn', total: P.total[id], open: isO, chev: isO ? 'expand_less' : 'expand_more',
+      avg: (P.total[id] / n).toFixed(1).replace('.', ','), wins: P.gpRank[id].filter((x) => x === 1).length, form: [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[id][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '' }; }),
+      bars: P.pts[id].map((v, g) => ({ h: Math.round(v / mxv * 100), c: P.gpRank[id][g] === 1 ? 'w' : '' })), pick: () => this.setState({ open: isO ? null : id }) }; });
+    const leadAt = []; for (let g = 0; g < n; g++) leadAt[g] = Math.max.apply(null, P.users.map((u) => P.acc[u.id][g]));
+    const sel = O.slice(0, 5); if (sel.indexOf(me) < 0) sel.push(me); const hl = sel.filter((id) => id !== me);
+    let lo = 0; sel.forEach((id) => P.acc[id].forEach((v, g) => { lo = Math.min(lo, v - leadAt[g]); }));
+    const X = (g) => 4 + g * 276 / (n - 1), Y = (v) => 10 + v / lo * 180;
+    const lines = sel.map((id) => { const e = P.acc[id][n - 1] - leadAt[n - 1]; return { d: P.acc[id].map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v - leadAt[g]).toFixed(1)).join(''), c: P.hue(id, hl), w: id === me ? 3 : 1.8, n: id === me ? 'Tú' : P.byId[id].name.split(' ')[0], y: Y(e) + 4 }; }).sort((a, b) => a.y - b.y);
+    for (let i = 1; i < lines.length; i++) if (lines[i].y < lines[i - 1].y + 13) lines[i].y = lines[i - 1].y + 13;
+    return {
+      tabs: ['Clasificación', 'Evolución', 'Por GP'].map((l, i) => ({ l, cls: i === t ? 'on' : '', pick: () => this.setState({ t: i }) })), t0: t === 0, t1: t === 1, t2: t === 2,
+      pos: O.indexOf(me) + 1, gap: P.total[lead] - P.total[me], total: P.total[me], mvText: mv > 0 ? '▲ ' + mv : mv < 0 ? '▼ ' + (-mv) : 'sin cambios', rows, lines,
+      heads: P.gps.slice(n - 5, n).map((g) => g.code), matrix: O.map((id) => ({ name: P.byId[id].name.split(' ')[0], cls: id === me ? 'me' : '', cells: P.pts[id].slice(n - 5).map((v, k) => ({ v, k: P.gpRank[id][n - 5 + k] === 1 ? 'sq6' : '' })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

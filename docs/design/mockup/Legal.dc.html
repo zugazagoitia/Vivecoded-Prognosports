@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Términos y privacidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.prose h2{font-size:20px;line-height:28px;font-weight:600;color:var(--h);margin:24px 0 8px}.prose h2:first-child{margin-top:0}.prose p{margin:0 0 12px}.ph{display:inline-block;background:var(--warn-tint);color:var(--warn-fg);border-radius:4px;padding:0 6px;font-weight:600}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" user="out" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main md">
+    <div class="crumb"><a href="Landing.dc.html">Inicio</a><span class="i">chevron_right</span><span>{{title}}</span></div>
+    <div class="col g8"><h1 class="t-title">{{title}}</h1><p class="muted">Última actualización: <span class="ph">[FECHA]</span></p></div>
+    <div class="tabs"><button type="button" class="tab {{c0}}" onClick="{{pick0}}">Términos de uso</button><button type="button" class="tab {{c1}}" onClick="{{pick1}}">Privacidad</button></div>
+    <div class="card card-b prose">
+      <sc-if value="{{t0}}" hint-placeholder-val="{{ true }}">
+        <h2>1. Quiénes somos</h2><p><span class="ph">[DATOS DEL RESPONSABLE]</span> Servicio gratuito para pronosticar resultados de carreras entre amigos. No es una casa de apuestas ni ofrece premios en dinero.</p>
+        <h2>2. Tu cuenta</h2><p>Eres responsable de la contraseña y de lo que se haga con tu cuenta. Debes tener la edad mínima de uso: <span class="ph">[EDAD MÍNIMA]</span>.</p>
+        <h2>3. Reglas de convivencia</h2><p>Los nombres, imágenes y descripciones de comunidades y perfiles deben respetar a los demás. Podemos retirar contenido que no lo haga.</p>
+        <h2>4. Puntos y rankings</h2><p>Los puntos los calcula la plataforma según las reglas de cada comunidad. Si hay un error, lo corregiremos y recalcularemos los puntos afectados.</p>
+        <h2>5. Cambios en el servicio</h2><p>PrognoSports está en beta: puede cambiar o dejar de estar disponible. Avisaremos de los cambios importantes.</p>
+      </sc-if>
+      <sc-if value="{{t1}}" hint-placeholder-val="{{ false }}">
+        <h2>1. Qué datos guardamos</h2><p>Nombre de usuario, correo, contraseña cifrada, tus pronósticos y, si lo añades, imagen, biografía, localización y zona horaria.</p>
+        <h2>2. Para qué los usamos</h2><p>Para que funcione el juego, enviarte los avisos que elijas por correo o Telegram y calcular rankings.</p>
+        <h2>3. Con quién los compartimos</h2><p>Los miembros de tus comunidades ven tu nombre, tu avatar y tus puntos. No vendemos datos. Proveedores: <span class="ph">[LISTA DE PROVEEDORES]</span>.</p>
+        <h2>4. Tus derechos</h2><p>Puedes acceder, corregir o pedir la eliminación de tus datos escribiendo a <span class="ph">[CORREO DE CONTACTO]</span>.</p>
+        <h2>5. Cookies y almacenamiento</h2><p>Guardamos tu sesión y tu preferencia de tema en el navegador. No usamos cookies publicitarias.</p>
+      </sc-if>
+    </div>
+    <p class="note">Los textos legales son marcadores de posición hasta que se redacten y revisen.</p>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const i = (this.state && this.state.i) || 0;
+    return { title: i === 0 ? 'Términos de uso' : 'Política de privacidad', t0: i === 0, t1: i === 1, c0: i === 0 ? 'on' : '', c1: i === 1 ? 'on' : '', pick0: () => this.setState({ i: 0 }), pick1: () => this.setState({ i: 1 }) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1447 @@
+{
+ "v": 3,
+ "attachments": {},
+ "boards": {
+  "AciertosTipo.dc.html": {
+   "expand": "fill",
+   "h": 1150,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R11 · Aciertos por tipo",
+   "w": 1440,
+   "x": 1520,
+   "y": 5780
+  },
+  "AdminCalculos.dc.html": {
+   "expand": "fill",
+   "h": 1000,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M13 · Cálculo de puntos",
+   "w": 1440,
+   "x": 0,
+   "y": 9920
+  },
+  "AdminCircuitoEditar.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M7 · Editar circuito",
+   "w": 1440,
+   "x": 0,
+   "y": 5160
+  },
+  "AdminCircuitos.dc.html": {
+   "expand": "fill",
+   "h": 1200,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M6 · Circuitos",
+   "w": 1440,
+   "x": 1520,
+   "y": 3240
+  },
+  "AdminComunidades.dc.html": {
+   "expand": "fill",
+   "h": 1000,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M11 · Comunidades",
+   "w": 1440,
+   "x": 0,
+   "y": 8600
+  },
+  "AdminGPEditar.dc.html": {
+   "expand": "fill",
+   "h": 1900,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M3 · Editar Gran Premio",
+   "w": 1440,
+   "x": 0,
+   "y": 1420
+  },
+  "AdminGPs.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M2 · Grandes Premios",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "AdminMovil.dc.html": {
+   "h": 1600,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M1m · Admin móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "AdminNotificaciones.dc.html": {
+   "expand": "fill",
+   "h": 1100,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M12 · Enviar notificaciones",
+   "w": 1440,
+   "x": 1520,
+   "y": 8600
+  },
+  "AdminPanel.dc.html": {
+   "expand": "fill",
+   "h": 1100,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M1 · Panel de administración",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "AdminPilotos.dc.html": {
+   "expand": "fill",
+   "h": 1900,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M8 · Pilotos y equipos",
+   "w": 1440,
+   "x": 1520,
+   "y": 5160
+  },
+  "AdminPilotosGP.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M4 · Pilotos del Gran Premio",
+   "w": 1440,
+   "x": 1520,
+   "y": 1420
+  },
+  "AdminReglas.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M9 · Reglas de puntuación",
+   "w": 1440,
+   "x": 0,
+   "y": 6680
+  },
+  "AdminSesiones.dc.html": {
+   "expand": "fill",
+   "h": 1400,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M5 · Sesiones y resultados",
+   "w": 1440,
+   "x": 0,
+   "y": 3240
+  },
+  "AdminSide.dc.html": {
+   "h": 760,
+   "page": "piezas",
+   "title": "Menú de administración",
+   "w": 280,
+   "x": 1520,
+   "y": 0
+  },
+  "AdminUsuarios.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "admin",
+   "title": "M10 · Usuarios (solo lectura)",
+   "w": 1440,
+   "x": 1520,
+   "y": 6680
+  },
+  "Ajustes.dc.html": {
+   "expand": "fill",
+   "h": 2400,
+   "is_interactive": true,
+   "page": "perfil",
+   "title": "U3 · Ajustes de cuenta",
+   "w": 1440,
+   "x": 0,
+   "y": 1720
+  },
+  "AjustesMovil.dc.html": {
+   "h": 1900,
+   "is_interactive": true,
+   "page": "perfil",
+   "title": "U3m · Ajustes móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 1920
+  },
+  "AppNav.dc.html": {
+   "h": 56,
+   "page": "piezas",
+   "title": "Barra superior",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Bump.dc.html": {
+   "expand": "fill",
+   "h": 1250,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R6 · Posición en la general",
+   "w": 1440,
+   "x": 1520,
+   "y": 4410
+  },
+  "CaraACara.dc.html": {
+   "expand": "fill",
+   "h": 1350,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R8 · Cara a cara",
+   "w": 1440,
+   "x": 1520,
+   "y": 7050
+  },
+  "CircuitoDetalle.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "publico",
+   "title": "P4 · Detalle de circuito",
+   "w": 1440,
+   "x": 1520,
+   "y": 2620
+  },
+  "Circuitos.dc.html": {
+   "expand": "fill",
+   "h": 1600,
+   "is_interactive": true,
+   "page": "publico",
+   "title": "P3 · Circuitos",
+   "w": 1440,
+   "x": 0,
+   "y": 2620
+  },
+  "Clasificacion.dc.html": {
+   "expand": "fill",
+   "h": 1500,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R1 · Clasificación",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "ClasificacionMovil.dc.html": {
+   "h": 1600,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R1m · Clasificación móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "Componentes.dc.html": {
+   "expand": "fill",
+   "h": 3000,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "02 · Componentes",
+   "w": 1440,
+   "x": 0,
+   "y": 1820
+  },
+  "ComunidadAjustes.dc.html": {
+   "expand": "fill",
+   "h": 2000,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H6 · Ajustes de la comunidad",
+   "w": 1440,
+   "x": 1520,
+   "y": 3340
+  },
+  "ComunidadHome.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H5 · Comunidad",
+   "w": 1440,
+   "x": 0,
+   "y": 3340
+  },
+  "Comunidades.dc.html": {
+   "expand": "fill",
+   "h": 1600,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H2 · Mis comunidades",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Consistencia.dc.html": {
+   "expand": "fill",
+   "h": 1150,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R7 · Regularidad",
+   "w": 1440,
+   "x": 0,
+   "y": 7050
+  },
+  "CrearComunidad.dc.html": {
+   "expand": "fill",
+   "h": 1400,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H4 · Crear comunidad",
+   "w": 1440,
+   "x": 1520,
+   "y": 1820
+  },
+  "Distribucion.dc.html": {
+   "expand": "fill",
+   "h": 1150,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R9 · Distribución de puntos",
+   "w": 1440,
+   "x": 0,
+   "y": 3140
+  },
+  "Estados.dc.html": {
+   "expand": "fill",
+   "h": 2000,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "05 · Estados del sistema",
+   "w": 1440,
+   "x": 1520,
+   "y": 4240
+  },
+  "Explorar.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H3 · Explorar comunidades",
+   "w": 1440,
+   "x": 0,
+   "y": 1820
+  },
+  "FAQ.dc.html": {
+   "expand": "fill",
+   "h": 1400,
+   "is_interactive": true,
+   "page": "publico",
+   "title": "P5 · Preguntas frecuentes",
+   "w": 1440,
+   "x": 0,
+   "y": 4440
+  },
+  "Flags.dc.html": {
+   "expand": "fill",
+   "h": 1100,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "06 · Feature flags",
+   "w": 1440,
+   "x": 0,
+   "y": 6060
+  },
+  "Fundamentos.dc.html": {
+   "expand": "fill",
+   "h": 2200,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "01 · Fundamentos",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "GPDetalle.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G2 · Fin de semana de carrera",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "GPDetalleMovil.dc.html": {
+   "h": 1800,
+   "page": "gp",
+   "title": "G2m · Fin de semana móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 2020
+  },
+  "GPLista.dc.html": {
+   "expand": "fill",
+   "h": 2000,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G1 · Grandes Premios",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Gap.dc.html": {
+   "expand": "fill",
+   "h": 1250,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R5 · Diferencia de puntos",
+   "w": 1440,
+   "x": 0,
+   "y": 4410
+  },
+  "Graficos.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "04 · Lenguaje de gráficos",
+   "w": 1440,
+   "x": 0,
+   "y": 4240
+  },
+  "HeatmapGP.dc.html": {
+   "expand": "fill",
+   "h": 1150,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R10 · Mapa de calor por GP",
+   "w": 1440,
+   "x": 1520,
+   "y": 1770
+  },
+  "Inicio.dc.html": {
+   "expand": "fill",
+   "h": 1800,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H1 · Inicio",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "InicioMovil.dc.html": {
+   "h": 1800,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H1m · Inicio móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "Invitacion.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "is_interactive": true,
+   "page": "inicio",
+   "title": "H7 · Invitación",
+   "w": 1440,
+   "x": 0,
+   "y": 5460
+  },
+  "Landing.dc.html": {
+   "expand": "fill",
+   "h": 2500,
+   "is_interactive": true,
+   "page": "publico",
+   "title": "P1 · Landing",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "LandingMovil.dc.html": {
+   "h": 2800,
+   "page": "publico",
+   "title": "P1m · Landing móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "Legal.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "page": "publico",
+   "title": "P6 · Términos y privacidad",
+   "w": 1440,
+   "x": 1520,
+   "y": 4440
+  },
+  "Login.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "is_interactive": true,
+   "page": "auth",
+   "title": "A1 · Iniciar sesión",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "LoginMovil.dc.html": {
+   "h": 844,
+   "page": "auth",
+   "title": "A1m · Iniciar sesión móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "Main.dc.html": {
+   "expand": "fill",
+   "h": 1500,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "00 · Portada y mapa",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "Matriz.dc.html": {
+   "expand": "fill",
+   "h": 1250,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R2 · Puntos por Gran Premio",
+   "w": 1440,
+   "x": 0,
+   "y": 1770
+  },
+  "MiTemporada.dc.html": {
+   "expand": "fill",
+   "h": 1250,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R3 · Mi temporada",
+   "w": 1440,
+   "x": 0,
+   "y": 8520
+  },
+  "MobileBar.dc.html": {
+   "h": 56,
+   "page": "piezas",
+   "title": "Cabecera móvil",
+   "w": 390,
+   "x": 1920,
+   "y": 192
+  },
+  "Navegacion.dc.html": {
+   "expand": "fill",
+   "h": 2200,
+   "is_interactive": true,
+   "page": "guia",
+   "title": "03 · Navegación",
+   "w": 1440,
+   "x": 1520,
+   "y": 1820
+  },
+  "Notificaciones.dc.html": {
+   "expand": "fill",
+   "h": 1300,
+   "is_interactive": true,
+   "page": "perfil",
+   "title": "U4 · Notificaciones",
+   "w": 1440,
+   "x": 1520,
+   "y": 1720
+  },
+  "Palmares.dc.html": {
+   "expand": "fill",
+   "h": 1250,
+   "is_interactive": true,
+   "page": "ranking",
+   "title": "R4 · Palmarés",
+   "w": 1440,
+   "x": 1520,
+   "y": 8520
+  },
+  "ParrillaComunidad.dc.html": {
+   "expand": "fill",
+   "h": 1500,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G4 · Parrilla y consenso",
+   "w": 1440,
+   "x": 1520,
+   "y": 1920
+  },
+  "Perfil.dc.html": {
+   "expand": "fill",
+   "h": 1450,
+   "is_interactive": true,
+   "page": "perfil",
+   "title": "U1 · Mi perfil",
+   "w": 1440,
+   "x": 0,
+   "y": 0
+  },
+  "PerfilMovil.dc.html": {
+   "h": 1500,
+   "page": "perfil",
+   "title": "U1m · Perfil móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "PerfilUsuario.dc.html": {
+   "expand": "fill",
+   "h": 1350,
+   "is_interactive": true,
+   "page": "perfil",
+   "title": "U2 · Perfil de otro usuario",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Pronosticar.dc.html": {
+   "expand": "fill",
+   "h": 1700,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G3 · Pronosticar",
+   "w": 1440,
+   "x": 0,
+   "y": 1920
+  },
+  "PronosticarMovil.dc.html": {
+   "h": 1500,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G3m · Pronosticar móvil",
+   "w": 390,
+   "x": 3040,
+   "y": 0
+  },
+  "Recuperar.dc.html": {
+   "expand": "fill",
+   "h": 800,
+   "is_interactive": true,
+   "page": "auth",
+   "title": "A3 · Recuperar contraseña",
+   "w": 1440,
+   "x": 0,
+   "y": 1220
+  },
+  "Registro.dc.html": {
+   "expand": "fill",
+   "h": 1100,
+   "is_interactive": true,
+   "page": "auth",
+   "title": "A2 · Registro",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Reglas.dc.html": {
+   "expand": "fill",
+   "h": 1900,
+   "is_interactive": true,
+   "page": "publico",
+   "title": "P2 · Cómo se puntúa",
+   "w": 1440,
+   "x": 1520,
+   "y": 0
+  },
+  "Restablecer.dc.html": {
+   "expand": "fill",
+   "h": 800,
+   "is_interactive": true,
+   "page": "auth",
+   "title": "A4 · Nueva contraseña",
+   "w": 1440,
+   "x": 1520,
+   "y": 1220
+  },
+  "Resultados.dc.html": {
+   "expand": "fill",
+   "h": 1500,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G5 · Resultados y puntos",
+   "w": 1440,
+   "x": 0,
+   "y": 3740
+  },
+  "Simulador.dc.html": {
+   "expand": "fill",
+   "h": 1500,
+   "is_interactive": true,
+   "page": "gp",
+   "title": "G6 · Simulador de puntos",
+   "w": 1440,
+   "x": 1520,
+   "y": 3740
+  },
+  "SiteFooter.dc.html": {
+   "h": 260,
+   "page": "piezas",
+   "title": "Pie de página",
+   "w": 1440,
+   "x": 0,
+   "y": 192
+  },
+  "TabBar.dc.html": {
+   "h": 64,
+   "page": "piezas",
+   "title": "Tab bar móvil",
+   "w": 390,
+   "x": 1920,
+   "y": 0
+  },
+  "Verificar.dc.html": {
+   "expand": "fill",
+   "h": 800,
+   "is_interactive": true,
+   "page": "auth",
+   "title": "A5 · Verificación de correo",
+   "w": 1440,
+   "x": 0,
+   "y": 2140
+  },
+  "RankNav.dc.html": {
+   "w": 1440,
+   "h": 180,
+   "page": "piezas",
+   "title": "Cabecera del ranking",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 0,
+   "y": 612
+  },
+  "RankingResumen.dc.html": {
+   "w": 1440,
+   "h": 1650,
+   "page": "ranking",
+   "title": "R0 · Ranking · resumen",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 0,
+   "y": 0
+  },
+  "Titulo.dc.html": {
+   "w": 1440,
+   "h": 1150,
+   "page": "ranking",
+   "title": "R12 · Lucha por el título",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 0,
+   "y": 5780
+  },
+  "Sesiones.dc.html": {
+   "w": 1440,
+   "h": 1150,
+   "page": "ranking",
+   "title": "R13 · Puntos por sesión",
+   "expand": "fill",
+   "is_interactive": true,
+   "x": 1520,
+   "y": 3140
+  }
+ },
+ "createdOnFiles": {
+  "at": "2026-10-10T12:00:00Z",
+  "v": 1
+ },
+ "designSystems": [
+  {
+   "artifact": "https://claude.ai/code/artifact/04dd0b16-d23e-45b6-a9cb-5c20f048150f",
+   "copiedAt": "2026-10-10T12:00:00Z",
+   "namespace": "prognosports",
+   "title": "PrognoSports Design System",
+   "version": "1791622920-a2be"
+  }
+ ],
+ "launch": {
+  "page": "guia",
+  "view": "canvas"
+ },
+ "notes": {
+  "r_AciertosTipo": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R11 · Aciertos por tipo\nRehecho con hitsBySession (tipos de sesión reales): totales apilados, % por sesión con el mejor resaltado y tú frente a la media; tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 6240
+  },
+  "r_AdminGPEditar": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M3 · Editar Gran Premio\nÍndice de secciones con estado, validaciones del GP, interruptor de visibilidad, barra de guardado fija, ‹ anterior · siguiente › y Ver como usuario.",
+   "w": 420,
+   "x": 3520,
+   "y": 1420
+  },
+  "r_AdminGPs": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M2 · Grandes Premios\nColumna de preparación con iconos (datos, sesiones, pilotos, imagen, resultados) y filtros Todos / Incompletos / Próximos.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_AdminNotificaciones": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M12 · Enviar notificaciones\nSolo correo y Telegram, los 5 tipos de la API, vista previa y envíos automáticos.",
+   "w": 420,
+   "x": 3520,
+   "y": 9040
+  },
+  "r_AdminPanel": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M1 · Panel de administración\nLista de preparación del próximo GP con 6 comprobaciones y enlace directo a cada pantalla; contadores de la temporada.",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_AdminPilotosGP": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M4 · Pilotos del Gran Premio\nBolsa de pilotos + huecos por equipo con asignación en dos clics, clonar del GP anterior, cambios resaltados y contador 22/22.",
+   "w": 420,
+   "x": 3520,
+   "y": 1860
+  },
+  "r_AdminReglas": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M9 · Reglas de puntuación\nConjuntos de reglas con los 8 conceptos × 4 sesiones, usos y excepciones por GP; borrar desactivado si está en uso.",
+   "w": 420,
+   "x": 3520,
+   "y": 6680
+  },
+  "r_AdminSesiones": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "admin",
+   "text": "Aplicado · M5 · Sesiones y resultados\nPestañas Calendario (línea temporal con cierre y hora del circuito), Parrilla (pit lane, nota, avisar) y Resultados (1..N y vuelta rápida informativa).",
+   "w": 420,
+   "x": 3520,
+   "y": 3240
+  },
+  "r_Ajustes": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "perfil",
+   "text": "Aplicado · U3 · Ajustes de cuenta\nCampos reales de la API (bio, localización, nacimiento, zona horaria), correo y contraseña, sesiones abiertas con cierre, Telegram, matriz de 5 avisos × correo/Telegram, barra de guardado fija y secciones pendientes de confirmar marcadas.",
+   "w": 420,
+   "x": 3520,
+   "y": 1720
+  },
+  "r_AjustesMovil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "perfil",
+   "text": "Aplicado · U3m · Ajustes móvil\nMismos tipos y canales que en escritorio, con chips de canal accesibles.",
+   "w": 420,
+   "x": 3980,
+   "y": 1920
+  },
+  "r_Bump": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R6 · Posición en la general\nFoco Top 5 / Mi entorno / Todos, chips para resaltar hasta 5, curvas o rectas, GP fijable y panel con la clasificación de ese momento.",
+   "w": 420,
+   "x": 3520,
+   "y": 4870
+  },
+  "r_CaraACara": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R8 · Cara a cara\nChips de rival, marcador de duelos, barras divergentes por GP, diferencia acumulada en área, comparativa en espejo y tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 7510
+  },
+  "r_CircuitoDetalle": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "publico",
+   "text": "Aplicado · P4 · Detalle de circuito\nTu historial aquí: puntos y puesto por temporada en este trazado, tu media aquí frente a la de la temporada.",
+   "w": 420,
+   "x": 3520,
+   "y": 3060
+  },
+  "r_Clasificacion": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R1 · Clasificación\nTabla densa con movimiento, forma de 5 GP, minigráfico de posición, diferencias, media, victorias, podios y aciertos; cabeceras ordenables; fila expandible con barras por GP frente a la media; filtro «solo mi entorno»; cabecera común del ranking con pestañas y vistas.",
+   "w": 420,
+   "x": 3520,
+   "y": 460
+  },
+  "r_ClasificacionMovil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R1m · Clasificación móvil\nTarjeta con tu puesto, selectores, 3 vistas (clasificación expandible con forma y minibarras, evolución, matriz de los últimos 5 GP).",
+   "w": 420,
+   "x": 3980,
+   "y": 0
+  },
+  "r_Componentes": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 02 · Componentes\nNueva sección Piezas de datos: forma, movimiento, celdas de acierto, progreso, huecos, validaciones, eje pulsable + panel, chips, barra de guardado y hoja inferior. Tabla con forma y movimiento reales.",
+   "w": 420,
+   "x": 3520,
+   "y": 1820
+  },
+  "r_ComunidadHome": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "inicio",
+   "text": "Aplicado · H5 · Comunidad\nRol «Creador», ranking con movimiento y forma, estado de pronósticos de cada miembro para Singapur, bloque del GP en curso y ganador del último GP. Reglas con 8 conceptos.",
+   "w": 420,
+   "x": 3520,
+   "y": 3340
+  },
+  "r_Comunidades": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "inicio",
+   "text": "Aplicado · H2 · Mis comunidades\nNueva sección «Tú en todas tus comunidades» por percentil con el resto de miembros, evolución y tendencia; resumen de dónde te va mejor; pronósticos pendientes por comunidad en cada tarjeta.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_Consistencia": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R7 · Regularidad\nDispersión media × regularidad con cuadrantes nombrados, puntos pulsables (botones reales), panel de detalle, modo puntos o aciertos y tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 7050
+  },
+  "r_CrearComunidad": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "inicio",
+   "text": "Aplicado · H4 · Crear comunidad\nTabla con los 8 conceptos por sesión y texto honesto sobre lo que se podrá cambiar después (la API no permite editar nombre ni reglas).",
+   "w": 420,
+   "x": 3520,
+   "y": 2260
+  },
+  "r_Distribucion": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R9 · Distribución de puntos\nHistograma de todas las puntuaciones con las tuyas encima y ambas medianas; vista por jugador (distribuciones apiladas); vista de tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 3140
+  },
+  "r_Estados": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 05 · Estados del sistema\nLos 3 estados de una sesión interactivos (abierta con ajenos ocultos, cerrada, con resultados) con línea temporal.",
+   "w": 420,
+   "x": 3520,
+   "y": 4680
+  },
+  "r_Flags": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 06 · Feature flags\n12 flags con Lucha por el título, Puntos por sesión y Percentil entre comunidades; vista previa de las pestañas del ranking según flags.",
+   "w": 420,
+   "x": 3520,
+   "y": 6060
+  },
+  "r_Fundamentos": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 01 · Fundamentos\nSección Foco + contexto interactiva (tú morado, 5 resaltados fijos, resto gris, etiquetas directas) y escala secuencial .sq1–.sq7.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_GPDetalle": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G2 · Fin de semana de carrera\nNavegación entre GP, línea de sesiones con estado y selección, panel de tu pronóstico por sesión con puntos, parrilla escalonada con pit lane, comunidad, historial en el circuito y reglas.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_GPDetalleMovil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G2m · Fin de semana móvil\nProgreso de pronósticos, secciones plegables de parrilla, consenso y circuito con tu historial.",
+   "w": 420,
+   "x": 3980,
+   "y": 2020
+  },
+  "r_GPLista": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G1 · Grandes Premios\nTodos por defecto agrupados por mes, banda del GP actual con tus pronósticos pendientes, puntos y puesto en cada GP disputado, contador por filtro y vacío con «Quitar filtros».",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_Gap": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R5 · Diferencia de puntos\n4 modos (líder, contigo, acumulado, ritmo), marcas de cambio de líder, bandas por delante/por detrás, eje de GP pulsable con panel de valores y vista de tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 4410
+  },
+  "r_Graficos": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 04 · Lenguaje de gráficos\nGráfico de ejemplo con modos (Acumulado / Por GP), eje X pulsable que fija un GP y panel fijo. Reglas de interacción actualizadas.",
+   "w": 420,
+   "x": 3520,
+   "y": 4240
+  },
+  "r_HeatmapGP": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R10 · Mapa de calor por GP\nMapa jugadores × GP en escala de un tono con 3 métricas, orden por puntos o regularidad, borde dorado al ganador, total o σ al lado y fila de mediana por GP como dificultad.",
+   "w": 420,
+   "x": 3520,
+   "y": 2230
+  },
+  "r_Inicio": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "inicio",
+   "text": "Aplicado · H1 · Inicio\nCentro de mando: próximo GP con tus 4 sesiones accionables (fecha, cuenta atrás, estado y botón), progreso 2 de 4, quién ya ha pronosticado; KPI con media y GP ganados; tu entorno; gráfico con 3 modos y barras por sesión; selector de comunidad.",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_InicioMovil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "inicio",
+   "text": "Aplicado · H1m · Inicio móvil\nCuenta atrás en bloques, sesiones con estado y acción, KPI, diferencia con el líder en área y tu entorno, con chips de comunidad.",
+   "w": 420,
+   "x": 3980,
+   "y": 0
+  },
+  "r_Landing": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "publico",
+   "text": "Aplicado · P1 · Landing\nEjemplo real: clasificación de Azerbaiyán, pronóstico frente a resultado con celdas de acierto y puntos, para 3 jugadores.",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_Main": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 00 · Portada y mapa\nMapa con R0, R12, R13 y flags; 77 pantallas y 12 flags; decisiones actualizadas (arrastrar + hueco + copiar, foco + contexto, aciertos sólidos).",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_Matriz": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R2 · Puntos por Gran Premio\nUna sola tabla con 5 métricas y 3 modos de color (escala secuencial legible en ambos temas), fila de media, GP pendientes atenuados y el mejor de cada GP en negrita.",
+   "w": 420,
+   "x": 3520,
+   "y": 1770
+  },
+  "r_MiTemporada": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R3 · Mi temporada\n5 KPI, barras sobre el rango de la comunidad con mediana o modo percentil, victorias marcadas, mejor, peor y GP más fácil, y tabla.",
+   "w": 420,
+   "x": 3520,
+   "y": 8520
+  },
+  "r_Navegacion": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "guia",
+   "text": "Aplicado · 03 · Navegación\nNavegación del ranking con RankNav (cabecera, 7 pestañas y vistas), reglas y rutas /ranking/:comunidad/:temporada/:seccion/:vista.",
+   "w": 420,
+   "x": 3520,
+   "y": 2260
+  },
+  "r_Notificaciones": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "perfil",
+   "text": "Aplicado · U4 · Notificaciones\n5 tipos reales, filtros con contador, agrupadas por día, sin leer marcadas y canal de envío.",
+   "w": 420,
+   "x": 3520,
+   "y": 2160
+  },
+  "r_Palmares": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "ranking",
+   "text": "Aplicado · R4 · Palmarés\nTarjetas de campeón por temporada, medallero y gráfico de pendiente de posición final con nombres pulsables para resaltar.",
+   "w": 420,
+   "x": 3520,
+   "y": 8980
+  },
+  "r_ParrillaComunidad": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G4 · Parrilla y consenso\nParrilla escalonada pulsable con pit lane y sanciones; consenso por posición (3 más votados, tu elección marcada, quién acabó ahí) y por piloto; estado bloqueado antes del cierre; datos curiosos.",
+   "w": 420,
+   "x": 3520,
+   "y": 2360
+  },
+  "r_Perfil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "perfil",
+   "text": "Aplicado · U1 · Mi perfil\nCabecera con bio, localización, nivel y rango (resume de la API), KPI, tu temporada frente a la comunidad, tus comunidades por percentil e historial por temporada.",
+   "w": 420,
+   "x": 3520,
+   "y": 0
+  },
+  "r_PerfilUsuario": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "perfil",
+   "text": "Aplicado · U2 · Perfil de otro usuario\nDuelo contigo: marcador de GP ganados, diferencia acumulada y forma de ambos; KPI comparados; enlace al cara a cara completo.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_Pronosticar": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G3 · Pronosticar\nLista por equipo, parrilla o dorsal con puesto de salida; progreso N de 5; atajos (parrilla, resultado de la sesión previa, copiar el sprint); cierre con hora exacta y privacidad; cómo puntúa; quién ha pronosticado. Arrastrar, tocar el hueco vacío y flechas.",
+   "w": 420,
+   "x": 3520,
+   "y": 1920
+  },
+  "r_PronosticarMovil": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G3m · Pronosticar móvil\nHoja inferior con rejilla de 4 columnas (código, color de equipo y salida), elegidos atenuados, salto al siguiente hueco, chips de sesión con ✓, cuenta atrás, atajos y barra de guardado.",
+   "w": 420,
+   "x": 3980,
+   "y": 0
+  },
+  "r_Reglas": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "publico",
+   "text": "Aplicado · P2 · Cómo se puntúa\n8 conceptos reales y ejemplo interactivo: subes o bajas pilotos y se recalculan los puntos con la regla aplicada.",
+   "w": 420,
+   "x": 3520,
+   "y": 440
+  },
+  "r_Resultados": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G5 · Resultados y puntos\nTabla de toda la comunidad con 3 estados (antes del cierre, visibles, con resultados), fila del resultado real, celdas por acierto, exactos, puntos y total; banner de estado; tu desglose como segunda vista.",
+   "w": 420,
+   "x": 3520,
+   "y": 3740
+  },
+  "r_Simulador": {
+   "fill": "green",
+   "maxH": 420,
+   "page": "gp",
+   "text": "Aplicado · G6 · Simulador de puntos\nEscenarios rápidos (parrilla, sprint, tu pronóstico, caos), cambio de piloto por posición, tus puntos por posición y la general resultante con ▲▼.",
+   "w": 420,
+   "x": 3520,
+   "y": 4180
+  },
+  "r_global": {
+   "fill": "green",
+   "maxH": 900,
+   "page": "guia",
+   "text": "Revisión frente a «Propuestas - OLD» · completada\n\nTodas las notas de revisión están aplicadas (verdes). Recuperado del viejo: modos por gráfico, eje de GP pulsable con panel, foco + contexto con chips, tablas densas con forma y movimiento, 3 estados de sesión, consenso, atajos de pronóstico y admin con validaciones y línea temporal.\n\nSe conserva del nuevo: sistema de diseño, tema global, móvil, accesibilidad y datos de la API real.",
+   "w": 440,
+   "x": -520,
+   "y": 0
+  },
+  "s0": {
+   "fill": "purple",
+   "maxH": 640,
+   "page": "guia",
+   "text": "Cambia claro/oscuro con el interruptor de la barra superior de cualquier pantalla: se sincroniza entre pantallas. Si tu navegador bloquea el almacenamiento, usa el menú Theme del canvas.\n\nTodos los datos son ficticios y salen de una misma semilla (temporada 2026, comunidad «Amigos del paddock», 12 jugadores): el mismo usuario y los mismos puntos en todas las pantallas.",
+   "w": 380,
+   "x": 3040,
+   "y": 0
+  },
+  "t0": {
+   "kind": "title1",
+   "maxW": 2960,
+   "page": "guia",
+   "text": "Guía y fundamentos",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t1": {
+   "kind": "title1",
+   "maxW": 2310,
+   "page": "piezas",
+   "text": "Piezas compartidas",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t2": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "publico",
+   "text": "Páginas públicas",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t3": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "auth",
+   "text": "Acceso y cuenta",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t4": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "inicio",
+   "text": "Inicio y comunidades",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t5": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "gp",
+   "text": "Grandes Premios",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t6": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "ranking",
+   "text": "Ranking y estadísticas",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t7": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "perfil",
+   "text": "Perfil y ajustes",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "t8": {
+   "kind": "title1",
+   "maxW": 3430,
+   "page": "admin",
+   "text": "Administración",
+   "w": 240,
+   "x": 0,
+   "y": -300
+  },
+  "r_RankingResumen": {
+   "x": 3520,
+   "y": 0,
+   "w": 420,
+   "maxH": 420,
+   "fill": "green",
+   "page": "ranking",
+   "text": "Nuevo · R0 · Ranking · resumen\nVista de entrada del ranking (A1 viejo): KPI con percentil, clasificación corta con forma y barra, podio, último y próximo GP, y lucha por el título con etiquetas directas."
+  },
+  "r_Titulo": {
+   "x": 3520,
+   "y": 5780,
+   "w": 420,
+   "maxH": 420,
+   "fill": "green",
+   "page": "ranking",
+   "text": "Nuevo · R12 · Lucha por el título\nCon datos de la API (puntos por GP): quién puede ganar aún con el máximo en juego, proyección al ritmo de los últimos 5 GP y lo que necesita cada uno por GP. Detrás de flag."
+  },
+  "r_Sesiones": {
+   "x": 3520,
+   "y": 3600,
+   "w": 420,
+   "maxH": 420,
+   "fill": "green",
+   "page": "ranking",
+   "text": "Nuevo · R13 · Puntos por sesión\nCon pointsBySession y bonusPoints: tu temporada apilada por sesión con la media, reparto por jugador y rankings alternativos por sesión. Detrás de flag."
+  },
+  "r_RankNav": {
+   "x": 0,
+   "y": 900,
+   "w": 420,
+   "maxH": 300,
+   "fill": "green",
+   "page": "piezas",
+   "text": "Nuevo · Cabecera del ranking\nTítulo, comunidad, temporada, progreso de la temporada, pestañas de sección y chips de vista (con flag) compartidos por todas las pantallas de ranking."
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Fundamentos.dc.html",
+  "Componentes.dc.html",
+  "Navegacion.dc.html",
+  "Graficos.dc.html",
+  "Estados.dc.html",
+  "Flags.dc.html",
+  "AppNav.dc.html",
+  "SiteFooter.dc.html",
+  "AdminSide.dc.html",
+  "TabBar.dc.html",
+  "MobileBar.dc.html",
+  "Landing.dc.html",
+  "Reglas.dc.html",
+  "Circuitos.dc.html",
+  "CircuitoDetalle.dc.html",
+  "FAQ.dc.html",
+  "Legal.dc.html",
+  "LandingMovil.dc.html",
+  "Login.dc.html",
+  "Registro.dc.html",
+  "Recuperar.dc.html",
+  "Restablecer.dc.html",
+  "Verificar.dc.html",
+  "LoginMovil.dc.html",
+  "Inicio.dc.html",
+  "Comunidades.dc.html",
+  "Explorar.dc.html",
+  "CrearComunidad.dc.html",
+  "ComunidadHome.dc.html",
+  "ComunidadAjustes.dc.html",
+  "Invitacion.dc.html",
+  "InicioMovil.dc.html",
+  "GPLista.dc.html",
+  "GPDetalle.dc.html",
+  "Pronosticar.dc.html",
+  "ParrillaComunidad.dc.html",
+  "Resultados.dc.html",
+  "Simulador.dc.html",
+  "PronosticarMovil.dc.html",
+  "GPDetalleMovil.dc.html",
+  "RankingResumen.dc.html",
+  "Clasificacion.dc.html",
+  "Matriz.dc.html",
+  "HeatmapGP.dc.html",
+  "Distribucion.dc.html",
+  "Sesiones.dc.html",
+  "Gap.dc.html",
+  "Bump.dc.html",
+  "Titulo.dc.html",
+  "AciertosTipo.dc.html",
+  "Consistencia.dc.html",
+  "CaraACara.dc.html",
+  "MiTemporada.dc.html",
+  "Palmares.dc.html",
+  "ClasificacionMovil.dc.html",
+  "Perfil.dc.html",
+  "PerfilUsuario.dc.html",
+  "Ajustes.dc.html",
+  "Notificaciones.dc.html",
+  "PerfilMovil.dc.html",
+  "AjustesMovil.dc.html",
+  "AdminPanel.dc.html",
+  "AdminGPs.dc.html",
+  "AdminGPEditar.dc.html",
+  "AdminPilotosGP.dc.html",
+  "AdminSesiones.dc.html",
+  "AdminCircuitos.dc.html",
+  "AdminCircuitoEditar.dc.html",
+  "AdminPilotos.dc.html",
+  "AdminReglas.dc.html",
+  "AdminUsuarios.dc.html",
+  "AdminComunidades.dc.html",
+  "AdminNotificaciones.dc.html",
+  "AdminCalculos.dc.html",
+  "AdminMovil.dc.html",
+  "RankNav.dc.html"
+ ],
+ "pages": [
+  {
+   "id": "guia",
+   "name": "0 · Guía y fundamentos"
+  },
+  {
+   "id": "piezas",
+   "name": "1 · Piezas compartidas"
+  },
+  {
+   "id": "publico",
+   "name": "2 · Público"
+  },
+  {
+   "id": "auth",
+   "name": "3 · Acceso"
+  },
+  {
+   "id": "inicio",
+   "name": "4 · Inicio y comunidades"
+  },
+  {
+   "id": "gp",
+   "name": "5 · Grandes Premios"
+  },
+  {
+   "id": "ranking",
+   "name": "6 · Ranking y estadísticas"
+  },
+  {
+   "id": "perfil",
+   "name": "7 · Perfil y ajustes"
+  },
+  {
+   "id": "admin",
+   "name": "8 · Administración"
+  }
+ ],
+ "title": "PrognoSports · Rediseño"
+}

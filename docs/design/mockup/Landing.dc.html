@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Landing de PrognoSports</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.lh{position:relative;min-height:600px;display:flex;align-items:center;background:linear-gradient(90deg,rgba(40,23,66,.94) 0%,rgba(40,23,66,.82) 45%,rgba(40,23,66,.35) 100%),url(/_blob/bf0336da0dc7784eb8d27bd46efc11be) center/cover}
+.feat{display:flex;flex-direction:column;gap:12px;padding:24px}
+.feat .ic{width:56px;height:56px;border-radius:12px;background:var(--tint);color:var(--tint-fg);display:flex;align-items:center;justify-content:center}
+.step{display:flex;gap:16px;align-items:flex-start}.step .n{width:40px;height:40px;border-radius:50%;background:var(--primary);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.acc{border-bottom:1px solid var(--border)}.acc button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 4px;background:transparent;border:0;cursor:pointer;text-align:left;font-weight:600;color:var(--h);font-size:16px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" user="out" active="ninguno" hint-size="100%,56px"></dc-import>
+
+  <section class="lh">
+    <div class="wrap" style="padding-block:72px">
+      <div class="col g24" style="max-width:640px">
+        <span class="tag pill" style="align-self:flex-start;background:rgba(255,255,255,.14);color:#f0e4fd">Temporada 2026 en marcha</span>
+        <h1 style="font-size:48px;line-height:52px;font-weight:600;color:#fff;letter-spacing:-.02em;text-wrap:balance">Pronostica resultados de carreras con tus amigos y compite por ser el mejor</h1>
+        <p style="font-size:20px;line-height:30px;color:#ebe1f5">Elige la parrilla antes de cada sesión, suma puntos por cada acierto y sigue el ranking de tu comunidad Gran Premio a Gran Premio.</p>
+        <div class="row wrapf g16">
+          <a class="btn btn-lg" href="Registro.dc.html" style="background:#fff;color:#4c2b7a">Registrarse gratis</a>
+          <a class="btn btn-lg" href="Reglas.dc.html" style="background:transparent;border-color:#c3a5e1;color:#fff">Cómo se puntúa</a>
+        </div>
+        <span class="t-sm" style="color:#d7c3eb">¿Ya tienes cuenta? <a href="Login.dc.html" style="color:#fff;text-decoration:underline">Inicia sesión</a></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block:72px">
+    <div class="col g8" style="max-width:640px;margin-bottom:32px"><span class="up">Cómo funciona</span><h2 style="font-size:30px;line-height:38px;font-weight:600;color:var(--h)">Tres pasos y a la parrilla</h2></div>
+    <div class="grid3" style="gap:32px">
+      <div class="step"><span class="n">1</span><div class="col g4"><b class="hd t-head">Únete o crea una comunidad</b><p class="muted">Abierta para quien quiera o cerrada con invitación. Cada comunidad elige sus reglas de puntuación.</p></div></div>
+      <div class="step"><span class="n">2</span><div class="col g4"><b class="hd t-head">Pronostica cada sesión</b><p class="muted">Ordena a los pilotos hasta cinco minutos antes de la clasificación, el sprint o la carrera.</p></div></div>
+      <div class="step"><span class="n">3</span><div class="col g4"><b class="hd t-head">Suma y compara</b><p class="muted">Los puntos se reparten al acabar la sesión. Mira quién sube, quién baja y quién aguanta.</p></div></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block:0 72px">
+    <div class="grid2" style="gap:48px;align-items:center">
+      <div class="card" style="overflow:hidden">
+        <div class="card-h"><div class="col" style="gap:0"><b class="hd">Clasificación · GP de Azerbaiyán</b><span class="t-cap muted">Pronóstico real frente al resultado</span></div>
+          <div class="seg" role="group" aria-label="Jugador"><sc-for list="{{who}}" as="w" hint-placeholder-count="3"><button type="button" class="sg {{w.cls}}" onClick="{{w.pick}}">{{w.l}}</button></sc-for></div></div>
+        <div class="tw"><table class="tbl tn"><thead><tr><th class="c">Pos.</th><th>Pronóstico</th><th>Acabó</th><th class="r">Puntos</th></tr></thead><tbody>
+          <sc-for list="{{exRows}}" as="r" hint-placeholder-count="5"><tr><td class="c"><span class="pos">{{r.p}}</span></td><td><span class="row g8"><span style="width:4px;height:20px;border-radius:2px;background:{{r.tc}}"></span><b class="hd">{{r.name}}</b></span></td><td class="muted">{{r.real}}</td><td class="r"><span class="cellp {{r.hc}}">{{r.pts}}</span></td></tr></sc-for>
+        </tbody><tfoot><tr><td colspan="3" class="r" style="padding:12px"><b class="hd">Total</b></td><td class="r" style="padding:12px"><b class="hd" style="font-size:18px">{{exTotal}}</b></td></tr></tfoot></table></div>
+      </div>
+      <div class="col g16">
+        <span class="up">Un ejemplo de verdad</span>
+        <h2 style="font-size:30px;line-height:38px;font-weight:600;color:var(--h);text-wrap:balance">Acertar de lleno puntúa más; quedarse cerca también cuenta</h2>
+        <p class="muted">Cada piloto suma según lo cerca que lo dejaste de su posición real. Cambia de jugador para ver cómo puntuó cada uno.</p>
+        <div class="col g8">
+          <div class="row g12"><span class="cellp hit-ex">5</span><span><b class="hd">Posición exacta</b></span></div>
+          <div class="row g12"><span class="cellp hit-1">3</span><span><b class="hd">Una posición arriba o abajo</b></span></div>
+          <div class="row g12"><span class="cellp hit-2">1</span><span><b class="hd">Dos posiciones arriba o abajo</b></span></div>
+          <div class="row g12"><span class="cellp hit-x">0</span><span class="muted">Más lejos, o fuera de los resultados</span></div>
+        </div>
+        <a class="t-sm" href="Reglas.dc.html" style="align-self:flex-start">Ver las 8 reglas y probar tu propio pronóstico</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--surface);box-shadow:0 1px 0 var(--border),0 -1px 0 var(--border)">
+    <div class="wrap" style="padding-block:72px">
+      <div class="grid2" style="gap:48px;align-items:center">
+        <div class="col g16">
+          <span class="up">Ranking en vivo</span>
+          <h2 style="font-size:30px;line-height:38px;font-weight:600;color:var(--h)">Sabes siempre cómo vas, y por qué</h2>
+          <p class="muted">Clasificación general, movimiento desde el último GP, forma reciente y la diferencia con quien tienes delante. Y estadísticas para quien quiera ir más allá: evolución, regularidad, cara a cara.</p>
+          <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px">
+            <li class="row g12"><span class="i" style="color:var(--ok)">check_circle</span><span>Puntos, aciertos y porcentaje por Gran Premio</span></li>
+            <li class="row g12"><span class="i" style="color:var(--ok)">check_circle</span><span>Gráficos claros, en modo claro y oscuro</span></li>
+            <li class="row g12"><span class="i" style="color:var(--ok)">check_circle</span><span>Avisos por correo o Telegram antes de cada cierre</span></li>
+          </ul>
+        </div>
+        <div class="card" style="overflow:hidden">
+          <div class="card-h"><b class="hd">Amigos del paddock</b><span class="tag tg-brand">Tras 17 GP</span></div>
+          <div class="tw"><table class="tbl tn"><thead><tr><th>Pos.</th><th>Jugador</th><th class="r">Puntos</th><th class="r"></th></tr></thead><tbody>
+            <sc-for list="{{top}}" as="r" hint-placeholder-count="5"><tr class="{{r.cls}}"><td><span class="pos {{r.pc}}">{{r.p}}</span></td><td><span class="row g8"><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></span></td><td class="r"><b class="hd">{{r.pts}}</b></td><td class="r"><span class="t-cap muted">{{r.gap}}</span></td></tr></sc-for>
+          </tbody></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block:72px">
+    <div class="col g8" style="max-width:640px;margin-bottom:32px"><span class="up">Todo lo que necesitas</span><h2 style="font-size:30px;line-height:38px;font-weight:600;color:var(--h)">Hecho para jugar entre amigos</h2></div>
+    <div class="grid3" style="gap:16px">
+      <sc-for list="{{feats}}" as="f" hint-placeholder-count="6"><div class="card feat"><span class="ic"><span class="i s32">{{f.icon}}</span></span><b class="hd t-head">{{f.title}}</b><p class="t-sm muted">{{f.text}}</p></div></sc-for>
+    </div>
+  </section>
+
+  <section style="background:var(--surface);box-shadow:0 1px 0 var(--border),0 -1px 0 var(--border)">
+    <div class="wrap" style="padding-block:72px;max-width:900px">
+      <div class="col g8" style="margin-bottom:24px"><span class="up">Dudas habituales</span><h2 style="font-size:30px;line-height:38px;font-weight:600;color:var(--h)">Preguntas frecuentes</h2></div>
+      <sc-for list="{{faq}}" as="q" hint-placeholder-count="4">
+        <div class="acc"><button type="button" onClick="{{q.pick}}" aria-expanded="{{q.open}}">{{q.q}}<span class="i">{{q.icon}}</span></button><sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}"><p class="muted" style="padding:0 4px 16px;max-width:720px">{{q.a}}</p></sc-if></div>
+      </sc-for>
+      <a class="btn btn-outline" href="FAQ.dc.html" style="margin-top:24px">Ver todas las preguntas</a>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block:72px">
+    <div class="card hero" style="padding:56px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;overflow:hidden">
+      <h2 style="font-size:36px;line-height:42px;font-weight:600;color:#fff;max-width:640px;text-wrap:balance">¿Preparado para comenzar? ¡Regístrate y pruébalo gratis!</h2>
+      <p style="color:#ebe1f5;max-width:520px">Crea tu cuenta en un minuto y entra en la comunidad de tus amigos con un código de invitación.</p>
+      <a class="btn btn-lg" href="Registro.dc.html" style="background:#fff;color:#4c2b7a">Crear mi cuenta</a>
+    </div>
+  </section>
+
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, open = s.open === undefined ? 0 : s.open;
+    const lead = P.total[P.order[0]];
+    const F = [
+      ['Pronósticos ordenados', 'format_list_numbered', 'Arrastra pilotos en el ordenador, toca el hueco en el móvil o copia el pronóstico de otra sesión.'],
+      ['Comunidades', 'groups', 'Juega con tus amigos, tu oficina o tu peña. Abiertas o con invitación.'],
+      ['Ranking y estadísticas', 'leaderboard', 'Clasificación general, evolución, regularidad y duelos directos.'],
+      ['Reglas a tu medida', 'rule', 'Cada comunidad define cuántos puntos vale cada acierto.'],
+      ['Avisos a tiempo', 'notifications_active', 'Correo o Telegram antes del cierre y cuando se reparten los puntos.'],
+      ['Circuitos y calendario', 'route', 'Todos los circuitos, con su historia en la temporada.']
+    ];
+    const Q = [
+      ['¿Cuánto cuesta?', 'Nada. PrognoSports es gratis y no es un sitio de apuestas: aquí solo se compite por el honor.'],
+      ['¿Hasta cuándo puedo pronosticar?', 'Hasta cinco minutos antes de que empiece cada sesión. Puedes cambiar tu pronóstico las veces que quieras hasta entonces.'],
+      ['¿Cómo se reparten los puntos?', 'Por posición exacta o por quedarte cerca. Cada comunidad elige sus reglas; las encuentras en la página «Cómo se puntúa».'],
+      ['¿Puedo estar en varias comunidades?', 'Sí. Cambias de una a otra desde la barra superior y tus pronósticos se guardan en cada una.']
+    ];
+    const W = [['alex', 'Álex'], ['marta', 'Marta'], ['pablo', 'Pablo']], wi = s.w || 0, pr = P.pred(W[wi][0], 'q'), sc = P.score(pr, P.REAL.q);
+    return {
+      who: W.map((w, k) => ({ l: w[1], cls: k === wi ? 'on' : '', pick: () => this.setState({ w: k }) })),
+      exRows: pr.map((c, k) => { const d = P.drv(c), ri = P.REAL.q.indexOf(c); return { p: k + 1, name: d.name, tc: d.color, real: ri >= 0 ? (ri + 1) + '.º' : 'Fuera del top 5', pts: sc.cells[k].p, hc: 'hit-' + sc.cells[k].k }; }), exTotal: sc.pts + ' puntos',
+      top: P.order.slice(0, 5).map((id, i) => ({ p: i + 1, pc: i < 3 ? 'p' + (i + 1) : '', name: P.byId[id].name, ini: P.byId[id].ini, me: id === 'alex' ? 'you' : '', cls: id === 'alex' ? 'me' : '', pts: P.total[id], gap: i === 0 ? 'Líder' : '−' + (lead - P.total[id]) })),
+      feats: F.map((f) => ({ title: f[0], icon: f[1], text: f[2] })),
+      faq: Q.map((q, i) => ({ q: q[0], a: q[1], open: open === i, icon: open === i ? 'remove' : 'add', pick: () => this.setState({ open: open === i ? -1 : i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

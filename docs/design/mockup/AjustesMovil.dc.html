@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ajustes móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.sw2{display:flex;align-items:center;justify-content:space-between;min-height:48px;border-top:1px solid var(--border)}
+
+</style>
+</helmet>
+<div class="mroot" style="min-height:1900px">
+  <dc-import name="MobileBar" title="Ajustes" back="true" backHref="PerfilMovil.dc.html" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Perfil</h2></div><div class="card-b col g12"><div class="field"><label class="lbl" for="m1">Nombre</label><input id="m1" class="inp" value="Álex Ruiz"></div><div class="field"><label class="lbl" for="m2">Biografía</label><textarea id="m2" class="txt" rows="3">Pronostico desde el sofá con el café en la mano.</textarea></div><div class="field"><label class="lbl" for="m3">Localización</label><input id="m3" class="inp" value="Madrid"></div><div class="field"><label class="lbl" for="m4">Zona horaria</label><select id="m4" class="sel"><option>Europa/Madrid</option></select></div><button type="button" class="btn btn-primary btn-block" style="min-height:48px">Guardar</button></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Avisos</h2></div><div class="card-b col" style="gap:12px"><sc-for list="{{prefs}}" as="p" hint-placeholder-count="5"><div class="col g8"><b class="hd t-sm">{{p.n}}</b><span class="t-cap muted">{{p.d}}</span><div class="row g8"><sc-for list="{{p.ch}}" as="c" hint-placeholder-count="2"><button type="button" class="chip {{c.cls}}" role="switch" aria-checked="{{c.on}}" style="min-height:40px" onClick="{{c.tog}}">{{c.l}}</button></sc-for></div></div></sc-for></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Seguridad</h2></div><div class="card-b col g8"><button type="button" class="btn btn-outline btn-block" style="min-height:44px">Cambiar correo</button><button type="button" class="btn btn-outline btn-block" style="min-height:44px">Cambiar contraseña</button><button type="button" class="btn btn-outline btn-block" style="min-height:44px">Cerrar las demás sesiones (2)</button></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Telegram</h2><span class="tag tg-ok">Vinculado</span></div><div class="card-b"><button type="button" class="btn btn-outline btn-block" style="min-height:44px">Desvincular</button></div></section>
+  </div>
+  <dc-import name="TabBar" active="perfil" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+const NT = [['Información', 'Novedades y avisos generales de PrognoSports', [1, 0]], ['Pre-alerta de sesión', 'El día antes de cada sesión con pronóstico', [1, 1]], ['Alerta de sesión', 'Minutos antes del cierre si aún no has pronosticado', [0, 1]], ['Cambios en la parrilla', 'Si la organización cambia una parrilla publicada', [0, 1]], ['Puntos repartidos', 'Cuando se calculan los puntos de una sesión', [1, 1]]];
+    const st = s.pr || NT.map((x) => x[2]), CH = ['correo', 'Telegram'];
+    const prefs = NT.map((x, i) => ({ n: x[0], d: x[1], ch: [0, 1].map((k) => ({ on: !!st[i][k], l: k ? 'Telegram' : 'Correo', label: x[0] + ' por ' + CH[k], icon: st[i][k] ? 'toggle_on' : 'toggle_off', col: st[i][k] ? 'var(--ring)' : 'var(--muted)', cls: st[i][k] ? 'on' : '',
+      tog: () => { const c = st.map((r) => r.slice()); c[i][k] = c[i][k] ? 0 : 1; this.setState({ pr: c, dirty: true, saved: false }); } })) }));
+    return { prefs };
+  }
+}
+</script>
+</body>
+</html>

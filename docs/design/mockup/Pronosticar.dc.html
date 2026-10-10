@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pronosticar</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.stabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:6px}
+.stab{display:flex;gap:12px;align-items:center;text-align:left;border:0;border-radius:6px;padding:10px 14px;background:transparent;cursor:pointer;min-height:56px;color:inherit;font:inherit}
+.stab:hover{background:var(--surface-hover)}
+.stab.on{background:var(--tint)}
+.stab .dot{width:10px;height:10px;border-radius:50%;flex:none}
+.p3{display:grid;grid-template-columns:360px minmax(0,1fr) 300px;gap:16px;align-items:start}
+@media(max-width:1180px){.p3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.p3>aside{grid-column:1/-1}}
+@media(max-width:760px){.p3{grid-template-columns:minmax(0,1fr)}}
+.gh{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;padding:8px 0 2px}
+.gh i{width:4px;height:12px;border-radius:2px;display:inline-block}
+.drv{min-height:40px;padding:0 10px;gap:8px}
+.drv .gp{width:30px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.drv .no{width:auto;min-width:28px;padding:2px 4px;border-radius:4px;color:#fff;font-size:11px;font-weight:700;text-align:center}
+.drv.used{opacity:.5}
+.drv .as{font-size:12px;font-weight:700;color:var(--tint-fg);min-width:24px;text-align:right}
+.drv[draggable=true]{cursor:grab}
+.prog{height:6px;border-radius:999px;background:var(--surface-muted);overflow:hidden}.prog i{display:block;height:6px;border-radius:999px;background:var(--primary)}
+.slot{min-height:56px;cursor:pointer}
+.slot .n.top{background:var(--primary);color:var(--on-primary)}
+.slot.ov{border:1px solid var(--ring);background:var(--tint)}
+.slot.act{border:1px dashed var(--ring);background:var(--tint)}
+.slot .grip{color:var(--muted);cursor:grab;display:flex}
+.slot .ic{background:none;border:1px solid var(--border);border-radius:6px;width:32px;height:32px;cursor:pointer;color:var(--body);display:flex;align-items:center;justify-content:center;padding:0}
+.slot .ic:hover:not(:disabled){background:var(--surface-hover)}
+.slot .ic:disabled{opacity:.35;cursor:default}
+.cd{font-size:28px;line-height:34px;font-weight:700;color:var(--h)}
+.avs{display:flex}.avs .av{margin-left:-6px;box-shadow:0 0 0 2px var(--surface)}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPLista.dc.html">Grandes Premios</a><span class="i">chevron_right</span><a href="GPDetalle.dc.html">Singapur</a><span class="i">chevron_right</span><span>Pronosticar</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end">
+      <div class="col" style="gap:2px"><h1 class="t-title">Gran Premio de Singapur</h1><p class="muted">Marina Bay Street Circuit · Ronda 18 de 24 · 62 vueltas · fin de semana con sprint</p></div>
+      <div class="row g8"><a class="btn btn-outline btn-sm" href="GPDetalle.dc.html" aria-label="GP anterior: Azerbaiyán"><span class="i s16">chevron_left</span>AZE</a><a class="btn btn-outline btn-sm" href="GPDetalle.dc.html" aria-label="GP siguiente: Estados Unidos">USA<span class="i s16">chevron_right</span></a></div>
+    </div>
+
+    <div class="card stabs" role="tablist" aria-label="Sesión">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+        <button type="button" role="tab" aria-selected="{{t.on}}" class="stab {{t.cls}}" onClick="{{t.pick}}"><span class="dot" style="background:{{t.dot}}"></span><span class="col" style="gap:0;min-width:0"><b class="hd" style="font-size:15px">{{t.name}}</b><span class="t-cap muted">{{t.sub}}</span></span></button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{closed}}" hint-placeholder-val="{{ false }}">
+      <div class="alert al-info"><span class="i">lock</span><span><b>La clasificación sprint ya está cerrada.</b> Tu pronóstico sumó 11 de 15 puntos. <a href="Resultados.dc.html">Ver resultados</a></span></div>
+    </sc-if>
+
+    <sc-if value="{{open}}" hint-placeholder-val="{{ true }}">
+    <div class="p3">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Pilotos</h2><div class="seg" role="group" aria-label="Ordenar"><sc-for list="{{sorts}}" as="o" hint-placeholder-count="3"><button type="button" class="sg {{o.cls}}" onClick="{{o.pick}}">{{o.l}}</button></sc-for></div></div>
+        <div class="card-b col g8">
+          <div class="iw"><span class="i">search</span><input class="inp" placeholder="Buscar piloto o equipo" aria-label="Buscar piloto o equipo" value="{{q}}" onInput="{{onQ}}"></div>
+          <span class="t-cap muted">Pulsa un piloto para ponerlo en el hueco marcado, o arrástralo a cualquier hueco.</span>
+          <sc-for list="{{groups}}" as="g" hint-placeholder-count="11">
+            <div class="col" style="gap:4px">
+              <span class="gh"><i style="background:{{g.c}}"></i>{{g.name}}</span>
+              <sc-for list="{{g.drivers}}" as="d" hint-placeholder-count="2">
+                <button type="button" class="drv {{d.cls}}" draggable="true" onDragStart="{{d.ds}}" onClick="{{d.add}}" style="box-shadow:0 0 0 1px var(--border),inset 4px 0 0 {{d.c}}"><span class="gp">{{d.grid}}</span><span class="no" style="background:{{d.c}}">{{d.no}}</span><b class="hd" style="width:34px">{{d.code}}</b><span class="fx ell t-sm">{{d.name}}</span><span class="as">{{d.slot}}</span></button>
+              </sc-for>
+            </div>
+          </sc-for>
+          <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="empty"><b class="hd">Ningún piloto coincide con «{{q}}»</b></div></sc-if>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Tu pronóstico · {{sessName}}</h2><span class="t-sm muted tn">{{count}} de {{n}}</span></div>
+        <div class="card-b col g8">
+          <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="{{n}}" aria-valuenow="{{count}}" aria-label="Pilotos elegidos"><i style="width:{{pct}}%"></i></div>
+          <sc-for list="{{slots}}" as="p" hint-placeholder-count="5">
+            <div class="slot {{p.cls}}" role="button" tabindex="0" aria-label="{{p.aria}}" onClick="{{p.pick}}" draggable="true" onDragStart="{{p.ds}}" onDragOver="{{p.over}}" onDragLeave="{{p.leave}}" onDrop="{{p.drop}}">
+              <span class="grip" aria-hidden="true"><span class="i s16">drag_indicator</span></span>
+              <span class="n {{p.top}}">{{p.pos}}</span>
+              <sc-if value="{{p.full}}" hint-placeholder-val="{{ true }}">
+                <span class="team" style="background:{{p.color}};height:28px"></span>
+                <span class="col fx" style="gap:0;min-width:0"><b class="hd" style="font-size:15px">{{p.name}}</b><span class="t-cap muted">{{p.team}} · sale {{p.grid}}</span></span>
+                <button type="button" class="ic" aria-label="Subir" disabled="{{p.noUp}}" onClick="{{p.up}}"><span class="i s16">arrow_upward</span></button>
+                <button type="button" class="ic" aria-label="Bajar" disabled="{{p.noDown}}" onClick="{{p.down}}"><span class="i s16">arrow_downward</span></button>
+                <button type="button" class="ic" aria-label="Quitar" onClick="{{p.rm}}"><span class="i s16">close</span></button>
+              </sc-if>
+              <sc-if value="{{p.empty}}" hint-placeholder-val="{{ false }}"><span class="t-sm fx">{{p.hint}}</span></sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{dirty}}" hint-placeholder-val="{{ false }}"><div class="alert al-warn"><span class="i">edit</span><span><b>Cambios sin guardar.</b> Si sales ahora, se perderán.</span></div></sc-if>
+        </div>
+        <div class="card-f" style="justify-content:space-between"><button type="button" class="btn btn-outline btn-sm" onClick="{{clear}}"><span class="i s16">restart_alt</span>Vaciar</button><span class="t-sm" style="color:{{msgC}}">{{msg}}</span><button type="button" class="btn btn-primary" disabled="{{cantSave}}" onClick="{{save}}"><span class="i s16">{{saveIcon}}</span>{{saveLabel}}</button></div>
+      </section>
+
+      <aside class="col g16">
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Cierre</h2><span class="tag tg-warn"><span class="i s16">schedule</span>Pronto</span></div>
+          <div class="card-b col g8"><b class="tn cd">{{cd}}</b><span class="t-sm muted">{{closeAt}}</span><div class="alert al-info" style="padding:8px 10px"><span class="i s16">visibility_off</span><span class="t-sm">Tu pronóstico es privado hasta el cierre.</span></div></div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Atajos</h2></div>
+          <div class="card-b col g8">
+            <sc-for list="{{shortcuts}}" as="c" hint-placeholder-count="3"><button type="button" class="btn btn-soft btn-sm" style="justify-content:flex-start" onClick="{{c.run}}"><span class="i s16">{{c.icon}}</span>{{c.l}}</button></sc-for>
+            <span class="t-cap muted">Después ajusta el orden arrastrando o con las flechas.</span>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-h"><h2 class="t-head">Cómo puntúa</h2><a class="t-sm" href="Reglas.dc.html">Reglas</a></div>
+          <div class="card-b col g8"><div class="row sp t-sm"><span>Posición exacta</span><span class="cellp hit-ex">5</span></div><div class="row sp t-sm"><span>A una posición</span><span class="cellp hit-1">3</span></div><div class="row sp t-sm"><span>A dos posiciones</span><span class="cellp hit-2">1</span></div><div class="row sp t-sm"><span>Más puntos del GP</span><span class="tag tg-brand">+5 bonus</span></div></div>
+        </section>
+        <section class="card card-b row g12" style="align-items:center"><span class="avs"><sc-for list="{{avatars}}" as="a" hint-placeholder-count="5"><span class="av s24">{{a}}</span></sc-for></span><span class="t-sm"><b class="hd">8 de 12</b> ya han pronosticado el sprint</span></section>
+      </aside>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}"><div class="toast" role="status" style="position:fixed;right:24px;bottom:24px;z-index:40"><span class="i" style="color:var(--ok)">check_circle</span><span>Pronóstico del {{sessName}} guardado. Puedes cambiarlo hasta el cierre.</span></div></sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, ses = s.ses === undefined ? 1 : s.ses;
+    const KEYS = ['cs', 'sp', 'q', 'r'], k = KEYS[ses], n = P.SESS[k][2];
+    const empty = () => new Array(n).fill(null);
+    const start = { sp: ['NOR', 'RUS', null, null, null], q: [null, null, null, null, null], r: empty() };
+    const sel = (s.sel && s.sel.length === n) ? s.sel : (start[k] || empty()).slice(0, n).concat(empty()).slice(0, n);
+    const firstEmpty = (a) => { for (let i = 0; i < n; i++) if (!a[i]) return i; return -1; };
+    const act = s.act === undefined ? firstEmpty(sel) : s.act;
+    const put = (a, newAct) => this.setState({ sel: a, act: newAct === undefined ? firstEmpty(a) : newAct, dirty: true, saved: false, ov: -1 });
+    const drvOf = (c) => P.drv(c), gridPos = (c) => 'P' + (P.GRID.indexOf(c) + 1);
+    const place = (code, at) => { const a = sel.slice(); const prev = a.indexOf(code); if (prev >= 0) a[prev] = null; const i = at >= 0 ? at : firstEmpty(a); if (i < 0) return; if (prev >= 0 && a[i]) a[prev] = a[i]; a[i] = code; put(a); };
+    const slots = sel.map((c, i) => {
+      const d = c ? drvOf(c) : null;
+      const drop = (e) => { e.preventDefault(); const x = this._d; this._d = null; if (!x) return; if (x.from === 'list') place(x.code, i); else { const a = sel.slice(); const t = a[i]; a[i] = a[x.idx]; a[x.idx] = t; put(a); } };
+      return {
+        pos: i + 1, top: i < 3 && d ? 'top' : '', full: !!d, empty: !d,
+        cls: (d ? 'full' : '') + (s.ov === i ? ' ov' : (!d && act === i ? ' act' : '')),
+        aria: d ? (i + 1) + '.º ' + d.name : (i + 1) + '.º vacío',
+        name: d ? d.name : '', team: d ? d.team : '', color: d ? d.color : '', grid: d ? gridPos(c) : '',
+        hint: act === i ? 'Elige un piloto de la lista o arrástralo aquí' : 'Pulsa para elegir este hueco',
+        noUp: i === 0, noDown: i === n - 1,
+        up: (e) => { if (e) e.stopPropagation(); const a = sel.slice(); const t = a[i - 1]; a[i - 1] = a[i]; a[i] = t; put(a, act); },
+        down: (e) => { if (e) e.stopPropagation(); const a = sel.slice(); const t = a[i + 1]; a[i + 1] = a[i]; a[i] = t; put(a, act); },
+        rm: (e) => { if (e) e.stopPropagation(); const a = sel.slice(); a[i] = null; put(a, i); },
+        pick: () => this.setState({ act: i }),
+        ds: (e) => { if (!d) { e.preventDefault(); return; } this._d = { from: 'slot', idx: i }; if (e.dataTransfer) { e.dataTransfer.setData('text/plain', c); e.dataTransfer.effectAllowed = 'move'; } },
+        over: (e) => { e.preventDefault(); if (s.ov !== i) this.setState({ ov: i }); }, leave: () => this.setState({ ov: -1 }), drop
+      };
+    });
+    const q = (s.q || '').toLowerCase().trim(), sort = s.sort || 'team';
+    const match = (d) => !q || (d.name + ' ' + d.team + ' ' + d.code).toLowerCase().indexOf(q) >= 0;
+    const mk = (d) => { const i = sel.indexOf(d.code); return { code: d.code, name: d.name, no: d.no, c: d.color, grid: gridPos(d.code), slot: i >= 0 ? (i + 1) + '.º' : '', cls: i >= 0 ? 'used' : '',
+      add: () => place(d.code, act), ds: (e) => { this._d = { from: 'list', code: d.code }; if (e.dataTransfer) { e.dataTransfer.setData('text/plain', d.code); e.dataTransfer.effectAllowed = 'copy'; } } }; };
+    let groups;
+    if (sort === 'team') groups = P.teams.map((t) => ({ name: t.name, c: t.color, drivers: P.drivers.filter((d) => d.team === t.name && match(d)).map(mk) })).filter((g) => g.drivers.length);
+    else if (sort === 'grid') groups = [{ name: 'Orden de parrilla', c: 'var(--c-rest)', drivers: P.GRID.map(drvOf).filter(match).map(mk) }];
+    else groups = [{ name: 'Por dorsal', c: 'var(--c-rest)', drivers: P.drivers.slice().sort((a, b) => a.no - b.no).filter(match).map(mk) }];
+    const count = sel.filter(Boolean).length, full = count === n;
+    const TABS = [['Clasif. sprint', 'Terminada · 11 pts', 'var(--ok)'], ['Sprint', 'Cierra en 1 h 32 min', 'var(--warn)'], ['Clasificación', 'Cierra en 5 h 27 min', 'var(--c-rest)'], ['Carrera', 'Cierra mañana 14:55', 'var(--c-rest)']];
+    const CLOSE = ['', 'Sábado 10 de octubre a las 11:55 (tu hora)', 'Sábado 10 de octubre a las 15:55 (tu hora)', 'Domingo 11 de octubre a las 14:55 (tu hora)'];
+    const CD = ['', '01:32:10', '05:27:10', '1 d 02:57'];
+    const myPrev = { cs: ['NOR', 'LEC', 'RUS'], sp: ['NOR', 'RUS', 'LEC', 'PIA', 'ANT'], q: ['NOR', 'RUS', 'PIA', 'LEC', 'ANT'] };
+    const sc = [{ icon: 'grid_view', l: 'Rellenar con la parrilla', run: () => put(P.GRID.slice(0, n), -1) }];
+    if (k !== 'cs') sc.push({ icon: 'flag', l: 'Copiar el resultado de la Clasif. sprint', run: () => put(P.REAL.cs.concat(P.GRID.filter((c) => P.REAL.cs.indexOf(c) < 0)).slice(0, n), -1) });
+    if (k === 'q' || k === 'r') sc.push({ icon: 'content_copy', l: 'Copiar mi pronóstico del Sprint', run: () => put(myPrev.sp.concat(P.GRID.filter((c) => myPrev.sp.indexOf(c) < 0)).slice(0, n), -1) });
+    return {
+      tabs: TABS.map((t, i) => ({ name: t[0], sub: t[1], dot: t[2], on: i === ses, cls: i === ses ? 'on' : '', pick: () => this.setState({ ses: i, sel: null, act: undefined, dirty: false, saved: false }) })),
+      closed: ses === 0, open: ses !== 0, sessName: P.SESS[k][0].toLowerCase(), n, count, pct: Math.round(count / n * 100),
+      sorts: [['team', 'Equipo'], ['grid', 'Parrilla'], ['no', 'Dorsal']].map((o) => ({ l: o[1], cls: o[0] === sort ? 'on' : '', pick: () => this.setState({ sort: o[0] }) })),
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }), groups, none: groups.length === 0,
+      slots, dirty: !!s.dirty, saved: !!s.saved,
+      msg: full ? 'Listo para guardar' : 'Faltan ' + (n - count) + ' pilotos', msgC: full ? 'var(--ok-fg)' : 'var(--muted)',
+      cantSave: !full, saveIcon: s.saved ? 'check' : 'save', saveLabel: s.saved ? 'Guardado' : 'Guardar pronóstico',
+      clear: () => put(empty(), 0), save: () => this.setState({ saved: true, dirty: false }),
+      cd: CD[ses], closeAt: CLOSE[ses], shortcuts: sc, avatars: ['MS', 'LF', 'SN', 'IC', 'DM']
+    };
+  }
+}
+</script>
+</body>
+</html>

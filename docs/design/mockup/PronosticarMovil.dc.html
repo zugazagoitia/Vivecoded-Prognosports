@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pronosticar móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.mroot{position:relative;overflow:hidden}
+.schip{flex:none;min-height:40px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border-radius:999px;border:1px solid var(--border-input);background:var(--surface);font:inherit;font-size:13px;font-weight:600;color:var(--body);cursor:pointer}
+.schip.on{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.schip.done{background:var(--ok-tint);border-color:transparent;color:var(--ok-fg)}
+.sl{width:100%;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 12px;border-radius:8px;text-align:left;font:inherit;cursor:pointer;background:var(--surface);border:1px dashed var(--border-input);color:var(--body)}
+.sl.full{border-style:solid;border-color:var(--border)}
+.sl.cur{border:1px solid var(--ring);background:var(--tint)}
+.sl .n{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;background:var(--surface-muted);color:var(--muted)}
+.sl.full .n{background:var(--primary);color:var(--on-primary)}
+.prog{height:6px;border-radius:999px;background:var(--surface-muted);overflow:hidden}.prog i{display:block;height:6px;background:var(--primary);border-radius:999px}
+.scrim2{position:absolute;inset:0;border:0;padding:0;cursor:pointer;background:rgba(17,24,39,.45);z-index:20}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:var(--surface);border-radius:16px 16px 0 0;padding:10px 16px 24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -10px 25px rgba(0,0,0,.2)}
+.handle{align-self:center;width:40px;height:4px;border-radius:999px;background:var(--border-input)}
+.dg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.dc{min-height:52px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--surface);color:var(--h);border:1px solid var(--border)}
+.dc small{font-size:10px;font-weight:500;color:var(--muted)}
+.dc.cur{background:var(--tint);border-color:var(--ring)}
+.dc:disabled{opacity:.4;cursor:default}
+.savebar{position:sticky;bottom:64px;z-index:5;background:var(--surface);box-shadow:0 -1px 0 var(--border);padding:12px 16px;display:flex;gap:8px;align-items:center}
+</style>
+</helmet>
+<div class="mroot" style="min-height:1500px">
+  <dc-import name="MobileBar" title="GP de Singapur" back="true" backHref="GPDetalleMovil.dc.html" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="row g8" style="overflow-x:auto;padding-bottom:2px"><sc-for list="{{chips}}" as="x" hint-placeholder-count="4"><button type="button" class="schip {{x.cls}}" onClick="{{x.pick}}"><sc-if value="{{x.done}}" hint-placeholder-val="{{ false }}"><span class="i s16">check</span></sc-if>{{x.l}}</button></sc-for></div>
+    <div class="card card-b row sp" style="padding:12px 14px;align-items:center"><div class="col" style="gap:0"><span class="t-cap muted">Cierra el {{sessName}} en</span><b class="tn" style="font-size:22px;line-height:28px;color:var(--warn-fg)">01:32:10</b></div><span class="t-cap muted" style="text-align:right">Sáb 10 · 11:55<br>(tu hora)</span></div>
+
+    <div class="col g8">
+      <div class="row sp t-sm"><span class="muted">Toca un hueco para elegir piloto</span><span><b class="hd tn">{{count}}</b><span class="muted">/{{n}}</span></span></div>
+      <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="{{n}}" aria-valuenow="{{count}}" aria-label="Pilotos elegidos"><i style="width:{{pct}}%"></i></div>
+      <sc-for list="{{slots}}" as="s" hint-placeholder-count="5">
+        <button type="button" class="sl {{s.cls}}" onClick="{{s.pick}}" aria-label="{{s.aria}}">
+          <span class="n">{{s.pos}}</span>
+          <span class="team" style="background:{{s.c}};height:26px"></span>
+          <span class="col fx" style="gap:0;min-width:0"><b class="hd ell" style="font-size:15px;color:{{s.nc}}">{{s.name}}</b><span class="t-cap muted">{{s.sub}}</span></span>
+          <span class="i s16 muted">chevron_right</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Atajos</h2></div><div class="card-b col g8"><button type="button" class="btn btn-soft btn-block" onClick="{{useGrid}}" style="min-height:44px"><span class="i s16">grid_view</span>Rellenar con la parrilla</button><button type="button" class="btn btn-soft btn-block" onClick="{{copyCs}}" style="min-height:44px"><span class="i s16">flag</span>Copiar el resultado de la Clasif. sprint</button></div></section>
+    <div class="alert al-info"><span class="i s16">visibility_off</span><span class="t-sm">Tu pronóstico es privado hasta el cierre.</span></div>
+  </div>
+  <div class="savebar"><button type="button" class="btn btn-outline" onClick="{{clear}}" style="min-height:48px">Vaciar</button><button type="button" class="btn btn-primary fx" disabled="{{cantSave}}" onClick="{{save}}" style="min-height:48px">{{saveLabel}}</button></div>
+  <dc-import name="TabBar" active="gps" hint-size="100%,64px"></dc-import>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ true }}">
+    <button type="button" class="scrim2" aria-label="Cerrar selector" onClick="{{close}}"></button>
+    <div class="sheet" role="dialog" aria-label="Elegir piloto">
+      <span class="handle"></span>
+      <div class="row sp"><b class="hd t-head" style="font-size:17px">Elige el {{sheetPos}}.º</b><button type="button" class="btn btn-ghost btn-sm" onClick="{{close}}" style="min-height:44px">Cerrar</button></div>
+      <div class="seg" role="group" aria-label="Orden" style="align-self:flex-start"><button type="button" class="sg {{o0}}" onClick="{{ord0}}">Parrilla</button><button type="button" class="sg {{o1}}" onClick="{{ord1}}">Equipo</button></div>
+      <div class="dg">
+        <sc-for list="{{drivers}}" as="d" hint-placeholder-count="22">
+          <button type="button" class="dc {{d.cls}}" onClick="{{d.pick}}" disabled="{{d.used}}" aria-label="{{d.name}}" style="box-shadow:inset 0 4px 0 {{d.c}}">{{d.code}}<small>{{d.sub}}</small></button>
+        </sc-for>
+      </div>
+      <span class="t-cap muted">Atenuados: ya están en otro puesto. Abajo, la posición de salida.</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = 5;
+    const sel = s.sel || ['NOR', 'RUS', null, null, null];
+    const open = s.open === undefined ? 2 : s.open;
+    const firstEmpty = (a) => { for (let i = 0; i < n; i++) if (!a[i]) return i; return -1; };
+    const gp = (c) => 'P' + (P.GRID.indexOf(c) + 1);
+    const count = sel.filter(Boolean).length;
+    const slots = sel.map((c, i) => { const d = c ? P.drv(c) : null; return { pos: i + 1, name: d ? d.name : 'Elegir piloto', nc: d ? 'var(--h)' : 'var(--muted)', sub: d ? d.team + ' · sale ' + gp(c) : '', c: d ? d.color : 'transparent',
+      cls: (d ? 'full' : '') + (open === i ? ' cur' : ''), aria: (i + 1) + '.º: ' + (d ? d.name : 'vacío'), pick: () => this.setState({ open: i }) }; });
+    const list = s.ord === 1 ? P.drivers : P.GRID.map((c) => P.drv(c));
+    const drivers = list.map((d) => { const k = sel.indexOf(d.code), used = k >= 0 && k !== open; return { code: d.code, name: d.name, c: d.color, used, sub: used ? (k + 1) + '.º' : gp(d.code), cls: sel[open] === d.code ? 'cur' : '',
+      pick: () => { if (used) return; const a = sel.slice(); a[open] = d.code; this.setState({ sel: a, open: firstEmpty(a) >= 0 ? firstEmpty(a) : -1, saved: false }); } }; });
+    const fill = (arr) => this.setState({ sel: arr.slice(0, n), open: -1, saved: false });
+    return {
+      chips: [['Clasif. sprint', 'done'], ['Sprint', 'on'], ['Clasificación', ''], ['Carrera', '']].map((x) => ({ l: x[0], cls: x[1], done: x[1] === 'done', pick: () => {} })),
+      sessName: 'sprint', n, count, pct: Math.round(count / n * 100), slots,
+      sheet: open >= 0, sheetPos: open + 1, drivers, close: () => this.setState({ open: -1 }),
+      o0: s.ord === 1 ? '' : 'on', o1: s.ord === 1 ? 'on' : '', ord0: () => this.setState({ ord: 0 }), ord1: () => this.setState({ ord: 1 }),
+      useGrid: () => fill(P.GRID), copyCs: () => fill(P.REAL.cs.concat(P.GRID.filter((c) => P.REAL.cs.indexOf(c) < 0))),
+      clear: () => this.setState({ sel: [null, null, null, null, null], open: 0, saved: false }),
+      cantSave: count < n, saveLabel: s.saved ? 'Guardado' : 'Guardar pronóstico', save: () => this.setState({ saved: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

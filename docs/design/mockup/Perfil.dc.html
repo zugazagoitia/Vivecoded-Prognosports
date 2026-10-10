@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mi perfil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.hero{display:flex;gap:24px;align-items:center;flex-wrap:wrap;padding:24px}
+.bigav{width:88px;height:88px;border-radius:50%;background:var(--c-you);color:#fff;font-size:30px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.lvl{display:flex;flex-direction:column;gap:6px;min-width:240px}
+.strip{position:relative;height:28px}.strip .ln{position:absolute;left:0;right:0;top:13px;height:2px;background:var(--surface-muted)}.strip .o{position:absolute;top:10px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--c-rest);opacity:.6}.strip .y{position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--c-you);box-shadow:0 0 0 2px var(--surface)}
+.cm{display:grid;grid-template-columns:180px minmax(0,1fr) 60px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="perfil" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <section class="card hero">
+      <span class="bigav">ÁR</span>
+      <div class="col fx" style="gap:4px;min-width:260px"><h1 class="t-title">Álex Ruiz</h1><span class="muted">@alexruiz · Madrid · en PrognoSports desde marzo de 2023</span><p class="t-sm" style="max-width:560px">Pronostico desde el sofá con el café en la mano. Fan de las carreras en mojado y de las estrategias a una parada.</p><div class="row g8 wrapf"><span class="tag tg-brand"><span class="i s16">emoji_events</span>Campeón 2024</span><span class="tag tg-gray">3 comunidades</span></div></div>
+      <div class="lvl"><div class="row sp t-sm"><b class="hd">Nivel 7 · Estratega</b><span class="muted tn">1.840 / 2.200 XP</span></div><div class="prog"><i style="width:84%"></i></div><span class="t-cap muted">Rango en Amigos del paddock</span><a class="btn btn-outline btn-sm" href="Ajustes.dc.html" style="align-self:flex-start"><span class="i s16">settings</span>Ajustes de la cuenta</a></div>
+    </section>
+    <section class="grid4" style="gap:16px">
+      <div class="card kpi"><span class="k">Puntos 2026</span><span class="v tn">{{total}}</span><span class="d">{{pos}}.º en Amigos del paddock</span></div>
+      <div class="card kpi"><span class="k">Media por GP</span><span class="v tn">{{avg}}</span><span class="d">mejor que el {{pctl}} %</span></div>
+      <div class="card kpi"><span class="k">GP ganados</span><span class="v tn">{{wins}}</span><span class="d">de 17 en 2026</span></div>
+      <div class="card kpi"><span class="k">Aciertos</span><span class="v tn">{{hitPct}} %</span><span class="d">{{hits}} de 221 posiciones</span></div>
+    </section>
+    <div class="split">
+      <section class="card"><div class="card-h"><div class="row g8"><h2 class="t-head">Tu temporada</h2><span class="flag">flag</span></div><a class="t-sm" href="MiTemporada.dc.html">Mi temporada</a></div>
+        <div class="card-b"><svg viewBox="0 0 1000 220" width="100%" class="chart" role="img" aria-label="Tus puntos por GP frente al rango de la comunidad"><sc-for list="{{cols}}" as="c" hint-placeholder-count="17"><g><rect x="{{c.x}}" y="{{c.bt}}" width="44" height="{{c.bh}}" rx="4" style="fill:var(--surface-muted)"></rect><rect x="{{c.bx}}" y="{{c.vt}}" width="26" height="{{c.vh}}" rx="3" style="fill:{{c.vc}}"></rect><line x1="{{c.x}}" x2="{{c.x2}}" y1="{{c.my}}" y2="{{c.my}}" style="stroke:var(--h);stroke-width:2"></line><text x="{{c.tx}}" y="214" text-anchor="middle">{{c.gp}}</text></g></sc-for></svg>
+          <div class="legend"><span><i style="width:12px;height:12px;border-radius:2px;display:inline-block;background:var(--c-you)"></i>Tus puntos</span><span><i style="width:12px;height:12px;border-radius:2px;display:inline-block;background:var(--surface-muted)"></i>Rango de la comunidad</span><span><i style="width:16px;height:2px;display:inline-block;background:var(--h)"></i>Mediana</span></div></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Tus comunidades</h2><a class="t-sm" href="Comunidades.dc.html">Ver todas</a></div>
+        <div class="card-b col" style="gap:0"><sc-for list="{{coms}}" as="c" hint-placeholder-count="3"><div class="cm"><span class="col" style="gap:0"><a href="ComunidadHome.dc.html" class="hd" style="font-weight:600">{{c.name}}</a><span class="t-cap muted">{{c.pos}}.º de {{c.m}}</span></span><span class="strip" role="img" aria-label="Percentil {{c.pct}}"><i class="ln"></i><sc-for list="{{c.o}}" as="o" hint-placeholder-count="10"><i class="o" style="left:{{o}}%"></i></sc-for><i class="y" style="left:{{c.pct}}%"></i></span><b class="hd tn" style="text-align:right">{{c.pct}}</b></div></sc-for><span class="t-cap muted" style="padding-top:8px">Percentil: 100 = primero de la comunidad.</span></div></section>
+    </div>
+    <section class="card"><div class="card-h"><h2 class="t-head">Historial en Amigos del paddock</h2></div>
+      <div class="tw"><table class="tbl tn"><thead><tr><th>Temporada</th><th>Puesto final</th><th class="r">Puntos</th><th>Campeón</th></tr></thead><tbody><sc-for list="{{hist}}" as="h" hint-placeholder-count="4"><tr class="{{h.cls}}"><td><b class="hd">{{h.y}}</b></td><td><span class="pos {{h.pc}}">{{h.p}}</span></td><td class="r">{{h.pts}}</td><td>{{h.champ}}</td></tr></sc-for></tbody></table></div></section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1450}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const pos = O.indexOf(me) + 1, avg = P.total[me] / n, avgs = P.users.map((u) => P.total[u.id] / n), hits = P.hits[me].reduce((a, b) => a + b, 0);
+    const Yp = (v) => 196 - v / 70 * 186;
+    const cols = P.pts[me].map((p, g) => { const vs = P.users.map((u) => P.pts[u.id][g]); const mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), x = 48 + g * 56; return { x, x2: x + 44, bx: x + 9, tx: x + 22, bt: Yp(mx), bh: Yp(mn) - Yp(mx), vt: Yp(p), vh: 196 - Yp(p), vc: P.gpRank[me][g] === 1 ? 'var(--brand-800)' : 'var(--c-you)', my: Yp(P.median(vs)), gp: P.gps[g].code }; });
+    const C = [['Amigos del paddock', 12, pos], ['Oficina F1', 31, 9], ['Peña Madring', 8, 2]];
+    const hist = [2026, 2025, 2024, 2023].map((y) => { const L = y === 2026 ? O : P.past[y], i = L.indexOf(me); return { y: y === 2026 ? '2026 (en curso)' : y, p: i + 1, pc: i < 3 ? 'p' + (i + 1) : '', pts: y === 2026 ? P.total[me] : P.pastPts[y][i], champ: P.byId[L[0]].name, cls: i === 0 ? 'me' : '' }; });
+    return {
+      total: P.total[me], pos, avg: avg.toFixed(1).replace('.', ','), pctl: Math.round(100 * avgs.filter((x) => x < avg).length / (avgs.length - 1)), wins: P.gpRank[me].filter((r) => r === 1).length, hits, hitPct: Math.round(hits / 221 * 100),
+      cols, coms: C.map((c) => { const pct = Math.round(100 * (c[1] - c[2]) / (c[1] - 1)), o = []; for (let k = 1; k <= Math.min(c[1], 14); k++) { const pp = Math.round(100 * (k - 1) / (Math.min(c[1], 14) - 1)); if (Math.abs(pp - pct) > 3) o.push(pp); } return { name: c[0], m: c[1], pos: c[2], pct, o }; }), hist
+    };
+  }
+}
+</script>
+</body>
+</html>

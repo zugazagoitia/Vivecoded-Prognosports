@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tab bar móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0;font-family:Inter,system-ui,sans-serif}</style>
+</helmet>
+<nav class="tabbar" aria-label="Principal">
+  <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+    <a class="tb {{t.cls}}" href="{{t.href}}" aria-label="{{t.label}}"><span class="i">{{t.icon}}</span>{{t.label}}</a>
+  </sc-for>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","default":"inicio","options":["inicio","gps","ranking","comunidades","perfil"]},"$preview":{"width":390,"height":64}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.active || 'inicio';
+    const T = [['inicio', 'Inicio', 'home', 'Inicio'], ['gps', 'GPs', 'flag', 'GPLista'], ['ranking', 'Ranking', 'leaderboard', 'Clasificacion'], ['comunidades', 'Comunidades', 'groups', 'Comunidades'], ['perfil', 'Perfil', 'person', 'Perfil']];
+    return { tabs: T.map((t) => ({ label: t[1], icon: t[2], href: t[3] + '.dc.html', cls: t[0] === a ? 'on' : '' })) };
+  }
+}
+</script>
+</body>
+</html>

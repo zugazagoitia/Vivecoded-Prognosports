@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Clasificación</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.sh{border:0;background:transparent;font:inherit;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:2px}
+.sh:hover{color:var(--h)}.sh.on{color:var(--tint-fg)}
+.rowb:hover td{background:var(--surface-hover)}
+.rowb.open td{background:var(--tint)}
+.exp td{background:var(--surface-muted);padding:16px 20px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.xbtn{border:0;background:transparent;cursor:pointer;color:var(--muted);display:inline-flex;padding:4px;border-radius:6px}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Clasificacion" hint-size="100%,170px"></dc-import>
+
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">Clasificación general</h2><span class="t-sm muted">Pulsa una cabecera para ordenar y una fila para ver su temporada.</span></div>
+        <label class="row g8 t-sm" style="cursor:pointer"><input type="checkbox" checked="{{near}}" onChange="{{toggleNear}}" style="width:18px;height:18px;accent-color:var(--primary)">Solo mi entorno</label></div>
+      <div class="tw"><table class="tbl tn">
+        <thead><tr><th>Pos.</th><th>Jugador</th><th>Forma</th><th>Posición</th><sc-for list="{{heads}}" as="h" hint-placeholder-count="8"><th class="r"><button type="button" class="sh {{h.cls}}" onClick="{{h.pick}}" title="{{h.title}}" aria-sort="{{h.aria}}">{{h.l}}<span class="i s16">{{h.ic}}</span></button></th></sc-for><th></th></tr></thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+            <tr class="rowb {{r.cls}}">
+              <td><b class="hd">{{r.pos}}</b> <span class="mv {{r.mc}}">{{r.mv}}</span></td>
+              <td><button type="button" class="row g8" onClick="{{r.pick}}" style="border:0;background:transparent;padding:0;font:inherit;color:inherit;cursor:pointer"><i class="dot" style="background:{{r.color}}"></i><span class="av s24 {{r.me}}">{{r.ini}}</span><b class="hd">{{r.name}}</b></button></td>
+              <td><span class="form"><sc-for list="{{r.form}}" as="f" hint-placeholder-count="5"><b class="{{f.c}}" title="{{f.t}}">{{f.v}}</b></sc-for></span></td>
+              <td><svg width="100" height="28" aria-hidden="true"><path d="{{r.spark}}" fill="none" style="stroke:{{r.sc}};stroke-width:1.5;stroke-linejoin:round"></path><circle cx="98" cy="{{r.sy}}" r="2.5" style="fill:{{r.sc}}"></circle></svg></td>
+              <td class="r"><b class="hd">{{r.total}}</b></td><td class="r muted">{{r.gap}}</td><td class="r muted">{{r.gapPrev}}</td><td class="r">{{r.avg}}</td><td class="r">{{r.wins}}</td><td class="r">{{r.pod}}</td><td class="r">{{r.hits}}</td><td class="r muted">17/17</td>
+              <td><button type="button" class="xbtn" onClick="{{r.pick}}" aria-label="{{r.xl}}" aria-expanded="{{r.open}}"><span class="i s16">{{r.chev}}</span></button></td>
+            </tr>
+            <sc-if value="{{r.open}}" hint-placeholder-val="{{ false }}">
+              <tr class="exp"><td colspan="13">
+                <div class="row sp wrapf"><b class="hd t-sm">Puntos de {{r.name}} por Gran Premio <span class="muted" style="font-weight:400">· raya = media de la comunidad · morado oscuro = ganó el GP</span></b><a class="t-sm" href="PerfilUsuario.dc.html">Ver perfil</a></div>
+                <svg viewBox="0 0 1000 140" width="100%" class="chart" role="img" aria-label="Puntos por GP de {{r.name}}" style="margin-top:8px;background:transparent">
+                  <sc-for list="{{r.bars}}" as="b" hint-placeholder-count="17"><g><rect x="{{b.x}}" y="{{b.y}}" width="36" height="{{b.h}}" rx="3" style="fill:{{b.c}}"></rect><line x1="{{b.ax}}" x2="{{b.ax2}}" y1="{{b.ay}}" y2="{{b.ay}}" style="stroke:var(--h);stroke-width:2"></line><text x="{{b.tx}}" y="{{b.vy}}" text-anchor="middle" style="fill:var(--h);font-weight:600">{{b.v}}</text><text x="{{b.tx}}" y="136" text-anchor="middle">{{b.code}}</text></g></sc-for>
+                </svg>
+              </td></tr>
+            </sc-if>
+          </sc-for>
+        </tbody></table></div>
+      <div class="card-f" style="justify-content:flex-start"><div class="legend"><span>Forma: puesto en cada uno de los últimos 5 GP</span><span>Posición: evolución en la general</span><span>Dif. ant.: puntos con el de arriba</span><span>Media: puntos por GP</span></div></div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, O = P.order, me = 'alex', lead = O[0], sort = s.sort || 'total', open = s.open === undefined ? 'alex' : s.open;
+    const hl = O.slice(0, 5).filter((id) => id !== me);
+    const avgGp = []; for (let g = 0; g < n; g++) avgGp[g] = P.users.reduce((a, u) => a + P.pts[u.id][g], 0) / P.users.length;
+    const info = O.map((id, i) => ({ id, pos: i + 1, total: P.total[id], avg: P.total[id] / n, wins: P.gpRank[id].filter((x) => x === 1).length, pod: P.gpRank[id].filter((x) => x <= 3).length, hits: P.hits[id].reduce((a, b) => a + b, 0) }));
+    const K = [['total', 'Puntos', 'Puntos totales', 1], ['gap', 'Dif. líder', 'Puntos con el líder', 0], ['gapPrev', 'Dif. ant.', 'Puntos con el de arriba', 0], ['avg', 'Media', 'Media por GP', 1], ['wins', 'Vict.', 'GP ganados', 1], ['pod', 'Podios', 'Top 3 en un GP', 1], ['hits', 'Aciertos', 'Aciertos totales', 1], ['gp', 'GP', 'GP disputados', 0]];
+    let list = info.slice();
+    if (s.near) { const p = O.indexOf(me); list = list.filter((x) => Math.abs(x.pos - 1 - p) <= 2); }
+    if (sort !== 'total') list.sort((a, b) => (b[sort] - a[sort]) || (a.pos - b.pos));
+    const X = (g) => 6 + g * (1000 - 12) / n;
+    const rows = list.map((x) => {
+      const id = x.id, m = P.pos[id][n - 2] - P.pos[id][n - 1], isOpen = open === id;
+      const spark = P.pos[id].map((r, g) => (g ? 'L' : 'M') + (g * 98 / (n - 1)).toFixed(1) + ' ' + ((r - 1) / 11 * 24 + 2).toFixed(1)).join('');
+      return { pos: x.pos, mv: m > 0 ? '▲' + m : m < 0 ? '▼' + (-m) : '—', mc: m > 0 ? 'up' : m < 0 ? 'dn' : 'eq', name: P.byId[id].name + (id === me ? ' (tú)' : ''), ini: P.byId[id].ini, me: id === me ? 'you' : '', cls: (id === me ? 'me ' : '') + (isOpen ? 'open' : ''), color: P.hue(id, hl),
+        form: [12, 13, 14, 15, 16].map((g) => { const v = P.gpRank[id][g]; return { v, c: v === 1 ? 'w' : v <= 3 ? 'p' : '', t: P.gps[g].name + ': ' + v + '.º del GP' }; }),
+        spark, sy: ((P.pos[id][n - 1] - 1) / 11 * 24 + 2).toFixed(1), sc: id === me ? 'var(--c-you)' : 'var(--muted)',
+        total: x.total, gap: x.pos === 1 ? '—' : '−' + (P.total[lead] - x.total), gapPrev: x.pos === 1 ? '—' : '−' + (P.total[O[x.pos - 2]] - x.total),
+        avg: x.avg.toFixed(1).replace('.', ','), wins: x.wins || '·', pod: x.pod || '·', hits: x.hits, open: isOpen, chev: isOpen ? 'expand_less' : 'expand_more', xl: (isOpen ? 'Ocultar' : 'Ver') + ' la temporada de ' + P.byId[id].name,
+        bars: P.pts[id].map((v, g) => { const h = v / 62 * 100, ay = 118 - avgGp[g] / 62 * 100; return { x: X(g) + 10, y: (118 - h).toFixed(1), h: h.toFixed(1), c: P.gpRank[id][g] === 1 ? 'var(--brand-800)' : 'var(--brand-300)', ax: X(g) + 6, ax2: X(g) + 50, ay: ay.toFixed(1), tx: X(g) + 28, vy: (114 - h).toFixed(1), v, code: P.gps[g].code }; }),
+        pick: () => this.setState({ open: isOpen ? null : id }) };
+    });
+    return {
+      heads: K.map((k) => ({ l: k[1], title: k[2], cls: sort === k[0] ? 'on' : '', ic: sort === k[0] ? 'arrow_downward' : '', aria: sort === k[0] ? 'descending' : 'none', pick: () => { if (k[3]) this.setState({ sort: k[0] }); else this.setState({ sort: 'total' }); } })),
+      rows, near: !!s.near, toggleNear: () => this.setState({ near: !s.near })
+    };
+  }
+}
+</script>
+</body>
+</html>

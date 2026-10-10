@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Puntos por sesión</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.sh{display:grid;grid-template-columns:160px minmax(0,1fr) 70px;gap:12px;align-items:center;min-height:32px;padding:0 6px;border-radius:4px}
+.sh.me{background:var(--tint)}
+.stk{display:flex;gap:2px;height:22px}.stk span{display:flex;align-items:center;justify-content:center;border-radius:2px;color:#fff;font-size:11px;font-weight:600;overflow:hidden}
+.alt{border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.alt .h{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+.alt .r{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:13px}.alt .r.me{background:var(--tint);font-weight:700}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <dc-import name="RankNav" active="Sesiones" hint-size="100%,200px"></dc-import>
+    <section class="card">
+      <div class="card-h"><div class="col" style="gap:0"><div class="row g8"><h2 class="t-head">{{title}}</h2><span class="flag">flag</span></div><span class="t-sm muted">{{sub}}</span></div>
+        <div class="seg" role="group" aria-label="Vista"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div></div>
+      <div class="card-b col g12">
+        <div class="legend"><sc-for list="{{cats}}" as="c" hint-placeholder-count="5"><span><i style="width:12px;height:12px;border-radius:2px;display:inline-block;background:{{c.c}}"></i>{{c.l}}</span></sc-for></div>
+        <sc-if value="{{isMe}}" hint-placeholder-val="{{ true }}">
+          <svg viewBox="0 0 1000 360" width="100%" class="chart" role="img" aria-label="Tus puntos por sesión en cada GP">
+            <sc-for list="{{grid}}" as="g" hint-placeholder-count="4"><line class="gl" x1="40" x2="1000" y1="{{g.y}}" y2="{{g.y}}"></line><text x="32" y="{{g.ty}}" text-anchor="end">{{g.l}}</text></sc-for>
+            <line x1="40" x2="1000" y1="{{avgY}}" y2="{{avgY}}" style="stroke:var(--h);stroke-width:2;stroke-dasharray:6 4"></line><text x="996" y="{{avgTy}}" text-anchor="end">media de la comunidad {{avg}}</text>
+            <sc-for list="{{bars}}" as="b" hint-placeholder-count="17"><g><sc-for list="{{b.segs}}" as="s" hint-placeholder-count="4"><rect x="{{b.x}}" y="{{s.y}}" width="40" height="{{s.h}}" rx="2" style="fill:{{s.c}}"><title>{{s.t}}</title></rect></sc-for><text x="{{b.tx}}" y="{{b.ty}}" text-anchor="middle" style="fill:var(--h);font-weight:600">{{b.v}}</text><text x="{{b.tx}}" y="334" text-anchor="middle">{{b.gp}}</text><text x="{{b.tx}}" y="350" text-anchor="middle" style="font-size:9px;font-weight:700;fill:var(--c-3)">{{b.sp}}</text></g></sc-for>
+          </svg>
+        </sc-if>
+        <sc-if value="{{isShare}}" hint-placeholder-val="{{ false }}">
+          <div class="col" style="gap:4px"><sc-for list="{{share}}" as="r" hint-placeholder-count="12"><div class="sh {{r.cls}}"><span class="t-sm" style="font-weight:{{r.w}}">{{r.name}}</span><span class="stk"><sc-for list="{{r.segs}}" as="g" hint-placeholder-count="5"><span style="width:{{g.w}}%;background:{{g.c}}" title="{{g.t}}">{{g.l}}</span></sc-for></span><b class="hd tn" style="text-align:right">{{r.total}}</b></div></sc-for></div>
+        </sc-if>
+        <sc-if value="{{isAlt}}" hint-placeholder-val="{{ false }}">
+          <div class="grid4" style="gap:12px"><sc-for list="{{alts}}" as="a" hint-placeholder-count="4"><div class="alt"><div class="h"><i style="width:10px;height:10px;border-radius:2px;display:inline-block;background:{{a.c}}"></i><b class="hd">{{a.title}}</b></div><sc-for list="{{a.rows}}" as="r" hint-placeholder-count="8"><div class="r {{r.cls}}"><span class="tn" style="width:18px;font-weight:700">{{r.pos}}</span><span class="fx ell">{{r.name}}</span><span class="mv {{r.mc}}">{{r.mv}}</span><span class="tn" style="width:36px;text-align:right">{{r.pts}}</span></div></sc-for></div></sc-for></div>
+          <span class="t-cap muted">Flechas: puestos que se ganan o pierden frente a la clasificación real.</span>
+        </sc-if>
+        <div class="alert al-info" style="padding:8px 12px"><span class="i s16">database</span><span class="t-sm">Datos de la API: <code>pointsBySession</code> y <code>bonusPoints</code> de cada GP.</span></div>
+      </div>
+    </section>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const mode = s.m || 'me', K = ['q', 'cs', 'sp', 'r', 'bonus'], NM = { q: 'Clasificación', cs: 'Clasif. sprint', sp: 'Sprint', r: 'Carrera', bonus: 'Bonus' };
+    const Y = (v) => 320 - v / 70 * 300;
+    const avg = P.users.reduce((a, u) => a + P.total[u.id], 0) / P.users.length / n;
+    const bars = P.bySess[me].map((o, g) => { let y = 320; const segs = []; K.forEach((k) => { const v = o[k] || 0; if (!v) return; const h = v / 70 * 300; y -= h; segs.push({ y: y.toFixed(1), h: Math.max(1, h - 1).toFixed(1), c: P.sessColor[k], t: NM[k] + ': ' + v }); }); const x = 48 + g * 56; return { x, tx: x + 20, ty: y - 6, v: P.pts[me][g], gp: P.gps[g].code, sp: P.gps[g].sprint ? 'SPRINT' : '', segs }; });
+    const sumBy = (id) => { const t = { q: 0, cs: 0, sp: 0, r: 0, bonus: 0 }; P.bySess[id].forEach((o) => K.forEach((k) => { t[k] += o[k] || 0; })); return t; };
+    const share = O.map((id) => { const t = sumBy(id), sum = K.reduce((a, k) => a + t[k], 0); return { name: P.byId[id].name + (id === me ? ' (tú)' : ''), cls: id === me ? 'me' : '', w: id === me ? 700 : 500, total: P.total[id], segs: K.map((k) => { const pc = t[k] / sum * 100; return { w: pc.toFixed(2), c: P.sessColor[k], l: pc >= 8 ? Math.round(pc) + '%' : '', t: NM[k] + ': ' + t[k] + ' pts' }; }) }; });
+    const alts = ['q', 'sp', 'r'].map((k) => { const list = O.map((id) => ({ id, t: sumBy(id)[k] })).sort((a, b) => b.t - a.t); return { title: 'Solo ' + NM[k].toLowerCase(), c: P.sessColor[k], rows: list.slice(0, 8).map((o, i) => { const d = O.indexOf(o.id) - i; return { pos: i + 1, name: o.id === me ? 'Tú' : P.byId[o.id].name, cls: o.id === me ? 'me' : '', pts: o.t, mv: d > 0 ? '▲' + d : d < 0 ? '▼' + (-d) : '', mc: d > 0 ? 'up' : 'dn' }; }) }; });
+    alts.push({ title: 'Clasificación real', c: 'var(--c-you)', rows: O.slice(0, 8).map((id, i) => ({ pos: i + 1, name: id === me ? 'Tú' : P.byId[id].name, cls: id === me ? 'me' : '', pts: P.total[id], mv: '', mc: '' })) });
+    const T = { me: ['Tus puntos por sesión en cada GP', 'Cada sesión con un color fijo; los fines de semana con sprint van marcados.'], share: ['¿De dónde salen los puntos de cada uno?', 'Reparto por tipo de sesión: ¿eres de clasificación o de carrera?'], alt: ['Rankings alternativos', '¿Quién ganaría si solo contara una sesión?'] };
+    return {
+      title: T[mode][0], sub: T[mode][1], modes: [['me', 'Tu temporada'], ['share', 'Reparto por jugador'], ['alt', 'Rankings alternativos']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ m: x[0] }) })),
+      isMe: mode === 'me', isShare: mode === 'share', isAlt: mode === 'alt', cats: K.map((k) => ({ l: NM[k], c: P.sessColor[k] })),
+      grid: [0, 20, 40, 60].map((v) => ({ y: Y(v), ty: Y(v) + 4, l: v })), avgY: Y(avg), avgTy: Y(avg) - 6, avg: Math.round(avg), bars, share, alts
+    };
+  }
+}
+</script>
+</body>
+</html>

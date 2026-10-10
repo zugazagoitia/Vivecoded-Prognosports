@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Ajustes de la comunidad</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.toc a{display:block;padding:6px 10px;border-radius:6px;font-size:14px;color:var(--muted)}.toc a:hover{background:var(--surface-muted);color:var(--h);text-decoration:none}.cimg{width:96px;height:96px;border-radius:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:32px;flex:none;background:var(--c-you)}.ro{background:var(--surface-muted);color:var(--muted)}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="comunidades" hint-size="100%,56px"></dc-import>
+  <main class="pg-main lg">
+    <div class="crumb"><a href="Comunidades.dc.html">Comunidades</a><span class="i">chevron_right</span><a href="ComunidadHome.dc.html">Amigos del paddock</a><span class="i">chevron_right</span><span>Ajustes</span></div>
+    <div class="col" style="gap:2px"><h1 class="t-title">Ajustes de la comunidad</h1><p class="muted">Solo los administradores ven esta página.</p></div>
+
+    <div class="side-l" style="grid-template-columns:200px minmax(0,1fr)">
+      <nav class="toc sticky col" style="gap:2px" aria-label="En esta página"><a href="#imagen">Imagen</a><a href="#invitacion">Invitación</a><a href="#datos">Datos</a><a href="#reglas">Reglas</a><a href="#miembros">Miembros</a></nav>
+      <div class="col g24" style="min-width:0">
+        <section id="imagen" class="card">
+          <div class="card-h"><h2 class="t-head">Imagen</h2></div>
+          <div class="card-b row g24 wrapf"><span class="cimg">AP</span><div class="col g8 fx" style="min-width:240px"><p class="t-sm muted">Se muestra en las listas y en la cabecera de la comunidad. Hasta 2 MB; recortarás la imagen antes de subirla.</p><div class="row g8 wrapf"><button type="button" class="btn btn-primary btn-sm"><span class="i s16">upload</span>Subir imagen</button><button type="button" class="btn btn-outline btn-sm">Quitar imagen</button></div></div></div>
+        </section>
+
+        <section id="invitacion" class="card">
+          <div class="card-h"><h2 class="t-head">Invitación</h2><span class="tag tg-brand"><span class="i s16">lock</span>Cerrada</span></div>
+          <div class="card-b col g12">
+            <p class="t-sm muted">Comparte el enlace con quien quieras que entre. Al regenerarlo, el anterior deja de funcionar.</p>
+            <div class="row g8"><input class="inp" readonly value="prognosports.com/unirse/PADDOCK-7KQ2" aria-label="Enlace de invitación"><button type="button" class="btn btn-primary" onClick="{{copy}}"><span class="i s16">{{copyIcon}}</span>{{copyLabel}}</button></div>
+            <div class="row g8"><button type="button" class="btn btn-outline btn-sm" onClick="{{askRegen}}"><span class="i s16">autorenew</span>Regenerar enlace</button></div>
+          </div>
+        </section>
+
+        <section id="datos" class="card">
+          <div class="card-h"><h2 class="t-head">Datos</h2><span class="tag tg-gray"><span class="i s16">lock</span>Solo lectura</span></div>
+          <div class="card-b col g16">
+            <div class="alert al-info"><span class="i">info</span><span>Por ahora el nombre, la descripción y el acceso no se pueden cambiar después de crear la comunidad.</span></div>
+            <div class="grid2" style="gap:16px">
+              <div class="field"><span class="lbl">Nombre</span><div class="inp ro" style="display:flex;align-items:center">Amigos del paddock</div></div>
+              <div class="field"><span class="lbl">Acceso</span><div class="inp ro" style="display:flex;align-items:center">Cerrada · con invitación</div></div>
+              <div class="field" style="grid-column:1/-1"><span class="lbl">Descripción</span><div class="inp ro" style="display:flex;align-items:center;min-height:56px;height:auto;padding-block:10px">Quienes pronosticamos desde la pandemia. Reglas clásicas, cero piedad.</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="reglas" class="card">
+          <div class="card-h"><h2 class="t-head">Reglas de puntuación</h2><span class="tag tg-gray"><span class="i s16">lock</span>Solo lectura</span></div>
+          <div class="tw"><table class="tbl tn"><thead><tr><th>Acierto</th><th class="r">Puntos</th></tr></thead><tbody><sc-for list="{{rules}}" as="r" hint-placeholder-count="6"><tr><td>{{r.n}}</td><td class="r"><b class="hd">{{r.p}}</b></td></tr></sc-for></tbody></table></div>
+          <div class="card-f" style="justify-content:flex-start"><span class="t-sm muted">Conjunto «Clásica 2026», público y usado por 4 comunidades.</span></div>
+        </section>
+
+        <section id="miembros" class="card">
+          <div class="card-h"><h2 class="t-head">Miembros</h2><span class="t-sm muted">12 jugadores</span></div>
+          <div class="card-b row g8 wrapf"><sc-for list="{{members}}" as="m" hint-placeholder-count="12"><span class="row g8 tag tg-gray" style="padding:4px 10px 4px 4px;border-radius:999px"><span class="av s24 {{m.me}}">{{m.ini}}</span>{{m.name}}</span></sc-for></div>
+        </section>
+      </div>
+    </div>
+
+    <sc-if value="{{confirm}}" hint-placeholder-val="{{ false }}">
+      <div class="scrim" style="position:fixed;inset:0;border-radius:0;z-index:50"><div class="modal"><div class="card-b col g12"><div class="row g12"><div class="av s40" style="background:var(--warn-tint);color:var(--warn-fg)"><span class="i">warning</span></div><h3 class="t-head">¿Regenerar el enlace?</h3></div><p class="t-sm muted">El enlace actual dejará de funcionar. Quienes ya estén dentro no se ven afectados.</p></div><div class="card-f"><button type="button" class="btn btn-outline btn-sm" onClick="{{closeConfirm}}">Cancelar</button><button type="button" class="btn btn-primary btn-sm" onClick="{{closeConfirm}}">Regenerar</button></div></div></div>
+    </sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {};
+    return {
+      rules: P.rules.map((r) => ({ n: r[0], p: r[1] })),
+      members: P.order.map((id) => ({ name: P.byId[id].name, ini: P.byId[id].ini, me: id === 'alex' ? 'you' : '' })),
+      copyIcon: s.copied ? 'check' : 'content_copy', copyLabel: s.copied ? 'Copiado' : 'Copiar', copy: () => this.setState({ copied: !s.copied }),
+      confirm: !!s.confirm, askRegen: () => this.setState({ confirm: true }), closeConfirm: () => this.setState({ confirm: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Inicio móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.ngp{background:linear-gradient(135deg,var(--brand-800),var(--brand-900));color:#f5f0fa;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.cdb{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cdb div{background:rgba(255,255,255,.1);border-radius:8px;padding:8px 0;display:flex;flex-direction:column;align-items:center}
+.cdb b{font-size:24px;line-height:30px;color:#fff;font-variant-numeric:tabular-nums}.cdb span{font-size:11px;color:var(--brand-200)}
+.ses{display:flex;align-items:center;gap:12px;min-height:56px;padding:0 12px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--border);background:var(--surface);color:inherit;text-decoration:none}
+.ses.urg{box-shadow:inset 0 0 0 1px var(--warn);background:var(--warn-tint)}
+.ses .ic{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none}
+.near{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 8px;border-radius:6px;font-size:14px}.near.me{background:var(--tint);font-weight:700}
+.chips{display:flex;gap:6px;overflow-x:auto}
+</style>
+</helmet>
+<div class="mroot" style="min-height:1800px">
+  <dc-import name="MobileBar" title="Inicio" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="chips"><sc-for list="{{coms}}" as="c" hint-placeholder-count="3"><button type="button" class="chip {{c.cls}}" style="flex:none;min-height:40px" onClick="{{c.pick}}">{{c.l}}</button></sc-for></div>
+
+    <section class="ngp" aria-label="Próximo Gran Premio">
+      <span class="up" style="color:var(--brand-200)">Próximo GP · Ronda 18 · Con sprint</span>
+      <b style="font-size:22px;line-height:28px;color:#fff">Gran Premio de Singapur</b>
+      <div class="cdb" role="timer" aria-label="Faltan 0 días, 1 hora y 32 minutos para el cierre del sprint"><div><b>00</b><span>días</span></div><div><b>01</b><span>horas</span></div><div><b>32</b><span>min</span></div></div>
+      <span class="t-sm" style="color:var(--brand-100)">para el cierre del sprint</span>
+    </section>
+
+    <section class="card card-b col g8">
+      <div class="row sp"><b class="hd t-head" style="font-size:16px">Tus pronósticos</b><span class="t-sm muted tn">2/4</span></div>
+      <sc-for list="{{sessions}}" as="s" hint-placeholder-count="4">
+        <a class="ses {{s.cls}}" href="{{s.href}}"><span class="ic" style="background:{{s.icBg}};color:{{s.icFg}}"><span class="i s16">{{s.ic}}</span></span><span class="col fx" style="gap:0;min-width:0"><b class="hd">{{s.name}}</b><span class="t-cap muted">{{s.when}}</span></span><span class="t-sm" style="font-weight:600;color:{{s.ac}}">{{s.action}}</span><span class="i s16 muted">chevron_right</span></a>
+      </sc-for>
+      <span class="t-cap muted">8 de 12 miembros ya han pronosticado el sprint</span>
+    </section>
+
+    <section class="grid2" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+      <div class="card kpi"><span class="k">Puesto</span><span class="v tn">{{pos}}.º</span><span class="mv {{mvCls}}">{{mvText}}</span></div>
+      <div class="card kpi"><span class="k">Puntos</span><span class="v tn">{{total}}</span><span class="d">−{{gap}} del líder</span></div>
+      <div class="card kpi"><span class="k">Media/GP</span><span class="v tn">{{avg}}</span><span class="d">comunidad {{cavg}}</span></div>
+      <div class="card kpi"><span class="k">GP ganados</span><span class="v tn">{{wins}}</span><span class="d">de 17</span></div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head" style="font-size:16px">Diferencia con el líder</h2></div>
+      <div class="card-b col g8">
+        <svg viewBox="0 0 340 140" width="100%" class="chart" role="img" aria-label="Diferencia con el líder tras cada GP. Ahora: {{end}} puntos">
+          <line class="ax" x1="4" x2="300" y1="12" y2="12"></line><text x="304" y="16">líder</text>
+          <path d="{{area}}" style="fill:var(--tint);stroke:none"></path>
+          <path d="{{line}}" fill="none" style="stroke:var(--c-you);stroke-width:2.5;stroke-linejoin:round"></path>
+          <text x="304" y="{{endY}}" class="lbl-s" style="fill:var(--h)">{{end}}</text>
+          <text x="4" y="136">AUS</text><text x="300" y="136" text-anchor="end">AZE</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-h"><h2 class="t-head" style="font-size:16px">Tu entorno</h2><a class="t-sm" href="ClasificacionMovil.dc.html">Ranking</a></div>
+      <div class="card-b col" style="gap:2px;padding-top:6px"><sc-for list="{{near}}" as="r" hint-placeholder-count="5"><div class="near {{r.cls}}"><span class="tn" style="width:22px;font-weight:700">{{r.pos}}</span><span class="fx ell">{{r.name}}</span><span class="t-cap muted tn">{{r.gap}}</span><b class="hd tn" style="width:40px;text-align:right">{{r.pts}}</b></div></sc-for></div>
+    </section>
+  </div>
+  <dc-import name="TabBar" active="inicio" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', lead = P.order[0], pos = P.order.indexOf(me) + 1;
+    const S = [['Clasif. sprint', 'Vie 9 · terminada · 11 pts', 'check', 'var(--ok-tint)', 'var(--ok-fg)', 'Ver', 'var(--muted)', '', 'Resultados.dc.html'],
+      ['Sprint', 'Sáb 10 · 12:00 · cierra en 1 h 32 min', '2', 'var(--warn)', '#1f1300', 'Pronosticar', 'var(--warn-fg)', 'urg', 'PronosticarMovil.dc.html'],
+      ['Clasificación', 'Sáb 10 · 16:00 · hecho', 'check', 'var(--ok-tint)', 'var(--ok-fg)', 'Editar', 'var(--muted)', '', 'PronosticarMovil.dc.html'],
+      ['Carrera', 'Dom 11 · 15:00 · cierra en 1 d 3 h', '4', 'var(--tint)', 'var(--tint-fg)', 'Pronosticar', 'var(--tint-fg)', '', 'PronosticarMovil.dc.html']];
+    const d = []; for (let g = 0; g < n; g++) d.push(P.acc[me][g] - Math.max.apply(null, P.users.map((u) => P.acc[u.id][g])));
+    const lo = Math.min.apply(null, d.concat([-1])), Y = (v) => 12 + v / lo * 104, X = (g) => 4 + g * (296 / (n - 1));
+    const line = d.map((v, g) => (g ? 'L' : 'M') + X(g).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
+    const mv = P.pos[me][n - 2] - P.pos[me][n - 1];
+    return {
+      coms: ['Amigos del paddock', 'Oficina F1', 'Peña Madring'].map((l, i) => ({ l, cls: i === (s.com || 0) ? 'on' : '', pick: () => this.setState({ com: i }) })),
+      sessions: S.map((x) => ({ name: x[0], when: x[1], ic: x[2] === 'check' ? 'check' : '', icBg: x[3], icFg: x[4], action: x[5], ac: x[6], cls: x[7], href: x[8] })).map((x, i) => Object.assign(x, { ic: x.ic || String(i + 1) })),
+      pos, mvText: mv > 0 ? '▲ ' + mv : mv < 0 ? '▼ ' + (-mv) : '= sin cambios', mvCls: mv > 0 ? 'up' : mv < 0 ? 'dn' : 'eq',
+      total: P.total[me], gap: P.total[lead] - P.total[me], avg: Math.round(P.total[me] / n), cavg: Math.round(P.users.reduce((a, u) => a + P.total[u.id], 0) / P.users.length / n),
+      wins: P.gpRank[me].filter((r) => r === 1).length,
+      line, area: line + ' L' + X(n - 1).toFixed(1) + ' 12 L4 12 Z', end: String(d[n - 1]).replace('-', '−'), endY: Y(d[n - 1]) + 4,
+      near: P.order.slice(Math.max(0, pos - 3), pos + 2).map((id) => ({ pos: P.order.indexOf(id) + 1, name: id === me ? 'Tú' : P.byId[id].name, cls: id === me ? 'me' : '', pts: P.total[id], gap: id === me ? '' : (P.total[id] > P.total[me] ? '+' : '−') + Math.abs(P.total[id] - P.total[me]) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

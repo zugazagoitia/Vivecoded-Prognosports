@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Grandes Premios</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.nextbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:16px 20px;border-radius:8px;background:linear-gradient(135deg,var(--brand-700),var(--brand-900));color:#f5f0fa}
+.gc{display:flex;flex-direction:column;gap:8px;padding:16px;color:inherit;text-decoration:none}
+.gc:hover{text-decoration:none;box-shadow:var(--card-shadow),0 0 0 2px var(--ring)}
+.gc.nx{box-shadow:var(--card-shadow),0 0 0 2px var(--ring)}
+.gc.fut{background:var(--surface-muted);box-shadow:none}
+.rd{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dots{display:flex;gap:6px;align-items:center}
+.dots i{width:22px;height:8px;border-radius:999px;display:inline-block;background:var(--surface-muted);box-shadow:inset 0 0 0 1px var(--border)}
+.dots i.ok{background:var(--ok);box-shadow:none}.dots i.pend{background:var(--warn);box-shadow:none}
+.mh{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.mh:after{content:"";flex:1;height:1px;background:var(--border)}
+.sumbar{display:flex;gap:6px;align-items:flex-end;height:28px}
+.sumbar i{flex:1;border-radius:2px 2px 0 0;background:var(--c-you);display:block}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><span>Grandes Premios</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end"><div class="col" style="gap:2px"><h1 class="t-title">Grandes Premios</h1><p class="muted">Fórmula 1 · Temporada 2026 · 17 disputados de 24</p></div><div class="field" style="flex-direction:row;align-items:center;gap:8px"><label class="lbl" for="tmp">Temporada</label><select id="tmp" class="sel" style="width:auto"><option>2026</option><option>2025</option><option>2024</option></select></div></div>
+
+    <a class="nextbar" href="GPDetalle.dc.html" style="text-decoration:none">
+      <span class="i s24" style="color:var(--brand-200)">sports_score</span>
+      <div class="col fx" style="gap:0;min-width:220px"><span class="up" style="color:var(--brand-200)">Ahora · Ronda 18</span><b style="font-size:20px;line-height:28px;color:#fff">Gran Premio de Singapur</b><span class="t-sm" style="color:var(--brand-100)">Cierra el sprint en 01:32:10 · te faltan 2 de 4 pronósticos</span></div>
+      <span class="dots" aria-label="Tus pronósticos: 2 hechos, 2 pendientes"><i class="ok"></i><i class="pend"></i><i class="ok"></i><i></i></span>
+      <span class="btn btn-lg" style="background:#fff;color:#4c2b7a">Pronosticar</span>
+    </a>
+
+    <div class="card card-b row wrapf g16">
+      <div class="iw fx" style="min-width:240px"><span class="i">search</span><input class="inp" placeholder="Buscar por país, ciudad o circuito" aria-label="Buscar Gran Premio" value="{{q}}" onInput="{{onQ}}"></div>
+      <div class="row g8 wrapf"><sc-for list="{{chips}}" as="c" hint-placeholder-count="4"><button type="button" class="chip {{c.cls}}" onClick="{{c.pick}}">{{c.label}} <span class="muted tn">{{c.n}}</span></button></sc-for></div>
+    </div>
+
+    <sc-for list="{{months}}" as="m" hint-placeholder-count="3">
+      <section class="col g12">
+        <h2 class="mh">{{m.name}}</h2>
+        <div class="grid4" style="gap:12px">
+          <sc-for list="{{m.cards}}" as="g" hint-placeholder-count="3">
+            <a class="card gc {{g.cls}}" href="GPDetalle.dc.html" aria-label="{{g.aria}}">
+              <div class="row sp"><span class="rd">R{{g.r}} · {{g.date}}</span><sc-if value="{{g.sprint}}" hint-placeholder-val="{{ false }}"><span class="tag tg-info">Sprint</span></sc-if></div>
+              <b class="hd t-head">{{g.name}}</b>
+              <span class="t-sm muted ell">{{g.circuit}}</span>
+              <sc-if value="{{g.done}}" hint-placeholder-val="{{ false }}"><div class="row sp" style="padding-top:8px;border-top:1px solid var(--border)"><span class="row g8"><b class="hd tn" style="font-size:20px">{{g.pts}}</b><span class="t-cap muted">pts</span></span><span class="tag {{g.rtg}}">{{g.rank}}.º del GP</span></div></sc-if>
+              <sc-if value="{{g.next}}" hint-placeholder-val="{{ false }}"><div class="row sp" style="padding-top:8px;border-top:1px solid var(--border)"><span class="dots"><i class="ok"></i><i class="pend"></i><i class="ok"></i><i></i></span><span class="tag tg-warn">2 de 4</span></div></sc-if>
+              <sc-if value="{{g.future}}" hint-placeholder-val="{{ false }}"><span class="t-cap muted" style="padding-top:8px;border-top:1px solid var(--border)">Pronósticos abiertos {{g.opens}}</span></sc-if>
+            </a>
+          </sc-for>
+        </div>
+      </section>
+    </sc-for>
+    <sc-if value="{{none}}" hint-placeholder-val="{{ false }}"><div class="card"><div class="empty"><div class="ic"><span class="i s24">search_off</span></div><b class="hd">Ningún Gran Premio coincide con «{{q}}»</b><button type="button" class="btn btn-outline btn-sm" onClick="{{reset}}">Quitar filtros</button></div></div></sc-if>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, f = s.f || 0, q = (s.q || '').toLowerCase().trim();
+    const MN = { mar: 'Marzo', abr: 'Abril', may: 'Mayo', jun: 'Junio', jul: 'Julio', ago: 'Agosto', sep: 'Septiembre', oct: 'Octubre', nov: 'Noviembre', dic: 'Diciembre' };
+    const all = P.gps.map((g, i) => {
+      const done = g.done, rank = done ? P.gpRank.alex[i] : 0;
+      return { r: g.r, name: g.name, circuit: g.circuit + ' · ' + g.city, date: g.date, month: g.date.split(' ')[1], sprint: g.sprint, done, next: g.next, future: !g.done && !g.next,
+        cls: g.next ? 'nx' : (!g.done ? 'fut' : ''), pts: done ? P.pts.alex[i] : 0, rank, rtg: rank === 1 ? 'tg-solid' : rank <= 3 ? 'tg-brand' : 'tg-gray',
+        opens: 'el lunes previo', aria: 'GP de ' + g.name + ', ronda ' + g.r };
+    });
+    const F = [['Todos', () => true], ['Disputados', (g) => g.done], ['Por disputar', (g) => !g.done], ['Con sprint', (g) => g.sprint]];
+    const list = all.filter((g) => F[f][1](g) && (!q || (g.name + g.circuit).toLowerCase().indexOf(q) >= 0));
+    const months = []; list.forEach((g) => { let m = months[months.length - 1]; if (!m || m.key !== g.month) { m = { key: g.month, name: MN[g.month] || g.month, cards: [] }; months.push(m); } m.cards.push(g); });
+    return {
+      q: s.q || '', onQ: (e) => this.setState({ q: e.target.value }), reset: () => this.setState({ q: '', f: 0 }),
+      chips: F.map((x, i) => ({ label: x[0], n: all.filter(x[1]).length, cls: i === f ? 'on' : '', pick: () => this.setState({ f: i }) })),
+      months, none: list.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

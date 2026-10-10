@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Enviar notificaciones</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.prev{border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;gap:12px;background:var(--surface-muted)}
+
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="admin" admin="true" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="side-l" style="grid-template-columns:240px minmax(0,1fr)">
+      <div class="sticky"><dc-import name="AdminSide" active="notificaciones" hint-size="240px,420px"></dc-import></div>
+      <div class="col g24" style="min-width:0">
+<div class="col" style="gap:2px"><h1 class="t-title">Notificaciones</h1><p class="muted">Avisos manuales y estado de los envíos automáticos.</p></div>
+<div class="split">
+  <section class="card"><div class="card-h"><h2 class="t-head">Nuevo aviso</h2></div><div class="card-b col g12">
+    <div class="field"><label class="lbl" for="n1">Tipo</label><select id="n1" class="sel"><option>Información</option><option>Cambios en la parrilla</option></select><span class="help">Los avisos de sesión y de puntos se envían solos.</span></div>
+    <div class="field"><label class="lbl" for="n2">Título</label><input id="n2" class="inp" value="{{t}}" onInput="{{onT}}"></div>
+    <div class="field"><label class="lbl" for="n3">Mensaje</label><textarea id="n3" class="txt" rows="4" onInput="{{onM}}">{{m}}</textarea></div>
+    <div class="row g16 wrapf"><label class="row g8 t-sm"><input type="checkbox" checked="" style="width:18px;height:18px;accent-color:var(--primary)">Correo</label><label class="row g8 t-sm"><input type="checkbox" checked="" style="width:18px;height:18px;accent-color:var(--primary)">Telegram</label></div>
+    <span class="up">Vista previa</span><div class="prev"><span class="av s40" style="background:var(--tint);color:var(--tint-fg)"><span class="i">campaign</span></span><div class="col" style="gap:2px"><b class="hd">{{t}}</b><span class="t-sm muted">{{m}}</span></div></div>
+    <span class="t-cap muted">Llegará a 287 usuarios que tienen activado «Información» en algún canal.</span>
+  </div><div class="card-f"><button type="button" class="btn btn-primary btn-sm">Enviar</button></div></section>
+  <aside class="col g16"><section class="card"><div class="card-h"><h2 class="t-head">Envíos automáticos</h2></div><div class="tw"><table class="tbl"><tbody>
+    <tr><td>Pre-alerta de sesión</td><td class="r"><span class="tag tg-ok">Activo</span></td></tr><tr><td>Alerta de sesión</td><td class="r"><span class="tag tg-ok">Activo</span></td></tr><tr><td>Cambios en la parrilla</td><td class="r"><span class="tag tg-ok">Al publicar</span></td></tr><tr><td>Puntos repartidos</td><td class="r"><span class="tag tg-ok">Al calcular</span></td></tr></tbody></table></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head">Canales</h2></div><div class="card-b col g8"><div class="row sp t-sm"><span>Correo</span><span class="tag tg-ok">Funcionando</span></div><div class="row sp t-sm"><span>Telegram</span><span class="tag tg-ok">Funcionando · 164 vinculados</span></div></div></section></aside>
+</div>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    const t = s.t === undefined ? 'Nuevo: Mi temporada' : s.t, m = s.m === undefined ? 'Mira tu año de un vistazo desde tu perfil.' : s.m;
+    return { t, m, onT: (e) => this.setState({ t: e.target.value }), onM: (e) => this.setState({ m: e.target.value }) };
+  }
+}
+</script>
+</body>
+</html>

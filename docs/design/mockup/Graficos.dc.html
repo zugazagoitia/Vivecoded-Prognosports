@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Lenguaje de gráficos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.cs{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.cs i{width:44px;height:28px;border-radius:4px;display:block}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 04</span>
+      <h1 class="t-title">Lenguaje de gráficos</h1>
+      <p class="t-body muted" style="max-width:760px">Los gráficos se dibujan con Apache ECharts, con un tema propio claro y oscuro. Tres reglas lo ordenan todo: tú siempre en morado, los demás en gris salvo hasta cinco resaltados, y el color nunca es la única pista.</p>
+    </div>
+
+    <section class="card">
+      <div class="card-h">
+        <div class="col" style="gap:0"><h2 class="t-head">{{chTitle}}</h2><span class="t-sm muted">Amigos del paddock · 17 Grandes Premios · pulsa un GP del eje para fijarlo</span></div>
+        <div class="row g8 wrapf"><div class="seg" role="group" aria-label="Modo"><sc-for list="{{modes}}" as="m" hint-placeholder-count="2"><button type="button" class="sg {{m.cls}}" onClick="{{m.pick}}">{{m.l}}</button></sc-for></div><div class="seg"><button type="button" class="sg {{vc}}" onClick="{{setChart}}"><span class="i s16">show_chart</span>Gráfico</button><button type="button" class="sg {{vt}}" onClick="{{setTable}}"><span class="i s16">table_chart</span>Ver como tabla</button></div></div>
+      </div>
+      <div class="card-b col g16">
+        <sc-if value="{{isChart}}" hint-placeholder-val="{{ true }}">
+          <div class="chart" style="position:relative;width:100%;max-width:880px">
+            <svg viewBox="0 0 880 312" width="100%" role="img" aria-label="{{alt}}" style="display:block">
+              <sc-for list="{{grid}}" as="g" hint-placeholder-count="5"><line class="gl" x1="48" x2="780" y1="{{g.y}}" y2="{{g.y}}"></line><text x="40" y="{{g.ty}}" text-anchor="end">{{g.t}}</text></sc-for>
+              <line class="ax" x1="48" x2="780" y1="304" y2="304"></line>
+              <sc-for list="{{rest}}" as="l" hint-placeholder-count="8"><path d="{{l.d}}" fill="none" style="stroke:var(--c-rest);stroke-width:1.5;opacity:.55"></path></sc-for>
+              <sc-for list="{{hl}}" as="l" hint-placeholder-count="4"><path d="{{l.d}}" fill="none" style="stroke:{{l.c}};stroke-width:{{l.w}};stroke-linejoin:round;stroke-linecap:round"></path></sc-for>
+              <line x1="{{cx}}" x2="{{cx}}" y1="16" y2="304" style="stroke:var(--axis);stroke-dasharray:3 3"></line>
+              <sc-for list="{{hl}}" as="l" hint-placeholder-count="4"><circle cx="{{cx}}" cy="{{l.cy}}" r="4.5" style="fill:{{l.c}};stroke:var(--chart-surface);stroke-width:2"></circle><text x="790" y="{{l.ly}}" class="lbl-s" style="fill:var(--h)">{{l.name}}</text><text x="790" y="{{l.ly2}}" style="fill:var(--axis-txt)">{{l.val}}</text></sc-for>
+            </svg>
+            <div class="axis" role="group" aria-label="Elegir Gran Premio" style="display:flex;justify-content:space-between;margin:2px 0 0 calc(5.45% - 16px);width:calc(83.2% + 32px)"><sc-for list="{{xl}}" as="x" hint-placeholder-count="17"><button type="button" class="xl {{x.cls}}" onClick="{{x.pick}}" aria-label="{{x.full}}" style="min-width:32px;padding:2px 0">{{x.l}}</button></sc-for></div>
+            <div class="ftip" aria-live="polite" style="position:absolute;left:{{tipL}}%;top:24px;min-width:176px"><b class="hd">{{tipT}}</b><sc-for list="{{hl}}" as="l" hint-placeholder-count="4"><span class="r"><i style="background:{{l.c}}"></i><span class="fx">{{l.name}}</span><b class="tn">{{l.tv}}</b></span></sc-for></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{isTable}}" hint-placeholder-val="{{ false }}">
+          <div class="tw card flat"><table class="tbl tn"><thead><tr><th>Jugador</th><th class="r">GP 13</th><th class="r">GP 14</th><th class="r">GP 15</th><th class="r">GP 16</th><th class="r">GP 17</th></tr></thead><tbody>
+            <sc-for list="{{tbl}}" as="r" hint-placeholder-count="4"><tr class="{{r.cls}}"><td><span class="row g8"><span class="sq" style="background:{{r.c}}"></span><b class="hd">{{r.name}}</b></span></td><td class="r">{{r.a}}</td><td class="r">{{r.b}}</td><td class="r">{{r.c2}}</td><td class="r">{{r.d}}</td><td class="r"><b class="hd">{{r.e}}</b></td></tr></sc-for>
+          </tbody></table></div>
+        </sc-if>
+        <div class="legend"><sc-for list="{{leg}}" as="l" hint-placeholder-count="5"><span><i class="lg-line" style="background:{{l.c}}"></i>{{l.name}}</span></sc-for><span><i class="lg-line" style="background:var(--c-rest)"></i>Resto de la comunidad</span></div>
+        <p class="note">Etiquetas directas al final de cada línea resaltada, leyenda siempre visible, panel fijo con todos los resaltados y tabla equivalente. Línea de 2 px (3 px la tuya). Cada gráfico ofrece de 2 a 4 modos en un control segmentado arriba a la derecha; el eje X son botones que fijan un GP.</p>
+      </div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Color categórico</h2><span class="t-sm muted">Orden fijo; validado para daltonismo</span></div>
+        <div class="card-b col g16">
+          <div class="row wrapf g16">
+            <sc-for list="{{cat}}" as="c" hint-placeholder-count="6"><div class="cs"><i style="background:{{c.v}}"></i><span class="t-cap muted">{{c.n}}</span></div></sc-for>
+            <div class="cs"><i style="background:var(--c-rest)"></i><span class="t-cap muted">Resto</span></div>
+          </div>
+          <ul class="t-sm" style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+            <li>El primer color, el morado de marca, está reservado para <b class="hd">ti</b>. Nunca se reparte a otro jugador.</li>
+            <li>El color sigue a la persona, no a su posición: si cambia el filtro, nadie cambia de color.</li>
+            <li>Más de cinco resaltados: el resto se queda en gris, no se inventan tonos nuevos.</li>
+            <li>Amarillo, aqua y rosa tienen poco contraste sobre blanco: por eso hay etiqueta directa y tabla.</li>
+          </ul>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Escalas de magnitud</h2></div>
+        <div class="card-b col g16">
+          <div class="col g8"><span class="up">Secuencial · mapa de calor, un solo tono</span><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px"><i style="height:28px;border-radius:3px;background:var(--seq-1)"></i><i style="height:28px;border-radius:3px;background:var(--seq-2)"></i><i style="height:28px;border-radius:3px;background:var(--seq-3)"></i><i style="height:28px;border-radius:3px;background:var(--seq-4)"></i><i style="height:28px;border-radius:3px;background:var(--seq-5)"></i><i style="height:28px;border-radius:3px;background:var(--seq-6)"></i><i style="height:28px;border-radius:3px;background:var(--seq-7)"></i></div><div class="row sp t-cap muted"><span>Menos puntos</span><span>Más puntos</span></div></div>
+          <div class="col g8"><span class="up">Divergente · cara a cara</span><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2px"><i style="height:28px;border-radius:3px;background:var(--div-neg)"></i><i style="height:28px;border-radius:3px;background:var(--div-neg);opacity:.5"></i><i style="height:28px;border-radius:3px;background:var(--div-mid)"></i><i style="height:28px;border-radius:3px;background:var(--div-pos);opacity:.5"></i><i style="height:28px;border-radius:3px;background:var(--div-pos)"></i></div><div class="row sp t-cap muted"><span>Gana el rival</span><span>Empate</span><span>Ganas tú</span></div></div>
+          <div class="col g8"><span class="up">Estado · siempre con icono y palabra</span><div class="row wrapf g8"><span class="tag tg-ok"><span class="i s16">check</span>Exacto</span><span class="tag tg-warn"><span class="i s16">remove</span>A una posición</span><span class="tag tg-err"><span class="i s16">close</span>Fallo</span></div></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid3">
+      <section class="card"><div class="card-h"><h2 class="t-head">Barras</h2></div><div class="card-b col g8">
+        <svg viewBox="0 0 280 150" width="100%" role="img" aria-label="Tus puntos en los últimos 8 Grandes Premios" class="chart">
+          <line class="gl" x1="8" x2="272" y1="20" y2="20"></line><line class="gl" x1="8" x2="272" y1="70" y2="70"></line><line class="ax" x1="8" x2="272" y1="120" y2="120"></line>
+          <sc-for list="{{bars}}" as="b" hint-placeholder-count="8"><rect x="{{b.x}}" y="{{b.y}}" width="22" height="{{b.h}}" rx="4" style="fill:var(--c-you)"></rect><text x="{{b.tx}}" y="138" text-anchor="middle">{{b.t}}</text></sc-for>
+        </svg>
+        <p class="note">Barras finas, esquinas de 4 px solo en el extremo, anclas en la base y 2 px de aire entre barras.</p></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Interacción</h2></div><div class="card-b col g8">
+        <div class="rowt"><span class="i" style="color:var(--ring)">ads_click</span><p class="t-sm"><b class="hd">Eje pulsable:</b> cada GP del eje es un botón. Al pulsarlo se fija la línea vertical y el panel con los valores; se queda hasta elegir otro.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ring)">tune</span><p class="t-sm"><b class="hd">Modos:</b> 2 a 4 lecturas del mismo dato (acumulado, con el líder, contigo, ritmo) en un control segmentado. Nunca dos ejes.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ring)">mouse</span><p class="t-sm"><b class="hd">Ratón:</b> al pasar se previsualiza el GP; al pulsar se fija.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ring)">touch_app</span><p class="t-sm"><b class="hd">Táctil:</b> toca para fijar el tooltip; se cierra al tocar fuera.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ring)">keyboard</span><p class="t-sm"><b class="hd">Teclado:</b> el gráfico es enfocable y las flechas recorren los GP.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ring)">filter_alt</span><p class="t-sm"><b class="hd">Filtros</b> en una fila encima del gráfico, nunca dentro.</p></div></div></section>
+      <section class="card"><div class="card-h"><h2 class="t-head">Accesibilidad</h2></div><div class="card-b col g8">
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Cada gráfico lleva texto alternativo con el titular («Marta lidera con 684 puntos»).</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Tabla equivalente a un clic, con las mismas cifras.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Con «contraste alto» o impresión, líneas con trazos distintos en vez de solo color.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Sin animaciones si el sistema pide reducir el movimiento.</p></div></div></section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, table = s.view === 'table', mode = s.mode || 'acc';
+    const X0 = 48, X1 = 780, Y0 = 16, Y1 = 304, n = P.N, sel = s.sel === undefined ? 14 : s.sel;
+    const src = mode === 'acc' ? P.acc : P.pts, MAX = mode === 'acc' ? 800 : 80;
+    const hlIds = ['alex', 'marta', 'lucia', 'sofia'];
+    const col = { alex: 'var(--c-you)', marta: 'var(--c-2)', lucia: 'var(--c-3)', sofia: 'var(--c-4)' };
+    const sy = (v) => P.sy(v, 0, MAX, Y0, Y1), sx = (i) => P.sx(i, n, X0, X1);
+    const cx = sx(sel);
+    const hl = hlIds.map((id) => {
+      const a = src[id], v = a[n - 1];
+      return { id, c: col[id], w: id === 'alex' ? 3 : 2, d: P.line(a, X0, X1, Y0, Y1, 0, MAX), cy: sy(a[sel]), name: P.byId[id].name.split(' ')[0] + (id === 'alex' ? ' (tú)' : ''), val: v + ' pts', tv: a[sel] + ' pts', v };
+    });
+    // evita choques de etiquetas
+    const sorted = hl.slice().sort((a, b) => a.v - b.v).reverse();
+    let last = -99;
+    sorted.forEach((l) => { let y = sy(l.v) - 2; if (y - last < 30) y = last + 30; l.ly = y; l.ly2 = y + 13; last = y; });
+    return {
+      isChart: !table, isTable: table, vc: table ? '' : 'on', vt: table ? 'on' : '',
+      setChart: () => this.setState({ view: 'chart' }), setTable: () => this.setState({ view: 'table' }),
+      grid: [0, 1, 2, 3, 4].map((k) => { const v = k * MAX / 4; return { y: sy(v), ty: sy(v) + 4, t: v }; }),
+      xl: P.gps.slice(0, n).map((g, i) => ({ l: g.code, full: 'Fijar ' + g.name, cls: i === sel ? 'on' : '', pick: () => this.setState({ sel: i }) })),
+      rest: P.users.filter((u) => hlIds.indexOf(u.id) < 0).map((u) => ({ d: P.line(src[u.id], X0, X1, Y0, Y1, 0, MAX) })),
+      hl, cx, tipL: ((cx > 560 ? cx - 200 : cx + 14) / 880 * 100).toFixed(1), tipT: P.gps[sel].name + ' · ronda ' + P.gps[sel].r,
+      chTitle: mode === 'acc' ? 'Puntos acumulados' : 'Puntos en cada GP',
+      modes: [['acc', 'Acumulado'], ['gp', 'Por GP']].map((x) => ({ l: x[1], cls: x[0] === mode ? 'on' : '', pick: () => this.setState({ mode: x[0] }) })),
+      alt: (mode === 'acc' ? 'Puntos acumulados' : 'Puntos') + ' por Gran Premio. ' + P.byId[P.order[0]].name + ' lidera con ' + P.total[P.order[0]] + ' puntos; tú vas ' + (P.order.indexOf('alex') + 1) + '.º con ' + P.total.alex + '.',
+      leg: hl.map((l) => ({ c: l.c, name: l.name })),
+      cat: [['Tú', 'var(--c-you)'], ['Jugador 2', 'var(--c-2)'], ['Jugador 3', 'var(--c-3)'], ['Jugador 4', 'var(--c-4)'], ['Jugador 5', 'var(--c-5)'], ['Jugador 6', 'var(--c-6)']].map((x) => ({ n: x[0], v: x[1] })),
+      tbl: hl.map((l) => { const p = src[l.id]; return { c: l.c, name: l.name, cls: l.id === 'alex' ? 'me' : '', a: p[12], b: p[13], c2: p[14], d: p[15], e: p[16] }; }),
+      bars: P.pts.alex.slice(9, 17).map((v, i) => { const h = v * 1.6; return { x: 14 + i * 33, y: 120 - h, h, tx: 25 + i * 33, t: P.gps[9 + i].r }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

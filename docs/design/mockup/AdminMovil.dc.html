@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Admin móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div class="mroot" style="min-height:1600px">
+  <dc-import name="MobileBar" title="Administración" hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="alert al-info"><span class="i">desktop_windows</span><span>La edición completa está pensada para escritorio. Aquí puedes consultar y hacer tareas rápidas.</span></div>
+    <section class="grid2" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><div class="card kpi"><span class="k">Usuarios</span><span class="v tn">312</span></div><div class="card kpi"><span class="k">Comunidades</span><span class="v tn">47</span></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:17px">Tareas</h2></div><a class="row sp" href="AdminSesiones.dc.html" style="padding:14px 16px;min-height:52px"><span class="col" style="gap:0"><b class="hd t-sm">Resultados del sprint</b><span class="t-cap muted">Pendientes</span></span><span class="i">chevron_right</span></a><a class="row sp" href="AdminCalculos.dc.html" style="padding:14px 16px;min-height:52px;border-top:1px solid var(--border)"><span class="col" style="gap:0"><b class="hd t-sm">Recalcular puntos</b><span class="t-cap muted">Azerbaiyán</span></span><span class="i">chevron_right</span></a></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:17px">Secciones</h2></div><sc-for list="{{secs}}" as="x" hint-placeholder-count="8"><a class="row sp" href="{{x.href}}" style="padding:14px 16px;min-height:52px;border-top:1px solid var(--border)"><span class="row g12"><span class="i">{{x.icon}}</span>{{x.l}}</span><span class="i">chevron_right</span></a></sc-for></section>
+  </div>
+  <dc-import name="TabBar" active="perfil" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { secs: [['flag', 'Grandes Premios', 'AdminGPs'], ['route', 'Circuitos', 'AdminCircuitos'], ['sports_motorsports', 'Pilotos y equipos', 'AdminPilotos'], ['rule', 'Reglas', 'AdminReglas'], ['person', 'Usuarios', 'AdminUsuarios'], ['groups', 'Comunidades', 'AdminComunidades'], ['campaign', 'Notificaciones', 'AdminNotificaciones'], ['calculate', 'Cálculo de puntos', 'AdminCalculos']].map((x) => ({ icon: x[0], l: x[1], href: x[2] + '.dc.html' })) };
+  }
+}
+</script>
+</body>
+</html>

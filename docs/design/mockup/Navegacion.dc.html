@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Navegación</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>body{margin:0}.frame{border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px var(--border);background:var(--page)}.rt{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--tint-fg);background:var(--tint);padding:1px 6px;border-radius:4px}</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="ninguno" hint-size="100%,56px"></dc-import>
+  <main class="pg-main" style="gap:32px">
+    <div class="col g8">
+      <span class="up">Guía · 03</span>
+      <h1 class="t-title">Navegación</h1>
+      <p class="t-body muted" style="max-width:760px">Barra superior de 56 px en escritorio y tab bar de cinco destinos en móvil. La comunidad activa se cambia desde la barra y se recuerda. Las pantallas de administración solo se enseñan a administradores.</p>
+    </div>
+
+    <section class="col g16">
+      <h2 class="t-sub">Barra superior · escritorio</h2>
+      <div class="grid2" style="gap:16px">
+        <div class="col g8"><span class="up">Visitante</span><div class="frame"><dc-import name="AppNav" user="out" active="reglas" hint-size="100%,56px"></dc-import></div></div>
+        <div class="col g8"><span class="up">Jugador · Ranking activo</span><div class="frame"><dc-import name="AppNav" active="ranking" hint-size="100%,56px"></dc-import></div></div>
+      </div>
+      <div class="col g8"><span class="up">Administrador</span><div class="frame"><dc-import name="AppNav" active="admin" admin="{{ true }}" hint-size="100%,56px"></dc-import></div></div>
+    </section>
+
+    <section class="col g16">
+      <h2 class="t-sub">Menús desplegables</h2>
+      <div class="grid3" style="align-items:start">
+        <div class="card card-b col g12"><span class="up">Selector de comunidad</span>
+          <div class="menu" style="width:100%"><span class="mh">Tus comunidades</span>
+            <button type="button" class="mi on"><span class="i">groups</span><span class="fx">Amigos del paddock</span><span class="tag tg-brand">Activa</span></button>
+            <button type="button" class="mi"><span class="i">groups</span><span class="fx">Oficina F1</span></button>
+            <button type="button" class="mi"><span class="i">groups</span><span class="fx">Peña Madring</span></button>
+            <hr class="hr" style="margin:4px 0">
+            <a class="mi" href="Comunidades.dc.html"><span class="i">apps</span>Ver todas</a>
+            <a class="mi" href="CrearComunidad.dc.html"><span class="i">add</span>Crear comunidad</a>
+          </div>
+          <p class="note">Si cambias de comunidad, la pantalla se queda donde estás y recarga sus datos.</p></div>
+        <div class="card card-b col g12"><span class="up">Menú de usuario</span>
+          <div class="menu" style="width:100%"><div class="row" style="padding:8px 10px"><span class="av you">ÁR</span><div class="col" style="gap:0"><b class="hd t-sm">Álex Ruiz</b><span class="t-cap muted">alex@correo.com</span></div></div>
+            <hr class="hr" style="margin:4px 0">
+            <a class="mi" href="Perfil.dc.html"><span class="i">person</span>Mi perfil</a>
+            <a class="mi" href="Ajustes.dc.html"><span class="i">settings</span>Ajustes</a>
+            <a class="mi" href="Notificaciones.dc.html"><span class="i">notifications</span>Notificaciones</a>
+            <hr class="hr" style="margin:4px 0">
+            <button type="button" class="mi"><span class="i">logout</span>Cerrar sesión</button>
+          </div></div>
+        <div class="card card-b col g12"><span class="up">Avisos</span>
+          <div class="menu" style="width:100%"><span class="mh">Hoy</span>
+            <a class="mi" href="Pronosticar.dc.html" style="align-items:flex-start"><span class="i" style="color:var(--warn)">schedule</span><span class="col" style="gap:0"><b class="hd">Cierra la clasificación</b><span class="t-cap muted">GP de Singapur · en 2 h</span></span></a>
+            <a class="mi" href="Resultados.dc.html" style="align-items:flex-start"><span class="i" style="color:var(--ok)">emoji_events</span><span class="col" style="gap:0"><b class="hd">Puntos repartidos</b><span class="t-cap muted">GP de Azerbaiyán · 34 puntos</span></span></a>
+            <hr class="hr" style="margin:4px 0"><a class="mi" href="Notificaciones.dc.html"><span class="i">list</span>Ver todas</a>
+          </div></div>
+      </div>
+    </section>
+
+    <section class="col g16">
+      <div class="row sp wrapf"><h2 class="t-sub">Navegación del ranking</h2><span class="tag tg-brand">Nuevo</span></div>
+      <p class="t-sm muted" style="max-width:760px">El ranking tiene muchas vistas. En vez de una lista plana, una cabecera común con comunidad, temporada y progreso, siete pestañas de sección y, debajo, chips para las vistas de cada sección. La pestaña que no tiene ninguna vista activa por flag desaparece.</p>
+      <div class="grid2" style="gap:16px;align-items:start">
+        <div class="col g8"><span class="up">Sección con una sola vista · Resumen</span><div class="frame" style="padding:16px;background:var(--page)"><dc-import name="RankNav" active="RankingResumen" hint-size="100%,200px"></dc-import></div></div>
+        <div class="col g8"><span class="up">Sección con vistas · Evolución › Gap</span><div class="frame" style="padding:16px;background:var(--page)"><dc-import name="RankNav" active="Gap" hint-size="100%,200px"></dc-import></div></div>
+      </div>
+      <div class="grid3" style="gap:16px">
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Comunidad y temporada siempre visibles</b> en la cabecera; cambiar una mantiene la pestaña abierta.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">Resumen primero.</b> El enlace Ranking de la barra lleva al Resumen; cada sección tiene URL propia.</p></div>
+        <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm"><b class="hd">En móvil</b>, un control segmentado con Clasificación, Evolución y Por GP; el resto se abre desde «Ver todas las vistas».</p></div>
+      </div>
+    </section>
+
+    <section class="col g16">
+      <h2 class="t-sub">Móvil</h2>
+      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+        <div class="col g8" style="width:390px;max-width:100%"><span class="up">Cabecera raíz + tab bar</span>
+          <div class="frame"><dc-import name="MobileBar" title="Inicio" hint-size="100%,56px"></dc-import><div style="height:120px;display:flex;align-items:center;justify-content:center" class="note">contenido</div><dc-import name="TabBar" active="inicio" hint-size="100%,64px"></dc-import></div></div>
+        <div class="col g8" style="width:390px;max-width:100%"><span class="up">Cabecera con volver (sin tab bar activa)</span>
+          <div class="frame"><dc-import name="MobileBar" title="Fin de semana de Singapur" back="{{ true }}" backHref="GPLista.dc.html" hint-size="100%,56px"></dc-import><div style="height:120px;display:flex;align-items:center;justify-content:center" class="note">contenido</div><dc-import name="TabBar" active="gps" hint-size="100%,64px"></dc-import></div></div>
+        <div class="col g12" style="flex:1 1 320px;min-width:0">
+          <span class="up">Reglas de la navegación móvil</span>
+          <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">La tab bar siempre visible, con objetivos de 44 px y etiqueta en cada icono.</p></div>
+          <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">El selector de comunidad vive dentro de Inicio y de Comunidades, no en la cabecera.</p></div>
+          <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Administración se abre desde el perfil, con su propio menú de lista.</p></div>
+          <div class="rowt"><span class="i" style="color:var(--ok)">check_circle</span><p class="t-sm">Sin barra de estado ni teclado falsos: se deja el espacio del sistema.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="card">
+        <div class="card-h"><h2 class="t-head">Cabecera de página</h2></div>
+        <div class="card-b col g12">
+          <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPLista.dc.html">Grandes Premios</a><span class="i">chevron_right</span><span>Singapur</span></div>
+          <div class="row sp wrapf"><h3 class="t-sub">Gran Premio de Singapur</h3><div class="row g8"><button type="button" class="btn btn-outline btn-sm">Ver reglas</button><button type="button" class="btn btn-primary btn-sm">Pronosticar</button></div></div>
+          <p class="note">Migas de pan, título con acciones a la derecha y después el contenido en una tarjeta o en varias. Es el mismo esquema en todas las vistas de la app.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h2 class="t-head">Mapa de rutas</h2></div>
+        <div class="card-b col g8">
+          <div class="row sp wrapf"><span class="rt">/</span><span class="t-sm muted">Landing · Inicio si hay sesión</span></div>
+          <div class="row sp wrapf"><span class="rt">/gps/:competicion/:temporada/:gp</span><span class="t-sm muted">Fin de semana</span></div>
+          <div class="row sp wrapf"><span class="rt">/gps/…/:gp/pronosticar/:sesion</span><span class="t-sm muted">Pronosticar</span></div>
+          <div class="row sp wrapf"><span class="rt">/ranking/:comunidad/:temporada</span><span class="t-sm muted">Resumen del ranking</span></div>
+          <div class="row sp wrapf"><span class="rt">/ranking/…/:seccion/:vista</span><span class="t-sm muted">p. ej. evolucion/gap</span></div>
+          <div class="row sp wrapf"><span class="rt">/comunidades/:id</span><span class="t-sm muted">Comunidad</span></div>
+          <div class="row sp wrapf"><span class="rt">/u/:usuario</span><span class="t-sm muted">Perfil</span></div>
+          <div class="row sp wrapf"><span class="rt">/admin/*</span><span class="t-sm muted">Solo admin; si no, 404</span></div>
+          <p class="note">Cada temporada, comunidad y pestaña tiene URL propia para poder compartirla.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

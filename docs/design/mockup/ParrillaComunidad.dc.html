@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Parrilla y consenso</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+.lay{display:grid;grid-template-columns:380px minmax(0,1fr);gap:20px;align-items:start}
+@media(max-width:980px){.lay{grid-template-columns:minmax(0,1fr)}}
+.grid2c{display:flex;gap:16px;justify-content:center}
+.gcol{display:flex;flex-direction:column;gap:12px}
+.gslot{width:150px;height:46px;border-radius:6px;display:flex;align-items:center;gap:8px;padding:0 10px;font:inherit;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--border);color:var(--h)}
+.gslot:hover{border-color:var(--ring)}
+.gslot.on{background:var(--tint);border-color:var(--ring)}
+.gslot .p{font-size:12px;font-weight:700;color:var(--muted);width:26px}
+.gslot .num{font-size:11px;font-weight:700;color:#fff;border-radius:4px;padding:1px 5px}
+.pit{border-top:1px dashed var(--border-input);padding-top:10px}
+.cons{display:grid;grid-template-columns:40px minmax(0,1fr) 92px;gap:10px;align-items:center}
+.bar{display:flex;gap:2px;height:30px}
+.bar span{border-radius:4px;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden;white-space:nowrap}
+.k1{background:var(--brand-700);color:#fff}.k2{background:var(--brand-400);color:#fff}.k3{background:var(--brand-200);color:var(--brand-900)}.k0{background:var(--surface-muted);color:var(--muted)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .k1{background:var(--brand-300);color:var(--brand-900)}:root:not([data-theme="light"]) .k2{background:var(--brand-500)}:root:not([data-theme="light"]) .k3{background:var(--brand-700);color:#fff}}
+:root[data-theme="dark"] .k1{background:var(--brand-300);color:var(--brand-900)}:root[data-theme="dark"] .k2{background:var(--brand-500)}:root[data-theme="dark"] .k3{background:var(--brand-700);color:#fff}
+.mine{box-shadow:inset 0 0 0 2px var(--gold)}
+.vb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end;height:200px}
+.vb i{display:block;width:100%;border-radius:4px 4px 0 0}
+</style>
+</helmet>
+<div class="pg">
+  <dc-import name="AppNav" active="gps" hint-size="100%,56px"></dc-import>
+  <main class="pg-main">
+    <div class="crumb"><a href="Inicio.dc.html">Inicio</a><span class="i">chevron_right</span><a href="GPLista.dc.html">Grandes Premios</a><span class="i">chevron_right</span><a href="GPDetalle.dc.html">Azerbaiyán</a><span class="i">chevron_right</span><span>Parrilla y consenso</span></div>
+    <div class="row sp wrapf" style="align-items:flex-end">
+      <div class="col" style="gap:2px"><h1 class="t-title">Parrilla y consenso</h1><p class="muted">Gran Premio de Azerbaiyán · {{sessName}} · Amigos del paddock</p></div>
+      <div class="seg" role="group" aria-label="Sesión"><sc-for list="{{sess}}" as="x" hint-placeholder-count="2"><button type="button" class="sg {{x.cls}}" onClick="{{x.pick}}">{{x.l}}</button></sc-for></div>
+    </div>
+
+    <div class="lay">
+      <section class="card">
+        <div class="card-h"><h2 class="t-head">Parrilla de salida</h2><span class="t-cap muted">Pulsa un piloto</span></div>
+        <div class="card-b col g12">
+          <div class="grid2c">
+            <div class="gcol"><sc-for list="{{left}}" as="d" hint-placeholder-count="10"><button type="button" class="gslot {{d.cls}}" onClick="{{d.pick}}" style="box-shadow:inset 0 4px 0 {{d.c}}" aria-label="{{d.aria}}"><span class="p">{{d.pos}}</span><b class="hd fx">{{d.code}}</b><span class="num" style="background:{{d.c}}">{{d.no}}</span></button></sc-for></div>
+            <div class="gcol" style="padding-top:29px"><sc-for list="{{right}}" as="d" hint-placeholder-count="10"><button type="button" class="gslot {{d.cls}}" onClick="{{d.pick}}" style="box-shadow:inset 0 4px 0 {{d.c}}" aria-label="{{d.aria}}"><span class="p">{{d.pos}}</span><b class="hd fx">{{d.code}}</b><span class="num" style="background:{{d.c}}">{{d.no}}</span></button></sc-for></div>
+          </div>
+          <div class="pit col g8"><span class="up">Salen desde el pit lane</span><div class="row g8 wrapf"><span class="tag tg-gray">PER · cambio de motor</span><span class="tag tg-gray">BOT · cambio de alerón</span></div></div>
+          <div class="alert al-warn" style="padding:8px 10px"><span class="i s16">info</span><span class="t-sm">ALO sale 3 puestos más atrás por bloquear en clasificación.</span></div>
+        </div>
+      </section>
+
+      <div class="col g24" style="min-width:0">
+        <sc-if value="{{locked}}" hint-placeholder-val="{{ false }}">
+          <section class="card"><div class="empty" style="padding-block:56px"><div class="ic"><span class="i s24">lock</span></div><b class="hd">Los pronósticos de la comunidad se verán al cierre</b><span class="t-sm">Domingo 26 a las 12:55 (tu hora). 9 de 12 ya han pronosticado.</span><a class="btn btn-primary btn-sm" href="Pronosticar.dc.html">Hacer mi pronóstico</a></div></section>
+        </sc-if>
+        <sc-if value="{{visible}}" hint-placeholder-val="{{ true }}">
+          <section class="card">
+            <div class="card-h"><div class="col" style="gap:0"><h2 class="t-head">¿Qué ha pronosticado la comunidad?</h2><span class="t-sm muted">{{subtitle}}</span></div><div class="seg" role="group" aria-label="Vista"><button type="button" class="sg {{m0}}" onClick="{{pm0}}">Por posición</button><button type="button" class="sg {{m1}}" onClick="{{pm1}}">Por piloto</button></div></div>
+            <div class="card-b col g8">
+              <sc-if value="{{byPos}}" hint-placeholder-val="{{ true }}">
+                <sc-for list="{{cons}}" as="r" hint-placeholder-count="8">
+                  <div class="cons"><b class="hd tn">{{r.pos}}</b><div class="bar"><sc-for list="{{r.segs}}" as="g" hint-placeholder-count="4"><span class="{{g.k}} {{g.mine}}" style="width:{{g.w}}%" title="{{g.t}}">{{g.l}}</span></sc-for></div><span class="t-cap muted">tú: <b class="hd" style="color:var(--tint-fg)">{{r.mine}}</b> <span class="cellp {{r.hk}}" style="min-width:24px;height:20px">{{r.real}}</span></span></div>
+                </sc-for>
+                <div class="legend" style="padding-top:8px"><span><i class="lgk k1" style="width:14px;height:12px;border-radius:3px;display:inline-block"></i>Más votado</span><span><i class="lgk k2" style="width:14px;height:12px;border-radius:3px;display:inline-block"></i>2.º</span><span><i class="lgk k3" style="width:14px;height:12px;border-radius:3px;display:inline-block"></i>3.º</span><span><i style="width:14px;height:12px;border-radius:3px;display:inline-block;box-shadow:inset 0 0 0 2px var(--gold)"></i>Tu elección</span><span>A la derecha: quién acabó en esa posición</span></div>
+              </sc-if>
+              <sc-if value="{{byDrv}}" hint-placeholder-val="{{ false }}">
+                <div class="row sp"><b class="hd">{{drvTitle}}</b><span class="t-cap muted">De 12 jugadores</span></div>
+                <div class="row g8" style="align-items:flex-end">
+                  <sc-for list="{{vbars}}" as="b" hint-placeholder-count="9"><div class="vb"><b class="hd tn t-sm">{{b.v}}</b><i style="height:{{b.h}}px;background:{{b.c}}"></i><span class="t-cap muted">{{b.l}}</span></div></sc-for>
+                </div>
+                <span class="t-cap muted">Cuántos jugadores pusieron a este piloto en cada posición y cuántos lo dejaron fuera. Acabó {{drvReal}}.</span>
+              </sc-if>
+            </div>
+            <div class="card-f" style="justify-content:space-between"><span class="t-sm muted">Visible porque la sesión ya cerró.</span><a class="btn btn-soft btn-sm" href="Resultados.dc.html">Ver la tabla de pronósticos y puntos</a></div>
+          </section>
+          <section class="grid3" style="gap:12px">
+            <div class="card kpi"><span class="k">Piloto más votado al 1.º</span><span class="v">{{topP1}}</span><span class="d">{{topP1n}} de 12 jugadores</span></div>
+            <div class="card kpi"><span class="k">Apuesta más original</span><span class="v">{{bold}}</span><span class="d">{{boldWho}}</span></div>
+            <div class="card kpi"><span class="k">Tu pronóstico coincide</span><span class="v tn">{{agree}} %</span><span class="d">con la elección mayoritaria</span></div>
+          </section>
+        </sc-if>
+        <section class="card card-b row g16 wrapf" style="align-items:center"><div class="cimg" style="width:96px;height:64px;border-radius:8px;background:var(--surface-muted);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 400 300" height="48" aria-hidden="true"><path d="M60 230 L80 80 L180 70 L210 120 L320 110 L340 200 L230 240 Z" fill="none" style="stroke:var(--ring);stroke-width:12;stroke-linejoin:round"></path></svg></div><div class="col fx" style="gap:2px;min-width:220px"><b class="hd">Baku City Circuit</b><span class="t-sm muted">6,003 km · 51 vueltas · 306,0 km</span></div><a class="btn btn-ghost btn-sm" href="CircuitoDetalle.dc.html">Tu historial en este circuito<span class="i s16">arrow_forward</span></a></section>
+      </div>
+    </div>
+  </main>
+  <dc-import name="SiteFooter" hint-size="100%,260px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, sesK = s.k || 'r', mode = s.mode || 'pos', locked = sesK === 'locked';
+    const k = locked ? 'r' : sesK, n = P.SESS[k][2], real = P.REAL[k];
+    const preds = {}; P.users.forEach((u) => { preds[u.id] = P.pred(u.id, k); });
+    const mine = preds.alex, N = P.users.length;
+    const selD = s.d || 'LEC';
+    const slot = (c, i) => { const d = P.drv(c); return { pos: 'P' + (i + 1), code: c, no: d.no, c: d.color, aria: 'P' + (i + 1) + ' ' + d.name, cls: c === selD && mode === 'drv' ? 'on' : '', pick: () => this.setState({ d: c, mode: 'drv' }) }; };
+    const left = [], right = []; P.GRID.slice(0, 20).forEach((c, i) => (i % 2 ? right : left).push(slot(c, i)));
+    const cons = [];
+    for (let i = 0; i < n; i++) {
+      const cnt = {}; P.users.forEach((u) => { const c = preds[u.id][i]; cnt[c] = (cnt[c] || 0) + 1; });
+      const arr = Object.keys(cnt).map((c) => [c, cnt[c]]).sort((a, b) => b[1] - a[1]);
+      const top = arr.slice(0, 3), rest = arr.slice(3).reduce((a, x) => a + x[1], 0);
+      const segs = top.map((x, j) => { const pc = x[1] / N * 100; return { w: pc.toFixed(1), k: 'k' + (j + 1), mine: mine[i] === x[0] ? 'mine' : '', l: pc >= 14 ? x[0] + ' ' + Math.round(pc) + '%' : x[0], t: x[0] + ': ' + x[1] + ' de ' + N }; });
+      if (rest) segs.push({ w: (rest / N * 100).toFixed(1), k: 'k0', mine: top.every((x) => x[0] !== mine[i]) ? 'mine' : '', l: rest / N >= 0.14 ? 'otros' : '', t: 'Otros: ' + rest });
+      const sc = P.score([mine[i]], [real[i]]);
+      const j = real.indexOf(mine[i]), dd = j < 0 ? 9 : Math.abs(j - i);
+      cons.push({ pos: (i + 1) + '.º', segs, mine: mine[i], real: real[i], hk: dd === 0 ? 'hit-ex' : dd === 1 ? 'hit-1' : dd === 2 ? 'hit-2' : 'hit-x' });
+    }
+    const dist = []; for (let i = 0; i < n; i++) dist.push(P.users.filter((u) => preds[u.id][i] === selD).length);
+    const out = N - dist.reduce((a, b) => a + b, 0), mx = Math.max.apply(null, dist.concat([out, 1]));
+    const dcol = P.drv(selD).color;
+    const vbars = dist.map((v, i) => ({ v, h: Math.round(v / mx * 150), l: (i + 1) + '.º', c: dcol })).concat([{ v: out, h: Math.round(out / mx * 150), l: 'Fuera', c: 'var(--c-rest)' }]);
+    const p1 = {}; P.users.forEach((u) => { p1[preds[u.id][0]] = (p1[preds[u.id][0]] || 0) + 1; });
+    const p1s = Object.keys(p1).sort((a, b) => p1[b] - p1[a]);
+    let agree = 0; cons.forEach((r, i) => { const top = r.segs[0]; if (top && top.l.indexOf(mine[i]) === 0) agree++; });
+    const rj = real.indexOf(selD);
+    return {
+      sessName: locked ? 'Carrera (abierta)' : P.SESS[k][0],
+      sess: [['r', 'Carrera'], ['q', 'Clasificación'], ['locked', 'Antes del cierre']].map((x) => ({ l: x[1], cls: x[0] === sesK ? 'on' : '', pick: () => this.setState({ k: x[0] }) })),
+      left, right, locked, visible: !locked,
+      subtitle: mode === 'pos' ? 'Cada barra reparte los votos de esa posición entre los pilotos más elegidos.' : 'Pulsa un piloto en la parrilla para ver dónde lo pusieron los demás.',
+      m0: mode === 'pos' ? 'on' : '', m1: mode === 'drv' ? 'on' : '', pm0: () => this.setState({ mode: 'pos' }), pm1: () => this.setState({ mode: 'drv' }),
+      byPos: mode === 'pos', byDrv: mode === 'drv', cons, vbars, drvTitle: P.drv(selD).name + ' · sale P' + (P.GRID.indexOf(selD) + 1), drvReal: rj >= 0 ? (rj + 1) + '.º' : 'fuera de los ' + n + ' primeros',
+      topP1: p1s[0], topP1n: p1[p1s[0]], bold: p1s[p1s.length - 1] + ' al 1.º', boldWho: (P.users.filter((u) => preds[u.id][0] === p1s[p1s.length - 1]).map((u) => u.name.split(' ')[0]).join(', ')) + (p1[p1s[p1s.length - 1]] === 1 ? ' · solo una persona' : ''), agree: Math.round(agree / n * 100)
+    };
+  }
+}
+</script>
+</body>
+</html>

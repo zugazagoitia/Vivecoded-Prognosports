@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Perfil móvil</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="pg.css">
+<script src="theme.js"></script>
+<script src="seed.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0&amp;display=block" rel="stylesheet">
+<style>
+body{margin:0}
+
+.lnk{display:flex;align-items:center;justify-content:space-between;padding:0 16px;min-height:52px;border-top:1px solid var(--border);color:inherit;text-decoration:none}
+
+</style>
+</helmet>
+<div class="mroot" style="min-height:1500px">
+  <dc-import name="MobileBar" title="Perfil"  hint-size="100%,56px"></dc-import>
+  <div class="body">
+    <div class="card card-b col g12" style="align-items:center;text-align:center"><span class="av s40 you" style="width:72px;height:72px;font-size:26px">ÁR</span><div class="col" style="gap:2px"><b class="hd t-head">Álex Ruiz</b><span class="t-sm muted">@alexruiz · Madrid</span></div><p class="t-sm">Pronostico desde el sofá con el café en la mano.</p><div class="col g4" style="width:100%"><div class="row sp t-cap"><b class="hd">Nivel 7 · Estratega</b><span class="muted tn">84 %</span></div><div class="prog"><i style="width:84%"></i></div></div><span class="tag tg-brand"><span class="i s16">emoji_events</span>Campeón 2024</span></div>
+    <section class="grid2" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><div class="card kpi"><span class="k">Puesto</span><span class="v tn">{{pos}}.º</span><span class="d">de 12</span></div><div class="card kpi"><span class="k">Puntos</span><span class="v tn">{{total}}</span><span class="d">2026</span></div><div class="card kpi"><span class="k">Media/GP</span><span class="v tn">{{avg}}</span><span class="d">comunidad {{cavg}}</span></div><div class="card kpi"><span class="k">GP ganados</span><span class="v tn">{{wins}}</span><span class="d">de 17</span></div></section>
+    <section class="card"><div class="card-h"><h2 class="t-head" style="font-size:16px">Puntos por GP</h2></div><div class="card-b"><div class="mbars" style="height:70px" role="img" aria-label="Tus puntos por GP"><sc-for list="{{bars}}" as="b" hint-placeholder-count="17"><i class="{{b.c}}" style="height:{{b.h}}%"></i></sc-for></div></div></section>
+    <section class="card"><a class="lnk" href="MiTemporada.dc.html" style="border-top:0"><span class="row g12"><span class="i">insights</span>Mi temporada</span><span class="i">chevron_right</span></a><a class="lnk" href="Comunidades.dc.html"><span class="row g12"><span class="i">groups</span>Mis comunidades</span><span class="tag tg-gray">3</span></a><a class="lnk" href="Notificaciones.dc.html"><span class="row g12"><span class="i">notifications</span>Notificaciones</span><span class="tag tg-err">2</span></a><a class="lnk" href="AjustesMovil.dc.html"><span class="row g12"><span class="i">settings</span>Ajustes de la cuenta</span><span class="i">chevron_right</span></a></section>
+    <button type="button" class="btn btn-outline btn-block" style="min-height:48px">Cerrar sesión</button>
+  </div>
+  <dc-import name="TabBar" active="perfil" hint-size="100%,64px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const P = window.PG, s = this.state || {}, n = P.N, me = 'alex', O = P.order;
+    return { pos: O.indexOf(me) + 1, total: P.total[me], avg: Math.round(P.total[me] / n), cavg: Math.round(P.users.reduce((a, u) => a + P.total[u.id], 0) / P.users.length / n), wins: P.gpRank[me].filter((r) => r === 1).length,
+      bars: P.pts[me].map((v, g) => ({ h: Math.round(v / 62 * 100), c: P.gpRank[me][g] === 1 ? 'w' : '' })) };
+  }
+}
+</script>
+</body>
+</html>
