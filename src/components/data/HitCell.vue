@@ -6,9 +6,10 @@ import type { HitKind } from './types'
 
 const POINTS: Record<HitKind, number> = { exact: 5, near: 3, far: 1, miss: 0, hidden: 0 }
 
-const props = withDefaults(defineProps<{ kind?: HitKind; label?: string }>(), {
+const props = withDefaults(defineProps<{ kind?: HitKind; label?: string; points?: number }>(), {
   kind: 'miss',
   label: '',
+  points: undefined,
 })
 
 const { t } = useI18n()
@@ -18,7 +19,9 @@ const text = computed(() => (props.kind === 'hidden' ? '•••' : props.label
 const name = computed(() => {
   if (props.kind === 'hidden') return t('data.hit.hidden')
   if (props.kind === 'miss') return `${props.label}, ${t('data.hit.miss')}`
-  const pts = t('data.hit.points', { n: POINTS[props.kind] }, POINTS[props.kind])
+  // `points` overrides the default scale (rule sets differ per community).
+  const n = props.points ?? POINTS[props.kind]
+  const pts = t('data.hit.points', { n }, n)
   return `${props.label}, ${t(`data.hit.${props.kind}`)}, ${pts}`
 })
 </script>

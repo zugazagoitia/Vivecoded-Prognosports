@@ -1,5 +1,10 @@
 import {
+  faArrowDown,
   faArrowLeft,
+  faArrowUp,
+  faBan,
+  faCalendarCheck,
+  faLightbulb,
   faBell,
   faBullhorn,
   faCalculator,
@@ -119,11 +124,21 @@ export const MATERIAL_TO_FA = {
   wifi_off: 'plug-circle-xmark',
   search_off: 'magnifying-glass-minus',
   lock_clock: 'hourglass-end',
+  arrow_upward: 'arrow-up',
+  arrow_downward: 'arrow-down',
+  edit_calendar: 'calendar-check',
+  block: 'ban',
+  lightbulb: 'lightbulb',
 } as const
 
 /** Registry: only the icons listed here are bundled (per-icon import, no full set). */
 const REGISTRY: Record<string, IconDefinition> = {
+  'arrow-down': faArrowDown,
   'arrow-left': faArrowLeft,
+  'arrow-up': faArrowUp,
+  ban: faBan,
+  'calendar-check': faCalendarCheck,
+  lightbulb: faLightbulb,
   bell: faBell,
   bullhorn: faBullhorn,
   calculator: faCalculator,

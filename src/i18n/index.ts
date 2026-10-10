@@ -6,6 +6,7 @@ import errors from './es/errors.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import sessions from './es/sessions.json'
+import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
 
@@ -13,7 +14,9 @@ export const i18n = createI18n({
   legacy: false,
   locale: 'es',
   fallbackLocale: 'es',
-  messages: { es: { ...common, ...mobilenav, admin, errors, nav, sessions, data, states, ui } },
+  messages: {
+    es: { ...common, ...mobilenav, admin, errors, nav, sessions, data, states, ui, ...rules },
+  },
 })
 
 export const t = i18n.global.t
