@@ -1,0 +1,23 @@
+{
+  "title": "Administración",
+  "nav": {
+    "label": "Administración",
+    "groups": {
+      "general": "General",
+      "temporada": "Temporada",
+      "catalogo": "Catálogo",
+      "personas": "Personas"
+    },
+    "items": {
+      "panel": "Panel",
+      "gps": "Grandes Premios",
+      "calculos": "Cálculo de puntos",
+      "circuitos": "Circuitos",
+      "pilotos": "Pilotos y equipos",
+      "reglas": "Reglas de puntuación",
+      "usuarios": "Usuarios",
+      "comunidades": "Comunidades",
+      "notificaciones": "Notificaciones"
+    }
+  }
+}
