@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import { fail, ok } from '../envelope'
-import { MOCK_PASSWORD, MOCK_RESET_CODE, MOCK_TOKEN, users } from '../fixtures'
+import { MOCK_PASSWORD, MOCK_RESET_CODE, MOCK_TOKEN, MOCK_VERIFY_CODE, users } from '../fixtures'
 
 export const authHandlers = [
   http.post('*/v2/auth/login', async ({ request }) => {
@@ -18,6 +18,10 @@ export const authHandlers = [
     const body = (await request.json()) as { token?: string; password?: string }
     if (!body.password) return fail(400, 'Debes enviar la nueva contraseña.')
     return body.token === MOCK_RESET_CODE ? ok(null) : fail(403, 'Código no válido.')
+  }),
+  http.post('*/v2/auth/verify-email', async ({ request }) => {
+    const body = (await request.json()) as { token?: string }
+    return body.token === MOCK_VERIFY_CODE ? ok(null) : fail(400, 'Código no válido.')
   }),
   http.post('*/v2/auth/send-verify-email', () => new HttpResponse(null, { status: 204 })),
 ]

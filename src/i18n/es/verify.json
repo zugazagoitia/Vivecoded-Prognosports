@@ -1,0 +1,38 @@
+{
+  "verify": {
+    "stepsLabel": "Pasos",
+    "steps": {
+      "account": "Cuenta creada",
+      "verify": "Verificar correo",
+      "community": "Tu comunidad",
+      "completed": "completado"
+    },
+    "title": "Verifica tu correo",
+    "intro": "Te hemos enviado un código de 6 caracteres a ",
+    "introEnd": ". Escríbelo para activar tu cuenta.",
+    "emailLoading": "Cargando tu correo",
+    "codeLabel": "Código de verificación",
+    "codeHelp": "Puedes pegarlo tal cual: lo pasamos a mayúsculas.",
+    "codeRequired": "Escribe el código de 6 caracteres.",
+    "submit": "Verificar",
+    "notArrived": "¿No te ha llegado?",
+    "resendWait": "Reenviar en {time}",
+    "resend": "Reenviar código",
+    "resendReady": "Ya puedes pedir un código nuevo.",
+    "resent": "Código reenviado a {email}",
+    "resentFallback": "Código reenviado",
+    "error": {
+      "code": "El código no es correcto.",
+      "codeDescription": "Revísalo o pide uno nuevo.",
+      "failed": "No hemos podido verificar el correo",
+      "resendFailed": "No hemos podido reenviar el código",
+      "retry": "Inténtalo de nuevo en unos instantes."
+    },
+    "done": {
+      "title": "¡Correo verificado!",
+      "text": "Tu cuenta ya está activa. El siguiente paso es entrar en una comunidad.",
+      "choose": "Elegir comunidad",
+      "create": "Crear la mía"
+    }
+  }
+}
