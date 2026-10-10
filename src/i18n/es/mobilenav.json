@@ -1,0 +1,27 @@
+{
+  "mobileNav": {
+    "tabsLabel": "Principal",
+    "tabs": {
+      "home": "Inicio",
+      "gps": "GPs",
+      "ranking": "Ranking",
+      "communities": "Comunidades",
+      "profile": "Perfil"
+    },
+    "back": "Volver",
+    "theme": "Cambiar tema claro u oscuro",
+    "notifications": "Notificaciones",
+    "defaultTitle": "PrognoSports",
+    "titles": {
+      "home": "Inicio",
+      "gp": "Gran Premio",
+      "predict": "Pronosticar",
+      "ranking": "Ranking",
+      "communities": "Comunidades",
+      "community": "Comunidad",
+      "user": "Perfil",
+      "settings": "Ajustes",
+      "notifications": "Notificaciones"
+    }
+  }
+}
