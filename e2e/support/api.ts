@@ -8,6 +8,12 @@ import {
   season,
   users,
 } from '../../src/mocks/fixtures'
+import {
+  circuitDetail,
+  gpPoints,
+  MOCK_SEASON_AVERAGE,
+  variantGps,
+} from '../../src/mocks/fixtures/circuit'
 
 /** 1x1 transparent PNG standing in for a circuit layout image. */
 const PIXEL = Buffer.from(
@@ -38,11 +44,25 @@ function json(route: Route, status: number, result: unknown, message = 'OK') {
   })
 }
 
+/** The real API answers 200 with `success:false` for unknown ids. */
+function invalid(route: Route, message: string) {
+  return route.fulfill({
+    status: 200,
+    headers: CORS,
+    contentType: 'application/json',
+    body: JSON.stringify({ success: false, message }),
+  })
+}
+
 /**
  * Mocks `/v2/**` with the same fixtures as the MSW handlers (T9), via page.route so it
  * works on the production build. The real API is never reached: unhandled calls get 501.
  */
 export async function mockApi(page: Page): Promise<void> {
+  // Map tiles (P4) never hit the network: a blank tile keeps screenshots deterministic.
+  await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
+    route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
+  )
   await page.route('**/v2/**', async (route) => {
     const request = route.request()
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS })
@@ -65,6 +85,28 @@ export async function mockApi(page: Page): Promise<void> {
     }
     if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+$/.test(path) && !path.endsWith('/next')) {
       return json(route, 200, grandPrixes)
+    }
+    // Circuit detail (P4): the circuit, its variant GPs and the authenticated community data.
+    if (method === 'GET' && /^\/circuits\/[^/]+$/.test(path)) {
+      const circuit = circuitDetail(Number(path.split('/')[2]))
+      return circuit ? json(route, 200, circuit) : invalid(route, 'Circuito inválido')
+    }
+    if (method === 'GET' && /^\/circuits\/[^/]+\/[^/]+\/gps$/.test(path)) {
+      const [, , c, v] = path.split('/')
+      return json(route, 200, variantGps(Number(c), Number(v)))
+    }
+    if (method === 'GET' && /^\/communities\/[^/]+\/[^/]+\/[^/]+\/points\/[^/]+$/.test(path)) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      const [, , , , season, , gp] = path.split('/')
+      return json(route, 200, gpPoints(Number(gp), Number(season)))
+    }
+    if (
+      method === 'GET' &&
+      /^\/user\/[^/]+\/communities\/[^/]+\/[^/]+\/[^/]+\/resume$/.test(path)
+    ) {
+      return authed
+        ? json(route, 200, { average: MOCK_SEASON_AVERAGE, totalPoints: 600 })
+        : json(route, 401, null, 'Tu sesión ha caducado.')
     }
     if (method === 'GET' && /^\/circuits\/[^/]+\/[^/]+\/layout$/.test(path)) {
       return route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL })

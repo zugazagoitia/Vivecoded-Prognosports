@@ -81,6 +81,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/circuits/[id]': RouteRecordInfo<
+      '/circuits/[id]',
+      '/circuits/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/comunidades/': RouteRecordInfo<
       '/comunidades/',
       '/comunidades',
@@ -333,6 +340,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | never
+    }
+    'src/pages/circuits/[id].vue': {
+      routes:
+        | '/circuits/[id]'
+      views:
+        | never
+      pathParamNames:
+        | 'id'
     }
     'src/pages/comunidades/index.vue': {
       routes:

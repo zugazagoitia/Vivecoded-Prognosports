@@ -33,6 +33,14 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 - Layout: `GET /v2/circuits/{circuit}/{variant}/layout` devuelve un PNG público (RGBA, fondo transparente, trazo oscuro) solo si `hasLayoutImage`; `GET /v2/circuits/{id}/layout` (sin variante) devuelve JSON, no imagen. El logo (`/circuits/{id}/logo`) puede devolver 200 con 0 bytes cuando `hasLogoImage` es false. `circuitLayoutUrl()` (`catalog.ts`) construye la URL; la CSP ya permite `img-src https://api.prognosports.com`.
 - Se listan los circuitos de la temporada en curso (no `GET /circuits/`); los que no tuvieran GP irían al final sin etiqueta de ronda.
 
+### Detalle de circuito (P4, sondeado sin sesión el 2026-10-11)
+
+- `GET /v2/circuits/{id}` es público y trae `latitude`/`longitude` y `variants[]` (`distance` en km, `turns`, `hasLayoutImage`). Un id inexistente devuelve HTTP 200 con `{"success":false,"message":"Circuito inválido"}` (sin `status`): el cliente lo convierte en `ApiError` con `status` 200; la pantalla lo trata como 404 propia.
+- `GET /v2/circuits/{id}/{variant}/gps` es público y trae todas las ediciones (varias temporadas) con `season`, `laps`, `lastSessionDate`, `sessions[]` y `variant` (sin `hasLayoutImage`). Un mismo GP conserva su `id` entre temporadas: la temporada hay que tomarla de `season.id`.
+- No hay campo de sentido de giro ni de forma corta del nombre: la fila «Sentido» se oculta y la miga usa `Circuit.name`.
+- Ganador de la comunidad / historial: `points/{grandprix}` es una petición por GP y exige sesión. Se limita a los 5 GP disputados más recientes de la variante (`POINTS_GP_LIMIT`); el resto muestra «—». La media de la temporada sale de `…/resume` (`average`) de la temporada en curso.
+- Mapa: no hay tiles propios; se usan teselas raster de CARTO (ver `docs/security.md`).
+
 ## URL base
 
 `VITE_API_BASE_URL` es solo el origen (`https://api.prognosports.com`, sin `/v2`): las rutas de los envoltorios ya empiezan por `/v2` (igual que en la spec). La validación de entorno rechaza una URL que termine en `/v2` (evita peticiones a `/v2/v2/...`). Los mocks (MSW y `e2e/support/api.ts`) interceptan `*/v2/**` y no dependen del origen.

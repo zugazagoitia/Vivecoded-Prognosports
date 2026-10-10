@@ -1,4 +1,5 @@
 import { authHandlers } from './auth'
+import { circuitHandlers } from './circuits'
 import { communityHandlers } from './communities'
 import { competitionHandlers } from './competitions'
 import { gpHandlers } from './gps'
@@ -11,4 +12,5 @@ export const handlers = [
   ...communityHandlers,
   ...competitionHandlers,
   ...gpHandlers,
+  ...circuitHandlers,
 ]
