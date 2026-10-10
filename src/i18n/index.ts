@@ -4,12 +4,13 @@ import data from './es/data.json'
 import errors from './es/errors.json'
 import sessions from './es/sessions.json'
 import states from './es/states.json'
+import ui from './es/ui.json'
 
 export const i18n = createI18n({
   legacy: false,
   locale: 'es',
   fallbackLocale: 'es',
-  messages: { es: { ...common, errors, sessions, data, states } },
+  messages: { es: { ...common, errors, sessions, data, states, ui } },
 })
 
 export const t = i18n.global.t

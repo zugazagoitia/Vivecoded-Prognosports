@@ -1,0 +1,31 @@
+{
+  "saving": "Guardando...",
+  "close": "Cerrar",
+  "cancel": "Cancelar",
+  "confirm": "Confirmar",
+  "breadcrumb": "Migas de pan",
+  "pagination": {
+    "label": "Paginación",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "page": "Página {n}"
+  },
+  "number": { "dec": "Disminuir", "inc": "Aumentar" },
+  "table": { "sortAsc": "ordenar de menor a mayor", "sortDesc": "ordenar de mayor a menor" },
+  "stepper": { "label": "Pasos" },
+  "countdown": {
+    "closesIn": "Cierra en {text}",
+    "closed": "Cerrado",
+    "less": "menos de un minuto",
+    "days": "{n} día | {n} días",
+    "hours": "{n} hora | {n} horas",
+    "minutes": "{n} minuto | {n} minutos",
+    "and": " y ",
+    "d": "días",
+    "h": "horas",
+    "m": "min",
+    "s": "s"
+  },
+  "alert": { "dismiss": "Descartar aviso" },
+  "kpi": { "up": "sube", "down": "baja" }
+}

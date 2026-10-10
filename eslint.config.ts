@@ -74,6 +74,17 @@ export default tseslint.config(
   },
 
   {
+    // F3 base components: short design-system names (Chip, Menu...), optional props default to
+    // undefined, and labels are wired with a dynamic `:for` (id generated per instance).
+    files: ['src/components/ui/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+      'vue/require-default-prop': 'off',
+      'vuejs-accessibility/label-has-for': ['error', { required: { some: ['nesting', 'id'] } }],
+    },
+  },
+
+  {
     files: ['src/api/**', 'scripts/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },
