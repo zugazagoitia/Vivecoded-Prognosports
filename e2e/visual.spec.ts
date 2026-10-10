@@ -9,6 +9,7 @@ const PUBLIC_PAGES = [
   { name: 'tokens', path: '/dev/tokens' },
   { name: 'datos', path: '/dev/datos' },
   { name: 'graficos', path: '/dev/graficos' },
+  { name: 'estados', path: '/dev/estados' },
 ]
 
 test.describe('visual regression', () => {

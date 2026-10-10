@@ -95,6 +95,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/dev/estados': RouteRecordInfo<
+      '/dev/estados',
+      '/dev/estados',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/dev/graficos': RouteRecordInfo<
       '/dev/graficos',
       '/dev/graficos',
@@ -282,6 +289,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/dev/datos.vue': {
       routes:
         | '/dev/datos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/estados.vue': {
+      routes:
+        | '/dev/estados'
       views:
         | never
       pathParamNames:

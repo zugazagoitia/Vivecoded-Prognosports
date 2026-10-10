@@ -21,6 +21,7 @@ const fallback: Record<string, string> = {
   'route.tokens': 'Fundamentos',
   'route.datos': 'Piezas de datos',
   'route.graficos': 'Gráficos',
+  'route.estados': 'Estados',
   'route.loggedOut': 'Has cerrado sesión',
 }
 
