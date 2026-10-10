@@ -2,5 +2,5 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "vue"],
   "categories": { "correctness": "error" },
-  "ignorePatterns": ["dist", "docs", "node_modules"]
+  "ignorePatterns": ["public", "coverage", "dist", "docs", "node_modules"]
 }

@@ -2,7 +2,8 @@ import { execSync } from 'node:child_process'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import VueRouter from 'vue-router/vite'
-import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { loadEnv, type Plugin } from 'vite'
+import { coverageConfigDefaults, defineConfig } from 'vitest/config'
 import pkg from './package.json' with { type: 'json' }
 
 /** Runs a git command; returns undefined when git or the repo is unavailable. */
@@ -51,6 +52,28 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+    },
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
+      include: ['src/**/*.test.ts'],
+      env: { VITE_API_BASE_URL: 'http://api.test/v2', VITE_API_MOCK: 'false' },
+      restoreMocks: true,
+      coverage: {
+        provider: 'v8',
+        reporter: ['text', 'html', 'lcov'],
+        // Only domain logic is gated (requisitos §20.2): utils, i18n helpers, api core, env, domain.
+        // Endpoint wrappers (src/api/<area>.ts) are thin and covered by the T4 query tests.
+        include: [
+          'src/domain/**/*.ts',
+          'src/utils/**/*.ts',
+          'src/i18n/**/*.ts',
+          'src/api/{client,errors,events,config}.ts',
+          'src/env.ts',
+        ],
+        exclude: [...coverageConfigDefaults.exclude, '**/*.d.ts', '**/*.test.ts'],
+        thresholds: { lines: 90, statements: 90, functions: 90, branches: 85 },
+      },
     },
     define: {
       'import.meta.env.VITE_GIT_SHA': JSON.stringify(gitSha),
