@@ -67,6 +67,8 @@ export default tseslint.config(
       'src/components/layout/**/*.vue',
       'src/App.vue',
       'src/components/BetaBanner.vue',
+      // Chart language (F5): Spanish copy lives next to the components until the i18n catalogue.
+      'src/components/charts/**/*.vue',
     ],
     rules: { 'vue/no-bare-strings-in-template': 'off' },
   },
