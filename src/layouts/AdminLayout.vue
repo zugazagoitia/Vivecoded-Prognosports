@@ -4,9 +4,12 @@ import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import AdminSide from '@/components/layout/AdminSide.vue'
 import { activeAdminItem } from '@/components/layout/adminNav'
+import AppNav from '@/components/layout/AppNav.vue'
+import MobileBar from '@/components/layout/MobileBar.vue'
+import SiteFooter from '@/components/layout/SiteFooter.vue'
 import Breadcrumb from '@/components/ui/Breadcrumb.vue'
 
-// Layout "admin": AppNav (Administración active) + main(AdminSide | content) + SiteFooter.
+// Layout "admin": AppNav + main(AdminSide | content) + SiteFooter; MobileBar on phones.
 // Only reachable through the `admin` guard (router) — non-admins get the 404 before this renders.
 interface Crumb {
   label: string
@@ -27,11 +30,15 @@ const crumbs = computed<Crumb[]>(() => {
   for (const key of route.meta.breadcrumb ?? []) list.push({ label: t(key) })
   return list
 })
+
+// «Volver» on phones: sub-screens go back to the admin index, the index goes home.
+const atAdminRoot = computed(() => route.path.replace(/\/+$/, '') === '/admin')
 </script>
 
 <template>
   <div class="layout layout-admin">
-    <!-- TODO(N1): <AppNav active="admin" /> (desktop). TODO(N2): MobileBar with «Volver» to /admin on phones. -->
+    <AppNav />
+    <MobileBar :title="t('admin.title')" back :back-href="atAdminRoot ? '/home' : '/admin'" />
     <main id="contenido" tabindex="-1" class="mx-auto w-full max-w-6xl px-4 py-6">
       <Breadcrumb class="mb-4" :items="crumbs" />
       <div class="side-l">
@@ -44,6 +51,6 @@ const crumbs = computed<Crumb[]>(() => {
         </div>
       </div>
     </main>
-    <!-- TODO(N1): <SiteFooter /> -->
+    <SiteFooter />
   </div>
 </template>

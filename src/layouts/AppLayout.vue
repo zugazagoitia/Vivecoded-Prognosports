@@ -1,19 +1,24 @@
 <script setup lang="ts">
-// Layout "app": AppNav/MobileBar/TabBar + SiteFooter
-// --- N2 (MobileBar + TabBar) ---
+// Layout "app": AppNav (desktop) + MobileBar/TabBar (mobile) + SiteFooter
+import AppNav from '@/components/layout/AppNav.vue'
 import MobileBar from '@/components/layout/MobileBar.vue'
+import SiteFooter from '@/components/layout/SiteFooter.vue'
 import TabBar from '@/components/layout/TabBar.vue'
 import { useMobileNav } from '@/composables/useMobileNav'
 import { useSessionStore } from '@/stores/session'
 
 const session = useSessionStore()
 const mobile = useMobileNav()
-// --- /N2 ---
 </script>
 
 <template>
-  <div class="layout layout-app" :class="{ 'layout-app-tabs': session.isAuthenticated }">
-    <!-- TODO(N1): AppNav + SiteFooter -->
+  <div
+    class="layout layout-app flex min-h-screen flex-col"
+    :class="{ 'layout-app-tabs': session.isAuthenticated }"
+  >
+    <!-- N1 -->
+    <AppNav />
+    <!-- /N1 -->
     <!-- N2 -->
     <MobileBar
       v-if="session.isAuthenticated"
@@ -25,6 +30,9 @@ const mobile = useMobileNav()
     <main id="contenido" tabindex="-1">
       <slot />
     </main>
+    <!-- N1 -->
+    <SiteFooter />
+    <!-- /N1 -->
     <!-- N2 -->
     <TabBar v-if="session.isAuthenticated" />
     <!-- /N2 -->

@@ -1,5 +1,7 @@
 import userEvent from '@testing-library/user-event'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { render, screen, within } from '@testing-library/vue'
+import { createPinia } from 'pinia'
 import { describe, expect, it } from 'vitest'
 import { routes } from 'vue-router/auto-routes'
 import { createMemoryHistory, createRouter } from 'vue-router'
@@ -15,7 +17,7 @@ async function mount(path: string, component = AdminSide) {
   })
   await router.push(path)
   await router.isReady()
-  return render(component, { global: { plugins: [i18n, router] } })
+  return render(component, { global: { plugins: [i18n, router, createPinia(), VueQueryPlugin] } })
 }
 
 describe('AdminSide', () => {
@@ -64,6 +66,7 @@ describe('admin layout access', () => {
   it('renders breadcrumbs and the menu around the content', async () => {
     await mount('/admin/gps', AdminLayout)
     expect(screen.getAllByRole('navigation').map((n) => n.getAttribute('aria-label'))).toEqual([
+      'Principal',
       'Migas de pan',
       'Administración',
     ])
