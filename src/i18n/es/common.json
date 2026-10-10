@@ -1,0 +1,19 @@
+{
+  "loading": "Cargando...",
+  "search": "Buscar...",
+  "yes": "Sí",
+  "no": "No",
+  "noDate": "Sin fecha",
+  "soon": "Pronto",
+  "showing": "Mostrando de {from} a {to} de un total de {total} resultados",
+  "players": "{n} jugador | {n} jugadores",
+  "communities": "{n} comunidad | {n} comunidades",
+  "missingDrivers": "Falta {n} piloto | Faltan {n} pilotos",
+  "relative": {
+    "in": "en {value}",
+    "ago": "hace {value}",
+    "minutes": "{n} min",
+    "hours": "{n} h",
+    "days": "{n} d"
+  }
+}
