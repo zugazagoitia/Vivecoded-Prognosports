@@ -16,6 +16,10 @@ export const MOCK_TOKEN = 'mock-token'
 export const MOCK_PASSWORD = 'secret123'
 /** Valid recovery code accepted by the mocked PATCH changepassword. */
 export const MOCK_RESET_CODE = 'K7X2M9'
+/** Valid e-mail verification code accepted by the mocked POST verify-email (A5). */
+export const MOCK_VERIFY_CODE = 'A4F9B2'
+/** Token of a signed-in user whose e-mail is not verified yet (e2e mock). */
+export const MOCK_UNVERIFIED_TOKEN = 'mock-token-unverified'
 
 type UserInput = z.input<typeof UserSchema>
 type CommunityInput = z.input<typeof CommunitySchema>

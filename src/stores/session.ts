@@ -25,6 +25,12 @@ export const useSessionStore = defineStore('session', () => {
   let loading: Promise<void> | null = null
 
   const isAuthenticated = computed(() => !!token.value)
+  /**
+   * Token AND not a known-unverified user: an unverified account (A5) is shown the visitor nav
+   * because the app is not usable until the e-mail is confirmed. `user` null (not loaded) counts
+   * as signed in.
+   */
+  const isSignedIn = computed(() => !!token.value && !(user.value && !user.value.verified))
   const isAdmin = computed(() => user.value?.rank?.admin === true)
 
   /** Drops token + user (no cache clearing; see `clearAll`). */
@@ -97,5 +103,23 @@ export const useSessionStore = defineStore('session', () => {
     clearAll()
   }
 
-  return { token, user, loaded, isAuthenticated, isAdmin, ensureLoaded, login, logout, clearAll }
+  /** Re-reads `GET /user/me` into the store (e.g. after verifying the e-mail, A5). */
+  async function refreshUser(): Promise<void> {
+    await fetchUser()
+    loaded.value = true
+  }
+
+  return {
+    token,
+    user,
+    loaded,
+    isAuthenticated,
+    isSignedIn,
+    isAdmin,
+    ensureLoaded,
+    refreshUser,
+    login,
+    logout,
+    clearAll,
+  }
 })

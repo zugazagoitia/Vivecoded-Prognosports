@@ -22,7 +22,9 @@ const community = useCommunityStore()
 const theme = useThemeStore()
 const links = useNavLinks()
 
-const homeTo = computed(() => (session.isAuthenticated ? NAV_PATHS.home : '/'))
+// An unverified account (A5) gets the visitor variant, see `isSignedIn`.
+const signedIn = computed(() => session.isSignedIn)
+const homeTo = computed(() => (signedIn.value ? NAV_PATHS.home : '/'))
 
 // The effective theme (system mode included) lives on <html>.
 const root = globalThis.document?.documentElement
@@ -93,7 +95,7 @@ const linkClass = [
   <!-- Signed-in phones use MobileBar + TabBar (N2); visitors keep this header. -->
   <header
     class="bg-surface border-border sticky top-0 z-40 border-b"
-    :class="{ 'max-[899px]:hidden': session.isAuthenticated }"
+    :class="{ 'max-[899px]:hidden': signedIn }"
   >
     <div
       class="mx-auto flex min-h-14 w-full max-w-(--container-xl) items-center gap-1 px-4 sm:px-6"
@@ -124,7 +126,7 @@ const linkClass = [
 
       <span class="flex-1" />
 
-      <template v-if="!session.isAuthenticated">
+      <template v-if="!signedIn">
         <PTooltip :content="t('nav.theme')">
           <PButton
             variant="ghost"

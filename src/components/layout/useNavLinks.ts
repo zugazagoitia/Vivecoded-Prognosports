@@ -55,7 +55,7 @@ export function useNavLinks(): ComputedRef<NavLink[]> {
 
   return computed(() => {
     let defs: NavDef[]
-    if (!session.isAuthenticated) {
+    if (!session.isSignedIn) {
       defs = [
         def('rules', NAV_PATHS.rules),
         def('circuits', NAV_PATHS.circuits),
