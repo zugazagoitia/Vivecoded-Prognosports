@@ -88,6 +88,13 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/dev/datos': RouteRecordInfo<
+      '/dev/datos',
+      '/dev/datos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/dev/tokens': RouteRecordInfo<
       '/dev/tokens',
       '/dev/tokens',
@@ -264,6 +271,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'id'
+    }
+    'src/pages/dev/datos.vue': {
+      routes:
+        | '/dev/datos'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
     'src/pages/dev/tokens.vue': {
       routes:
