@@ -2,7 +2,13 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { authApi, userApi, sanitizeUser, ApiError, type User } from '@/api'
 import { queryClient } from '@/queries/client'
-import { STORAGE_KEYS, readStorage, writeStorage } from './storage'
+import {
+  STORAGE_KEYS,
+  readSessionStorage,
+  readStorage,
+  writeSessionStorage,
+  writeStorage,
+} from './storage'
 
 let resetDependentStores: (() => void) | undefined
 /** Registered by `installStores` so session does not import the other stores (no cycles). */
@@ -11,7 +17,9 @@ export function onSessionCleared(fn: () => void): void {
 }
 
 export const useSessionStore = defineStore('session', () => {
-  const token = ref<string | null>(readStorage(STORAGE_KEYS.token))
+  const token = ref<string | null>(
+    readStorage(STORAGE_KEYS.token) ?? readSessionStorage(STORAGE_KEYS.token),
+  )
   const user = ref<Omit<User, 'hashedPassword'> | null>(null)
   const loaded = ref(false)
   let loading: Promise<void> | null = null
@@ -26,6 +34,7 @@ export const useSessionStore = defineStore('session', () => {
     loaded.value = false
     loading = null
     writeStorage(STORAGE_KEYS.token, null)
+    writeSessionStorage(STORAGE_KEYS.token, null)
   }
 
   async function fetchUser(): Promise<void> {
@@ -54,11 +63,16 @@ export const useSessionStore = defineStore('session', () => {
     return loading
   }
 
-  async function login(username: string, password: string): Promise<void> {
+  /**
+   * `remember` (default) keeps the token in localStorage; `false` keeps it in sessionStorage
+   * so it dies with the tab (A1 «Mantener la sesión iniciada en este dispositivo»).
+   */
+  async function login(username: string, password: string, remember = true): Promise<void> {
     const t = await authApi.login({ username, password })
     queryClient.clear()
     token.value = t
-    writeStorage(STORAGE_KEYS.token, t)
+    writeStorage(STORAGE_KEYS.token, remember ? t : null)
+    writeSessionStorage(STORAGE_KEYS.token, remember ? null : t)
     user.value = null
     await fetchUser()
     loaded.value = true

@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import admin from './es/admin.json'
+import auth from './es/auth.json'
 import circuits from './es/circuits.json'
 import common from './es/common.json'
 import data from './es/data.json'
@@ -23,6 +24,7 @@ export const i18n = createI18n({
       ...common,
       ...mobilenav,
       admin,
+      ...auth,
       errors,
       ...legal,
       nav,
