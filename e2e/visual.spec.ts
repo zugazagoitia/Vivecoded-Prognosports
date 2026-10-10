@@ -5,6 +5,7 @@ import { expect, test } from './support/fixtures'
 const PUBLIC_PAGES = [
   { name: 'landing', path: '/' },
   { name: 'login', path: '/login' },
+  { name: 'registro', path: '/registro' },
   { name: 'not-found', path: '/404' },
   { name: 'fundamentos', path: '/fundamentos' },
   { name: 'tokens', path: '/dev/tokens' },

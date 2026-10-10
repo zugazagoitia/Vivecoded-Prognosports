@@ -63,6 +63,8 @@ export async function mockApi(page: Page): Promise<void> {
   await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
     route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
   )
+  /** Usernames created through the mocked `POST /auth/register`. */
+  const registered = new Set<string>()
   await page.route('**/v2/**', async (route) => {
     const request = route.request()
     if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: CORS })
@@ -70,9 +72,21 @@ export async function mockApi(page: Page): Promise<void> {
     const method = request.method()
     const authed = request.headers()['authorization'] === `Bearer ${MOCK_TOKEN}`
 
+    if (method === 'POST' && path === '/auth/register') {
+      const body = request.postDataJSON() as { username?: string; email?: string }
+      if (body.username === 'ocupado' || users.some((u) => u.username === body.username)) {
+        return json(route, 400, null, 'Username in use')
+      }
+      if (body.email === 'ocupado@example.com') {
+        return json(route, 400, null, 'El correo ya está registrado')
+      }
+      registered.add(body.username ?? '')
+      return json(route, 200, 'ok')
+    }
     if (method === 'POST' && path === '/auth/login') {
       const body = request.postDataJSON() as { username?: string; password?: string }
-      const known = users.some((u) => u.username === body.username)
+      const known =
+        users.some((u) => u.username === body.username) || registered.has(body.username ?? '')
       return known && body.password === MOCK_PASSWORD
         ? json(route, 200, MOCK_TOKEN)
         : json(route, 401, null, 'Usuario o contraseña incorrectos.')
