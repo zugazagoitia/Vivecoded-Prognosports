@@ -1,4 +1,5 @@
 import './lib/zod-csp'
+import './styles/app.css'
 import '@fontsource-variable/inter/wght.css'
 import './styles/typography.css'
 import './styles/layout.css'
@@ -22,7 +23,7 @@ function showFatal(message: string) {
   el.textContent = ''
   const pre = document.createElement('pre')
   pre.setAttribute('role', 'alert')
-  pre.style.cssText = 'padding:1rem;white-space:pre-wrap;color:#b91c1c'
+  pre.className = 'p-4 whitespace-pre-wrap text-err'
   pre.textContent = message
   el.append(pre)
 }
