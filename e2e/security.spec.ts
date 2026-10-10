@@ -25,6 +25,7 @@ test.describe('security', () => {
     '/ruta-que-no-existe',
     '/home',
     '/circuits',
+    '/circuits/18',
     '/dev/tokens',
     '/dev/datos',
     '/dev/estados',
