@@ -30,7 +30,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "lefthook install",
-    "test": "vitest run"
+    "test": "vitest run",
+    "api:types": "openapi-typescript api/openapi.json -o src/api/schema.d.ts",
+    "api:types:fetch": "curl -fsSL https://api.prognosports.com/openapi -o api/openapi.json && pnpm api:types"
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.104.1",
@@ -56,6 +58,7 @@
     "oxlint": "^1.87.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "openapi-typescript": "^7.13.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.3.4",

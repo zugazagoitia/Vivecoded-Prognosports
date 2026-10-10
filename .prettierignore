@@ -3,3 +3,5 @@ node_modules
 pnpm-lock.yaml
 docs
 src/typed-router.d.ts
+api/openapi.json
+src/api/schema.d.ts
