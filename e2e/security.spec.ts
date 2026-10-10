@@ -31,6 +31,7 @@ test.describe('security', () => {
     '/dev/datos',
     '/dev/estados',
     '/dev/graficos',
+    '/recuperar',
     '/terms',
     '/privacy',
     '/faq',

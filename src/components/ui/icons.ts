@@ -18,6 +18,9 @@ import {
   faCircleInfo,
   faClock,
   faClockRotateLeft,
+  faEnvelope,
+  faEnvelopeCircleCheck,
+  faUnlockKeyhole,
   faCloudBolt,
   faCopy,
   faEye,
@@ -129,6 +132,9 @@ export const MATERIAL_TO_FA = {
   edit_calendar: 'calendar-check',
   block: 'ban',
   lightbulb: 'lightbulb',
+  mail: 'envelope',
+  lock_reset: 'unlock-keyhole',
+  mark_email_read: 'envelope-circle-check',
 } as const
 
 /** Registry: only the icons listed here are bundled (per-icon import, no full set). */
@@ -152,6 +158,9 @@ const REGISTRY: Record<string, IconDefinition> = {
   'circle-info': faCircleInfo,
   clock: faClock,
   'clock-rotate-left': faClockRotateLeft,
+  envelope: faEnvelope,
+  'envelope-circle-check': faEnvelopeCircleCheck,
+  'unlock-keyhole': faUnlockKeyhole,
   'cloud-bolt': faCloudBolt,
   copy: faCopy,
   eye: faEye,
