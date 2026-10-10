@@ -5,6 +5,7 @@ import common from './es/common.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
 import legal from './es/legal.json'
+import faq from './es/faq.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import sessions from './es/sessions.json'
@@ -30,6 +31,7 @@ export const i18n = createI18n({
       ui,
       ...rules,
       ...circuits,
+      faq,
     },
   },
 })

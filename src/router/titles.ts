@@ -26,6 +26,7 @@ const fallback: Record<string, string> = {
   'route.estados': 'Estados',
   'route.terms': 'Términos de uso',
   'route.privacy': 'Política de privacidad',
+  'route.faq': 'Preguntas frecuentes',
   'route.loggedOut': 'Has cerrado sesión',
 }
 

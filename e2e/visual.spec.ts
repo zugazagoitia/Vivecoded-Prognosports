@@ -14,6 +14,7 @@ const PUBLIC_PAGES = [
   { name: 'ranknav', path: '/dev/ranknav' },
   { name: 'terms', path: '/terms' },
   { name: 'privacy', path: '/privacy' },
+  { name: 'faq', path: '/faq' },
 ]
 
 test.describe('visual regression', () => {

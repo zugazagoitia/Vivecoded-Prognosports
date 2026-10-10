@@ -137,6 +137,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/faq': RouteRecordInfo<
+      '/faq',
+      '/faq',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/fundamentos': RouteRecordInfo<
       '/fundamentos',
       '/fundamentos',
@@ -386,6 +393,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/dev/tokens.vue': {
       routes:
         | '/dev/tokens'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/faq.vue': {
+      routes:
+        | '/faq'
       views:
         | never
       pathParamNames:
