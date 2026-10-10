@@ -7,6 +7,8 @@ type Id = string | number
 export const keys = {
   me: () => ['me'] as const,
   userCommunities: (user: Id) => ['user-communities', user] as const,
+  currentSeason: (competition: Id) => ['current-season', competition] as const,
+  seasonCircuits: (season: Id) => ['season-circuits', season] as const,
   gps: (competition: Id, season: Id) => ['gps', competition, season] as const,
   points: (community: Id, competition: Id, season: Id) =>
     ['points', community, competition, season] as const,

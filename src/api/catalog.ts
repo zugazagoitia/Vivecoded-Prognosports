@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { request, requestParsed, seg, uploadImage } from './client'
+import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
 import {
   CircuitSchema,
   CircuitVariantSchema,
@@ -124,3 +124,7 @@ export const getCommunityGpRuleset = (c: Id, comp: Id, season: Id, gp: Id, signa
   requestParsed(`/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}/${seg(gp)}`, RuleSetSchema, {
     signal,
   })
+
+/** Public PNG of a circuit variant's layout (only exists when `variant.hasLayoutImage`). */
+export const circuitLayoutUrl = (c: Id, v: Id): string =>
+  apiUrl(`/v2/circuits/${seg(c)}/${seg(v)}/layout`)

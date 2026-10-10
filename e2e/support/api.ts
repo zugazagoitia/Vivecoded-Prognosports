@@ -1,5 +1,19 @@
 import type { Page, Route } from '@playwright/test'
-import { community, MOCK_PASSWORD, MOCK_TOKEN, users } from '../../src/mocks/fixtures'
+import {
+  circuits,
+  community,
+  grandPrixes,
+  MOCK_PASSWORD,
+  MOCK_TOKEN,
+  season,
+  users,
+} from '../../src/mocks/fixtures'
+
+/** 1x1 transparent PNG standing in for a circuit layout image. */
+const PIXEL = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+  'base64',
+)
 
 export { MOCK_PASSWORD, MOCK_TOKEN }
 export const TOKEN_KEY = 'prognosports:token'
@@ -42,6 +56,18 @@ export async function mockApi(page: Page): Promise<void> {
       return known && body.password === MOCK_PASSWORD
         ? json(route, 200, MOCK_TOKEN)
         : json(route, 401, null, 'Usuario o contraseña incorrectos.')
+    }
+    // Public endpoints (no token), with the shapes verified against the real API.
+    if (method === 'GET' && /^\/seasons\/current\/[^/]+$/.test(path))
+      return json(route, 200, season)
+    if (method === 'GET' && /^\/seasons\/[^/]+\/circuits$/.test(path)) {
+      return json(route, 200, circuits)
+    }
+    if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+$/.test(path) && !path.endsWith('/next')) {
+      return json(route, 200, grandPrixes)
+    }
+    if (method === 'GET' && /^\/circuits\/[^/]+\/[^/]+\/layout$/.test(path)) {
+      return route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL })
     }
     if (method === 'GET' && path === '/user/me') {
       return authed ? json(route, 200, users[0]) : json(route, 401, null, 'Tu sesión ha caducado.')

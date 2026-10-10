@@ -32,7 +32,7 @@ describe('reference season', () => {
   it('mixes sessions with and without sprint', () => {
     const codes = (round: number) => grandPrixes[round - 1]?.sessions?.map((s) => s.code)
     expect(codes(1)).toEqual(['Q', 'R'])
-    for (const r of SPRINT_ROUNDS) expect(codes(r)).toEqual(['Q', 'SQ', 'S', 'R'])
+    for (const r of SPRINT_ROUNDS) expect(codes(r)).toEqual(['Q', 'SR', 'R'])
   })
   it('factories accept overrides', () => {
     expect(mockUser({ username: 'otro' }).username).toBe('otro')
