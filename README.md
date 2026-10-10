@@ -68,3 +68,13 @@ El alias `@/` apunta a `src/`. Las carpetas vacías llevan un `.keep` que cada i
 ## Ramas
 
 Modelo de ramas: `develop` (integración) y `master` (producción), según §21.10 de los requisitos.
+
+## CI y protección de ramas
+
+`.github/workflows/ci.yml` se ejecuta en cada PR y en cada push a `develop` y `master`; `codeql.yml` hace el escaneo de CodeQL (además, semanal). Jobs: `lint`, `typecheck`, `test` (cobertura), `audit` (`pnpm audit --prod`, falla en high/critical), `build` (modos `beta` y `production`, una sola vez), `size` y `e2e`. `size` (T14) y `e2e` (T10) se omiten con un aviso mientras su script no exista en `package.json`, y se activan solos al fusionarse.
+
+Contrato del artefacto: `build` sube `dist-beta` y `dist-production` (contenido de `dist/` en la raíz, retención 7 días). `e2e`, `size` y los futuros jobs de deploy (T12) lo descargan en lugar de reconstruir. El build recibe `VITE_GIT_SHA` y `VITE_GIT_DATE` del commit probado (en PR, el head de la rama).
+
+Seguridad: permisos `contents: read` por job, `persist-credentials: false`, acciones fijadas por SHA (con la versión en comentario; las actualiza Dependabot), `concurrency` que cancela ejecuciones obsoletas y ningún secreto en `ci.yml`, de modo que las PRs de forks no acceden a ninguno.
+
+Configuración que debe hacer el propietario del repo (Settings > Branches), para `develop` y `master`: exigir PR y los checks `ci-ok` (agrega todos los jobs de CI) y `analyze (javascript-typescript)`. Activar también Code scanning y Dependabot alerts en Settings > Code security.
