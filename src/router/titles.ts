@@ -20,6 +20,7 @@ const fallback: Record<string, string> = {
   'route.notFound': 'No se ha encontrado',
   'route.tokens': 'Fundamentos',
   'route.datos': 'Piezas de datos',
+  'route.graficos': 'Gráficos',
   'route.loggedOut': 'Has cerrado sesión',
 }
 

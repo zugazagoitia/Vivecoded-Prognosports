@@ -8,6 +8,7 @@ const PUBLIC_PAGES = [
   { name: 'fundamentos', path: '/fundamentos' },
   { name: 'tokens', path: '/dev/tokens' },
   { name: 'datos', path: '/dev/datos' },
+  { name: 'graficos', path: '/dev/graficos' },
 ]
 
 test.describe('visual regression', () => {
