@@ -8,7 +8,19 @@ import tseslint from 'typescript-eslint'
 const FETCH_MSG = 'Usa el cliente de src/api/ en lugar de fetch directo.'
 
 export default tseslint.config(
-  { ignores: ['**/*.d.ts', 'dist/**', 'node_modules/**', 'docs/**', 'coverage/**', 'public/**'] },
+  {
+    ignores: [
+      '**/*.d.ts',
+      'dist/**',
+      'node_modules/**',
+      'docs/**',
+      'coverage/**',
+      'public/**',
+      'playwright-report/**',
+      'e2e/.results/**',
+      'e2e/__screenshots__/**',
+    ],
+  },
 
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -20,7 +32,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
-        project: ['./tsconfig.app.json', './tsconfig.node.json'],
+        project: ['./tsconfig.app.json', './tsconfig.node.json', './e2e/tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
         extraFileExtensions: ['.vue'],
       },
