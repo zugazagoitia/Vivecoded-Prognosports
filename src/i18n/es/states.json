@@ -1,0 +1,58 @@
+{
+  "loading": {
+    "slowTitle": "Está tardando más de lo normal",
+    "retry": "Reintentar"
+  },
+  "empty": {
+    "noCommunity": {
+      "title": "Aún no estás en ninguna comunidad",
+      "text": "Para pronosticar necesitas jugar con alguien. Crea una o únete con un código.",
+      "create": "Crear comunidad",
+      "explore": "Explorar"
+    },
+    "noResults": {
+      "title": "No se ha encontrado lo que buscabas",
+      "text": "Prueba con otro nombre o quita algún filtro.",
+      "clear": "Quitar filtros"
+    },
+    "noSessionResults": {
+      "title": "Aún no hay resultados de esta sesión",
+      "text": "Los puntos se reparten en cuanto se publican. Te avisaremos.",
+      "notices": "Gestionar avisos"
+    }
+  },
+  "notice": {
+    "offline": "Sin conexión. Puedes ver lo último que cargaste, pero no guardar pronósticos hasta que vuelva.",
+    "closed": "Ya no se puede pronosticar. El plazo de {session} cerró hoy a las {time}. Aquí tienes tu pronóstico.",
+    "beta": "Estás usando la versión beta. Puede haber cambios y errores.",
+    "notSaved": "No se ha guardado. Falta {n} piloto por elegir: necesitas {total} y llevas {chosen}. | No se ha guardado. Faltan {n} pilotos por elegir: necesitas {total} y llevas {chosen}."
+  },
+  "page": {
+    "expiredTitle": "Tu sesión ha caducado",
+    "expiredText": "Vuelve a iniciar sesión para seguir pronosticando.",
+    "expiredAction": "Iniciar sesión",
+    "loggedOutTitle": "Has cerrado sesión",
+    "loggedOutText": "Hasta pronto. Tus pronósticos te esperan.",
+    "loggedOutAction": "Volver a entrar"
+  },
+  "session": {
+    "open": {
+      "title": "Cierra en {time}.",
+      "text": "Solo ves tu pronóstico; los demás se ocultan hasta el cierre."
+    },
+    "closed": {
+      "title": "Sesión cerrada.",
+      "text": "Ya se ven todos los pronósticos y el consenso. Los puntos llegan con los resultados."
+    },
+    "scored": {
+      "title": "Puntos repartidos.",
+      "text": "Cada celda dice cuánto acertó cada uno."
+    },
+    "timeline": {
+      "label": "Estado de la sesión",
+      "open": "Abierta",
+      "closed": "Cerrada",
+      "scored": "Con resultados"
+    }
+  }
+}
