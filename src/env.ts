@@ -1,9 +1,11 @@
 import { z } from 'zod'
 
 export const envSchema = z.object({
-  VITE_API_BASE_URL: z.url({
-    error: 'debe ser una URL válida (p. ej. https://api.prognosports.com/v2)',
-  }),
+  VITE_API_BASE_URL: z
+    .url({ error: 'debe ser una URL válida (p. ej. https://api.prognosports.com)' })
+    .refine((u) => !/\/v2\/*$/.test(u.split(/[?#]/)[0] ?? u), {
+      error: 'no debe terminar en /v2: los envoltorios de src/api ya añaden ese prefijo',
+    }),
   VITE_GIT_SHA: z.string().min(1, 'no puede estar vacío'),
   VITE_GIT_DATE: z.string().min(1, 'no puede estar vacío'),
   VITE_APP_VERSION: z.string().min(1, 'no puede estar vacío'),

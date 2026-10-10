@@ -7,7 +7,7 @@ import { ContractMismatchError, NetworkUnavailableError, live } from './harness'
 
 afterEach(() => {
   setTokenProvider(() => null)
-  setBaseUrl('http://api.test/v2')
+  setBaseUrl('http://api.test')
 })
 
 describe('contract harness', () => {

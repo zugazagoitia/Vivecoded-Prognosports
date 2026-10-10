@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { request, requestParsed, seg, uploadImage } from './client'
-import { CommunitySchema, UserPointsSchema, UserSchema } from './schemas'
+import { CommunityDetailSchema, CommunitySchema, UserPointsSchema, UserSchema } from './schemas'
 
 type Id = string | number
 
@@ -8,8 +8,11 @@ export const listCommunities = (
   query?: { competition?: Id; open?: boolean },
   signal?: AbortSignal,
 ) => requestParsed('/v2/communities', z.array(CommunitySchema), { query, signal })
-export const getCommunity = (c: Id, signal?: AbortSignal) =>
-  requestParsed(`/v2/communities/${seg(c)}`, CommunitySchema, { signal })
+/** The real response lacks `id` (see README): it is filled in from the requested one. */
+export const getCommunity = async (c: Id, signal?: AbortSignal) => {
+  const r = await requestParsed(`/v2/communities/${seg(c)}`, CommunityDetailSchema, { signal })
+  return { ...r, id: r.id ?? Number(c) }
+}
 export const createCommunity = (body: Record<string, unknown>, signal?: AbortSignal) =>
   requestParsed('/v2/communities', CommunitySchema, { method: 'POST', body, signal })
 export const listMembers = (c: Id, signal?: AbortSignal) =>

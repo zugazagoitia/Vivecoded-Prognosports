@@ -2,7 +2,7 @@
 
 // Never put secrets in VITE_* variables: they are bundled into the client.
 interface ImportMetaEnv {
-  /** Base URL of the PrognoSports API, e.g. https://api.prognosports.com/v2 (required). */
+  /** Origin of the PrognoSports API, e.g. https://api.prognosports.com, without the `/v2` prefix (the wrappers add it) (required). */
   readonly VITE_API_BASE_URL: string
   /** `true` starts the MSW service worker (src/mocks) so the app runs without the real API. */
   readonly VITE_API_MOCK?: string

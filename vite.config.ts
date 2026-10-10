@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
-      env: { VITE_API_BASE_URL: 'http://api.test/v2', VITE_API_MOCK: 'false' },
+      env: { VITE_API_BASE_URL: 'http://api.test', VITE_API_MOCK: 'false' },
       restoreMocks: true,
       coverage: {
         provider: 'v8',
