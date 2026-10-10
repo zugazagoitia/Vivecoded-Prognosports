@@ -10,3 +10,4 @@ coverage
 e2e/.results
 playwright-report
 e2e/__screenshots__
+reports

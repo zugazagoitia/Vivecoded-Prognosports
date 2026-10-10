@@ -1,6 +1,8 @@
 import { execSync } from 'node:child_process'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
+import { visualizer } from 'rollup-plugin-visualizer'
 import VueRouter from 'vue-router/vite'
 import { loadEnv, type Plugin } from 'vite'
 import { coverageConfigDefaults, defineConfig } from 'vitest/config'
@@ -43,13 +45,31 @@ export default defineConfig(({ mode }) => {
   const gitDate = env.VITE_GIT_DATE || git('log -1 --format=%cI') || new Date().toISOString()
   const appVersion = env.VITE_APP_VERSION || pkg.version
 
+  // Source maps exist only when CI can upload them to Sentry; they are deleted from dist/ afterwards.
+  const sentryToken = process.env.SENTRY_AUTH_TOKEN || undefined
+  const withSentry = sentryToken !== undefined
+
   return {
     // VueRouter() must come before vue(). File-based routes live in src/pages (see src/router).
     plugins: [
       VueRouter({ routesFolder: 'src/pages', dts: 'src/typed-router.d.ts' }),
       vue(),
       apiOriginPlugin(env.VITE_API_BASE_URL),
+      // Source maps to Sentry (CI only, needs SENTRY_AUTH_TOKEN/ORG/PROJECT). Maps never ship in dist/.
+      withSentry &&
+        sentryVitePlugin({
+          authToken: sentryToken,
+          org: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+          telemetry: false,
+          release: { name: gitSha },
+          sourcemaps: { filesToDeleteAfterUpload: ['dist/**/*.map'] },
+        }),
+      // Bundle report: `ANALYZE=true vite build` -> reports/bundle.html (CI artifact).
+      process.env.ANALYZE === 'true' &&
+        visualizer({ filename: 'reports/bundle.html', gzipSize: true, brotliSize: true }),
     ],
+    build: { sourcemap: withSentry ? 'hidden' : false },
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
