@@ -116,6 +116,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/dev/ranknav': RouteRecordInfo<
+      '/dev/ranknav',
+      '/dev/ranknav',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/dev/tokens': RouteRecordInfo<
       '/dev/tokens',
       '/dev/tokens',
@@ -163,6 +170,13 @@ declare module 'vue-router/auto-routes' {
       '/ranking/:comunidad/:temporada',
       { comunidad: ParamValue<true>, temporada: ParamValue<true> },
       { comunidad: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/ranking/[comunidad]/[temporada]/[seccion]/': RouteRecordInfo<
+      '/ranking/[comunidad]/[temporada]/[seccion]/',
+      '/ranking/:comunidad/:temporada/:seccion',
+      { comunidad: ParamValue<true>, seccion: ParamValue<true>, temporada: ParamValue<true> },
+      { comunidad: ParamValue<false>, seccion: ParamValue<false>, temporada: ParamValue<false> },
       | never
     >,
     '/ranking/[comunidad]/[temporada]/[seccion]/[vista]': RouteRecordInfo<
@@ -325,6 +339,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/dev/ranknav.vue': {
+      routes:
+        | '/dev/ranknav'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/dev/tokens.vue': {
       routes:
         | '/dev/tokens'
@@ -376,6 +398,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/ranking/[comunidad]/[temporada]/index.vue': {
       routes:
         | '/ranking/[comunidad]/[temporada]/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/ranking/[comunidad]/[temporada]/[seccion]/index.vue': {
+      routes:
+        | '/ranking/[comunidad]/[temporada]/[seccion]/'
       views:
         | never
       pathParamNames:
