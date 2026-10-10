@@ -23,6 +23,76 @@
       "text": "Prueba con el nombre del circuito o de la ciudad."
     },
     "error": "los circuitos",
-    "list": "Lista de circuitos"
+    "list": "Lista de circuitos",
+    "detail": {
+      "subtitle": "{locality} · {country}",
+      "sprintIn": "Sprint en {year}",
+      "viewGp": "Ver el GP de {country}",
+      "variants": "Variantes del circuito",
+      "notFound": {
+        "title": "Este circuito no existe",
+        "text": "Puede que el enlace sea antiguo. Mira todos los circuitos disponibles.",
+        "action": "Ver circuitos"
+      },
+      "map": {
+        "label": "Mapa del circuito de {circuit} en {locality}",
+        "zoomIn": "Acercar",
+        "zoomOut": "Alejar",
+        "controls": "Controles del mapa",
+        "attribution": "© {osm} © {carto}",
+        "osm": "OpenStreetMap contributors",
+        "carto": "CARTO",
+        "coords": "Coordenadas: {coords}",
+        "external": "Abrir en OpenStreetMap",
+        "marker": "Ubicación del circuito"
+      },
+      "gps": {
+        "title": "Grandes Premios en este circuito",
+        "layout": "{name}",
+        "caption": "Grandes Premios disputados en {name}",
+        "season": "Temporada",
+        "gp": "Gran Premio",
+        "date": "Fecha",
+        "winner": "Ganador de la comunidad",
+        "points": "Puntos",
+        "pending": "Pendiente",
+        "tie": " y ",
+        "empty": "No se ha usado este circuito en ningún Gran Premio",
+        "error": "los Grandes Premios del circuito",
+        "limit": "El ganador se muestra solo en los {n} Grandes Premios más recientes."
+      },
+      "history": {
+        "title": "Tu historial aquí",
+        "you": "Tú",
+        "subtitle": "{community} · {variant}",
+        "rank": "{n}.º del GP",
+        "thisWeekend": "Este fin de semana",
+        "pts": "{n} pt | {n} pts",
+        "closes": "Cierra {article} {session} en {h} h {m} min",
+        "closesMinutes": "Cierra {article} {session} en {m} min",
+        "barDone": "{year}: {n} punto | {year}: {n} puntos",
+        "barPending": "{year}: pendiente",
+        "avgHere": "Tu media aquí",
+        "avgSeason": "Tu media en la temporada",
+        "predict": "Pronosticar {gp} {year}",
+        "emptyTitle": "No jugaste con este trazado",
+        "emptyText": "Empezaste en {from}; este layout se usó hasta {to}.",
+        "emptyTextShort": "No tienes puntos en este layout todavía.",
+        "error": "tu historial en este circuito"
+      },
+      "data": {
+        "title": "Datos del layout",
+        "length": "Longitud",
+        "laps": "Vueltas",
+        "distance": "Distancia de carrera",
+        "turns": "Curvas"
+      },
+      "plan": {
+        "title": "Plano del trazado",
+        "alt": "Plano del trazado de {circuit} ({variant})",
+        "empty": "Sin plano"
+      },
+      "error": "el circuito"
+    }
   }
 }

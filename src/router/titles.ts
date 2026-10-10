@@ -14,6 +14,7 @@ const fallback: Record<string, string> = {
   'route.predict': 'Pronosticar',
   'route.ranking': 'Clasificación',
   'route.circuits': 'Circuitos',
+  'route.circuit': 'Circuito',
   'route.communities': 'Comunidades',
   'route.community': 'Comunidad',
   'route.user': 'Perfil',

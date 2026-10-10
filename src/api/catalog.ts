@@ -128,3 +128,7 @@ export const getCommunityGpRuleset = (c: Id, comp: Id, season: Id, gp: Id, signa
 /** Public PNG of a circuit variant's layout (only exists when `variant.hasLayoutImage`). */
 export const circuitLayoutUrl = (c: Id, v: Id): string =>
   apiUrl(`/v2/circuits/${seg(c)}/${seg(v)}/layout`)
+
+/** One circuit with its variants (public). Unknown ids answer 200 with `success:false`. */
+export const getCircuit = (c: Id, signal?: AbortSignal) =>
+  requestParsed(`/v2/circuits/${seg(c)}`, CircuitSchema, { signal })
