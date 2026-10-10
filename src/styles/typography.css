@@ -101,3 +101,13 @@ body {
   color: var(--brand-600, #5d34a0);
   text-decoration: underline;
 }
+
+/* Placeholder gaps in draft legal texts (P6). Brackets keep them identifiable without colour. */
+.ph {
+  display: inline-block;
+  background: var(--color-warn-tint);
+  color: var(--color-warn-fg);
+  border-radius: 4px;
+  padding: 0 6px;
+  font-weight: 600;
+}
