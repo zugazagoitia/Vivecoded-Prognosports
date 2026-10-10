@@ -8,9 +8,9 @@ import {
   SessionStateAlert,
   SessionTimeline,
   Skeleton,
-  StateAction,
-  StateAlert,
 } from '@/components/states'
+import PButton from '@/components/ui/PButton.vue'
+import PrognoAlert from '@/components/ui/PrognoAlert.vue'
 import ThemeSwitch from '@/components/ui/ThemeSwitch.vue'
 
 // Development-only catalogue of the F6 system states (unlisted; /dev/* is served noindex).
@@ -52,16 +52,14 @@ const people = [
         <h2 class="text-heading mb-4 text-xl font-semibold">Vacío</h2>
         <div class="flex flex-col gap-4">
           <EmptyState variant="noCommunity">
-            <StateAction>{{ t('states.empty.noCommunity.create') }}</StateAction>
-            <StateAction variant="outline">{{ t('states.empty.noCommunity.explore') }}</StateAction>
+            <PButton>{{ t('states.empty.noCommunity.create') }}</PButton>
+            <PButton variant="outline">{{ t('states.empty.noCommunity.explore') }}</PButton>
           </EmptyState>
           <EmptyState variant="noResults">
-            <StateAction variant="outline">{{ t('states.empty.noResults.clear') }}</StateAction>
+            <PButton variant="outline">{{ t('states.empty.noResults.clear') }}</PButton>
           </EmptyState>
           <EmptyState variant="noSessionResults">
-            <StateAction variant="outline">{{
-              t('states.empty.noSessionResults.notices')
-            }}</StateAction>
+            <PButton variant="outline">{{ t('states.empty.noSessionResults.notices') }}</PButton>
           </EmptyState>
         </div>
       </section>
@@ -108,14 +106,18 @@ const people = [
       <section class="bg-surface shadow-card ring-card-ring rounded-lg p-5 ring-1">
         <h2 class="text-heading mb-4 text-xl font-semibold">Avisos</h2>
         <div class="flex flex-col gap-3">
-          <StateAlert kind="warn" icon="wifi_off">{{ t('states.notice.offline') }}</StateAlert>
-          <StateAlert kind="info" icon="lock">{{
-            t('states.notice.closed', { session: 'la Carrera', time: '14:00' })
-          }}</StateAlert>
-          <StateAlert kind="brand" icon="science">{{ t('states.notice.beta') }}</StateAlert>
-          <StateAlert kind="err" icon="error">{{
-            t('states.notice.notSaved', { n: 2, total: 10, chosen: 8 }, 2)
-          }}</StateAlert>
+          <PrognoAlert role="status" variant="warn" :title="t('states.notice.offline')" />
+          <PrognoAlert
+            role="status"
+            variant="info"
+            :title="t('states.notice.closed', { session: 'la Carrera', time: '14:00' })"
+          />
+          <PrognoAlert role="status" variant="brand" :title="t('states.notice.beta')" />
+          <PrognoAlert
+            role="status"
+            variant="err"
+            :title="t('states.notice.notSaved', { n: 2, total: 10, chosen: 8 }, 2)"
+          />
         </div>
       </section>
 

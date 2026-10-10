@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { messageFor } from '@/api/messages'
-import StateAction from '@/components/states/StateAction.vue'
+import PButton from './PButton.vue'
 import PIcon from './PIcon.vue'
 import { iconFor } from './icons'
 
@@ -25,8 +25,8 @@ const title = computed(() =>
     <p v-if="error">{{ messageFor(error) }}</p>
     <p>{{ t('errors.section.safe') }}</p>
     <div class="section-error-actions">
-      <StateAction @click="$emit('retry')">{{ t('errors.section.retry') }}</StateAction>
-      <StateAction to="/" variant="ghost">{{ t('errors.section.home') }}</StateAction>
+      <PButton @click="$emit('retry')">{{ t('errors.section.retry') }}</PButton>
+      <PButton to="/" variant="ghost">{{ t('errors.section.home') }}</PButton>
     </div>
   </section>
 </template>

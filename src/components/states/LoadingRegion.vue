@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import StateAction from './StateAction.vue'
+import PButton from '@/components/ui/PButton.vue'
 
 /**
  * Envuelve un bloque que carga: `aria-busy` mientras `loading`, esqueleto (slot `skeleton`) y,
@@ -17,9 +17,7 @@ const { t } = useI18n()
       <slot name="skeleton" />
       <div v-if="slow" class="slow-loading" role="status">
         <span>{{ t('states.loading.slowTitle') }}</span>
-        <StateAction variant="outline" @click="$emit('retry')">{{
-          t('states.loading.retry')
-        }}</StateAction>
+        <PButton variant="outline" @click="$emit('retry')">{{ t('states.loading.retry') }}</PButton>
       </div>
     </template>
     <slot v-else />

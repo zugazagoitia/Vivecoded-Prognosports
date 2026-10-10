@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNow } from '@/composables/useNow'
 import { closesAt, formatCountdown, type HasDate } from '@/utils/dates'
-import StateAlert from './StateAlert.vue'
+import PrognoAlert from '@/components/ui/PrognoAlert.vue'
 import { sessionState } from './sessionState'
 
 const props = defineProps<{
@@ -22,15 +22,15 @@ const time = computed(() => {
   return c ? formatCountdown((c.getTime() - current.value) / 1000) : ''
 })
 const KIND = { open: 'warn', closed: 'info', scored: 'ok' } as const
-const ICON = { open: 'schedule', closed: 'visibility', scored: 'emoji_events' } as const
 </script>
 
 <template>
-  <StateAlert
-    :kind="KIND[state]"
-    :icon="ICON[state]"
+  <!-- role="status": the countdown ticks, so it must not be an assertive alert. -->
+  <PrognoAlert
+    role="status"
+    :variant="KIND[state]"
     :title="t(`states.session.${state}.title`, { time })"
   >
     {{ t(`states.session.${state}.text`) }}
-  </StateAlert>
+  </PrognoAlert>
 </template>

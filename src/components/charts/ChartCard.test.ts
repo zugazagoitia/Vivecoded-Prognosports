@@ -1,6 +1,7 @@
-import { fireEvent, render, screen, within } from '@testing-library/vue'
+import { fireEvent, screen, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import ChartCard, { type ChartMode } from './ChartCard.vue'
+import { renderWithProviders } from '@/test/render'
 import { cumulate, type ChartGp, type ChartUser } from './model'
 
 const gps: ChartGp[] = [
@@ -20,15 +21,15 @@ const modes: ChartMode[] = [
 const props = { title: 'Clasificación', gps, modes, highlight: ['m'], me: 'me' }
 
 describe('ChartCard', () => {
-  it('exposes the chart as an image with the computed headline', () => {
-    render(ChartCard, { props })
+  it('exposes the chart as an image with the computed headline', async () => {
+    await renderWithProviders(ChartCard, { props })
     expect(screen.getByRole('img').getAttribute('aria-label')).toBe(
       'Marta lidera con 90 puntos; tú vas 2.º con 60.',
     )
   })
 
   it('alt text changes with the mode data', async () => {
-    render(ChartCard, { props })
+    await renderWithProviders(ChartCard, { props })
     await fireEvent.click(screen.getByRole('button', { name: 'Por GP' }))
     expect(screen.getByRole('img').getAttribute('aria-label')).toContain(
       'Marta lidera con 30 puntos',
@@ -36,7 +37,7 @@ describe('ChartCard', () => {
   })
 
   it('pins a GP from the pressable axis and announces it in the live panel', async () => {
-    render(ChartCard, { props })
+    await renderWithProviders(ChartCard, { props })
     const btn = screen.getByRole('button', { name: 'Fijar Gran Premio de Italia' })
     expect(btn.getAttribute('aria-pressed')).toBe('false')
     await fireEvent.click(btn)
@@ -49,7 +50,7 @@ describe('ChartCard', () => {
   })
 
   it('walks the GPs with the arrow keys', async () => {
-    render(ChartCard, { props })
+    await renderWithProviders(ChartCard, { props })
     const chart = screen.getByRole('img')
     await fireEvent.keyDown(chart, { key: 'ArrowRight' })
     expect(screen.getByRole('button', { name: /Australia/ }).getAttribute('aria-pressed')).toBe(
@@ -64,7 +65,7 @@ describe('ChartCard', () => {
   })
 
   it('offers the equivalent table with the same figures', async () => {
-    render(ChartCard, { props })
+    await renderWithProviders(ChartCard, { props })
     await fireEvent.click(screen.getByRole('button', { name: 'Ver como tabla' }))
     expect(screen.queryByRole('img')).toBeNull()
     const row = screen.getByRole('row', { name: /Marta/ })
@@ -72,12 +73,12 @@ describe('ChartCard', () => {
       within(row)
         .getAllByRole('cell')
         .map((c) => c.textContent),
-    ).toEqual(['30', '60', '90'])
+    ).toEqual(['Marta', '30', '60', '90'])
     expect(screen.getByRole('columnheader', { name: 'ITA' })).toBeTruthy()
   })
 
-  it('always shows the legend including the rest of the community', () => {
-    render(ChartCard, { props })
+  it('always shows the legend including the rest of the community', async () => {
+    await renderWithProviders(ChartCard, { props })
     const legend = screen.getByRole('list', { name: 'Leyenda' })
     expect(within(legend).getByText('Resto de la comunidad')).toBeTruthy()
     expect(within(legend).getByText('Tú (tú)')).toBeTruthy()
