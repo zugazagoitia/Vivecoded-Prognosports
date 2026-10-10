@@ -15,11 +15,18 @@ function showFatal(message: string) {
   el.append(pre)
 }
 
-try {
+async function start() {
   loadEnv()
+  // Dev without the real API: `VITE_API_MOCK=true pnpm dev` serves src/mocks via MSW.
+  if (import.meta.env.DEV && import.meta.env.VITE_API_MOCK === 'true') {
+    const { startMocking } = await import('./mocks/browser')
+    await startMocking()
+  }
   createApp(App).use(i18n).use(createAppRouter()).mount('#app')
-} catch (e) {
+}
+
+start().catch((e: unknown) => {
   const message = e instanceof EnvError ? e.message : String(e)
   console.error(`[PrognoSports] La app no puede arrancar.\n${message}`)
   showFatal(`La app no puede arrancar.\n${message}`)
-}
+})

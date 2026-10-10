@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint'
 const FETCH_MSG = 'Usa el cliente de src/api/ en lugar de fetch directo.'
 
 export default tseslint.config(
-  { ignores: ['**/*.d.ts', 'dist/**', 'node_modules/**', 'docs/**', 'coverage/**'] },
+  { ignores: ['**/*.d.ts', 'dist/**', 'node_modules/**', 'docs/**', 'coverage/**', 'public/**'] },
 
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -62,6 +62,12 @@ export default tseslint.config(
   {
     files: ['src/api/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
+  },
+
+  {
+    // Tests define small inline components.
+    files: ['**/*.test.ts'],
+    rules: { 'vue/one-component-per-file': 'off' },
   },
 
   {
