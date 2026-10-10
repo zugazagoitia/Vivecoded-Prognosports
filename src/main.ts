@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { EnvError, loadEnv } from './env'
 import { i18n } from './i18n'
+import { createAppRouter } from './router'
 
 function showFatal(message: string) {
   const el = document.getElementById('app')
@@ -16,7 +17,7 @@ function showFatal(message: string) {
 
 try {
   loadEnv()
-  createApp(App).use(i18n).mount('#app')
+  createApp(App).use(i18n).use(createAppRouter()).mount('#app')
 } catch (e) {
   const message = e instanceof EnvError ? e.message : String(e)
   console.error(`[PrognoSports] La app no puede arrancar.\n${message}`)

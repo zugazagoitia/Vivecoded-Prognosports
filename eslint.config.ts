@@ -41,6 +41,25 @@ export default tseslint.config(
   },
 
   {
+    // File-based routes: names come from the path; definePage is a vue-router macro.
+    files: ['src/pages/**/*.vue'],
+    languageOptions: { globals: { definePage: 'readonly' } },
+    rules: { 'vue/multi-word-component-names': 'off' },
+  },
+
+  {
+    // Placeholder pages/layouts/shell; their screen issues (A*, G*, N*...) bring real i18n text.
+    files: [
+      'src/pages/**/*.vue',
+      'src/layouts/**/*.vue',
+      'src/components/layout/**/*.vue',
+      'src/App.vue',
+      'src/components/BetaBanner.vue',
+    ],
+    rules: { 'vue/no-bare-strings-in-template': 'off' },
+  },
+
+  {
     files: ['src/api/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },

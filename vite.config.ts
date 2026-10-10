@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { fileURLToPath, URL } from 'node:url'
 import vue from '@vitejs/plugin-vue'
+import VueRouter from 'vue-router/vite'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
 import pkg from './package.json' with { type: 'json' }
 
@@ -42,7 +43,12 @@ export default defineConfig(({ mode }) => {
   const appVersion = env.VITE_APP_VERSION || pkg.version
 
   return {
-    plugins: [vue(), apiOriginPlugin(env.VITE_API_BASE_URL)],
+    // VueRouter() must come before vue(). File-based routes live in src/pages (see src/router).
+    plugins: [
+      VueRouter({ routesFolder: 'src/pages', dts: 'src/typed-router.d.ts' }),
+      vue(),
+      apiOriginPlugin(env.VITE_API_BASE_URL),
+    ],
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },

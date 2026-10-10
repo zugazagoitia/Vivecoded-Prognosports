@@ -29,7 +29,8 @@
     "lint:fix": "oxlint --fix && eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "test": "vitest run"
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.104.1",
@@ -58,6 +59,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.3.4",
+    "vitest": "^5.0.3",
     "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.13"
   }
