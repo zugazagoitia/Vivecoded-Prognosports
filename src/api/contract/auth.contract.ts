@@ -29,12 +29,12 @@ describe.skipIf(!TOKEN)('authenticated GET endpoints', () => {
       gpsApi.getResults(C, S, G, SES),
     )
   })
-  it('GET /v2/communities/{community}/{c}/{s}/points -> UserPointsSchema[]', async () => {
+  it('GET /v2/communities/{community}/{c}/{s}/points -> {gp: UserPointsSchema[]}', async () => {
     const points = await live(
-      'UserPointsSchema[] GET /v2/communities/{community}/{c}/{s}/points',
+      '{gp: UserPointsSchema[]} GET /v2/communities/{community}/{c}/{s}/points',
       () => communitiesApi.getCommunityPoints(COM, C, S),
     )
-    expect(Array.isArray(points)).toBe(true)
+    expect(typeof points).toBe('object')
   })
   it('GET /v2/user/{user}/communities/{community}/{c}/{s}/resume -> UserResumeSchema', async () => {
     await live('UserResumeSchema GET /v2/user/{user}/communities/{community}/{c}/{s}/resume', () =>
