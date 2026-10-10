@@ -7,6 +7,7 @@ import legal from './es/legal.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import sessions from './es/sessions.json'
+import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
 
@@ -15,7 +16,19 @@ export const i18n = createI18n({
   locale: 'es',
   fallbackLocale: 'es',
   messages: {
-    es: { ...common, ...mobilenav, admin, errors, ...legal, nav, sessions, data, states, ui },
+    es: {
+      ...common,
+      ...mobilenav,
+      admin,
+      errors,
+      ...legal,
+      nav,
+      sessions,
+      data,
+      states,
+      ui,
+      ...rules,
+    },
   },
 })
 

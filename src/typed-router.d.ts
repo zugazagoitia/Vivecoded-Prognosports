@@ -214,6 +214,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/rules': RouteRecordInfo<
+      '/rules',
+      '/rules',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/sesion-cerrada': RouteRecordInfo<
       '/sesion-cerrada',
       '/sesion-cerrada',
@@ -460,6 +467,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/restablecer.vue': {
       routes:
         | '/restablecer'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/rules.vue': {
+      routes:
+        | '/rules'
       views:
         | never
       pathParamNames:

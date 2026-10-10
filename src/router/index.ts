@@ -63,7 +63,11 @@ export function createAppRouter(): Router {
     routes: [...routes, ...legacyRedirects],
     scrollBehavior(to, _from, saved) {
       if (saved) return saved
-      if (to.hash) return { el: to.hash, behavior: 'smooth' }
+      if (to.hash)
+        return {
+          el: to.hash,
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        }
       return { top: 0 }
     },
   })

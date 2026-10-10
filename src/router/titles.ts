@@ -3,6 +3,7 @@ import type { Router } from 'vue-router'
 /** Fallback Spanish titles until T5 (i18n) lands; `setTitleResolver` swaps in `t()`. */
 const fallback: Record<string, string> = {
   'route.landing': 'Inicio',
+  'route.rules': 'Cómo se puntúa',
   'route.login': 'Iniciar sesión',
   'route.register': 'Crear cuenta',
   'route.recover': 'Recuperar contraseña',
