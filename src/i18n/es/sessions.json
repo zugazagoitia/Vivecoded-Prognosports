@@ -1,0 +1,10 @@
+{
+  "race": { "short": "Carrera", "long": "Carrera" },
+  "sprint": { "short": "Sprint", "long": "Sprint" },
+  "qualifying": { "short": "Clasif.", "long": "Clasificación" },
+  "sprintQualifying": { "short": "Clasif. sprint", "long": "Clasificación sprint" },
+  "fp1": { "short": "L1", "long": "Libres 1" },
+  "fp2": { "short": "L2", "long": "Libres 2" },
+  "fp3": { "short": "L3", "long": "Libres 3" },
+  "predictionOf": "Pronóstico {de} {session}"
+}
