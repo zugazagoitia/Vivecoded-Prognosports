@@ -22,7 +22,14 @@
     "dev": "vite",
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.node.json"
+    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.node.json",
+    "lint:ox": "oxlint",
+    "lint:eslint": "eslint .",
+    "lint": "pnpm lint:ox && pnpm lint:eslint",
+    "lint:fix": "oxlint --fix && eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@tanstack/vue-query": "^5.104.1",
@@ -35,10 +42,23 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.5",
     "@vitejs/plugin-vue": "^6.0.10",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-oxlint": "^1.87.0",
+    "eslint-plugin-vue": "^10.11.1",
+    "eslint-plugin-vuejs-accessibility": "^2.6.2",
+    "jiti": "^2.7.0",
+    "lefthook": "^2.2.1",
+    "oxlint": "^1.87.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
     "vite": "^8.3.4",
+    "vue-eslint-parser": "^10.4.1",
     "vue-tsc": "^3.3.13"
   }
 }
