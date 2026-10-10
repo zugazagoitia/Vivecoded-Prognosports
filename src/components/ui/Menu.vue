@@ -22,6 +22,8 @@ export type MenuEntry =
       icon?: IconName
       /** Current option (highlighted, `aria-current`). */
       active?: boolean
+      /** Small tag on the right (e.g. «Activa»). */
+      hint?: string
       disabled?: boolean
     }
 
@@ -41,6 +43,7 @@ defineEmits<{ select: [value: string] }>()
         :side-offset="6"
         class="bg-surface ring-card-ring z-50 flex min-w-52 flex-col rounded-lg p-1.5 shadow-lg ring-1"
       >
+        <slot name="header" />
         <template v-for="(e, i) in entries" :key="i">
           <DropdownMenuSeparator
             v-if="e.type === 'separator'"
@@ -64,7 +67,12 @@ defineEmits<{ select: [value: string] }>()
             @select="$emit('select', e.value)"
           >
             <PIcon v-if="e.icon" :name="e.icon" :size="16" :class="e.active ? '' : 'text-muted'" />
-            {{ e.label }}
+            <span class="min-w-0 flex-1 truncate">{{ e.label }}</span>
+            <span
+              v-if="e.hint"
+              class="bg-tint text-tint-fg rounded-full px-2 py-0.5 text-xs font-medium"
+              >{{ e.hint }}</span
+            >
           </DropdownMenuItem>
         </template>
       </DropdownMenuContent>

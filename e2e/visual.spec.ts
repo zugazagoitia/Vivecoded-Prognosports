@@ -31,7 +31,11 @@ test.describe('visual regression', () => {
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
         await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
-        await expect(page).toHaveScreenshot(`home-${scheme}.png`, { fullPage: true })
+        // The footer build line changes with every commit.
+        await expect(page).toHaveScreenshot(`home-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
       })
     })
   }

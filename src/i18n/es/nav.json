@@ -1,0 +1,47 @@
+{
+  "main": "Principal",
+  "home": "Ir al inicio",
+  "links": {
+    "rules": "Cómo se puntúa",
+    "circuits": "Circuitos",
+    "faq": "Preguntas frecuentes",
+    "home": "Inicio",
+    "gps": "Grandes Premios",
+    "ranking": "Ranking",
+    "communities": "Comunidades",
+    "admin": "Administración"
+  },
+  "login": "Iniciar sesión",
+  "register": "Registrarse",
+  "theme": "Cambiar tema claro u oscuro",
+  "notifications": "Notificaciones",
+  "profile": "Mi perfil",
+  "community": {
+    "switch": "Cambiar de comunidad",
+    "none": "Sin comunidad",
+    "yours": "Tus comunidades",
+    "active": "Activa",
+    "all": "Ver todas",
+    "create": "Crear comunidad"
+  },
+  "user": {
+    "settings": "Ajustes",
+    "notifications": "Notificaciones",
+    "logout": "Cerrar sesión"
+  },
+  "footer": {
+    "tagline": "Pronostica resultados de carreras con tus amigos y compite por ser el mejor.",
+    "beta": "PrognoSports Beta",
+    "game": "Juego",
+    "help": "Ayuda",
+    "legal": "Legal",
+    "calendar": "Calendario",
+    "openCommunities": "Comunidades abiertas",
+    "gameRules": "Reglas del juego",
+    "contact": "Contacto",
+    "terms": "Términos de uso",
+    "privacy": "Privacidad",
+    "copyright": "© {year} PrognoSports. Proyecto de aficionados, sin relación con la Fórmula 1 ni con la FIA.",
+    "build": "v{version} · build {sha} · {date}"
+  }
+}
