@@ -1,0 +1,2121 @@
+{
+ "repo": "zugazagoitia/Vivecoded-Prognosports",
+ "epics": [
+  {
+   "code": "E1",
+   "title": "Base técnica",
+   "label": "technical"
+  },
+  {
+   "code": "E2",
+   "title": "Guía, fundamentos y piezas compartidas",
+   "label": "design"
+  },
+  {
+   "code": "E3",
+   "title": "Público",
+   "label": "design"
+  },
+  {
+   "code": "E4",
+   "title": "Acceso",
+   "label": "design"
+  },
+  {
+   "code": "E5",
+   "title": "Inicio y comunidades",
+   "label": "design"
+  },
+  {
+   "code": "E6",
+   "title": "Grandes Premios",
+   "label": "design"
+  },
+  {
+   "code": "E7",
+   "title": "Ranking y estadísticas",
+   "label": "design"
+  },
+  {
+   "code": "E8",
+   "title": "Perfil y ajustes",
+   "label": "design"
+  },
+  {
+   "code": "E9",
+   "title": "Administración",
+   "label": "design"
+  }
+ ],
+ "issues": [
+  {
+   "code": "T1",
+   "title": "Scaffold Vue 3.5 + Vite + TS estricto + pnpm",
+   "deps": [],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T2",
+   "title": "Cliente API v2, tipos OpenAPI y Zod",
+   "deps": [
+    "T1"
+   ],
+   "size": "L",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T3",
+   "title": "Router (unplugin-vue-router), layouts y guards",
+   "deps": [
+    "T1"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T4",
+   "title": "Pinia + TanStack Query",
+   "deps": [
+    "T1",
+    "T2"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T5",
+   "title": "i18n (es) y fechas/números con Intl",
+   "deps": [
+    "T1"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T6",
+   "title": "Feature flags VITE_FF_* (12)",
+   "deps": [
+    "T1",
+    "T3"
+   ],
+   "size": "S",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:S"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T7",
+   "title": "Errores y toasts (vue-sonner)",
+   "deps": [
+    "T1",
+    "T4"
+   ],
+   "size": "S",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:S"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T8",
+   "title": "Lint, formato y pre-commit (oxlint, ESLint, Prettier, Lefthook)",
+   "deps": [
+    "T1"
+   ],
+   "size": "S",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:S"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T9",
+   "title": "Tests unitarios y de componentes (Vitest, MSW)",
+   "deps": [
+    "T1",
+    "T2"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T10",
+   "title": "E2E y accesibilidad (Playwright multinavegador, axe, regresión visual)",
+   "deps": [
+    "T1",
+    "T9"
+   ],
+   "size": "L",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T11",
+   "title": "CI en GitHub Actions (build único, acciones fijadas por SHA, CodeQL, audit, Dependabot)",
+   "deps": [
+    "T8",
+    "T9"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T12",
+   "title": "Despliegue Cloudflare Workers Static Assets (beta, producción con aprobación, previews, rollback)",
+   "deps": [
+    "T11"
+   ],
+   "size": "L",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T13",
+   "title": "Seguridad: CSP, cabeceras, política de tokens",
+   "deps": [
+    "T12"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T14",
+   "title": "Observabilidad y presupuesto de rendimiento (size-limit, Web Vitals)",
+   "deps": [
+    "T11"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "T15",
+   "title": "Tests de contrato contra la API v2",
+   "deps": [
+    "T2",
+    "T9"
+   ],
+   "size": "M",
+   "labels": [
+    "technical",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E1",
+   "kind": "technical",
+   "body": null
+  },
+  {
+   "code": "F1",
+   "title": "Tokens y tema (claro/oscuro)",
+   "deps": [
+    "T1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "F2",
+   "title": "Tipografía, iconos y layout",
+   "deps": [
+    "T1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "F3",
+   "title": "Componentes base",
+   "deps": [
+    "T1"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "F4",
+   "title": "Piezas de datos (HitCell, FormChips, PredictionSlot, ValidationList, SaveBar, BottomSheet, PlayerChip)",
+   "deps": [
+    "T1"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "F5",
+   "title": "Gráficos (foco+contexto, modos, eje pulsable, tabla alternativa)",
+   "deps": [
+    "T1"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:L"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "F6",
+   "title": "Estados del sistema (carga, vacío, error)",
+   "deps": [
+    "T1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:foundation",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "foundation",
+   "body": null
+  },
+  {
+   "code": "N1",
+   "title": "AppNav + SiteFooter",
+   "deps": [
+    "F1",
+    "F2",
+    "F3",
+    "T3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:component",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "piece",
+   "body": null
+  },
+  {
+   "code": "N2",
+   "title": "TabBar + MobileBar",
+   "deps": [
+    "F1",
+    "F2",
+    "F3",
+    "T3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:component",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "piece",
+   "body": null
+  },
+  {
+   "code": "N3",
+   "title": "RankNav",
+   "deps": [
+    "F1",
+    "F2",
+    "F3",
+    "T3"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "type:component",
+    "size:S"
+   ],
+   "epic": "E2",
+   "kind": "piece",
+   "body": null
+  },
+  {
+   "code": "N4",
+   "title": "AdminSide y layout admin",
+   "deps": [
+    "F1",
+    "F2",
+    "F3",
+    "T3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "type:component",
+    "size:M"
+   ],
+   "epic": "E2",
+   "kind": "piece",
+   "body": null
+  },
+  {
+   "code": "M6",
+   "title": "Circuitos (admin)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "M7"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminCircuitos.dc.html",
+   "body": "issues/M6.md"
+  },
+  {
+   "code": "M7",
+   "title": "Editar circuito",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "T5",
+    "F4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminCircuitoEditar.dc.html",
+   "body": "issues/M7.md"
+  },
+  {
+   "code": "M8",
+   "title": "Pilotos y equipos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "F4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminPilotos.dc.html",
+   "body": "issues/M8.md"
+  },
+  {
+   "code": "M9",
+   "title": "Reglas de puntuación",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "F4"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminReglas.dc.html",
+   "body": "issues/M9.md"
+  },
+  {
+   "code": "M10",
+   "title": "Usuarios (solo lectura)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "T5"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminUsuarios.dc.html",
+   "body": "issues/M10.md"
+  },
+  {
+   "code": "M11",
+   "title": "Comunidades (solo lectura)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "H5"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminComunidades.dc.html",
+   "body": "issues/M11.md"
+  },
+  {
+   "code": "M12",
+   "title": "Enviar notificaciones",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "T5"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminNotificaciones.dc.html",
+   "body": "issues/M12.md"
+  },
+  {
+   "code": "M13",
+   "title": "Cálculo de puntos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "T5",
+    "M5"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminCalculos.dc.html",
+   "body": "issues/M13.md"
+  },
+  {
+   "code": "G1",
+   "title": "Grandes Premios (calendario)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N2"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "GPLista.dc.html",
+   "body": "issues/G1.md"
+  },
+  {
+   "code": "G2",
+   "title": "Fin de semana de carrera",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "G1"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "GPDetalle.dc.html",
+   "body": "issues/G2.md"
+  },
+  {
+   "code": "G3",
+   "title": "Pronosticar",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "G2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "Pronosticar.dc.html",
+   "body": "issues/G3.md"
+  },
+  {
+   "code": "G4",
+   "title": "Parrilla y consenso",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N2",
+    "G2"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "ParrillaComunidad.dc.html",
+   "body": "issues/G4.md"
+  },
+  {
+   "code": "G5",
+   "title": "Resultados y puntos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "G2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "Resultados.dc.html",
+   "body": "issues/G5.md"
+  },
+  {
+   "code": "G6",
+   "title": "Simulador de puntos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "G5"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:grandes-premios",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E6",
+   "kind": "screen",
+   "flag": null,
+   "file": "Simulador.dc.html",
+   "body": "issues/G6.md"
+  },
+  {
+   "code": "H1",
+   "title": "Inicio",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "Inicio.dc.html",
+   "body": "issues/H1.md"
+  },
+  {
+   "code": "H2",
+   "title": "Mis comunidades",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "Comunidades.dc.html",
+   "body": "issues/H2.md"
+  },
+  {
+   "code": "H3",
+   "title": "Explorar comunidades",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N2",
+    "H2"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "Explorar.dc.html",
+   "body": "issues/H3.md"
+  },
+  {
+   "code": "H4",
+   "title": "Crear comunidad",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N2",
+    "H5"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "CrearComunidad.dc.html",
+   "body": "issues/H4.md"
+  },
+  {
+   "code": "H5",
+   "title": "Comunidad",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "H2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "ComunidadHome.dc.html",
+   "body": "issues/H5.md"
+  },
+  {
+   "code": "H6",
+   "title": "Ajustes de la comunidad",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N2",
+    "H5"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "ComunidadAjustes.dc.html",
+   "body": "issues/H6.md"
+  },
+  {
+   "code": "H7",
+   "title": "Invitación",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "H2",
+    "H5"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:inicio-comunidades",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E5",
+   "kind": "screen",
+   "flag": null,
+   "file": "Invitacion.dc.html",
+   "body": "issues/H7.md"
+  },
+  {
+   "code": "U1",
+   "title": "Mi perfil",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:perfil-ajustes",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E8",
+   "kind": "screen",
+   "flag": null,
+   "file": "Perfil.dc.html",
+   "body": "issues/U1.md"
+  },
+  {
+   "code": "U2",
+   "title": "Perfil de otro usuario",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N2",
+    "U1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:perfil-ajustes",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E8",
+   "kind": "screen",
+   "flag": null,
+   "file": "PerfilUsuario.dc.html",
+   "body": "issues/U2.md"
+  },
+  {
+   "code": "U3",
+   "title": "Ajustes de cuenta",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:perfil-ajustes",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E8",
+   "kind": "screen",
+   "flag": null,
+   "file": "Ajustes.dc.html",
+   "body": "issues/U3.md"
+  },
+  {
+   "code": "U4",
+   "title": "Notificaciones",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N2",
+    "U3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:perfil-ajustes",
+    "type:screen",
+    "size:M",
+    "blocked"
+   ],
+   "epic": "E8",
+   "kind": "screen",
+   "flag": null,
+   "file": "Notificaciones.dc.html",
+   "body": "issues/U4.md"
+  },
+  {
+   "code": "M1",
+   "title": "Panel de administración",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N2",
+    "N4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M",
+    "mobile"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminPanel.dc.html",
+   "body": "issues/M1.md"
+  },
+  {
+   "code": "M2",
+   "title": "Grandes Premios (admin)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminGPs.dc.html",
+   "body": "issues/M2.md"
+  },
+  {
+   "code": "M3",
+   "title": "Editar Gran Premio",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F6",
+    "N1",
+    "N4",
+    "M2"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminGPEditar.dc.html",
+   "body": "issues/M3.md"
+  },
+  {
+   "code": "M4",
+   "title": "Pilotos del Gran Premio",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "M3"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminPilotosGP.dc.html",
+   "body": "issues/M4.md"
+  },
+  {
+   "code": "M5",
+   "title": "Sesiones y resultados",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N4",
+    "M3"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:admin",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E9",
+   "kind": "screen",
+   "flag": null,
+   "file": "AdminSesiones.dc.html",
+   "body": "issues/M5.md"
+  },
+  {
+   "code": "P1",
+   "title": "Landing",
+   "deps": [
+    "T1",
+    "T3",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "N1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:M",
+    "mobile"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "Landing.dc.html",
+   "body": "issues/P1.md"
+  },
+  {
+   "code": "P2",
+   "title": "Cómo se puntúa",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "N1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "Reglas.dc.html",
+   "body": "issues/P2.md"
+  },
+  {
+   "code": "P3",
+   "title": "Circuitos",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "Circuitos.dc.html",
+   "body": "issues/P3.md"
+  },
+  {
+   "code": "P4",
+   "title": "Detalle de circuito",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "P3"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "CircuitoDetalle.dc.html",
+   "body": "issues/P4.md"
+  },
+  {
+   "code": "P5",
+   "title": "Preguntas frecuentes",
+   "deps": [
+    "T1",
+    "T3",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "FAQ.dc.html",
+   "body": "issues/P5.md"
+  },
+  {
+   "code": "P6",
+   "title": "Términos y privacidad",
+   "deps": [
+    "T1",
+    "T3",
+    "T5",
+    "F1",
+    "F2",
+    "F3",
+    "N1"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:publico",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E3",
+   "kind": "screen",
+   "flag": null,
+   "file": "Legal.dc.html",
+   "body": "issues/P6.md"
+  },
+  {
+   "code": "A1",
+   "title": "Iniciar sesión",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:acceso",
+    "type:screen",
+    "size:M",
+    "mobile"
+   ],
+   "epic": "E4",
+   "kind": "screen",
+   "flag": null,
+   "file": "Login.dc.html",
+   "body": "issues/A1.md"
+  },
+  {
+   "code": "A2",
+   "title": "Registro",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:acceso",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E4",
+   "kind": "screen",
+   "flag": null,
+   "file": "Registro.dc.html",
+   "body": "issues/A2.md"
+  },
+  {
+   "code": "A3",
+   "title": "Recuperar contraseña",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:acceso",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E4",
+   "kind": "screen",
+   "flag": null,
+   "file": "Recuperar.dc.html",
+   "body": "issues/A3.md"
+  },
+  {
+   "code": "A4",
+   "title": "Nueva contraseña",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1",
+    "A3"
+   ],
+   "size": "S",
+   "labels": [
+    "design",
+    "area:acceso",
+    "type:screen",
+    "size:S"
+   ],
+   "epic": "E4",
+   "kind": "screen",
+   "flag": null,
+   "file": "Restablecer.dc.html",
+   "body": "issues/A4.md"
+  },
+  {
+   "code": "A5",
+   "title": "Verificación de correo",
+   "deps": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "N1",
+    "A2",
+    "A4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:acceso",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E4",
+   "kind": "screen",
+   "flag": null,
+   "file": "Verificar.dc.html",
+   "body": "issues/A5.md"
+  },
+  {
+   "code": "R0",
+   "title": "Resumen del ranking",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:L"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": null,
+   "file": "RankingResumen.dc.html",
+   "body": "issues/R0.md"
+  },
+  {
+   "code": "R1",
+   "title": "Clasificación",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N2",
+    "N3",
+    "R0"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:L",
+    "mobile"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": null,
+   "file": "Clasificacion.dc.html",
+   "body": "issues/R1.md"
+  },
+  {
+   "code": "R2",
+   "title": "Puntos por Gran Premio (matriz)",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F6",
+    "N1",
+    "N3",
+    "R1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": null,
+   "file": "Matriz.dc.html",
+   "body": "issues/R2.md"
+  },
+  {
+   "code": "R3",
+   "title": "Mi temporada",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "R1"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_MY_SEASON",
+   "file": "MiTemporada.dc.html",
+   "body": "issues/R3.md"
+  },
+  {
+   "code": "R4",
+   "title": "Palmarés",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "R0"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_HONOURS",
+   "file": "Palmares.dc.html",
+   "body": "issues/R4.md"
+  },
+  {
+   "code": "R5",
+   "title": "Diferencia de puntos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "R0"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:L",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_GAP",
+   "file": "Gap.dc.html",
+   "body": "issues/R5.md"
+  },
+  {
+   "code": "R6",
+   "title": "Posición en la general",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T6",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "R5"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:L",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_BUMP",
+   "file": "Bump.dc.html",
+   "body": "issues/R6.md"
+  },
+  {
+   "code": "R7",
+   "title": "Regularidad",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_CONSISTENCY",
+   "file": "Consistencia.dc.html",
+   "body": "issues/R7.md"
+  },
+  {
+   "code": "R8",
+   "title": "Cara a cara",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "F4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_HEAD_TO_HEAD",
+   "file": "CaraACara.dc.html",
+   "body": "issues/R8.md"
+  },
+  {
+   "code": "R9",
+   "title": "Distribución de puntos",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_DISTRIBUTION",
+   "file": "Distribucion.dc.html",
+   "body": "issues/R9.md"
+  },
+  {
+   "code": "R10",
+   "title": "Mapa de calor por GP",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_HEATMAP",
+   "file": "HeatmapGP.dc.html",
+   "body": "issues/R10.md"
+  },
+  {
+   "code": "R11",
+   "title": "Aciertos por tipo",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_HITS_BY_TYPE",
+   "file": "AciertosTipo.dc.html",
+   "body": "issues/R11.md"
+  },
+  {
+   "code": "R12",
+   "title": "Lucha por el título",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3"
+   ],
+   "size": "L",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:L",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_TITLE_RACE",
+   "file": "Titulo.dc.html",
+   "body": "issues/R12.md"
+  },
+  {
+   "code": "R13",
+   "title": "Puntos por sesión",
+   "deps": [
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6",
+    "T7",
+    "F1",
+    "F2",
+    "F3",
+    "F5",
+    "F6",
+    "N1",
+    "N3",
+    "F4"
+   ],
+   "size": "M",
+   "labels": [
+    "design",
+    "area:ranking",
+    "type:screen",
+    "size:M",
+    "feature-flag"
+   ],
+   "epic": "E7",
+   "kind": "screen",
+   "flag": "VITE_FF_POINTS_BY_SESSION",
+   "file": "Sesiones.dc.html",
+   "body": "issues/R13.md"
+  }
+ ]
+}
