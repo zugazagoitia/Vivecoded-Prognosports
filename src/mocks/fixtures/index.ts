@@ -14,6 +14,8 @@ export const REFERENCE_NOW = '2026-07-01T12:00:00.000Z'
 
 export const MOCK_TOKEN = 'mock-token'
 export const MOCK_PASSWORD = 'secret123'
+/** Valid recovery code accepted by the mocked PATCH changepassword. */
+export const MOCK_RESET_CODE = 'K7X2M9'
 
 type UserInput = z.input<typeof UserSchema>
 type CommunityInput = z.input<typeof CommunitySchema>
