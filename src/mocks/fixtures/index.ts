@@ -80,9 +80,30 @@ export function mockCommunity(overrides: Partial<CommunityInput> = {}): Communit
     open: false,
     invitation: 'PADDOCK26',
     owner: users[0],
-    membersAmount: users.length,
-    userIsMember: true,
+    // snake_case + isPublic + nested pointsByEqualsPosition: the real wire shapes (README).
+    members_amount: users.length,
+    user_is_member: true,
     created: '2026-01-05T09:00:00Z',
+    defaultRuleSet: {
+      id: 1,
+      displayname: 'Default Rule Set',
+      description: 'El conjunto de reglas por defecto',
+      creator: users[0],
+      isPublic: true,
+      data: {
+        predictedPositions: { '1': 4, '2': 10, '3': 4, '4': 8 },
+        pointsByEqualsPosition: {
+          '1': { '1': 20, '2': 16, '3': 12, '4': 10 },
+          '2': { '1': 25, '2': 20, '3': 18 },
+        },
+        pointsByNextPosition: { '1': 2, '2': 2 },
+        pointsByNextOfFollowingPosition: { '1': 1, '2': 1 },
+        pointsByPreviousPosition: { '1': 2, '2': 2 },
+        pointsByPreviousOfPreviousPosition: { '1': 1, '2': 1 },
+        pointsIfIsNotInPodium: {},
+        pointsIfIsNotInResults: {},
+      },
+    },
     ...overrides,
   })
 }

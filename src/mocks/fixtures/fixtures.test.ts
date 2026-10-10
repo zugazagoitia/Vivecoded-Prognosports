@@ -18,7 +18,7 @@ import {
 describe('reference season', () => {
   it('has 12 players in the community', () => {
     expect(users).toHaveLength(12)
-    expect(community.membersAmount).toBe(12)
+    expect(community.members_amount).toBe(12)
     expect(z.array(UserSchema).safeParse(users).success).toBe(true)
     expect(CommunitySchema.safeParse(community).success).toBe(true)
   })

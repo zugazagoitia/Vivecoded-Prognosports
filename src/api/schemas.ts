@@ -98,7 +98,8 @@ export const GrandPrixSchema = z.object({
   id,
   name: z.string(),
   code: n(z.string()),
-  round: z.number(),
+  // /gps and /gps/{id} do not send it (only the season listing does): see src/api/README.md.
+  round: n(z.number()),
   competition: n(CompetitionSchema),
   season: n(SeasonSchema),
   circuit: n(CircuitSchema),
@@ -160,7 +161,8 @@ const RuleMap = z.record(z.string(), z.number())
 
 export const RuleSetDataSchema = z.object({
   predictedPositions: n(z.record(z.string(), z.unknown())),
-  pointsByEqualsPosition: n(RuleMap),
+  // Real shape: { [sessionKey]: { [position]: points } } (the spec says flat numbers).
+  pointsByEqualsPosition: n(z.record(z.string(), RuleMap)),
   pointsByNextPosition: n(RuleMap),
   pointsByNextOfFollowingPosition: n(RuleMap),
   pointsByPreviousPosition: n(RuleMap),
@@ -170,29 +172,76 @@ export const RuleSetDataSchema = z.object({
   pointsByTopScorer: n(z.number()),
 })
 
-export const RuleSetSchema = z.object({
-  id,
-  displayname: n(z.string()),
-  description: n(z.string()),
-  creator: n(UserSchema),
-  public: z.boolean(),
-  data: n(RuleSetDataSchema),
-})
+/**
+ * The real API sends `isPublic` (the spec says `public`). Both are accepted and normalised to
+ * `public` in the app model.
+ */
+export const RuleSetSchema = z
+  .object({
+    id,
+    displayname: n(z.string()),
+    description: n(z.string()),
+    creator: n(UserSchema),
+    public: n(z.boolean()),
+    isPublic: n(z.boolean()),
+    data: n(RuleSetDataSchema),
+  })
+  .transform(({ isPublic, public: pub, ...rest }, ctx) => {
+    const value = pub ?? isPublic
+    if (value == null) {
+      ctx.issues.push({
+        code: 'custom',
+        message: 'falta isPublic/public',
+        input: undefined,
+        path: ['public'],
+      })
+      return z.NEVER
+    }
+    return { ...rest, public: value }
+  })
 
-export const CommunitySchema = z.object({
-  id,
+const CommunityShape = z.object({
   name: z.string(),
   description: n(z.string()),
   competition: n(CompetitionSchema),
   open: z.boolean(),
   invitation: n(z.string()),
   owner: n(UserSchema),
-  membersAmount: n(z.number()),
-  userIsMember: z.boolean(),
   created: n(z.string()),
   hasImage: n(z.boolean()),
   defaultRuleSet: n(RuleSetSchema),
+  // Real API: snake_case (the spec says camelCase). Both accepted, normalised below.
+  membersAmount: n(z.number()),
+  members_amount: n(z.number()),
+  userIsMember: n(z.boolean()),
+  user_is_member: n(z.boolean()),
 })
+
+function normaliseCommunity<T extends z.output<typeof CommunityShape>>(
+  v: T,
+  ctx: z.core.$RefinementCtx,
+) {
+  const { members_amount, user_is_member, membersAmount, userIsMember, ...rest } = v
+  const isMember = userIsMember ?? user_is_member
+  if (isMember == null) {
+    ctx.issues.push({
+      code: 'custom',
+      message: 'falta user_is_member/userIsMember',
+      input: undefined,
+      path: ['userIsMember'],
+    })
+    return z.NEVER
+  }
+  return { ...rest, membersAmount: membersAmount ?? members_amount, userIsMember: isMember }
+}
+
+/** Community as listed (`GET /communities`): has `id`. */
+export const CommunitySchema = CommunityShape.extend({ id }).transform(normaliseCommunity)
+
+/** `GET /communities/{id}` does not send `id`: optional here; the wrapper fills it in. */
+export const CommunityDetailSchema = CommunityShape.extend({ id: n(id) }).transform(
+  normaliseCommunity,
+)
 
 export const PredictionSchema = z.object({
   user: n(UserSchema),

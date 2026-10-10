@@ -12,13 +12,13 @@ import { MAX_UPLOAD_BYTES } from './config'
 
 afterEach(() => {
   setTokenProvider(() => null)
-  setBaseUrl('http://api.test/v2')
+  setBaseUrl('http://api.test')
 })
 
 describe('request', () => {
   it('unwraps the ApiResponse envelope', async () => {
     server.use(http.get('*/v2/ping', () => ok({ pong: true })))
-    await expect(request('/ping')).resolves.toEqual({ pong: true })
+    await expect(request('/v2/ping')).resolves.toEqual({ pong: true })
   })
   it('returns non-envelope bodies as they are (json and text)', async () => {
     server.use(
@@ -26,9 +26,9 @@ describe('request', () => {
       http.get('*/v2/text', () => HttpResponse.text('tok')),
       http.get('*/v2/empty', () => new HttpResponse(null, { status: 204 })),
     )
-    await expect(request('/raw')).resolves.toEqual([1, 2])
-    await expect(request('/text')).resolves.toBe('tok')
-    await expect(request('/empty')).resolves.toBeUndefined()
+    await expect(request('/v2/raw')).resolves.toEqual([1, 2])
+    await expect(request('/v2/text')).resolves.toBe('tok')
+    await expect(request('/v2/empty')).resolves.toBeUndefined()
   })
   it('sends query, JSON body and the bearer token', async () => {
     let seen: { url: string; auth: string | null; body: unknown } | undefined
@@ -39,7 +39,11 @@ describe('request', () => {
       }),
     )
     setTokenProvider(() => 'abc')
-    await request('/echo', { method: 'POST', body: { a: 1 }, query: { x: 'y z', skip: undefined } })
+    await request('/v2/echo', {
+      method: 'POST',
+      body: { a: 1 },
+      query: { x: 'y z', skip: undefined },
+    })
     expect(seen).toEqual({
       url: 'http://api.test/v2/echo?x=y+z',
       auth: 'Bearer abc',
@@ -55,7 +59,7 @@ describe('request', () => {
       }),
     )
     setTokenProvider(() => 'abc')
-    await request('/anon', { anonymous: true })
+    await request('/v2/anon', { anonymous: true })
     expect(auth).toBeNull()
   })
   it('seg percent-encodes path segments', () => {
@@ -65,7 +69,7 @@ describe('request', () => {
   describe('errors', () => {
     it('throws ApiError with the envelope message and code', async () => {
       server.use(http.get('*/v2/boom', () => fail(404, 'No existe.', 4040)))
-      await expect(request('/boom')).rejects.toMatchObject({
+      await expect(request('/v2/boom')).rejects.toMatchObject({
         name: 'ApiError',
         status: 404,
         code: 4040,
@@ -75,7 +79,7 @@ describe('request', () => {
     })
     it('falls back to a generic message', async () => {
       server.use(http.get('*/v2/boom', () => new HttpResponse(null, { status: 503 })))
-      await expect(request('/boom')).rejects.toMatchObject({
+      await expect(request('/v2/boom')).rejects.toMatchObject({
         status: 503,
         message: genericMessage(503),
       })
@@ -87,11 +91,11 @@ describe('request', () => {
           HttpResponse.json({ success: false, status: 409, message: 'Conflicto' }),
         ),
       )
-      await expect(request('/odd')).rejects.toMatchObject({ status: 409, message: 'Conflicto' })
+      await expect(request('/v2/odd')).rejects.toMatchObject({ status: 409, message: 'Conflicto' })
     })
     it('maps network failures to kind "network"', async () => {
       server.use(http.get('*/v2/down', () => HttpResponse.error()))
-      await expect(request('/down')).rejects.toMatchObject({ kind: 'network', status: 0 })
+      await expect(request('/v2/down')).rejects.toMatchObject({ kind: 'network', status: 0 })
     })
     it('maps timeouts to kind "timeout"', async () => {
       server.use(
@@ -100,12 +104,14 @@ describe('request', () => {
           return ok(null)
         }),
       )
-      await expect(request('/slow', { timeoutMs: 20 })).rejects.toMatchObject({ kind: 'timeout' })
+      await expect(request('/v2/slow', { timeoutMs: 20 })).rejects.toMatchObject({
+        kind: 'timeout',
+      })
     })
     it('rethrows the abort when the caller cancels', async () => {
       server.use(http.get('*/v2/slow', async () => new Promise<never>(() => {})))
       const ctrl = new AbortController()
-      const p = request('/slow', { signal: ctrl.signal })
+      const p = request('/v2/slow', { signal: ctrl.signal })
       ctrl.abort()
       await expect(p).rejects.not.toBeInstanceOf(ApiError)
     })
@@ -116,7 +122,7 @@ describe('request', () => {
       const handler = vi.fn()
       const off = onSessionExpired(handler)
       server.use(http.get('*/v2/secure', () => fail(401, 'caducada')))
-      await expect(request('/secure')).rejects.toMatchObject({ status: 401 })
+      await expect(request('/v2/secure')).rejects.toMatchObject({ status: 401 })
       expect(handler).toHaveBeenCalledTimes(1)
       off()
     })
@@ -124,7 +130,9 @@ describe('request', () => {
       const handler = vi.fn()
       const off = onSessionExpired(handler)
       server.use(http.get('*/v2/secure', () => fail(401, 'mal')))
-      await expect(request('/secure', { noSessionExpiry: true })).rejects.toBeInstanceOf(ApiError)
+      await expect(request('/v2/secure', { noSessionExpiry: true })).rejects.toBeInstanceOf(
+        ApiError,
+      )
       expect(handler).not.toHaveBeenCalled()
       off()
     })
@@ -143,16 +151,16 @@ describe('request', () => {
 describe('requestParsed', () => {
   it('returns the parsed (stripped) output', async () => {
     server.use(http.get('*/v2/u', () => ok({ id: 1, secret: 'x' })))
-    await expect(requestParsed('/u', z.object({ id: z.number() }))).resolves.toEqual({ id: 1 })
+    await expect(requestParsed('/v2/u', z.object({ id: z.number() }))).resolves.toEqual({ id: 1 })
   })
   it('raises a contract error and emits the event when the schema does not match', async () => {
     const handler = vi.fn()
     const off = onContractError(handler)
     server.use(http.get('*/v2/u', () => ok({ id: 'not-a-number' })))
-    const err = await requestParsed('/u', z.object({ id: z.number() })).catch((e: unknown) => e)
+    const err = await requestParsed('/v2/u', z.object({ id: z.number() })).catch((e: unknown) => e)
     expect(err).toBeInstanceOf(ApiError)
     expect((err as ApiError).isContractError).toBe(true)
-    expect(handler).toHaveBeenCalledWith(expect.objectContaining({ path: '/u' }))
+    expect(handler).toHaveBeenCalledWith(expect.objectContaining({ path: '/v2/u' }))
     off()
   })
   it('validates the shared MSW fixtures through the real endpoint wrappers', async () => {

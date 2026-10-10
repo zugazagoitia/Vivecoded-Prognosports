@@ -33,12 +33,12 @@ Lint, tests y CI llegan en T8, T9 y T11.
 
 Modos de Vite: `development` (`.env`), `beta` (`.env.beta`) y `production` (`.env.production`). El banner «Estás utilizando PrognoSports Beta» solo se muestra en `beta`.
 
-| Variable            | Origen                   | Descripción                                                              |
-| ------------------- | ------------------------ | ------------------------------------------------------------------------ |
-| `VITE_API_BASE_URL` | `.env*` (obligatoria)    | URL base de la API. También se usa para el `preconnect` de `index.html`. |
-| `VITE_GIT_SHA`      | `git` o entorno          | SHA corto del build. CI puede pasarlo (T11).                             |
-| `VITE_GIT_DATE`     | `git` o entorno          | Fecha ISO del commit del build.                                          |
-| `VITE_APP_VERSION`  | `package.json` o entorno | Versión de la app (pie de página).                                       |
+| Variable            | Origen                   | Descripción                                                                                                                                                            |
+| ------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL` | `.env*` (obligatoria)    | Origen de la API, sin `/v2` (los envoltorios de `src/api` ya añaden ese prefijo; se rechaza si termina en `/v2`). También se usa para el `preconnect` de `index.html`. |
+| `VITE_GIT_SHA`      | `git` o entorno          | SHA corto del build. CI puede pasarlo (T11).                                                                                                                           |
+| `VITE_GIT_DATE`     | `git` o entorno          | Fecha ISO del commit del build.                                                                                                                                        |
+| `VITE_APP_VERSION`  | `package.json` o entorno | Versión de la app (pie de página).                                                                                                                                     |
 
 Las variables se tipan en `src/env.d.ts` y se validan al arrancar con Zod en `src/env.ts`. Si falta alguna o es inválida, la app no arranca y muestra el error (nombrando la variable) en consola y en pantalla. Nunca pongas secretos en `VITE_*`: acaban en el bundle. Los `.env`, `.env.beta` y `.env.production` están versionados y solo contienen configuración pública; los overrides locales van en `.env.local` (ignorado).
 

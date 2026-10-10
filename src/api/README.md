@@ -20,4 +20,12 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 3. `PUT /gps/.../sessions`: la spec declara el parámetro `session` sin que esté en la ruta; se usa `PUT .../sessions/{session}`.
 4. `UserPoints`: el backend envía `stadingsByHits` / `previousStadingsByHits`; el modelo de dominio expone `standingsByHits` / `previousStandingsByHits` (mapeo en `UserPointsSchema`).
 
+5. `Community`: la API real envía `members_amount` y `user_is_member` (snake_case; la spec dice camelCase) y `GET /communities/{id}` no incluye `id`. `CommunitySchema` acepta ambas formas y normaliza al modelo camelCase (`membersAmount`, `userIsMember`); `getCommunity` rellena `id` con el solicitado (`CommunityDetailSchema`).
+6. `RuleSet`: la API real envía `isPublic` (la spec dice `public`); se acepta cualquiera de las dos y el modelo expone `public`. `data.pointsByEqualsPosition` es `{ [sesión]: { [posición]: puntos } }` (objetos anidados, no números).
+7. `GrandPrix`: `/gps` y `/gps/{id}` no envían `round` (solo el listado por temporada), por lo que es opcional. Esas respuestas solo traen `id`, `name` y `code`.
+
+## URL base
+
+`VITE_API_BASE_URL` es solo el origen (`https://api.prognosports.com`, sin `/v2`): las rutas de los envoltorios ya empiezan por `/v2` (igual que en la spec). La validación de entorno rechaza una URL que termine en `/v2` (evita peticiones a `/v2/v2/...`). Los mocks (MSW y `e2e/support/api.ts`) interceptan `*/v2/**` y no dependen del origen.
+
 Además: la spec describe las respuestas sin envelope y el login como `text/plain`; el cliente admite ambos (envelope o cuerpo directo).
