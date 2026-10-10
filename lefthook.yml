@@ -1,0 +1,16 @@
+pre-commit:
+  jobs:
+    - name: oxlint
+      glob: '*.{js,ts,vue}'
+      run: pnpm exec oxlint {staged_files}
+    - name: eslint
+      glob: '*.{js,ts,vue}'
+      run: pnpm exec eslint --max-warnings=0 --no-warn-ignored {staged_files}
+    - name: prettier
+      glob: '*.{js,ts,vue,json,css,html,yml}'
+      run: pnpm exec prettier --check {staged_files}
+
+pre-push:
+  jobs:
+    - name: typecheck
+      run: pnpm typecheck

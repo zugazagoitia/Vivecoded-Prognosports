@@ -7,7 +7,11 @@ import pkg from './package.json' with { type: 'json' }
 /** Runs a git command; returns undefined when git or the repo is unavailable. */
 function git(args: string): string | undefined {
   try {
-    return execSync(`git ${args}`, { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || undefined
+    return (
+      execSync(`git ${args}`, { stdio: ['ignore', 'pipe', 'ignore'] })
+        .toString()
+        .trim() || undefined
+    )
   } catch {
     return undefined
   }
