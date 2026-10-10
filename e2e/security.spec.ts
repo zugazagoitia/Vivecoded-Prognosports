@@ -28,6 +28,8 @@ test.describe('security', () => {
     '/dev/datos',
     '/dev/estados',
     '/dev/graficos',
+    '/terms',
+    '/privacy',
   ]) {
     test(`no CSP violations on ${path}`, async ({ authedPage: page, browserName }) => {
       test.skip(browserName !== 'chromium', 'CSP violations are checked in Chromium')

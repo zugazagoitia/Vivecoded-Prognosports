@@ -165,6 +165,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/privacy': RouteRecordInfo<
+      '/privacy',
+      '/privacy',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/ranking/[comunidad]/[temporada]/': RouteRecordInfo<
       '/ranking/[comunidad]/[temporada]/',
       '/ranking/:comunidad/:temporada',
@@ -210,6 +217,13 @@ declare module 'vue-router/auto-routes' {
     '/sesion-cerrada': RouteRecordInfo<
       '/sesion-cerrada',
       '/sesion-cerrada',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/terms': RouteRecordInfo<
+      '/terms',
+      '/terms',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -395,6 +409,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/privacy.vue': {
+      routes:
+        | '/privacy'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/ranking/[comunidad]/[temporada]/index.vue': {
       routes:
         | '/ranking/[comunidad]/[temporada]/'
@@ -446,6 +468,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/sesion-cerrada.vue': {
       routes:
         | '/sesion-cerrada'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/terms.vue': {
+      routes:
+        | '/terms'
       views:
         | never
       pathParamNames:
