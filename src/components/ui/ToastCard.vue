@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PIcon from './PIcon.vue'
+
 export interface ToastAction {
   label: string
   onClick: () => void
@@ -9,7 +11,7 @@ defineProps<{
   description?: string
   action?: ToastAction
 }>()
-const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } as const
+const icons = { success: 'circle-check', error: 'circle-exclamation', info: 'copy' } as const
 </script>
 
 <template>
@@ -20,7 +22,7 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
     :aria-live="kind === 'error' ? 'assertive' : 'polite'"
     aria-atomic="true"
   >
-    <span class="material-symbols-outlined toast-icon" aria-hidden="true">{{ icons[kind] }}</span>
+    <PIcon class="toast-icon" :name="icons[kind]" :size="24" />
     <div class="toast-body">
       <strong class="toast-title">{{ title }}</strong>
       <span v-if="description" class="toast-desc">{{ description }}</span>
@@ -57,7 +59,7 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
   font-size: 0.875rem;
 }
 .toast-icon {
-  font-size: 1.5rem;
+  margin-top: 0.125rem;
 }
 .toast-success .toast-icon {
   color: var(--success, #16a34a);
