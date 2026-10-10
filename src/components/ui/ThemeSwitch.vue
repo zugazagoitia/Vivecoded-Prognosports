@@ -23,7 +23,7 @@ const options: { mode: ThemeMode; label: string }[] = [
       :key="o.mode"
       type="button"
       :aria-pressed="theme.mode === o.mode"
-      class="text-muted hover:text-heading focus-visible:outline-focus-ring aria-pressed:bg-surface aria-pressed:text-heading rounded-md px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 aria-pressed:shadow-sm"
+      class="text-muted hover:text-heading focus-visible:outline-focus-ring aria-pressed:bg-surface aria-pressed:text-heading inline-flex min-h-11 items-center rounded-md px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 aria-pressed:shadow-sm md:min-h-0"
       @click="theme.set(o.mode)"
     >
       {{ t(o.label) }}
