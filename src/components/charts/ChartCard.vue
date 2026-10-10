@@ -3,8 +3,9 @@ import { useElementSize, useEventListener, useMediaQuery } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, useId, useTemplateRef, watch } from 'vue'
 import ChartAxis from './ChartAxis.vue'
 import ChartPlot from './ChartPlot.vue'
-import ChartSegmented from './ChartSegmented.vue'
-import ChartTable from './ChartTable.vue'
+import PSegmentedControl from '@/components/ui/SegmentedControl.vue'
+import PTable from '@/components/ui/PTable.vue'
+import type { PTableColumn } from '@/components/ui/tableFeatures'
 import {
   altText,
   buildSeries,
@@ -52,12 +53,29 @@ const active = computed(() => hover.value ?? pinned.value)
 const panelIndex = computed(() => active.value ?? n.value - 1)
 const rows = computed(() => panelRows(series.value, panelIndex.value))
 const table = computed(() => toTable(series.value, props.gps))
+type TableRow = (typeof table.value.rows)[number]
+// Equivalent data table ("Ver como tabla"): player + one column per GP, same numbers as the plot.
+const tableColumns = computed<PTableColumn<TableRow>[]>(() => [
+  {
+    id: 'name',
+    header: 'Jugador',
+    accessorFn: (r) => (r.isMe ? `${r.name} (tú)` : r.name),
+    enableSorting: false,
+  },
+  ...table.value.columns.map((c, i): PTableColumn<TableRow> => ({
+    id: `gp-${i}`,
+    header: c,
+    accessorFn: (r) => r.cells[i],
+    enableSorting: false,
+    meta: { align: 'right' },
+  })),
+])
 const headline = computed(() => altText(series.value, undefined, props.unit))
 const legend = computed(() => focusSeries(series.value))
-const modeOptions = computed(() => props.modes.map((m) => ({ id: m.id, label: m.label })))
+const modeOptions = computed(() => props.modes.map((m) => ({ value: m.id, label: m.label })))
 const viewOptions = [
-  { id: 'chart' as const, label: 'Gráfico' },
-  { id: 'table' as const, label: 'Ver como tabla' },
+  { value: 'chart' as const, label: 'Gráfico' },
+  { value: 'table' as const, label: 'Ver como tabla' },
 ]
 
 // Geometry: the plot scrolls horizontally when the GPs cannot keep 32 px (44 px on touch) targets.
@@ -122,13 +140,13 @@ const titleId = `ch-title-${uid}`
         <p v-if="subtitle" class="t-body-sm ch-sub">{{ subtitle }}</p>
       </div>
       <div class="ch-controls">
-        <ChartSegmented
+        <PSegmentedControl
           v-if="modes.length > 1"
           v-model="modeId"
           :options="modeOptions"
           label="Modo"
         />
-        <ChartSegmented v-model="view" :options="viewOptions" label="Vista" />
+        <PSegmentedControl v-model="view" :options="viewOptions" label="Vista" />
       </div>
     </header>
 
@@ -170,7 +188,16 @@ const titleId = `ch-title-${uid}`
             />
           </div>
         </template>
-        <ChartTable v-else :table="table" :caption="`${title}: ${headline}`" />
+        <PTable
+          v-else
+          :columns="tableColumns"
+          :data="table.rows"
+          :caption="`${title}: ${headline}`"
+          role="region"
+          :aria-label="`${title}: ${headline}`"
+          tabindex="0"
+          :is-mine="(r) => r.isMe"
+        />
 
         <ul class="ch-legend" aria-label="Leyenda">
           <li v-for="s in legend" :key="s.id" class="ch-legend-item">

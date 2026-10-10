@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import PTooltip from '@/components/ui/PTooltip.vue'
 import { formatOrdinal } from '@/utils/numbers'
 
 const props = withDefaults(
@@ -39,31 +40,23 @@ const moveGlyph = computed(() => {
 </script>
 
 <template>
-  <!-- TODO(F3): replace the CSS tooltip below with PTooltip once it lands. -->
   <span class="inline-flex items-center gap-2">
     <ul class="m-0 flex list-none gap-1 p-0" :aria-label="t('data.form.label')">
-      <li
-        v-for="(c, i) in chips"
-        :key="i"
-        tabindex="0"
-        :aria-label="c.name"
-        :data-kind="c.kind"
-        class="group focus-visible:outline-focus-ring relative inline-flex size-7 items-center justify-center rounded-md text-xs font-semibold tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2"
-        :class="{
-          'bg-primary text-on-primary': c.kind === 'won',
-          'bg-tint text-tint-fg': c.kind === 'podium',
-          'bg-surface-muted text-body': c.kind === 'rest',
-        }"
-      >
-        <span aria-hidden="true">{{ c.place }}</span>
-        <span
-          role="tooltip"
-          aria-hidden="true"
-          class="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 hidden -translate-x-1/2 rounded-md bg-gray-900 px-2 py-1 text-xs font-medium whitespace-nowrap text-white group-hover:block group-focus-visible:block"
+      <PTooltip v-for="(c, i) in chips" :key="i" :content="c.name">
+        <li
+          tabindex="0"
+          :aria-label="c.name"
+          :data-kind="c.kind"
+          class="focus-visible:outline-focus-ring inline-flex size-7 items-center justify-center rounded-md text-xs font-semibold tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2"
+          :class="{
+            'bg-primary text-on-primary': c.kind === 'won',
+            'bg-tint text-tint-fg': c.kind === 'podium',
+            'bg-surface-muted text-body': c.kind === 'rest',
+          }"
         >
-          {{ c.name }}
-        </span>
-      </li>
+          <span aria-hidden="true">{{ c.place }}</span>
+        </li>
+      </PTooltip>
     </ul>
     <span
       class="text-sm font-semibold tabular-nums"

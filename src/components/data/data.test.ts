@@ -217,7 +217,7 @@ describe('useUnsavedChanges', () => {
   it('opens the in-page dialog on leave and navigates on Descartar', async () => {
     const { router, user } = await renderWithProviders(RouterView, { route: '/a', routes })
     const nav = router.push('/b')
-    await screen.findByRole('alertdialog')
+    await screen.findByRole('dialog')
     expect(router.currentRoute.value.path).toBe('/a')
     await user.click(screen.getByRole('button', { name: 'Descartar y salir' }))
     await nav
@@ -227,7 +227,7 @@ describe('useUnsavedChanges', () => {
   it('stays when the user keeps editing', async () => {
     const { router, user } = await renderWithProviders(RouterView, { route: '/a', routes })
     const nav = router.push('/b')
-    await screen.findByRole('alertdialog')
+    await screen.findByRole('dialog')
     await user.click(screen.getByRole('button', { name: 'Seguir editando' }))
     await nav
     expect(router.currentRoute.value.path).toBe('/a')

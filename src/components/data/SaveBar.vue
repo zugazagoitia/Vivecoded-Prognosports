@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import PButton from '@/components/ui/PButton.vue'
 import PIcon from '@/components/ui/PIcon.vue'
 import { formatNumber } from '@/utils/numbers'
 
@@ -20,7 +21,6 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <!-- TODO(F3): swap the two plain buttons for the F3 button component. -->
   <section
     v-if="count > 0"
     :aria-label="t('data.saveBar.label')"
@@ -38,28 +38,21 @@ const { t } = useI18n()
       {{ t('data.saveBar.changes', { n: formatNumber(count) }, count) }}
     </p>
     <div class="flex gap-2">
-      <button
-        type="button"
+      <PButton
+        variant="ghost"
         :disabled="saving"
-        class="focus-visible:outline-focus-ring min-h-11 rounded-lg px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60"
         :class="
           variant === 'inverted'
-            ? 'hover:bg-white/15 dark:hover:bg-gray-900/10'
-            : 'text-heading hover:bg-surface-muted'
+            ? 'bg-transparent text-inherit hover:bg-white/15 hover:text-inherit dark:hover:bg-gray-900/10 dark:hover:text-inherit'
+            : ''
         "
         @click="emit('discard')"
       >
         {{ t('data.saveBar.discard') }}
-      </button>
-      <button
-        type="button"
-        :disabled="saving"
-        :aria-busy="saving"
-        class="bg-primary text-on-primary hover:bg-primary-hover focus-visible:outline-focus-ring min-h-11 rounded-lg px-4 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-70"
-        @click="emit('save')"
-      >
-        {{ saving ? t('data.saveBar.saving') : t('data.saveBar.save') }}
-      </button>
+      </PButton>
+      <PButton :loading="saving" @click="emit('save')">
+        {{ t('data.saveBar.save') }}
+      </PButton>
     </div>
   </section>
 </template>

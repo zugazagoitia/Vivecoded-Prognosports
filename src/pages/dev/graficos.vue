@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
+import { useHighlight } from '@/composables/useHighlight'
 import ThemeSwitch from '@/components/ui/ThemeSwitch.vue'
 import ScaleLegend from '@/components/charts/ScaleLegend.vue'
 import { cumulate, type ChartGp, type ChartUser } from '@/components/charts/model'
@@ -65,12 +66,8 @@ const modes = computed(() => [
 ])
 
 const candidates = perGp.filter((u) => u.id !== me)
-const highlight = ref<string[]>(['u1', 'u2', 'u3', 'u4'])
-function toggle(id: string) {
-  const i = highlight.value.indexOf(id)
-  if (i >= 0) highlight.value = highlight.value.filter((x) => x !== id)
-  else if (highlight.value.length < 5) highlight.value = [...highlight.value, id]
-}
+const { highlighted, toggle, isOn, set } = useHighlight(me)
+set(['u1', 'u2', 'u3', 'u4'])
 
 // Small heatmap sample on the sequential scale: the value is printed, not only coloured.
 const heat = [3, 9, 14, 20, 26, 31, 38, 42, 17, 5, 29, 35]
@@ -91,7 +88,7 @@ function seqStep(v: number): number {
       subtitle="Amigos del paddock · 17 Grandes Premios · pulsa un GP del eje para fijarlo"
       :gps="gps"
       :modes="modes"
-      :highlight="highlight"
+      :highlight="highlighted"
       :me="me"
     >
       <template #filters>
@@ -100,7 +97,7 @@ function seqStep(v: number): number {
           :key="u.id"
           type="button"
           class="demo-chip"
-          :aria-pressed="highlight.includes(u.id)"
+          :aria-pressed="isOn(u.id)"
           @click="toggle(u.id)"
         >
           {{ u.name }}
