@@ -38,6 +38,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "api:types": "openapi-typescript api/openapi.json -o src/api/schema.d.ts",
+    "api:drift": "jiti scripts/check-openapi-drift.ts",
+    "test:contract": "vitest run --config vitest.contract.config.ts",
     "api:types:fetch": "curl -fsSL https://api.prognosports.com/openapi -o api/openapi.json && pnpm api:types"
   },
   "dependencies": {

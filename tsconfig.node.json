@@ -13,5 +13,11 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["vite.config.ts", "package.json", "playwright.config.ts"]
+  "include": [
+    "vite.config.ts",
+    "vitest.contract.config.ts",
+    "playwright.config.ts",
+    "package.json",
+    "scripts/**/*.ts"
+  ]
 }

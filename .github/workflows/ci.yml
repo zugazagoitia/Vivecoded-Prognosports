@@ -193,7 +193,7 @@ jobs:
       - name: Detectar script e2e
         id: detect
         run: |
-          if node -e "process.exit(require('./package.json').scripts?.e2e ? 0 : 1)"; then
+          if node -e "process.exit(require('./package.json').scripts?.['e2e:ci'] ? 0 : 1)"; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "enabled=false" >> "$GITHUB_OUTPUT"
@@ -225,7 +225,7 @@ jobs:
         run: pnpm exec playwright install-deps
       - name: Ejecutar E2E
         if: steps.detect.outputs.enabled == 'true'
-        run: pnpm e2e
+        run: pnpm e2e:ci
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ !cancelled() && steps.detect.outputs.enabled == 'true' }}
         with:

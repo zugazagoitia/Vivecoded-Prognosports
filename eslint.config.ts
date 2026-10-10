@@ -72,7 +72,7 @@ export default tseslint.config(
   },
 
   {
-    files: ['src/api/**'],
+    files: ['src/api/**', 'scripts/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },
 
