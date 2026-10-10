@@ -7,3 +7,6 @@ api/openapi.json
 src/api/schema.d.ts
 public/mockServiceWorker.js
 coverage
+e2e/.results
+playwright-report
+e2e/__screenshots__

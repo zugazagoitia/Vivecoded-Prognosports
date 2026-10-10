@@ -22,7 +22,11 @@
     "dev": "vite",
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
-    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.node.json",
+    "e2e": "pnpm build && playwright test",
+    "e2e:ci": "playwright test",
+    "e2e:ui": "pnpm build && playwright test --ui",
+    "e2e:update": "pnpm build && playwright test visual --update-snapshots=all",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.app.json && vue-tsc --noEmit -p tsconfig.node.json && vue-tsc --noEmit -p e2e/tsconfig.json",
     "lint:ox": "oxlint",
     "lint:eslint": "eslint .",
     "lint": "pnpm lint:ox && pnpm lint:eslint",
@@ -48,7 +52,9 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.64.0",
     "@tanstack/vue-query-devtools": "^6.3.1",
     "@testing-library/user-event": "^14.6.7",
     "@testing-library/vue": "^8.1.0",
@@ -74,6 +80,7 @@
     "vite": "^8.3.4",
     "vitest": "^5.0.3",
     "vue-eslint-parser": "^10.4.1",
-    "vue-tsc": "^3.3.13"
+    "vue-tsc": "^3.3.13",
+    "web-vitals": "^6.2.3"
   }
 }
