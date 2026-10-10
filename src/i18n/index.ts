@@ -17,6 +17,7 @@ import sessions from './es/sessions.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
+import verify from './es/verify.json'
 
 export const i18n = createI18n({
   legacy: false,
@@ -42,6 +43,7 @@ export const i18n = createI18n({
       ...landing,
       ...recover,
       ...reset,
+      ...verify,
     },
   },
 })
