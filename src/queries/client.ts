@@ -1,5 +1,8 @@
-import { QueryClient } from '@tanstack/vue-query'
+import { MutationCache, QueryClient } from '@tanstack/vue-query'
 import { ApiError } from '@/api'
+import { messageFor } from '@/api/messages'
+import { toaster } from '@/composables/useToast'
+import { reportError } from '@/lib/report'
 
 /** Retry up to 2 times, but never on 4xx (401/403/404...) or contract/validation failures. */
 export function shouldRetry(failureCount: number, error: unknown): boolean {
@@ -12,6 +15,14 @@ export function shouldRetry(failureCount: number, error: unknown): boolean {
 
 export function createQueryClient(): QueryClient {
   return new QueryClient({
+    // Default for mutations: an error toast. Opt out with `meta: { silent: true }`.
+    mutationCache: new MutationCache({
+      onError: (error, _vars, _ctx, mutation) => {
+        if (mutation.meta?.silent) return
+        reportError(error, 'mutation')
+        toaster.error(messageFor(error))
+      },
+    }),
     defaultOptions: {
       queries: {
         staleTime: 60_000,
