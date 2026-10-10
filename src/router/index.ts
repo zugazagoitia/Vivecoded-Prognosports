@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type Router } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import './meta'
 import { installFocusManagement } from './a11y'
+import { flagForRoute } from '@/components/layout/rankNav'
 import { isFlagEnabled } from './flags'
 import { evaluateGuards, loginLocation } from './guards'
 import { getSessionProvider, onSessionExpired } from './session'
@@ -70,6 +71,11 @@ export function createAppRouter(): Router {
   router.beforeEach(async (to) => {
     // Flag off: behave as if the route did not exist (runs before any chunk is loaded).
     if (to.meta.flag && !isFlagEnabled(to.meta.flag) && to.path !== '/404') return '/404'
+
+    // Ranking views (N3): the flag of `:seccion/:vista` lives in the RankNav model.
+    const rp = to.params as Record<string, unknown>
+    const viewFlag = flagForRoute(rp.seccion, rp.vista)
+    if (viewFlag && !isFlagEnabled(viewFlag)) return '/404'
 
     // 1. data: load user + active community once.
     const session = getSessionProvider()
