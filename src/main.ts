@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import { EnvError, loadEnv } from './env'
 import { i18n } from './i18n'
+import { initObservability } from './lib/observability'
 import { isEnabled } from './flags'
 import { mountFlagPanel } from './flags/mount'
 import { queryClient } from './queries/client'
@@ -23,7 +24,8 @@ function showFatal(message: string) {
 }
 
 async function start() {
-  loadEnv()
+  const env = loadEnv()
+  initObservability(env, import.meta.env.MODE)
   // Dev without the real API: `VITE_API_MOCK=true pnpm dev` serves src/mocks via MSW.
   if (import.meta.env.DEV && import.meta.env.VITE_API_MOCK === 'true') {
     const { startMocking } = await import('./mocks/browser')

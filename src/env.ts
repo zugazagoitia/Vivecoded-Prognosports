@@ -7,6 +7,8 @@ export const envSchema = z.object({
   VITE_GIT_SHA: z.string().min(1, 'no puede estar vacío'),
   VITE_GIT_DATE: z.string().min(1, 'no puede estar vacío'),
   VITE_APP_VERSION: z.string().min(1, 'no puede estar vacío'),
+  VITE_SENTRY_DSN: z.url({ error: 'debe ser una URL válida (DSN de Sentry)' }).optional(),
+  VITE_CF_ANALYTICS_TOKEN: z.string().optional(),
 })
 
 export type Env = z.infer<typeof envSchema>

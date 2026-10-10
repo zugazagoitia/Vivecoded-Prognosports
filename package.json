@@ -40,9 +40,12 @@
     "api:types": "openapi-typescript api/openapi.json -o src/api/schema.d.ts",
     "api:drift": "jiti scripts/check-openapi-drift.ts",
     "test:contract": "vitest run --config vitest.contract.config.ts",
-    "api:types:fetch": "curl -fsSL https://api.prognosports.com/openapi -o api/openapi.json && pnpm api:types"
+    "api:types:fetch": "curl -fsSL https://api.prognosports.com/openapi -o api/openapi.json && pnpm api:types",
+    "size": "jiti scripts/bundle-budget.ts dist && size-limit",
+    "analyze": "ANALYZE=true vite build"
   },
   "dependencies": {
+    "@sentry/browser": "^11.6.0",
     "@tanstack/vue-query": "^5.104.1",
     "@vueuse/core": "^15.0.0",
     "date-fns": "^4.4.0",
@@ -57,6 +60,8 @@
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.0",
+    "@sentry/vite-plugin": "^5.4.1",
+    "@size-limit/file": "^14.2.0",
     "@tanstack/vue-query-devtools": "^6.3.1",
     "@testing-library/user-event": "^14.6.7",
     "@testing-library/vue": "^8.1.0",
@@ -77,6 +82,8 @@
     "oxlint": "^1.87.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "rollup-plugin-visualizer": "^7.1.1",
+    "size-limit": "^14.2.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.3.4",

@@ -133,6 +133,20 @@ jobs:
           echo "VITE_GIT_DATE=$(git log -1 --format=%cI "$COMMIT_SHA")" >> "$GITHUB_ENV"
       # El typecheck ya corre en su propio job; aquí solo se compila.
       - run: pnpm exec vite build --mode ${{ matrix.mode }}
+        env:
+          ANALYZE: 'true'
+          # Source maps a Sentry (T14): solo si los secretos existen (no en PRs de forks).
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_CF_ANALYTICS_TOKEN: ${{ vars.VITE_CF_ANALYTICS_TOKEN }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bundle-report-${{ matrix.mode }}
+          path: reports/bundle.html
+          if-no-files-found: ignore
+          retention-days: 7
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dist-${{ matrix.mode }}
@@ -161,8 +175,7 @@ jobs:
         with:
           name: dist-production
           path: dist/
-      # T14 añade el script `size` (presupuesto de bundle) y debe leer `dist/`.
-      # Mientras no exista, el paso se omite sin fallar; al fusionar T14 no hay que tocar este job.
+      # `pnpm size` (T14) lee dist/: scripts/bundle-budget.ts + .size-limit.json.
       - name: Presupuesto de bundle
         run: |
           if node -e "process.exit(require('./package.json').scripts?.size ? 0 : 1)"; then

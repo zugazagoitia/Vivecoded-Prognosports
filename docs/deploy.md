@@ -112,3 +112,35 @@ scripts/smoke-deploy.sh https://prognosports-beta.<subdominio>.workers.dev
 ## Límites para no gastar
 
 Solo Workers con Static Assets, `wrangler deploy`, `workers.dev` y GitHub Actions. No usar KV, D1, R2, Durable Objects, Queues ni Workers Paid; sin dominio propio. Las peticiones a assets estáticos son gratuitas e ilimitadas; no hay código de Worker, así que no se consumen las 100.000 peticiones diarias de Workers.
+
+## Observabilidad y presupuesto de rendimiento (T14)
+
+### Errores (Sentry, inerte por defecto)
+
+- Se activa solo si `VITE_SENTRY_DSN` está definido (el DSN es público) y el modo no es `development`/`test`. `@sentry/browser` se carga con `import()` perezoso: sin DSN no entra nada en el bundle principal ni se hace ninguna petición.
+- Configuración: `dataCollection` sin usuario, cookies, cabeceras, cuerpos ni query params (equivale a `sendDefaultPii: false`, retirado en el SDK v11), `release = VITE_GIT_SHA`, `environment = modo` (`beta`/`production`), sin trazas. `beforeSend` elimina usuario, cookies, cabeceras y cuerpos de petición y limpia emails, JWT, `Bearer` y parámetros `token=`/`code=` (`src/lib/scrub.ts`).
+- Integración: `setErrorReporter` (ErrorBoundary y `reportError` de T7) y el evento `contract-error` de T2 (solo ruta y códigos/rutas de issue, nunca valores).
+- Source maps: en CI, con `SENTRY_AUTH_TOKEN` (secreto) y `SENTRY_ORG`/`SENTRY_PROJECT` (variables), Vite genera maps `hidden`, el plugin los sube y los borra de `dist/`. Sin token no se generan maps.
+- CSP (T13): `connect-src` debe permitir el host de ingestión del DSN (p. ej. `https://*.ingest.sentry.io`, o `https://*.ingest.de.sentry.io` en la región UE).
+
+### Métricas
+
+Cloudflare Web Analytics (sin cookies, incluye Core Web Vitals): se inyecta el beacon solo si `VITE_CF_ANALYTICS_TOKEN` está definido. CSP: `script-src https://static.cloudflareinsights.com` y `connect-src https://cloudflareinsights.com`. Alternativamente, activar la inyección automática desde el panel de Cloudflare (entonces no hace falta el token).
+
+### Presupuesto de tamaño (`pnpm size`, job `size` de CI)
+
+Tras `pnpm build`, `pnpm size` ejecuta:
+
+| Control | Umbral | Dónde cambiarlo |
+| --- | --- | --- |
+| JS inicial `dist/assets/index-*.js` (gzip) | 150 kB (hoy ~105 kB) | `.size-limit.json` |
+| CSS inicial (gzip) | 20 kB (hoy ~1 kB) | `.size-limit.json` |
+| Cada chunk de ruta (gzip) | 80 kB | `ROUTE_LIMIT` en `scripts/bundle-budget.ts` |
+| Chunks cuyo nombre contenga `echarts`/`maplibre`/`zrender` | 250 kB | `HEAVY_LIMIT` en `scripts/bundle-budget.ts` |
+| ECharts/MapLibre en el grafo inicial (index.html + modulepreload) | prohibido | `HEAVY_CODE` en `scripts/bundle-budget.ts` |
+
+Los umbrales son la propuesta de §20.8 (pendiente de confirmar); suben o bajan editando esos ficheros en un PR revisado. `pnpm analyze` genera `reports/bundle.html` (treemap); CI lo sube como artefacto `bundle-report-<modo>`.
+
+### Imágenes
+
+Usar `src/components/ui/AppImage.vue` (`width`/`height` obligatorios, `loading="lazy"` salvo `eager`). Assets propios en WebP/AVIF.

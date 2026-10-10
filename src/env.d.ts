@@ -6,6 +6,10 @@ interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string
   /** `true` starts the MSW service worker (src/mocks) so the app runs without the real API. */
   readonly VITE_API_MOCK?: string
+  /** Sentry DSN (public, not a secret). Errors are only sent when set (beta/production). */
+  readonly VITE_SENTRY_DSN?: string
+  /** Cloudflare Web Analytics token (public). The beacon is only injected when set. */
+  readonly VITE_CF_ANALYTICS_TOKEN?: string
   /** Short git SHA of the build (computed in vite.config.ts when not provided). */
   readonly VITE_GIT_SHA: string
   /** ISO date of the build commit (computed in vite.config.ts when not provided). */
