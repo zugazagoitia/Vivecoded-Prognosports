@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useOnline } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
+import PIcon from '@/components/ui/PIcon.vue'
+import { iconFor } from '@/components/ui/icons'
 
 const online = useOnline()
 const { t } = useI18n()
@@ -8,7 +10,7 @@ const { t } = useI18n()
 
 <template>
   <div v-if="!online" class="offline-notice" role="alert">
-    <span class="material-symbols-outlined" aria-hidden="true">wifi_off</span>
+    <PIcon :name="iconFor('wifi_off')" :size="20" />
     <span>{{ t('errors.offline') }}</span>
   </div>
 </template>

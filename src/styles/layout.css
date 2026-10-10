@@ -1,0 +1,114 @@
+/*
+ * F2 · Layout.
+ * Breakpoint decision: Tailwind defaults (sm 640, md 768, lg 1024) for titles, padding and the
+ * navbar, plus the canvas cut at 900px as a named custom breakpoint (--bp-collapse) used only
+ * to collapse `side-l` / `split` / `grid3` / `grid4` columns, as in the mockup. CSS custom
+ * properties cannot be used inside media queries, so the 900/901 literals live in this file only.
+ * Column templates live in classes, never in inline styles.
+ */
+:root {
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-collapse: 900px;
+  --container-sm: 448px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+
+/* Containers (PContainer): xl by default, 2xl on landing, sm on sign-in forms. */
+.pg-main,
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+.container-2xl {
+  max-width: var(--container-2xl);
+}
+.container-sm {
+  max-width: var(--container-sm);
+}
+@media (min-width: 640px) {
+  .pg-main,
+  .container {
+    padding-inline: 24px;
+  }
+}
+
+.col,
+.row {
+  display: flex;
+  gap: 12px;
+  min-width: 0;
+}
+.col {
+  flex-direction: column;
+}
+.row {
+  align-items: center;
+}
+.g8 {
+  gap: 8px;
+}
+.g12 {
+  gap: 12px;
+}
+.g16 {
+  gap: 16px;
+}
+.g24 {
+  gap: 24px;
+}
+.g32 {
+  gap: 32px;
+}
+
+.grid2,
+.grid3,
+.grid4,
+.split,
+.side-l {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) {
+  .grid2,
+  .grid3,
+  .grid4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 901px) {
+  .grid3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .grid4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .split {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .side-l {
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* Tables scroll inside their wrapper, never the page. */
+.tw {
+  overflow-x: auto;
+  max-width: 100%;
+}

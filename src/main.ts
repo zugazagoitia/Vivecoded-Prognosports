@@ -1,4 +1,7 @@
 import './lib/zod-csp'
+import '@fontsource-variable/inter/wght.css'
+import './styles/typography.css'
+import './styles/layout.css'
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'

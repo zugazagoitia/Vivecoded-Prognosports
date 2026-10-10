@@ -5,6 +5,7 @@ import { expect, test } from './support/fixtures'
 const PUBLIC_PAGES = [
   { name: 'login', path: '/login' },
   { name: 'not-found', path: '/404' },
+  { name: 'fundamentos', path: '/fundamentos' },
 ]
 
 test.describe('visual regression', () => {

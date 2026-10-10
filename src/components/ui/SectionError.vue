@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { messageFor } from '@/api/messages'
+import PIcon from './PIcon.vue'
 
 const props = defineProps<{
   /** Noun phrase completing "No hemos podido cargar …" (e.g. "la clasificación"). */
@@ -10,7 +11,6 @@ const props = defineProps<{
 }>()
 defineEmits<{ retry: [] }>()
 const { t } = useI18n()
-const icon = 'error'
 const title = computed(() =>
   props.what ? t('errors.section.title', { what: props.what }) : t('errors.section.titleGeneric'),
 )
@@ -18,7 +18,7 @@ const title = computed(() =>
 
 <template>
   <section class="section-error" role="alert">
-    <span class="material-symbols-outlined" aria-hidden="true">{{ icon }}</span>
+    <PIcon name="circle-exclamation" :size="24" />
     <h2>{{ title }}</h2>
     <p v-if="error">{{ messageFor(error) }}</p>
     <div class="section-error-actions">
