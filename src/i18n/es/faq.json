@@ -1,0 +1,69 @@
+{
+  "title": "Preguntas frecuentes",
+  "intro": "Lo que más nos preguntan. Si no encuentras la tuya, escríbenos al final de la página.",
+  "searchLabel": "Buscar en las preguntas frecuentes",
+  "searchPlaceholder": "Buscar...",
+  "categoriesLabel": "Categorías",
+  "results": "Sin resultados | {n} resultado | {n} resultados",
+  "contact": {
+    "title": "¿No encuentras tu respuesta?",
+    "text": "Escríbenos y te respondemos en unos días.",
+    "copy": "Copiar correo",
+    "copied": "Correo copiado",
+    "copyFailed": "No se ha podido copiar el correo",
+    "copyFailedText": "Selecciónalo y cópialo a mano."
+  },
+  "categories": ["Todas", "Primeros pasos", "Pronósticos", "Puntos y ranking", "Cuenta"],
+  "items": [
+    {
+      "category": 1,
+      "question": "¿Qué es PrognoSports?",
+      "answer": "Una web para pronosticar el orden de llegada de las carreras con tus amigos y compararos en un ranking. No es un sitio de apuestas: no se juega dinero."
+    },
+    {
+      "category": 1,
+      "question": "¿Cómo me uno a una comunidad?",
+      "answer": "Si es abierta, pulsa Unirme. Si es cerrada, necesitas el código o el enlace de invitación que te pase quien la administra."
+    },
+    {
+      "category": 2,
+      "question": "¿Hasta cuándo puedo pronosticar?",
+      "answer": "Hasta cinco minutos antes de que empiece cada sesión. Puedes cambiar el pronóstico las veces que quieras antes del cierre."
+    },
+    {
+      "category": 2,
+      "question": "¿Puedo ver lo que han pronosticado los demás?",
+      "answer": "Sí, pero solo cuando se cierra el plazo de esa sesión, para que nadie copie."
+    },
+    {
+      "category": 2,
+      "question": "¿Qué pasa si me olvido de pronosticar?",
+      "answer": "Esa sesión te da cero puntos. Activa los avisos por correo o Telegram para que no se te pase."
+    },
+    {
+      "category": 3,
+      "question": "¿Cómo se reparten los puntos?",
+      "answer": "Por posición exacta o por quedarte a una o dos posiciones. Cada comunidad elige su reparto; mira «Cómo se puntúa»."
+    },
+    {
+      "category": 3,
+      "question": "¿Cuándo se publican los puntos?",
+      "answer": "En cuanto se cargan los resultados de la sesión. Recibirás un aviso cuando estén repartidos."
+    },
+    {
+      "category": 3,
+      "question": "¿Cuenta la vuelta rápida?",
+      "answer": "Se muestra en los resultados, pero no se pronostica ni da puntos."
+    },
+    {
+      "category": 4,
+      "question": "¿Cómo cambio mi contraseña o mi correo?",
+      "answer": "En Ajustes, dentro de «Seguridad». Para cambiar el correo te pediremos tu contraseña actual."
+    },
+    {
+      "category": 4,
+      "question": "¿Puedo recibir avisos por Telegram?",
+      "answer": "Sí. Vincula tu cuenta en Ajustes › Notificaciones y elige qué avisos quieres por cada canal."
+    }
+  ]
+}

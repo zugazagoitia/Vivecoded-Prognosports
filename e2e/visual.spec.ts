@@ -12,6 +12,7 @@ const PUBLIC_PAGES = [
   { name: 'estados', path: '/dev/estados' },
   { name: 'componentes', path: '/dev/componentes' },
   { name: 'ranknav', path: '/dev/ranknav' },
+  { name: 'faq', path: '/faq' },
 ]
 
 test.describe('visual regression', () => {
