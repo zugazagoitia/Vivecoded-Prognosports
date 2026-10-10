@@ -21,6 +21,7 @@ test.describe('security', () => {
   })
 
   for (const path of [
+    '/',
     '/login',
     '/ruta-que-no-existe',
     '/home',

@@ -3,6 +3,7 @@ import { expect, test } from './support/fixtures'
 // Visual regression (§20.7): Chromium engine only (user decision), light and dark,
 // desktop (`chromium`) and phone (`mobile`). Add the F3 catalogue page here when it lands.
 const PUBLIC_PAGES = [
+  { name: 'landing', path: '/' },
   { name: 'login', path: '/login' },
   { name: 'not-found', path: '/404' },
   { name: 'fundamentos', path: '/fundamentos' },
@@ -25,7 +26,10 @@ test.describe('visual regression', () => {
         test(name, async ({ page }) => {
           await page.goto(path)
           await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-          await expect(page).toHaveScreenshot(`${name}-${scheme}.png`, { fullPage: true })
+          await expect(page).toHaveScreenshot(`${name}-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
         })
       }
 

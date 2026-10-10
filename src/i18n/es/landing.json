@@ -1,0 +1,175 @@
+{
+  "landing": {
+    "pill": "Temporada {year} en marcha",
+    "hero": {
+      "title": "Pronostica resultados de carreras con tus amigos y compite por ser el mejor",
+      "text": "Elige la parrilla antes de cada sesión, suma puntos por cada acierto y sigue el ranking de tu comunidad Gran Premio a Gran Premio.",
+      "textShort": "Elige la parrilla antes de cada sesión, suma puntos y sigue el ranking de tu comunidad.",
+      "register": "Registrarse gratis",
+      "rules": "Cómo se puntúa",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "login": "Inicia sesión",
+      "start": "Empezar a pronosticar"
+    },
+    "steps": {
+      "eyebrow": "Cómo funciona",
+      "title": "Tres pasos y a la parrilla",
+      "list": [
+        {
+          "title": "Únete o crea una comunidad",
+          "text": "Abierta para quien quiera o cerrada con invitación. Cada comunidad elige sus reglas de puntuación.",
+          "short": "Abierta o con invitación, con sus propias reglas."
+        },
+        {
+          "title": "Pronostica cada sesión",
+          "text": "Ordena a los pilotos hasta cinco minutos antes de la clasificación, el sprint o la carrera.",
+          "short": "Hasta cinco minutos antes de que empiece."
+        },
+        {
+          "title": "Suma y compara",
+          "text": "Los puntos se reparten al acabar la sesión. Mira quién sube, quién baja y quién aguanta.",
+          "short": "Mira quién sube y quién baja tras cada GP."
+        }
+      ]
+    },
+    "example": {
+      "eyebrow": "Un ejemplo de verdad",
+      "title": "Acertar de lleno puntúa más; quedarse cerca también cuenta",
+      "text": "Cada piloto suma según lo cerca que lo dejaste de su posición real. Cambia de jugador para ver cómo puntuó cada uno.",
+      "cardTitle": "Clasificación · GP de Azerbaiyán",
+      "cardSubtitle": "Pronóstico real frente al resultado",
+      "demoNote": "Datos de ejemplo",
+      "player": "Jugador",
+      "caption": "Pronóstico de {player} frente al resultado real",
+      "pos": "Pos.",
+      "prediction": "Pronóstico",
+      "finished": "Acabó",
+      "points": "Puntos",
+      "total": "Total",
+      "totalPoints": "{n} puntos",
+      "finish": "{n}.º",
+      "out": "Fuera del top {n}",
+      "exact": "Posición exacta",
+      "near": "Una posición arriba o abajo",
+      "far": "Dos posiciones arriba o abajo",
+      "miss": "Más lejos, o fuera de los resultados",
+      "more": "Ver las 8 reglas y probar tu propio pronóstico"
+    },
+    "ranking": {
+      "eyebrow": "Ranking en vivo",
+      "title": "Sabes siempre cómo vas, y por qué",
+      "titleShort": "Sabes siempre cómo vas",
+      "text": "Clasificación general, movimiento desde el último GP, forma reciente y la diferencia con quien tienes delante. Y estadísticas para quien quiera ir más allá: evolución, regularidad, cara a cara.",
+      "benefits": [
+        "Puntos, aciertos y porcentaje por Gran Premio",
+        "Gráficos claros, en modo claro y oscuro",
+        "Avisos por correo o Telegram antes de cada cierre"
+      ],
+      "cardTitle": "Amigos del paddock",
+      "afterGps": "Tras {n} GP",
+      "pos": "Pos.",
+      "player": "Jugador",
+      "points": "Puntos",
+      "gap": "Diferencia",
+      "leader": "Líder",
+      "tied": "Empate",
+      "you": "tú"
+    },
+    "features": {
+      "eyebrow": "Todo lo que necesitas",
+      "title": "Hecho para jugar entre amigos",
+      "list": [
+        {
+          "icon": "list",
+          "title": "Pronósticos ordenados",
+          "text": "Arrastra pilotos en el ordenador, toca el hueco en el móvil o copia el pronóstico de otra sesión."
+        },
+        {
+          "icon": "groups",
+          "title": "Comunidades",
+          "text": "Juega con tus amigos, tu oficina o tu peña. Abiertas o con invitación."
+        },
+        {
+          "icon": "leaderboard",
+          "title": "Ranking y estadísticas",
+          "text": "Clasificación general, evolución, regularidad y duelos directos."
+        },
+        {
+          "icon": "rule",
+          "title": "Reglas a tu medida",
+          "text": "Cada comunidad define cuántos puntos vale cada acierto."
+        },
+        {
+          "icon": "notifications",
+          "title": "Avisos a tiempo",
+          "text": "Correo o Telegram antes del cierre y cuando se reparten los puntos."
+        },
+        {
+          "icon": "route",
+          "title": "Circuitos y calendario",
+          "text": "Todos los circuitos, con su historia en la temporada."
+        }
+      ],
+      "short": [
+        {
+          "icon": "list",
+          "title": "Pronósticos ordenados",
+          "text": "Sin arrastrar: toca y ordena."
+        },
+        {
+          "icon": "groups",
+          "title": "Comunidades",
+          "text": "Con tus amigos, tu oficina o tu peña."
+        },
+        {
+          "icon": "leaderboard",
+          "title": "Estadísticas",
+          "text": "Evolución, regularidad y duelos."
+        },
+        {
+          "icon": "notifications",
+          "title": "Avisos a tiempo",
+          "text": "Correo o Telegram antes del cierre."
+        }
+      ]
+    },
+    "faq": {
+      "eyebrow": "Dudas habituales",
+      "title": "Preguntas frecuentes",
+      "all": "Ver todas las preguntas",
+      "list": [
+        {
+          "q": "¿Cuánto cuesta?",
+          "a": "Nada. PrognoSports es gratis y no es un sitio de apuestas: aquí solo se compite por el honor."
+        },
+        {
+          "q": "¿Hasta cuándo puedo pronosticar?",
+          "a": "Hasta cinco minutos antes de que empiece cada sesión. Puedes cambiar tu pronóstico las veces que quieras hasta entonces."
+        },
+        {
+          "q": "¿Cómo se reparten los puntos?",
+          "a": "Por posición exacta o por quedarte cerca. Cada comunidad elige sus reglas; las encuentras en la página «Cómo se puntúa»."
+        },
+        {
+          "q": "¿Puedo estar en varias comunidades?",
+          "a": "Sí. Cambias de una a otra desde la barra superior y tus pronósticos se guardan en cada una."
+        }
+      ]
+    },
+    "cta": {
+      "title": "¿Preparado para comenzar? ¡Regístrate y pruébalo gratis!",
+      "text": "Crea tu cuenta en un minuto y entra en la comunidad de tus amigos con un código de invitación.",
+      "button": "Crear mi cuenta"
+    },
+    "mobile": {
+      "enter": "Entrar",
+      "register": "Registrarse",
+      "faq": "Preguntas",
+      "rules": "Reglas",
+      "circuits": "Circuitos",
+      "legal": "Legal",
+      "links": "Enlaces",
+      "build": "v{version} · build {sha}"
+    }
+  }
+}
