@@ -1,0 +1,45 @@
+{
+  "reset": {
+    "title": "Crea una nueva contraseña",
+    "introCode": "Escribe el código que te hemos enviado a ",
+    "introEmail": "Escribe tu correo y el código de 6 caracteres que te hemos enviado.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tucorreo{'@'}ejemplo.com",
+    "codeLabel": "Código de 6 caracteres",
+    "codeHelp": "Puedes pegarlo tal cual: lo pasamos a mayúsculas.",
+    "passwordLabel": "Nueva contraseña",
+    "passwordHelp": "Al menos 8 caracteres.",
+    "repeatLabel": "Repite la contraseña",
+    "submit": "Cambiar contraseña",
+    "expired": "¿Código caducado?",
+    "again": "Pedir otro",
+    "locked": "Reintentar en {n} s",
+    "strength": {
+      "label": "Seguridad",
+      "none": "",
+      "weak": "baja",
+      "fair": "media",
+      "good": "buena",
+      "strong": "alta"
+    },
+    "error": {
+      "code": "El código no es correcto o ha caducado.",
+      "codeDescription": "Revísalo o pide uno nuevo.",
+      "codeRequired": "Escribe el código de 6 caracteres.",
+      "tooMany": "Demasiados intentos.",
+      "tooManyDescription": "Espera un momento o pide un código nuevo.",
+      "passwordRequired": "Escribe la nueva contraseña.",
+      "passwordShort": "Usa al menos 8 caracteres.",
+      "passwordRejected": "La contraseña no es válida. Prueba con otra más segura.",
+      "repeatRequired": "Repite la contraseña.",
+      "mismatch": "Las contraseñas no coinciden.",
+      "title": "No hemos podido cambiar la contraseña",
+      "description": "Comprueba tu conexión e inténtalo de nuevo en unos instantes."
+    },
+    "done": {
+      "title": "Contraseña cambiada",
+      "text": "Ya puedes iniciar sesión con la nueva.",
+      "login": "Iniciar sesión"
+    }
+  }
+}

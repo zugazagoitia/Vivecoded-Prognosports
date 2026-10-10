@@ -4,6 +4,7 @@ import {
   community,
   grandPrixes,
   MOCK_PASSWORD,
+  MOCK_RESET_CODE,
   MOCK_TOKEN,
   season,
   users,
@@ -93,6 +94,11 @@ export async function mockApi(page: Page): Promise<void> {
         : json(route, 401, null, 'Usuario o contraseña incorrectos.')
     }
     if (method === 'POST' && path === '/auth/forgotpassword') return json(route, 200, null)
+    if (method === 'PATCH' && path === '/auth/changepassword') {
+      const body = request.postDataJSON() as { token?: string; password?: string }
+      if (!body.password) return json(route, 400, null, 'Debes enviar la nueva contraseña.')
+      return body.token === MOCK_RESET_CODE ? json(route, 200, null) : json(route, 403, null, 'x')
+    }
     // Public endpoints (no token), with the shapes verified against the real API.
     if (method === 'GET' && /^\/seasons\/current\/[^/]+$/.test(path))
       return json(route, 200, season)

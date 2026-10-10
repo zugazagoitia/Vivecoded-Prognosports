@@ -49,6 +49,24 @@ export const changePassword = (
   signal?: AbortSignal,
 ) => request('/v2/auth/changepassword', { method: 'PATCH', body: b, signal })
 
+/**
+ * Second step of the recovery (A4): `PATCH /v2/auth/changepassword` with `{ email, token,
+ * password }` (schema.d.ts). `token` is the 6-character code from the e-mail. Anonymous; 403 =
+ * code rejected, 400 = password missing. TO CONFIRM with the backend: that the code is sent
+ * upper-case and that other sessions are revoked.
+ */
+export const resetPassword = (
+  b: { email: string; code: string; password: string },
+  signal?: AbortSignal,
+) =>
+  request('/v2/auth/changepassword', {
+    method: 'PATCH',
+    body: { email: b.email, token: b.code, password: b.password },
+    anonymous: true,
+    noSessionExpiry: true,
+    signal,
+  })
+
 export const sendVerifyEmail = (signal?: AbortSignal) =>
   request('/v2/auth/send-verify-email', { method: 'POST', signal })
 
