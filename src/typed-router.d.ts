@@ -102,6 +102,13 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/comunidades/[id]/ajustes': RouteRecordInfo<
+      '/comunidades/[id]/ajustes',
+      '/comunidades/:id/ajustes',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/dev/componentes': RouteRecordInfo<
       '/dev/componentes',
       '/dev/componentes',
@@ -388,6 +395,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/comunidades/[id]/index.vue': {
       routes:
         | '/comunidades/[id]/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/comunidades/[id]/ajustes.vue': {
+      routes:
+        | '/comunidades/[id]/ajustes'
       views:
         | never
       pathParamNames:
