@@ -20,6 +20,17 @@ import {
   previousSeasonGps,
 } from '../../src/mocks/fixtures/gps'
 import {
+  calculations,
+  grid,
+  results,
+  tipps,
+  weekendPoints,
+  weekendRuleset,
+  WEEKEND_GP,
+  WEEKEND_SEASON,
+  WEEKEND_SESSIONS,
+} from '../../src/mocks/fixtures/gp'
+import {
   circuitDetail,
   gpPoints,
   MOCK_SEASON_AVERAGE,
@@ -147,7 +158,9 @@ export async function mockApi(page: Page): Promise<void> {
     }
     if (
       method === 'GET' &&
-      /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/[^/]+\/tipps\/[^/]+$/.test(path)
+      /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/[^/]+\/tipps\/[^/]+$/.test(path) &&
+      // The weekend GP (G2) has its own fixtures, answered further down.
+      path.split('/')[4] !== String(WEEKEND_GP)
     ) {
       if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
       return json(route, 200, ownTipps(Number(path.split('/')[6])))
@@ -160,6 +173,41 @@ export async function mockApi(page: Page): Promise<void> {
     }
     if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+$/.test(path) && !path.endsWith('/next')) {
       return json(route, 200, grandPrixes)
+    }
+    // GP weekend (G2): detail (public) and the authenticated endpoints of its sessions.
+    if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+\/[^/]+$/.test(path)) {
+      const gp = grandPrixes.find((g) => String(g.id) === path.split('/')[4])
+      return gp ? json(route, 200, gp) : invalid(route, 'Gran premio inválido')
+    }
+    const sessionPath = /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/(results|grid|tipps)/.exec(
+      path,
+    )
+    if (method === 'GET' && sessionPath) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      const session = Number(sessionPath[1])
+      if (sessionPath[2] === 'results') return json(route, 200, results(session))
+      if (sessionPath[2] === 'grid') return json(route, 200, grid(session))
+      return json(
+        route,
+        200,
+        path.endsWith('/calculations')
+          ? session === WEEKEND_SESSIONS.sprint
+            ? calculations
+            : {}
+          : tipps(session),
+      )
+    }
+    if (method === 'GET' && /^\/rulesets\/[^/]+\/[^/]+\/[^/]+(\/[^/]+)?$/.test(path)) {
+      return authed
+        ? json(route, 200, weekendRuleset)
+        : json(route, 401, null, 'Tu sesión ha caducado.')
+    }
+    if (
+      method === 'GET' &&
+      authed &&
+      new RegExp(`^/communities/[^/]+/[^/]+/${WEEKEND_SEASON}/points/${WEEKEND_GP}$`).test(path)
+    ) {
+      return json(route, 200, weekendPoints())
     }
     // Circuit detail (P4): the circuit, its variant GPs and the authenticated community data.
     if (method === 'GET' && /^\/circuits\/[^/]+$/.test(path)) {

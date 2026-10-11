@@ -1,3 +1,4 @@
+import { WEEKEND_GP, WEEKEND_NOW, WEEKEND_SEASON } from '../src/mocks/fixtures/gp'
 import { expect, test } from './support/fixtures'
 
 // Visual regression (§20.7): Chromium engine only (user decision), light and dark,
@@ -37,6 +38,21 @@ test.describe('visual regression', () => {
           })
         })
       }
+
+      test('gp-detalle', async ({ authedPage: page, isMobile }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}?sesion=61`)
+        await expect(page.getByText('Terminada · 10 pts').first()).toBeVisible()
+        await expect(
+          page.getByText(isMobile ? 'Circuito y tu historial' : 'Tu historial en Miami'),
+        ).toBeVisible()
+        await expect(page.getByText('P1', { exact: true }).first()).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`gp-detalle-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
 
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')

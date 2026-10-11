@@ -1,4 +1,4 @@
-import { computed, toValue, type MaybeRefOrGetter } from 'vue'
+import { computed, onScopeDispose, ref, toValue, watchEffect, type MaybeRefOrGetter } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import type { IconName } from '@/components/ui/icons'
@@ -57,6 +57,19 @@ export function rankingTarget(
   return `/ranking/${comunidad ?? activeCommunity ?? 0}/${temporada ?? year}/clasificacion/general`
 }
 
+/** Dynamic title a page gives to the mobile header (e.g. «GP de Singapur»). */
+const pageTitle = ref<string | undefined>()
+
+/** Sets the mobile header title while the calling page is mounted (falls back to the route's). */
+export function useMobileTitle(title: MaybeRefOrGetter<string | undefined>): void {
+  watchEffect(() => {
+    pageTitle.value = toValue(title)
+  })
+  onScopeDispose(() => {
+    pageTitle.value = undefined
+  })
+}
+
 export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | undefined> }) {
   const i18n = useI18n()
   const t = i18n.t.bind(i18n)
@@ -87,7 +100,7 @@ export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | und
   const backHref = computed(() => route.meta.backHref)
 
   const title = computed(() => {
-    const given = toValue(overrides?.title)
+    const given = toValue(overrides?.title) ?? pageTitle.value
     if (given) return given
     const key = route.meta.title?.replace(/^route\./, '')
     const path = key ? `mobileNav.titles.${key}` : ''

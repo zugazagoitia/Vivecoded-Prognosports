@@ -25,12 +25,12 @@ const ALIASES: Record<string, string> = {
   s: 'sprint',
   q: 'qualifying',
   sq: 'sprintQualifying',
-  sprintshootout: 'sprintQualifying',
-  // Real API (README): code `SR` / name `SPRINT_RACE`, `QUALIFY`, `RACE`.
+  // Codes and names the real API sends (`SR`/`SPRINT_RACE`, `QUALIFY`, `SPRINT_QUALIFY`, `RACE`).
   sr: 'sprint',
   sprintrace: 'sprint',
-  sprintqualify: 'sprintQualifying',
   qualify: 'qualifying',
+  sprintqualify: 'sprintQualifying',
+  sprintshootout: 'sprintQualifying',
   freepractice1: 'fp1',
   freepractice2: 'fp2',
   freepractice3: 'fp3',

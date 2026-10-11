@@ -1,0 +1,151 @@
+{
+  "gp": {
+    "home": "Inicio",
+    "list": "Grandes Premios",
+    "title": "Gran Premio de {name}",
+    "mobileTitle": "GP de {name}",
+    "round": "Ronda {n} de {total}",
+    "roundShort": "Ronda {n}",
+    "withSprint": "Con sprint",
+    "sprintShort": "Sprint",
+    "weekend": {
+      "live": "En curso",
+      "done": "Disputado"
+    },
+    "tz": {
+      "label": "Zona horaria",
+      "mine": "Mi hora",
+      "circuit": "Hora del circuito",
+      "yours": "tu hora ({city}, {offset})",
+      "ofCircuit": "hora de {city} ({offset})"
+    },
+    "prev": "GP anterior: {name}",
+    "next": "GP siguiente: {name}",
+    "sessions": {
+      "title": "Sesiones del fin de semana",
+      "label": "Sesiones del fin de semana",
+      "summary": "Pronósticos {done} de {total} · cierre 5 min antes · {tz}",
+      "list": "Sesiones",
+      "select": "Ver {session}"
+    },
+    "promo": {
+      "alt": "Imagen promocional del Gran Premio de {name}",
+      "placeholder": "Imagen promocional del GP"
+    },
+    "status": {
+      "finished": "Terminada",
+      "scored": "Terminada · {n} pts",
+      "scoredNoPrediction": "Terminada · sin pronóstico",
+      "closed": "Cerrada · sin resultados",
+      "closing": "Cierra en {time}",
+      "done": "Hecho · editable",
+      "open": "Abierta"
+    },
+    "close": {
+      "today": "Cierra hoy a las {time}.",
+      "day": "Cierra el {weekday} a las {time}."
+    },
+    "prediction": {
+      "title": "{session} · tu pronóstico",
+      "none": "Aún no has pronosticado esta sesión.",
+      "noneClosed": "No pronosticaste esta sesión.",
+      "noneClosedText": "El plazo ya cerró y no se puede enviar un pronóstico.",
+      "awaitingResults": "Sesión cerrada. Los puntos llegan en cuanto se publican los resultados.",
+      "cell": "{position}: {driver}",
+      "cellPoints": "{position}: {driver}, {kind}, {n} puntos",
+      "hit": {
+        "exact": "Exacto",
+        "near": "A una posición",
+        "far": "A dos posiciones",
+        "miss": "Fallo"
+      },
+      "results": "Ver resultados",
+      "edit": "Editar pronóstico",
+      "predict": "Pronosticar",
+      "gridConsensus": "Parrilla y consenso",
+      "table": "Tabla de la comunidad"
+    },
+    "grid": {
+      "title": "Parrilla de salida · {kind}",
+      "sprint": "sprint",
+      "carrera": "carrera",
+      "source": "Según la clasificación correspondiente",
+      "pit": "Pit lane",
+      "position": "P{n}",
+      "pitTag": "{code} · {note}",
+      "notice": "Si la organización cambia la parrilla, te avisamos por Telegram y correo.",
+      "empty": {
+        "title": "La parrilla aún no está publicada",
+        "text": "Se publica tras la clasificación. Si cambia, te avisamos."
+      },
+      "mobileTitle": "Parrilla del sprint",
+      "mobileTitleCarrera": "Parrilla de la carrera"
+    },
+    "community": {
+      "title": "La comunidad",
+      "members": "{n} jugador en la comunidad | {n} jugadores en la comunidad",
+      "leader": "Líder del fin de semana",
+      "leaderTie": "{name} y {n} más",
+      "mine": "Tus puntos hasta ahora",
+      "noPoints": "Aún no hay puntos en este fin de semana.",
+      "privacyNote": "Los pronósticos de los demás se muestran al cerrar cada sesión."
+    },
+    "circuit": {
+      "title": "Circuito",
+      "more": "Ver más",
+      "moreLabel": "Ver más sobre {name}",
+      "lap": "Longitud de vuelta",
+      "laps": "Vueltas",
+      "distance": "Distancia total",
+      "length": "Longitud"
+    },
+    "history": {
+      "title": "Tu historial en {name}",
+      "label": "Tus puntos en {name}: {values}",
+      "best": "Tu mejor resultado aquí: {rank}.º del GP en {year}.",
+      "empty": {
+        "title": "Aún no tienes historial aquí",
+        "text": "Cuando juegues un Gran Premio en este circuito, verás tus puntos de cada año."
+      },
+      "mobileTitle": "Circuito y tu historial",
+      "mobilePoints": "Tus puntos aquí"
+    },
+    "rules": {
+      "title": "Reglas de este GP",
+      "set": "{name} · sin excepciones",
+      "setException": "{name} · con excepción en este GP",
+      "exact": "{n} exacta",
+      "near": "{n} a ±1",
+      "far": "{n} a ±2",
+      "bonus": "+{n} bonus",
+      "full": "Ver reglas completas"
+    },
+    "consensus": {
+      "title": "Consenso · {session}",
+      "segment": "{code}: {votes} de {members}",
+      "empty": "Nadie pronosticó esta sesión.",
+      "view": "Ver parrilla y consenso"
+    },
+    "mobile": {
+      "progress": "Tus pronósticos",
+      "progressValue": "{done} de {total}",
+      "result": "Resultados",
+      "edit": "Editar",
+      "predict": "Pronosticar"
+    },
+    "notFound": {
+      "title": "Este Gran Premio no existe",
+      "text": "Puede que el enlace sea antiguo. Mira todos los Grandes Premios de la temporada.",
+      "action": "Ver Grandes Premios"
+    },
+    "error": {
+      "gp": "el Gran Premio",
+      "sessions": "las sesiones",
+      "prediction": "tu pronóstico",
+      "grid": "la parrilla",
+      "community": "los datos de la comunidad",
+      "history": "tu historial",
+      "rules": "las reglas"
+    }
+  }
+}
