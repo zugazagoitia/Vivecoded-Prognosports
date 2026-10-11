@@ -20,6 +20,7 @@ import {
   summariseSeason,
   type PointsMap,
 } from '@/lib/community'
+import { parseUsages } from '@/lib/community-settings'
 import { gpShortName } from '@/lib/gp'
 import { useCommunityStore } from '@/stores/community'
 import { useSessionStore } from '@/stores/session'
@@ -358,5 +359,47 @@ export function useLeaveCommunity(id: MaybeRefOrGetter<Id>) {
       }
       toaster.success(t('community.leave.done'))
     },
+  })
+}
+
+/** Cached state touched by an image change: the detail and every list that shows the picture. */
+async function refreshCommunityImage(id: Id) {
+  const uid = useSessionStore().user?.id
+  await Promise.all([
+    queryClient.invalidateQueries({ queryKey: keys.community(id) }),
+    uid != null ? queryClient.invalidateQueries({ queryKey: keys.userCommunities(uid) }) : null,
+  ])
+}
+
+/** `POST .../image` (multipart, <= 2 MB, already cropped). Errors toast globally. */
+export function useUploadCommunityImage(id: MaybeRefOrGetter<Id>) {
+  return useMutation({
+    mutationFn: (file: Blob) => communitiesApi.uploadCommunityImage(toValue(id), file),
+    onSuccess: async () => {
+      await refreshCommunityImage(toValue(id))
+      toaster.success(t('communitySettings.image.uploaded'))
+    },
+  })
+}
+
+/** `DELETE .../image`: back to the initials. Errors toast globally. */
+export function useDeleteCommunityImage(id: MaybeRefOrGetter<Id>) {
+  return useMutation({
+    mutationFn: () => communitiesApi.deleteCommunityImage(toValue(id)),
+    onSuccess: async () => {
+      await refreshCommunityImage(toValue(id))
+      toaster.success(t('communitySettings.image.removed'))
+    },
+  })
+}
+
+/** `GET /v2/rulesets/{id}/usages` as a count (undefined when the body is not understood). */
+export function useRulesetUsages(ruleset: MaybeRefOrGetter<Id | undefined>) {
+  return useQuery({
+    queryKey: computed(() => keys.rulesetUsages(toValue(ruleset) ?? '')),
+    queryFn: async ({ signal }) =>
+      parseUsages(await catalogApi.getRulesetUsages(toValue(ruleset)!, signal)) ?? null,
+    enabled: computed(() => authenticated() && toValue(ruleset) != null),
+    retry: false,
   })
 }

@@ -28,6 +28,8 @@ export const keys = {
   /** Rule set applied to a season (no GP) or to one GP of a community. */
   ruleset: (community: Id, competition: Id, season: Id, ...rest: Id[]) =>
     ['ruleset', community, competition, season, ...rest] as const,
+  /** Number of communities using a rule set (H6). */
+  rulesetUsages: (ruleset: Id) => ['ruleset-usages', ruleset] as const,
   /** Results of a session (public data, but the endpoint needs a session). */
   results: (competition: Id, season: Id, gp: Id, session: Id) =>
     ['results', competition, season, gp, session] as const,

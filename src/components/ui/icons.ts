@@ -23,6 +23,7 @@ import {
   faEnvelope,
   faEnvelopeCircleCheck,
   faUnlockKeyhole,
+  faUpload,
   faCloudBolt,
   faCopy,
   faEye,
@@ -143,6 +144,7 @@ export const MATERIAL_TO_FA = {
   lightbulb: 'lightbulb',
   lock_reset: 'unlock-keyhole',
   mark_email_read: 'envelope-circle-check',
+  upload: 'upload',
 } as const
 
 /** Registry: only the icons listed here are bundled (per-icon import, no full set). */
@@ -171,6 +173,7 @@ const REGISTRY: Record<string, IconDefinition> = {
   envelope: faEnvelope,
   'envelope-circle-check': faEnvelopeCircleCheck,
   'unlock-keyhole': faUnlockKeyhole,
+  upload: faUpload,
   'cloud-bolt': faCloudBolt,
   copy: faCopy,
   eye: faEye,

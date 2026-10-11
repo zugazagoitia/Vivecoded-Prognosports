@@ -4,6 +4,7 @@ import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
 import community from './es/community.json'
+import communitySettings from './es/community-settings.json'
 import common from './es/common.json'
 import communities from './es/communities.json'
 import createCommunity from './es/createCommunity.json'
@@ -56,6 +57,7 @@ export const i18n = createI18n({
       ...rules,
       ...circuits,
       ...community,
+      ...communitySettings,
       faq,
       ...gps,
       home,

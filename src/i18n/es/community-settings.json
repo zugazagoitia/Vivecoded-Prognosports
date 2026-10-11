@@ -1,0 +1,105 @@
+{
+  "communitySettings": {
+    "title": "Ajustes de la comunidad",
+    "mobileTitle": "Ajustes",
+    "crumb": "Ajustes",
+    "adminsOnly": "Solo los administradores ven esta página.",
+    "denied": "Solo los administradores pueden abrir los ajustes de la comunidad.",
+    "toc": "En esta página",
+    "sections": {
+      "imagen": "Imagen",
+      "invitacion": "Invitación",
+      "datos": "Datos",
+      "reglas": "Reglas",
+      "miembros": "Miembros"
+    },
+    "readOnly": "Solo lectura",
+    "error": {
+      "image": "la imagen",
+      "invitation": "la invitación",
+      "data": "los datos",
+      "rules": "las reglas",
+      "members": "los miembros"
+    },
+    "image": {
+      "title": "Imagen",
+      "text": "Se muestra en las listas y en la cabecera de la comunidad. Hasta 2 MB; recortarás la imagen antes de subirla.",
+      "upload": "Subir imagen",
+      "remove": "Quitar imagen",
+      "file": "Archivo de imagen",
+      "uploaded": "Imagen actualizada.",
+      "removed": "Imagen quitada.",
+      "uploadFailed": "No hemos podido subir la imagen.",
+      "removeFailed": "No hemos podido quitar la imagen.",
+      "errors": {
+        "none": "Elige una imagen.",
+        "type": "El archivo no es una imagen.",
+        "size": "La imagen es demasiado grande (máximo 10 MB antes de recortarla).",
+        "load": "No hemos podido leer esa imagen.",
+        "encode": "No hemos podido preparar la imagen."
+      },
+      "crop": {
+        "title": "Recortar imagen",
+        "text": "Ajusta el cuadro que se verá en la comunidad.",
+        "preview": "Vista previa del recorte",
+        "zoom": "Zoom",
+        "horizontal": "Posición horizontal",
+        "vertical": "Posición vertical",
+        "confirm": "Recortar y subir"
+      }
+    },
+    "invite": {
+      "title": "Invitación",
+      "text": "Comparte el enlace con quien quieras que entre. Al regenerarlo, el anterior deja de funcionar.",
+      "textOpen": "La comunidad es abierta: cualquiera puede unirse sin enlace, pero puedes compartirlo igualmente.",
+      "link": "Enlace de invitación",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "copyFailed": "No hemos podido copiar el enlace.",
+      "regenerate": "Regenerar enlace",
+      "none": "Esta comunidad no tiene enlace de invitación.",
+      "confirm": {
+        "title": "¿Regenerar el enlace?",
+        "text": "El enlace actual dejará de funcionar. Quienes ya estén dentro no se ven afectados.",
+        "action": "Regenerar"
+      }
+    },
+    "data": {
+      "title": "Datos",
+      "notice": "Por ahora el nombre, la descripción y el acceso no se pueden cambiar después de crear la comunidad.",
+      "name": "Nombre",
+      "access": "Acceso",
+      "description": "Descripción",
+      "accessClosed": "Cerrada · con invitación",
+      "accessOpen": "Abierta · cualquiera puede unirse",
+      "noDescription": "Sin descripción"
+    },
+    "rules": {
+      "title": "Reglas de puntuación",
+      "hit": "Acierto",
+      "points": "Puntos",
+      "table": "Reglas de puntuación de la comunidad",
+      "exact": "Posición exacta",
+      "next": "Posición siguiente (acaba 1 más abajo)",
+      "previous": "Posición anterior (acaba 1 más arriba)",
+      "nextOfFollowing": "Siguiente de la siguiente (2 más abajo)",
+      "previousOfPrevious": "Anterior de la anterior (2 más arriba)",
+      "notInPodium": "Piloto del podio que acaba fuera del podio",
+      "notInResults": "Piloto que no está en los resultados",
+      "bonus": "Bonus al que más aciertos consigue en el GP",
+      "public": "público",
+      "private": "privado",
+      "footnote": "Conjunto «{name}», {kind} y usado por {count} comunidad. | Conjunto «{name}», {kind} y usado por {count} comunidades.",
+      "footnoteBare": "Conjunto «{name}», {kind}.",
+      "none": "Sin reglas disponibles",
+      "noneText": "Todavía no hay un conjunto de reglas asignado a esta temporada."
+    },
+    "members": {
+      "title": "Miembros",
+      "count": "{n} jugador | {n} jugadores",
+      "list": "Miembros de la comunidad",
+      "you": "(tú)",
+      "none": "Esta comunidad aún no tiene miembros."
+    }
+  }
+}

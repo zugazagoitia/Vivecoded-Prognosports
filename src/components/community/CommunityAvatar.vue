@@ -7,11 +7,18 @@ import AppImage from '@/components/ui/AppImage.vue'
  * Identity image of a community: the uploaded picture (`hasImage`, public
  * `GET /v2/communities/{id}/image`) or, without one (or if it fails to load), the initials on the
  * brand colour. Decorative: the name is always next to it. Props: `id`, `name`, `hasImage`,
- * `size` in px (default 72).
+ * `size` in px (default 72), `version` (cache-buster).
  */
 const props = withDefaults(
-  defineProps<{ id: number | string; name: string; hasImage?: boolean | null; size?: number }>(),
-  { size: 72, hasImage: false },
+  defineProps<{
+    id: number | string
+    name: string
+    hasImage?: boolean | null
+    size?: number
+    /** Cache-buster: change it after replacing the picture (the URL is always the same). */
+    version?: number
+  }>(),
+  { size: 72, hasImage: false, version: undefined },
 )
 const failed = ref(false)
 const initials = computed(() =>
@@ -22,7 +29,11 @@ const initials = computed(() =>
     .map((w) => w.charAt(0).toUpperCase())
     .join(''),
 )
-const url = computed(() => apiUrl(`/v2/communities/${encodeURIComponent(String(props.id))}/image`))
+const url = computed(
+  () =>
+    apiUrl(`/v2/communities/${encodeURIComponent(String(props.id))}/image`) +
+    (props.version ? `?v=${props.version}` : ''),
+)
 </script>
 
 <template>

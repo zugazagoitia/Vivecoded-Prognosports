@@ -23,6 +23,7 @@ const fallback: Record<string, string> = {
   'route.communitiesExplore': 'Explorar comunidades',
   'route.createCommunity': 'Crear comunidad',
   'route.community': 'Comunidad',
+  'route.communitySettings': 'Ajustes de la comunidad',
   'route.user': 'Perfil',
   'route.admin': 'Administración',
   'route.adminGps': 'Administración · Grandes Premios',

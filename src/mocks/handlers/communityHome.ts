@@ -3,7 +3,7 @@ import { ok } from '../envelope'
 import { communityDetail, communityMembers } from '../fixtures/community'
 
 /**
- * Community home (H5): detail, members, leave and regenerate-invitation for the ids of
+ * Community home (H5): detail, members, leave and regenerate-invitation (and the H6 image/usages endpoints) for the ids of
  * `fixtures/community.ts`. Registered before the generic community handlers.
  */
 export const communityHomeHandlers = [
@@ -17,6 +17,10 @@ export const communityHomeHandlers = [
   }),
   http.post('*/v2/communities/:id/quit', () => ok('ok')),
   http.post('*/v2/communities/:id/recreate', () => ok('NUEVO-CODIGO')),
+  // Settings (H6): image upload / removal and the usages of a rule set.
+  http.post('*/v2/communities/:id/image', () => ok('ok')),
+  http.delete('*/v2/communities/:id/image', () => ok('ok')),
+  http.get('*/v2/rulesets/:id/usages', () => ok(4)),
 ]
 
 /** Unknown ids: HTTP 200 with `success:false` (README, same as circuits and GPs). */
