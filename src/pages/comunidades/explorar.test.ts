@@ -102,7 +102,7 @@ describe('Explorar comunidades', () => {
   it('joins an open community with its hidden invitation', async () => {
     let posted = ''
     server.use(
-      http.post('*/v2/communities/:id/:invitation', ({ params }) => {
+      http.post('*/v2/communities/:id/join/:invitation', ({ params }) => {
         posted = [params.id, params.invitation].join('/')
         return ok('ok')
       }),

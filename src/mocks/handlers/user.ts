@@ -1,11 +1,11 @@
 import { http } from 'msw'
-import { fail, ok } from '../envelope'
+import { fail, ok, unauthorized } from '../envelope'
 import { community, MOCK_TOKEN, toWireUser, users } from '../fixtures'
 
 export const userHandlers = [
   http.get('*/v2/user/me', ({ request }) => {
     if (request.headers.get('Authorization') !== `Bearer ${MOCK_TOKEN}`) {
-      return fail(401, 'Tu sesión ha caducado.')
+      return unauthorized()
     }
     return ok(toWireUser(users[0]!))
   }),

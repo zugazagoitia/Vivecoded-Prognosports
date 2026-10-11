@@ -172,7 +172,9 @@ describe('Parrilla y consenso (G4)', () => {
   })
 
   it('closed with nobody predicting: empty state', async () => {
-    server.use(http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () => ok([])))
+    server.use(
+      http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () => ok({ '1': [] })),
+    )
     await open()
     expect(await screen.findByText('Nadie ha pronosticado esta sesión')).toBeTruthy()
     expect(screen.queryByText('Piloto más votado al 1.º')).toBeNull()

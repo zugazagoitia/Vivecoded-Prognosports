@@ -65,7 +65,7 @@ async function mockExplore(page: Page) {
     if (req.method() === 'GET' && /^\/user\/[^/]+\/communities$/.test(path)) {
       return send(route, [mine, ...(joined ? [{ ...open, user_is_member: true }] : [])])
     }
-    if (req.method() === 'POST' && path === '/communities/101/SECRET-OPEN') {
+    if (req.method() === 'POST' && path === '/communities/101/join/SECRET-OPEN') {
       joined = true
       return send(route, 'ok')
     }

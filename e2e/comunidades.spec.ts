@@ -43,7 +43,7 @@ async function mockCommunities(page: Page) {
       return send(route, joined ? [mine, open, third, invited] : [mine, open, third])
     }
     if (req.method() === 'GET' && path === '/communities') return send(route, [invited])
-    if (req.method() === 'POST' && path === '/communities/200/PADDOCK-7KQ2') {
+    if (req.method() === 'POST' && path === '/communities/200/join/PADDOCK-7KQ2') {
       joined = true
       return send(route, invited)
     }

@@ -138,7 +138,7 @@ describe('Unirme con un código', () => {
   it('maps a rejected join (606) to the same message', async () => {
     server.use(
       http.get('*/v2/communities', () => ok([invited])),
-      http.post('*/v2/communities/200/:inv', () =>
+      http.post('*/v2/communities/200/join/:inv', () =>
         HttpResponse.json({
           success: false,
           status: 606,
@@ -161,7 +161,7 @@ describe('Unirme con un código', () => {
     let joinedYet = false
     server.use(
       http.get('*/v2/communities', () => ok([invited])),
-      http.post('*/v2/communities/200/:inv', ({ params }) => {
+      http.post('*/v2/communities/200/join/:inv', ({ params }) => {
         posted.push(String(params.inv))
         joinedYet = true
         return ok(invited)

@@ -41,7 +41,7 @@ async function mockInvitations(page: Page) {
     if (req.method() === 'GET' && /^\/user\/[^/]+\/communities$/.test(path)) {
       return send(route, joined ? [{ ...invited, user_is_member: true }, already] : [already])
     }
-    if (req.method() === 'POST' && path === '/communities/200/PADDOCK-7KQ2') {
+    if (req.method() === 'POST' && path === '/communities/200/join/PADDOCK-7KQ2') {
       joined = true
       return send(route, invited)
     }

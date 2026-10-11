@@ -1,11 +1,11 @@
 import { http } from 'msw'
-import { fail, ok } from '../envelope'
+import { invalidInvitation, ok } from '../envelope'
 import { community, mockCommunity, users } from '../fixtures'
 
 /**
  * Invitation page (H7). `GET /communities` is the public list the code is matched against:
  * `PADDOCK-7KQ2` is a community the mock user can join (id 200) and `MIEMBRO-1` one they already
- * belong to (id 201). Joining answers 606 «Invalid invitation» for a wrong code. Registered before
+ * belong to (id 201). Joining a wrong code answers 200 + success:false «Invitación inválida» (real API). Registered before
  * the generic user/community handlers; state is per module (call `resetInvitationMock()`).
  */
 export const INVITE_VALID = 'PADDOCK-7KQ2'
@@ -36,9 +36,9 @@ export const invitationHandlers = [
   http.get('*/v2/user/:id/communities', () =>
     ok(joined ? [community, { ...invitedCommunity, user_is_member: true }] : [community]),
   ),
-  http.post('*/v2/communities/:id/:invitation', ({ params }) => {
+  http.post('*/v2/communities/:id/join/:invitation', ({ params }) => {
     if (String(params.id) !== '200' || params.invitation !== INVITE_VALID) {
-      return fail(400, 'Invalid invitation', 606)
+      return invalidInvitation()
     }
     joined = true
     return ok(invitedCommunity)

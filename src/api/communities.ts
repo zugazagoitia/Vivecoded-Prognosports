@@ -17,8 +17,13 @@ export const createCommunity = (body: Record<string, unknown>, signal?: AbortSig
   requestParsed('/v2/communities', CommunitySchema, { method: 'POST', body, signal })
 export const listMembers = (c: Id, signal?: AbortSignal) =>
   requestParsed(`/v2/communities/${seg(c)}/members`, z.array(z.unknown()), { signal })
+/**
+ * The spec says `POST /v2/communities/{community}/{invitation}`, but the real route (production and
+ * local backend) is `POST /v2/communities/{community}/join/{invitation}`: the spec's one answers 404.
+ * A wrong code answers HTTP 200 `{ success:false, message:"No autorizado. Invitación inválida" }`.
+ */
 export const joinCommunity = (c: Id, invitation: string, signal?: AbortSignal) =>
-  request(`/v2/communities/${seg(c)}/${seg(invitation)}`, { method: 'POST', signal })
+  request(`/v2/communities/${seg(c)}/join/${seg(invitation)}`, { method: 'POST', signal })
 /**
  * There is NO documented endpoint that resolves a community from an invitation code, but the
  * public `GET /v2/communities` lists every community with its `invitation` (probed 2026-10-11,

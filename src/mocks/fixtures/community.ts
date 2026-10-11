@@ -36,22 +36,36 @@ const byId = new Map<number, ReturnType<typeof mockCommunity>>([
 export function communityDetail(id: number) {
   const c = byId.get(id)
   if (!c) return undefined
-  const { id: _id, ...detail } = c
-  return detail
+  // Real API (checked 2026-10-11): the detail now carries `id` (the older one did not).
+  return c
 }
 
-/** `GET /communities/{id}/members`: `CommunityUser[]`; only the owner can regenerate the link. */
+/**
+ * `GET /communities/{id}/members` as the real API sends it: `{ user, isUserInCommunity, join_date,
+ * can_* }` per member (never a plain `User`); only the owner can regenerate the link.
+ */
 export function communityMembers(id: number) {
-  // The reference community keeps the plain `User[]` the G5 results screen reads (it does not
-  // understand `CommunityUser` yet); `normaliseMembers` accepts both shapes.
-  if (id === COMMUNITY_OWNED) return users
   const owner = byId.get(id)?.owner?.id
   return users.map((user, i) => ({
     user,
-    userInCommunity: true,
+    isUserInCommunity: true,
     can_modify_permissions: user.id === owner,
     can_recreate_invitation: user.id === owner,
     can_kick_users: user.id === owner,
     join_date: `2026-01-${String(5 + i).padStart(2, '0')}T09:00:00Z`,
+  }))
+}
+
+/**
+ * `GET /v2/rulesets/{id}/usages` as the real API sends it: the list of communities using the rule
+ * set (`{ id, name, description, open, user_is_member }`), not a count.
+ */
+export function communitiesUsing(n: number) {
+  return Array.from({ length: n }, (_, i) => ({
+    id: 100 + i,
+    name: `Comunidad ${i + 1}`,
+    description: `Comunidad de prueba ${i + 1}`,
+    open: false,
+    user_is_member: false,
   }))
 }

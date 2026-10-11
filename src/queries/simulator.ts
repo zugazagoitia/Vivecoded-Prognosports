@@ -56,6 +56,7 @@ export function useSimulation(
         a.gp,
         toValue(session)!,
         actor.communityId.value!,
+        actor.userId.value,
         buildCalcRequest(toValue(sim)).results,
         signal,
       )

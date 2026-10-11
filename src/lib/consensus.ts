@@ -191,11 +191,13 @@ export interface OriginalBet {
 
 /**
  * Least voted driver at 1.º among those voted (ties: first in grid order). The mockup shows
- * first names; the API only has `User.username`, which is used instead.
+ * first names; the API only has `User.username`, which is used instead (looked up by user id in
+ * `names` when the prediction row only carries the id, as the real `tipps` do).
  */
 export function originalBet(
   predictions: readonly Prediction[],
   order: ReadonlyMap<number, number> = new Map(),
+  names: ReadonlyMap<number, string> = new Map(),
 ): OriginalBet | undefined {
   const votes = tally(predictions, 1, order)
   if (votes.length === 0) return undefined
@@ -205,7 +207,8 @@ export function originalBet(
     .sort((a, b) => byRank(order, a.driverId, b.driverId))[0]!
   const voters = predictions
     .filter((p) => p.position === 1 && p.driver.id === pick.driverId)
-    .map((p) => p.user?.username ?? '')
+    // The real tipps carry only the user id: the name comes from the community members.
+    .map((p) => p.user?.username ?? (p.user ? names.get(p.user.id) : undefined) ?? '')
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b, 'es'))
   return { code: pick.code, votes: pick.votes, voters }

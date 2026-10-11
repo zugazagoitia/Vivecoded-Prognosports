@@ -1,4 +1,4 @@
-import { grandPrixes, mockGrandPrix, REFERENCE_NOW, season, users } from './index'
+import { grandPrixes, mockGrandPrix, REFERENCE_NOW, season, tippsByUser, users } from './index'
 
 /** Previous season offered in the season selector. */
 export const previousSeason = { id: 9, name: '2025', totalEvents: 22 }
@@ -74,11 +74,21 @@ export function communitySeasonPoints(seasonId: number): Record<string, unknown[
 /** Session of the next GP (round 18) the mock user already predicted: the sprint (id 181). */
 export const PREDICTED_SESSION_IDS = [181]
 
-/** `GET .../sessions/{session}/tipps/{community}` for the mock user. */
+/**
+ * `GET .../sessions/{session}/tipps/{community}` for the mock user (user 1): the real map by user
+ * id with every member of the community; only the user has rows, in the session already predicted.
+ */
 export function ownTipps(sessionId: number) {
-  if (!PREDICTED_SESSION_IDS.includes(sessionId)) return []
-  return [1, 2, 3, 4].map((position) => ({
-    position,
-    driver: { id: 10 + position, firstname: 'Piloto', lastname: String(position) },
-  }))
+  const rows = PREDICTED_SESSION_IDS.includes(sessionId)
+    ? [1, 2, 3, 4].map((position) => ({
+        userId: 1,
+        position,
+        driver: { id: 10 + position, firstname: 'Piloto', lastname: String(position) },
+      }))
+    : []
+  return tippsByUser(
+    rows,
+    users.map((u) => u.id),
+    sessionId,
+  )
 }

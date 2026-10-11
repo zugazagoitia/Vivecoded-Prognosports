@@ -8,6 +8,7 @@ import { computeStanding, parseInvitation, type Standing } from '@/lib/communiti
 import { useCommunityStore } from '@/stores/community'
 import { useSessionStore } from '@/stores/session'
 import { DEFAULT_COMPETITION } from './circuits'
+import { mineOf } from './gp'
 import { keys } from './keys'
 
 /**
@@ -137,6 +138,7 @@ export function useCommunityPending(
   communities: MaybeRefOrGetter<readonly Community[]>,
   now: MaybeRefOrGetter<number>,
 ) {
+  const session = useSessionStore()
   const competitions = computed(() => [...new Set(toValue(communities).map(competitionOf))])
   const nexts = useQueries({
     queries: computed(() =>
@@ -189,7 +191,7 @@ export function useCommunityPending(
         if (x.ci !== ci) return
         const q = tipps.value[ti]
         if (!q || !q.isSuccess) known = false
-        else if ((q.data?.length ?? 0) === 0) pending++
+        else if (mineOf(q.data, session.user?.id).length === 0) pending++
       })
       return known ? { gp, pending } : undefined
     }),
@@ -197,9 +199,14 @@ export function useCommunityPending(
   return { info }
 }
 
-/** 606 «Invalid invitation» (spec) or any 4xx except an expired session. */
-const isRejectedInvitation = (status: number) =>
-  status === 606 || (status >= 400 && status < 500 && status !== 401)
+/**
+ * Rejected code: 606 «Invalid invitation» (spec), any 4xx except an expired session, or the real
+ * API's HTTP 200 + `success:false` «No autorizado. Invitación inválida» / «Se necesita invitación».
+ */
+const isRejectedInvitation = (e: ApiError) =>
+  e.status === 606 ||
+  (e.status >= 400 && e.status < 500 && e.status !== 401) ||
+  (e.status === 200 && /invitaci[oó]n/i.test(e.message))
 
 /** Error shown for any failed join: expired/unknown code. */
 export class InvalidInvitationError extends Error {
@@ -239,7 +246,7 @@ export function useJoinCommunity() {
       try {
         await communitiesApi.joinCommunity(id, invitation)
       } catch (e) {
-        if (e instanceof ApiError && isRejectedInvitation(e.status)) {
+        if (e instanceof ApiError && isRejectedInvitation(e)) {
           throw new InvalidInvitationError()
         }
         throw e

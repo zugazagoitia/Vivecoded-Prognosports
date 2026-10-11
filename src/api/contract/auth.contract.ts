@@ -4,7 +4,7 @@
  * account of the reference community). T15 / requisitos §20.9.
  */
 import { beforeAll, describe, expect, it } from 'vitest'
-import { communitiesApi, gpsApi, userApi } from '../index'
+import { catalogApi, communitiesApi, gpsApi, userApi } from '../index'
 import { request } from '../client'
 import { REF, TOKEN, configureClient, live } from './harness'
 
@@ -55,10 +55,67 @@ describe.skipIf(!TOKEN)('authenticated GET endpoints', () => {
     )
   })
 
+  // Tipps: the real answer is a map by user id with EVERY member of the community.
+  it('GET .../tipps/{community} -> map by user id, normalised to rows with `user.id`', async () => {
+    const raw = await live('raw GET .../tipps/{community}', () =>
+      request(`/v2/gps/${C}/${S}/${G}/sessions/${SES}/tipps/${COM}`),
+    )
+    expect(Array.isArray(raw), 'The API now sends a list: README «tipps»').toBe(false)
+    expect(typeof raw).toBe('object')
+    const rows = await live('TippsResponseSchema GET .../tipps/{community}', () =>
+      gpsApi.getTipps(C, S, G, SES, COM),
+    )
+    const ids = new Set(Object.keys(raw as object))
+    for (const r of rows) expect(ids.has(String(r.user?.id))).toBe(true)
+  })
+
+  it('GET .../tipps/{community}/calculations -> every field is a map by user id', async () => {
+    const raw = (await live('raw GET .../calculations', () =>
+      request(`/v2/gps/${C}/${S}/${G}/sessions/${SES}/tipps/${COM}/calculations`),
+    )) as { pointsByPosition?: Record<string, unknown>; totalHits?: unknown }
+    expect(typeof raw.totalHits, 'The API now sends a flat object: README «calculations»').toBe(
+      'object',
+    )
+    const calc = await live('ScoreCalculations GET .../calculations', () =>
+      gpsApi.getCalculations(C, S, G, SES, COM, Number(userId)),
+    )
+    expect(calc).toBeDefined()
+  })
+
+  it('GET /v2/communities/{id}/members -> CommunityUser (`user`, `isUserInCommunity`)', async () => {
+    const raw = (await live('raw members', () =>
+      request(`/v2/communities/${COM}/members`),
+    )) as Record<string, unknown>[]
+    expect(raw.length).toBeGreaterThan(0)
+    expect(raw[0]).toHaveProperty('user.id')
+    expect(raw[0]).toHaveProperty('isUserInCommunity')
+  })
+
+  it('GET /v2/rulesets/{ruleset}/usages -> a list of communities (not a count)', async () => {
+    const list = await live('raw usages', () => catalogApi.listRulesets())
+    const raw = await request(`/v2/rulesets/${list[0]!.id}/usages`)
+    expect(Array.isArray(raw)).toBe(true)
+  })
+
+  it('the community rule set resolves (spec route is 404: falls back to defaultRuleSet)', async () => {
+    const rs = await live('RuleSetSchema community ruleset', () =>
+      catalogApi.getCommunityRuleset(COM, C, S),
+    )
+    expect(rs.id).toBeDefined()
+  })
+
+  it('GET /v2/user/me -> the time zone comes from preferences[time-zone-id]', async () => {
+    const raw = (await request('/v2/user/me')) as { preferences?: Record<string, unknown> }
+    const me = await userApi.getMe()
+    if (typeof raw.preferences?.['time-zone-id'] === 'string') {
+      expect(me.timeZone).toBe(raw.preferences['time-zone-id'])
+    }
+  })
+
   // §24.7: the backend still sends the `stadingsByHits` typo; tell us when it is fixed.
   it('points still carry the `stadingsByHits` typo (§24.7)', async () => {
     const raw = await live('raw points', () => request(`/v2/communities/${COM}/${C}/${S}/points`))
-    const rows = raw as Record<string, unknown>[]
+    const rows = Object.values(raw as Record<string, Record<string, unknown>[]>).flat()
     const row = rows.find((r) => 'stadingsByHits' in r || 'standingsByHits' in r)
     if (!row) return // empty season: nothing to observe
     expect(

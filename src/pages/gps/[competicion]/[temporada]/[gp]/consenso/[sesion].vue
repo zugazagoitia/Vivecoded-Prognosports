@@ -35,6 +35,7 @@ import {
   useSessionTipps,
   type GpArgs,
 } from '@/queries/gp'
+import { useCommunityMembers } from '@/queries/community'
 import { useCommunityStore } from '@/stores/community'
 import { useSessionStore } from '@/stores/session'
 import { isClosed } from '@/utils/dates'
@@ -90,10 +91,16 @@ const gridSession = computed(() => gridSessionFor(sessions.value, session.value)
 const grid = useSessionGrid(args, () => gridSession.value?.id)
 const results = useSessionResults(args, sessionId, visible)
 const tipps = useSessionTipps(args, sessionId, visible)
+const members = useCommunityMembers(
+  () => community.activeId ?? '',
+  () => visible.value,
+)
+const names = computed(() => new Map((members.data.value ?? []).map((m) => [m.id, m.username])))
 
 const c = useConsensus({
   tipps: () => (visible.value ? tipps.data.value : undefined),
   mine: () => tipps.mine.value,
+  names: () => names.value,
   grid: () => (gridSession.value ? grid.data.value : undefined),
   results: () => (visible.value ? results.data.value : undefined),
   resetKey: sessionId,

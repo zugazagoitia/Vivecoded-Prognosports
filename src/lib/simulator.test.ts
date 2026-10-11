@@ -174,8 +174,8 @@ describe('buildCalcRequest', () => {
   it('numbers the positions from 1', () => {
     expect(buildCalcRequest([7, 9])).toEqual({
       results: [
-        { position: 1, driver: { id: 7 } },
-        { position: 2, driver: { id: 9 } },
+        { position: 1, driver: 7 },
+        { position: 2, driver: 9 },
       ],
     })
   })

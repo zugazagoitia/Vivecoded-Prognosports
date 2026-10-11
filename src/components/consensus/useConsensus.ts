@@ -52,6 +52,8 @@ export interface ConsensusInput {
   grid: MaybeRefOrGetter<readonly StartGridPosition[] | undefined>
   /** Official results, when published. */
   results: MaybeRefOrGetter<readonly RaceResult[] | undefined>
+  /** Usernames by user id (the real `tipps` rows carry only the id). */
+  names?: MaybeRefOrGetter<ReadonlyMap<number, string> | undefined>
   /** Resets the selection when it changes (session id). */
   resetKey: MaybeRefOrGetter<unknown>
 }
@@ -193,7 +195,7 @@ export function useConsensus(input: ConsensusInput) {
 
   // --- curiosities ---
   const top = computed(() => tally(predictions.value, 1, order.value)[0])
-  const original = computed(() => originalBet(predictions.value, order.value))
+  const original = computed(() => originalBet(predictions.value, order.value, toValue(input.names)))
   const agree = computed(() =>
     mineByPosition.value.size
       ? agreePct(mineByPosition.value, topByPosition.value, n.value)

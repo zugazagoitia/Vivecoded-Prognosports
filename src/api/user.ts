@@ -71,6 +71,10 @@ export const getUserCumulatedPoints = (
   signal?: AbortSignal,
 ) => request(`${scope(user, community, competition, season)}/cummulatedpoints`, { signal })
 
+/**
+ * Real answer: a map `{ "<GP name>": points }` (the spec says `UserPoints[]`). Not used by any
+ * screen yet; the schema accepts both.
+ */
 export const getUserPoints = (
   user: string | number,
   community: string | number,
@@ -80,7 +84,7 @@ export const getUserPoints = (
 ) =>
   requestParsed(
     `${scope(user, community, competition, season)}/points`,
-    z.array(UserPointsSchema),
+    z.union([z.array(UserPointsSchema), z.record(z.string(), z.number())]),
     { signal },
   )
 

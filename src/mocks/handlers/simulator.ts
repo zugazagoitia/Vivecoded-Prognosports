@@ -8,7 +8,7 @@ export const simulatorHandlers = [
     '*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community/calculations',
     async ({ params, request }) => {
       const body = (await request.json()) as {
-        results?: { position: number; driver: { id: number } }[]
+        results?: { position: number; driver: number }[]
       }
       return ok(simulatedCalculations(Number(params.session), body.results ?? []))
     },
