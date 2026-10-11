@@ -13,7 +13,7 @@ withDefaults(
     error?: string
     /** Leading icon (search field: `magnifying-glass`). */
     icon?: IconName
-    type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url'
+    type?: 'text' | 'email' | 'password' | 'search' | 'tel' | 'url' | 'date'
   }>(),
   { type: 'text' },
 )

@@ -26,6 +26,9 @@ import {
   faUpload,
   faCloudBolt,
   faCopy,
+  faDesktop,
+  faMobileScreen,
+  faTabletScreenButton,
   faEye,
   faEyeSlash,
   faFlag,
@@ -149,6 +152,9 @@ export const MATERIAL_TO_FA = {
   lock_reset: 'unlock-keyhole',
   mark_email_read: 'envelope-circle-check',
   upload: 'upload',
+  desktop_windows: 'desktop',
+  smartphone: 'mobile-screen',
+  tablet: 'tablet-screen-button',
 } as const
 
 /** Registry: only the icons listed here are bundled (per-icon import, no full set). */
@@ -180,6 +186,9 @@ const REGISTRY: Record<string, IconDefinition> = {
   upload: faUpload,
   'cloud-bolt': faCloudBolt,
   copy: faCopy,
+  desktop: faDesktop,
+  'mobile-screen': faMobileScreen,
+  'tablet-screen-button': faTabletScreenButton,
   eye: faEye,
   'eye-slash': faEyeSlash,
   flag: faFlag,

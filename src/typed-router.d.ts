@@ -74,6 +74,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/ajustes': RouteRecordInfo<
+      '/ajustes',
+      '/ajustes',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/circuits/': RouteRecordInfo<
       '/circuits/',
       '/circuits',
@@ -384,6 +391,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/admin/gps.vue': {
       routes:
         | '/admin/gps'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/ajustes.vue': {
+      routes:
+        | '/ajustes'
       views:
         | never
       pathParamNames:
