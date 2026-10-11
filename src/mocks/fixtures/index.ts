@@ -40,6 +40,22 @@ export function mockUser(overrides: Partial<UserInput> = {}): UserInput {
   })
 }
 
+/**
+ * A user as the real API sends it (snake_case `verified_at`, `time_zone`...), for the mocked
+ * `/user` endpoints: the fixtures hold the app model, the wire is what the app must parse.
+ */
+export function toWireUser(u: UserInput): Record<string, unknown> {
+  const { verified, timeZone, lastActivity, hasProfileImage, currentCommunity, ...rest } = u
+  return {
+    ...rest,
+    verified_at: verified ?? null,
+    time_zone: timeZone,
+    last_activity: lastActivity,
+    has_profile_image: hasProfileImage,
+    current_community: currentCommunity,
+  }
+}
+
 const NAMES = [
   'ana',
   'beto',

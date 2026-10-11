@@ -10,6 +10,7 @@ import {
   MOCK_UNVERIFIED_TOKEN,
   MOCK_VERIFY_CODE,
   season,
+  toWireUser,
   users,
 } from '../../src/mocks/fixtures'
 import {
@@ -268,13 +269,19 @@ export async function mockApi(page: Page): Promise<void> {
     }
     if (method === 'GET' && path === '/user/me') {
       if (unverifiedSession) {
-        return json(route, 200, {
-          ...users[0],
-          email: 'nuevo@example.com',
-          verified: verified ? users[0]!.verified : null,
-        })
+        return json(
+          route,
+          200,
+          toWireUser({
+            ...users[0]!,
+            email: 'nuevo@example.com',
+            verified: verified ? users[0]!.verified : null,
+          }),
+        )
       }
-      return authed ? json(route, 200, users[0]) : json(route, 401, null, 'Tu sesión ha caducado.')
+      return authed
+        ? json(route, 200, toWireUser(users[0]!))
+        : json(route, 401, null, 'Tu sesión ha caducado.')
     }
     if (method === 'GET' && /^\/user\/[^/]+\/communities$/.test(path)) {
       return json(route, 200, unverifiedSession ? [] : [community])

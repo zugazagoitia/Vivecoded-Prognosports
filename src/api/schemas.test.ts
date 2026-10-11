@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { CommunityDetailSchema, CommunitySchema, GrandPrixSchema, RuleSetSchema } from './schemas'
+import {
+  CommunityDetailSchema,
+  CommunitySchema,
+  GrandPrixSchema,
+  RuleSetSchema,
+  UserSchema,
+} from './schemas'
 
 const ruleSet = {
   id: 1,
@@ -18,6 +24,23 @@ describe('real API shapes', () => {
     const pub = RuleSetSchema.parse({ ...ruleSet, isPublic: undefined, public: false })
     expect(pub.public).toBe(false)
     expect(RuleSetSchema.safeParse({ id: 1 }).success).toBe(false)
+  })
+  it('User: verified_at (real API) and verified both map to verified', () => {
+    const real = UserSchema.parse({
+      id: 1,
+      username: 'a',
+      verified_at: '2026-10-10T08:53:41Z',
+      last_activity: '2026-10-11T00:00:00Z',
+      time_zone: 'Europe/Madrid',
+    })
+    expect(real).toMatchObject({
+      verified: '2026-10-10T08:53:41Z',
+      lastActivity: '2026-10-11T00:00:00Z',
+      timeZone: 'Europe/Madrid',
+    })
+    expect(real).not.toHaveProperty('verified_at')
+    expect(UserSchema.parse({ id: 1, username: 'a', verified: 'x' }).verified).toBe('x')
+    expect(UserSchema.parse({ id: 1, username: 'a' }).verified).toBeUndefined()
   })
   it('Community: snake_case is normalised, camelCase still accepted', () => {
     const base = { name: 'P', open: false, defaultRuleSet: ruleSet }
