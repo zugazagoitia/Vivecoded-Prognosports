@@ -31,7 +31,13 @@ export const useSessionStore = defineStore('session', () => {
    * as signed in.
    */
   const isSignedIn = computed(() => !!token.value && !(user.value && !user.value.verified))
-  const isAdmin = computed(() => user.value?.rank?.admin === true)
+  /**
+   * The API does not serialise `rank.admin` (spec says required); only `rank.name`. Accept both until
+   * the backend is aligned (see src/api/README.md).
+   */
+  const isAdmin = computed(
+    () => user.value?.rank?.admin === true || user.value?.rank?.name?.toLowerCase() === 'admin',
+  )
 
   /** Drops token + user (no cache clearing; see `clearAll`). */
   function reset(): void {

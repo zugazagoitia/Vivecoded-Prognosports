@@ -86,6 +86,19 @@ describe('session store', () => {
     expect(reset).toHaveBeenCalled()
   })
 
+  it.each([
+    [{ id: 2, name: 'admin' }, true],
+    [{ id: 2, name: 'Admin' }, true],
+    [{ id: 2, name: 'x', admin: true }, true],
+    [{ id: 1, name: 'Miembro' }, false],
+  ])('derives isAdmin from rank %j', async (rank, expected) => {
+    vi.spyOn(userApi, 'getMe').mockResolvedValue({ id: 1, username: 'a', rank } as never)
+    localStorage.setItem(STORAGE_KEYS.token, 't')
+    const s = useSessionStore()
+    await s.ensureLoaded()
+    expect(s.isAdmin).toBe(expected)
+  })
+
   it('reads the token at startup and drops it when /me answers 401', async () => {
     localStorage.setItem(STORAGE_KEYS.token, 'old')
     vi.spyOn(userApi, 'getMe').mockRejectedValue(new ApiError(401, undefined, 'x'))

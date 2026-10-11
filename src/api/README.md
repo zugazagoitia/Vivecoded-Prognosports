@@ -73,3 +73,5 @@ Solo la forma de los campos; las escrituras viven en `src/api/admin.ts` y nunca 
 - `User.rank` del administrador local trae solo `{ id, name, color }`, sin `admin`: el guard `admin` del frontend (`rank.admin === true`) no lo reconocería. Por confirmar si en producción llega `admin`.
 - `RuleSet.data` va indexado por la **clave** de sesión (1 Q, 2 R, 3 SQ, 4 SR); `POST /v2/rulesets` guarda `data` pero devuelve `isPublic` falso aunque se envíe `true`.
 - El `code` de la competición local es el nombre largo, no `f1`: el frontend usa `f1` (válido en producción).
+
+- `GET /v2/user/me`: `rank` llega como `{ id, name, color }` sin el booleano `admin` que la spec marca como requerido (comprobado en el backend local con un admin real; en producción un miembro devuelve `name: "Miembro"`). El frontend considera admin `rank.admin === true` o `rank.name` igual a «admin» (sin distinguir mayúsculas), `isAdmin` en `src/stores/session.ts`. Se podrá simplificar cuando el backend serialice `admin`.
