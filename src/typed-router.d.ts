@@ -58,7 +58,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '/admin/'
-      | '/admin/gps'
+      | '/admin/calculos'
+      | '/admin/circuitos/'
+      | '/admin/circuitos/[circuit]'
+      | '/admin/circuitos/nuevo'
+      | '/admin/comunidades'
+      | '/admin/gps/'
+      | '/admin/gps/[competicion]/[temporada]/[gp]/'
+      | '/admin/gps/[competicion]/[temporada]/[gp]/pilotos'
+      | '/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]]'
+      | '/admin/gps/nuevo'
+      | '/admin/notificaciones'
+      | '/admin/pilotos'
+      | '/admin/reglas/[[ruleset]]'
+      | '/admin/usuarios'
     >,
     '/admin/': RouteRecordInfo<
       '/admin/',
@@ -67,9 +80,100 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/admin/gps': RouteRecordInfo<
+    '/admin/calculos': RouteRecordInfo<
+      '/admin/calculos',
+      '/admin/calculos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/circuitos/': RouteRecordInfo<
+      '/admin/circuitos/',
+      '/admin/circuitos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/circuitos/[circuit]': RouteRecordInfo<
+      '/admin/circuitos/[circuit]',
+      '/admin/circuitos/:circuit',
+      { circuit: ParamValue<true> },
+      { circuit: ParamValue<false> },
+      | never
+    >,
+    '/admin/circuitos/nuevo': RouteRecordInfo<
+      '/admin/circuitos/nuevo',
+      '/admin/circuitos/nuevo',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/comunidades': RouteRecordInfo<
+      '/admin/comunidades',
+      '/admin/comunidades',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/gps/': RouteRecordInfo<
+      '/admin/gps/',
       '/admin/gps',
-      '/admin/gps',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/gps/[competicion]/[temporada]/[gp]/': RouteRecordInfo<
+      '/admin/gps/[competicion]/[temporada]/[gp]/',
+      '/admin/gps/:competicion/:temporada/:gp',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/admin/gps/[competicion]/[temporada]/[gp]/pilotos': RouteRecordInfo<
+      '/admin/gps/[competicion]/[temporada]/[gp]/pilotos',
+      '/admin/gps/:competicion/:temporada/:gp/pilotos',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]]': RouteRecordInfo<
+      '/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]]',
+      '/admin/gps/:competicion/:temporada/:gp/sesiones/:tab?',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, tab?: ParamValueZeroOrOne<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, tab?: ParamValueZeroOrOne<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/admin/gps/nuevo': RouteRecordInfo<
+      '/admin/gps/nuevo',
+      '/admin/gps/nuevo',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/notificaciones': RouteRecordInfo<
+      '/admin/notificaciones',
+      '/admin/notificaciones',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/pilotos': RouteRecordInfo<
+      '/admin/pilotos',
+      '/admin/pilotos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/reglas/[[ruleset]]': RouteRecordInfo<
+      '/admin/reglas/[[ruleset]]',
+      '/admin/reglas/:ruleset?',
+      { ruleset?: ParamValueZeroOrOne<true> },
+      { ruleset?: ParamValueZeroOrOne<false> },
+      | never
+    >,
+    '/admin/usuarios': RouteRecordInfo<
+      '/admin/usuarios',
+      '/admin/usuarios',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -374,7 +478,20 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/admin'
         | '/admin/'
-        | '/admin/gps'
+        | '/admin/calculos'
+        | '/admin/circuitos/'
+        | '/admin/circuitos/[circuit]'
+        | '/admin/circuitos/nuevo'
+        | '/admin/comunidades'
+        | '/admin/gps/'
+        | '/admin/gps/[competicion]/[temporada]/[gp]/'
+        | '/admin/gps/[competicion]/[temporada]/[gp]/pilotos'
+        | '/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]]'
+        | '/admin/gps/nuevo'
+        | '/admin/notificaciones'
+        | '/admin/pilotos'
+        | '/admin/reglas/[[ruleset]]'
+        | '/admin/usuarios'
       views:
         | 'default'
       pathParamNames:
@@ -388,9 +505,113 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'src/pages/admin/gps.vue': {
+    'src/pages/admin/calculos.vue': {
       routes:
-        | '/admin/gps'
+        | '/admin/calculos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/circuitos/index.vue': {
+      routes:
+        | '/admin/circuitos/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/circuitos/[circuit].vue': {
+      routes:
+        | '/admin/circuitos/[circuit]'
+      views:
+        | never
+      pathParamNames:
+        | 'circuit'
+    }
+    'src/pages/admin/circuitos/nuevo.vue': {
+      routes:
+        | '/admin/circuitos/nuevo'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/comunidades.vue': {
+      routes:
+        | '/admin/comunidades'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/gps/index.vue': {
+      routes:
+        | '/admin/gps/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/gps/[competicion]/[temporada]/[gp]/index.vue': {
+      routes:
+        | '/admin/gps/[competicion]/[temporada]/[gp]/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/gps/[competicion]/[temporada]/[gp]/pilotos.vue': {
+      routes:
+        | '/admin/gps/[competicion]/[temporada]/[gp]/pilotos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]].vue': {
+      routes:
+        | '/admin/gps/[competicion]/[temporada]/[gp]/sesiones/[[tab]]'
+      views:
+        | never
+      pathParamNames:
+        | 'tab'
+    }
+    'src/pages/admin/gps/nuevo.vue': {
+      routes:
+        | '/admin/gps/nuevo'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/notificaciones.vue': {
+      routes:
+        | '/admin/notificaciones'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/pilotos.vue': {
+      routes:
+        | '/admin/pilotos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/admin/reglas/[[ruleset]].vue': {
+      routes:
+        | '/admin/reglas/[[ruleset]]'
+      views:
+        | never
+      pathParamNames:
+        | 'ruleset'
+    }
+    'src/pages/admin/usuarios.vue': {
+      routes:
+        | '/admin/usuarios'
       views:
         | never
       pathParamNames:
