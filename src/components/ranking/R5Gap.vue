@@ -169,7 +169,7 @@ const PR = 150
         <span class="text-muted pt-1.5 text-[11px]">{{ t('ranking.r5.hint') }}</span>
       </aside>
     </div>
-    <div v-else class="tw">
+    <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{

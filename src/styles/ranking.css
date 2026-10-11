@@ -92,3 +92,8 @@
 .rk-tone-rest {
   color: var(--color-series-rest);
 }
+
+/* Scroll containers clip their visually hidden text (position: absolute) too. */
+.tw {
+  position: relative;
+}

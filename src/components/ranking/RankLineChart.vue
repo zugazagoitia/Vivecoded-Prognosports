@@ -112,7 +112,7 @@ const zeroY = computed(() => y(0))
 </script>
 
 <template>
-  <div class="rk-scroll">
+  <div class="rk-scroll" tabindex="0" role="region" :aria-label="label">
     <div class="rk-inner" :style="{ minWidth: `${minWidth}px` }">
       <svg
         class="rk-svg"
@@ -254,25 +254,27 @@ const zeroY = computed(() => y(0))
       <slot name="below" />
     </div>
 
-    <table class="sr-only">
-      <caption>
-        {{
-          label
-        }}
-      </caption>
-      <thead>
-        <tr>
-          <th scope="col">{{ firstColumn }}</th>
-          <th v-for="(c, i) in xCodes" :key="c + i" scope="col">{{ xNames?.[i] ?? c }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="s in series" :key="s.id">
-          <th scope="row">{{ s.label }}</th>
-          <td v-for="(v, i) in s.values" :key="i">{{ cell(v) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="sr-only">
+      <table>
+        <caption>
+          {{
+            label
+          }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">{{ firstColumn }}</th>
+            <th v-for="(c, i) in xCodes" :key="c + i" scope="col">{{ xNames?.[i] ?? c }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="s in series" :key="s.id">
+            <th scope="row">{{ s.label }}</th>
+            <td v-for="(v, i) in s.values" :key="i">{{ cell(v) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 

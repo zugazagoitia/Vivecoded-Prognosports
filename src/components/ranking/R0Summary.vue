@@ -215,7 +215,7 @@ const ticks = computed(() => {
             {{ t('ranking.r0.seeFull') }}
           </RouterLink>
         </template>
-        <div class="tw">
+        <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
           <table class="w-full border-collapse text-sm tabular-nums">
             <caption class="sr-only">
               {{

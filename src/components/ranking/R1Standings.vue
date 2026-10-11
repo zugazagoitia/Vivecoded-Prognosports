@@ -97,7 +97,7 @@ const barY = (v: number) => 20 + (1 - v / max.value) * (H - 50)
     <template #controls>
       <PCheckbox v-model="near" :label="t('ranking.r1.near')" />
     </template>
-    <div class="tw">
+    <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{
@@ -301,27 +301,29 @@ const barY = (v: number) => 20 + (1 - v / max.value) * (H - 50)
                     />
                   </g>
                 </svg>
-                <table class="sr-only">
-                  <caption>
-                    {{
-                      t('ranking.r1.expAria', { name: p.name })
-                    }}
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">{{ t('ranking.gp') }}</th>
-                      <th scope="col">{{ t('ranking.cols.points') }}</th>
-                      <th scope="col">{{ t('ranking.r1.communityAvg') }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(g, i) in model.played" :key="g.id">
-                      <th scope="row">{{ g.name }}</th>
-                      <td>{{ p.pts[i] }}</td>
-                      <td>{{ formatDec(gpAverage(model, i)) }}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div class="sr-only">
+                  <table>
+                    <caption>
+                      {{
+                        t('ranking.r1.expAria', { name: p.name })
+                      }}
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">{{ t('ranking.gp') }}</th>
+                        <th scope="col">{{ t('ranking.cols.points') }}</th>
+                        <th scope="col">{{ t('ranking.r1.communityAvg') }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(g, i) in model.played" :key="g.id">
+                        <th scope="row">{{ g.name }}</th>
+                        <td>{{ p.pts[i] }}</td>
+                        <td>{{ formatDec(gpAverage(model, i)) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </td>
             </tr>
           </template>

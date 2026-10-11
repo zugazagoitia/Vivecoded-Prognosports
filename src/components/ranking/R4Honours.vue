@@ -125,7 +125,7 @@ const cardLabel = (c: (typeof cards.value)[number]) =>
         <div class="flex min-w-0 flex-col gap-2">
           <b class="text-heading text-sm">{{ t('ranking.r4.medals') }}</b>
           <p v-if="!medals.length" class="text-muted text-sm">{{ t('ranking.r4.medalsEmpty') }}</p>
-          <div v-else class="tw">
+          <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
             <table class="w-full border-collapse text-sm tabular-nums">
               <caption class="sr-only">
                 {{
@@ -240,7 +240,7 @@ const cardLabel = (c: (typeof cards.value)[number]) =>
                 </g>
               </template>
             </svg>
-            <ul class="m-0 list-none p-0">
+            <ul class="m-0 list-none p-0" aria-hidden="true">
               <li
                 v-for="id in labelIds"
                 :key="id"
@@ -250,43 +250,50 @@ const cardLabel = (c: (typeof cards.value)[number]) =>
                   top: `${(y(posIn(id, last)!) / H) * 100}%`,
                 }"
               >
-                <span v-if="id === me" class="text-heading text-xs font-bold">{{
-                  t('ranking.you')
-                }}</span>
-                <button
-                  v-else
-                  type="button"
-                  :aria-pressed="hl.includes(id)"
-                  :class="[
-                    'text-muted hover:bg-surface-hover aria-pressed:text-heading min-h-6 cursor-pointer rounded px-1 text-xs aria-pressed:font-bold',
-                    focusRing,
-                  ]"
-                  @click="toggle(id)"
+                <span
+                  class="text-xs"
+                  :class="id === me || hl.includes(id) ? 'text-heading font-bold' : 'text-muted'"
+                  >{{ id === me ? t('ranking.you') : firstName(nameOf(id)) }}</span
                 >
-                  {{ firstName(nameOf(id)) }}
-                </button>
               </li>
             </ul>
           </div>
-          <table class="sr-only">
-            <caption>
-              {{
-                t('ranking.r4.slope')
-              }}
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">{{ t('ranking.cols.player') }}</th>
-                <th v-for="c in cols" :key="c.seasonId" scope="col">{{ c.label }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="id in ids" :key="id">
-                <th scope="row">{{ nameOf(id) }}</th>
-                <td v-for="(c, ci) in cols" :key="c.seasonId">{{ posIn(id, ci) ?? '—' }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="flex flex-wrap gap-2" role="group" :aria-label="t('ranking.r4.pickPlayer')">
+            <button
+              v-for="id in labelIds.filter((i) => i !== me)"
+              :key="id"
+              type="button"
+              :aria-pressed="hl.includes(id)"
+              :class="[
+                'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 text-[13px] aria-pressed:font-semibold',
+                focusRing,
+              ]"
+              @click="toggle(id)"
+            >
+              {{ nameOf(id) }}
+            </button>
+          </div>
+          <div class="sr-only">
+            <table>
+              <caption>
+                {{
+                  t('ranking.r4.slope')
+                }}
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">{{ t('ranking.cols.player') }}</th>
+                  <th v-for="c in cols" :key="c.seasonId" scope="col">{{ c.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="id in ids" :key="id">
+                  <th scope="row">{{ nameOf(id) }}</th>
+                  <td v-for="(c, ci) in cols" :key="c.seasonId">{{ posIn(id, ci) ?? '—' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </template>

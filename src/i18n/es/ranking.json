@@ -200,7 +200,8 @@
       "slopeHint": " · pulsa un nombre para resaltarlo",
       "f1": "F1 {season}",
       "cardPts": "{pts} pts · {margin}",
-      "podiumNames": "2.º {second} · 3.º {third}"
+      "podiumNames": "2.º {second} · 3.º {third}",
+      "pickPlayer": "Resaltar jugador"
     },
     "r5": {
       "mode": "Modo",
@@ -279,7 +280,8 @@
         "worst": "Peor GP",
         "n": "GP disputados"
       },
-      "sigma": "σ {v}"
+      "sigma": "σ {v}",
+      "pickPlayer": "Elegir jugador"
     },
     "r8": {
       "title": "Cara a cara",
@@ -473,6 +475,7 @@
     "bandBehind": "POR DETRÁS DE TI",
     "mark": "▼",
     "axis": "Elegir Gran Premio",
-    "axisAfter": "Ver tras {name}"
+    "axisAfter": "Ver tras {name}",
+    "scroll": "Tabla desplazable"
   }
 }

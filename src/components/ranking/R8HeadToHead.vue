@@ -125,7 +125,7 @@ const areaPts = computed(
     <div v-if="!table" class="grid items-start gap-7 min-[1001px]:grid-cols-[minmax(0,1fr)_340px]">
       <div class="flex min-w-0 flex-col gap-2">
         <b class="text-heading text-sm">{{ t('ranking.r8.barsTitle') }}</b>
-        <div class="tw">
+        <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
           <svg
             viewBox="0 0 800 300"
             class="block h-auto w-full min-w-[560px]"
@@ -170,7 +170,7 @@ const areaPts = computed(
           </svg>
         </div>
         <b class="text-heading mt-2 text-sm">{{ t('ranking.r8.cumTitle') }}</b>
-        <div class="tw">
+        <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
           <svg
             viewBox="0 0 800 160"
             class="block h-auto w-full min-w-[560px]"
@@ -228,7 +228,7 @@ const areaPts = computed(
         </div>
       </div>
     </div>
-    <div v-else class="tw">
+    <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{

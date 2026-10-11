@@ -116,7 +116,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
       </li>
     </ul>
 
-    <div v-if="table" class="tw">
+    <div v-if="table" class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{
@@ -176,7 +176,13 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
       </li>
     </ul>
 
-    <div v-else-if="view === 'grid'" class="tw">
+    <div
+      v-else-if="view === 'grid'"
+      class="tw"
+      tabindex="0"
+      role="region"
+      :aria-label="t('ranking.scroll')"
+    >
       <div
         class="grid min-w-[560px] grid-cols-[110px_repeat(4,minmax(0,1fr))] items-center gap-x-2 gap-y-1 min-[641px]:grid-cols-[160px_repeat(4,minmax(0,1fr))]"
       >

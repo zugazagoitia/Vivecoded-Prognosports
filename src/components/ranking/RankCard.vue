@@ -33,7 +33,10 @@ const id = `rk-${useId()}`
         </div>
         <p v-if="subtitle" class="text-muted text-sm">{{ subtitle }}</p>
       </div>
-      <div v-if="$slots.controls" class="flex flex-wrap items-center gap-2">
+      <div
+        v-if="$slots.controls"
+        class="flex max-w-full min-w-0 flex-wrap items-center gap-2 [&>*]:max-w-full [&>*]:overflow-x-auto"
+      >
         <slot name="controls" />
       </div>
     </header>

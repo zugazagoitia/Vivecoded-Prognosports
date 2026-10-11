@@ -129,27 +129,43 @@ const pointClass = (s: (typeof stats.value)[number]) =>
           :key="s.p.id"
           class="absolute flex -translate-x-1/2 -translate-y-1/2 items-center"
           :style="{ left: `${xPct(s.mean)}%`, top: `${yPct(s.sd)}%` }"
+          aria-hidden="true"
         >
-          <button
-            type="button"
-            :aria-label="ariaPoint(s)"
-            :aria-pressed="s.p.id === selected"
+          <!-- Purely visual: the player chips below select (keyboard, touch and assistive tech). -->
+          <span
             :class="[
-              'border-surface cursor-pointer rounded-full border-2',
+              'border-surface rounded-full border-2',
               pointClass(s),
               s.p.id === selected ? 'ring-focus-ring ring-[3px]' : '',
-              focusRing,
             ]"
-            @click="selected = s.p.id"
           />
           <span
             class="text-body ml-3 text-xs whitespace-nowrap"
             :class="{ 'text-heading font-bold': s.p.you || s.p.id === selected }"
-            aria-hidden="true"
           >
             {{ s.p.you ? t('ranking.you') : firstName(s.name) }}
           </span>
         </div>
+      </div>
+      <div
+        class="flex flex-wrap gap-2 min-[1001px]:col-span-2"
+        role="group"
+        :aria-label="t('ranking.r7.pickPlayer')"
+      >
+        <button
+          v-for="s in stats"
+          :key="s.p.id"
+          type="button"
+          :aria-label="ariaPoint(s)"
+          :aria-pressed="s.p.id === selected"
+          :class="[
+            'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 text-[13px] aria-pressed:font-semibold',
+            focusRing,
+          ]"
+          @click="selected = s.p.id"
+        >
+          {{ s.p.you ? t('ranking.you') : s.name }}
+        </button>
       </div>
       <aside
         v-if="current"
@@ -180,7 +196,7 @@ const pointClass = (s: (typeof stats.value)[number]) =>
         <p class="text-muted text-xs">{{ t('ranking.r7.note') }}</p>
       </aside>
     </div>
-    <div v-else class="tw">
+    <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{

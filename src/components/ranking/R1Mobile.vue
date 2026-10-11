@@ -104,7 +104,6 @@ const selectClass = `${controlBase} md:min-h-11`
 
 <template>
   <div class="flex flex-col gap-4">
-    <h1 class="sr-only">{{ t('ranking.title') }}</h1>
     <div class="flex gap-2">
       <div class="min-w-0 flex-1">
         <select v-model="communityId" :aria-label="t('ranking.community')" :class="selectClass">
@@ -135,9 +134,7 @@ const selectClass = `${controlBase} md:min-h-11`
       }}</span>
       <div class="flex min-w-0 flex-1 flex-col">
         <b>{{ t('ranking.r0.position') }}</b>
-        <span class="text-sm opacity-90">{{
-          t('ranking.r1m.mine', { gap: gap(me), move: moveText })
-        }}</span>
+        <span class="text-sm">{{ t('ranking.r1m.mine', { gap: gap(me), move: moveText }) }}</span>
       </div>
       <b class="text-lg tabular-nums">{{ me.total }}</b>
     </div>
@@ -271,7 +268,7 @@ const selectClass = `${controlBase} md:min-h-11`
     </section>
 
     <section v-else class="bg-surface ring-card-ring overflow-hidden rounded-lg ring-1">
-      <div class="tw">
+      <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <table class="w-full border-collapse text-sm tabular-nums">
           <caption class="sr-only">
             {{

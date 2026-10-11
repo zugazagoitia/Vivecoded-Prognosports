@@ -121,7 +121,7 @@ const title = computed(() => view.value)
         v-for="(p, i) in players"
         :key="p.id"
         class="grid min-h-[34px] grid-cols-[28px_110px_minmax(0,1fr)_100px] items-center gap-2.5 min-[641px]:grid-cols-[30px_160px_minmax(0,1fr)_120px]"
-        :class="[state(i, p.total) === 'out' ? 'opacity-45' : '']"
+        :class="[state(i, p.total) === 'out' ? 'text-muted' : '']"
         :data-state="state(i, p.total)"
       >
         <b class="text-heading text-right tabular-nums">{{ p.pos }}</b>
@@ -175,7 +175,13 @@ const title = computed(() => view.value)
     </ol>
 
     <div v-else-if="view === 'proj'" class="flex flex-col gap-2">
-      <div v-if="n && pending.length" class="tw">
+      <div
+        v-if="n && pending.length"
+        class="tw"
+        tabindex="0"
+        role="region"
+        :aria-label="t('ranking.scroll')"
+      >
         <svg
           :viewBox="`0 0 ${W} ${H}`"
           class="block h-auto w-full min-w-[640px]"
@@ -259,7 +265,7 @@ const title = computed(() => view.value)
         :text="t('ranking.r12.noProjText')"
       />
       <p class="text-muted text-xs">{{ t('ranking.r12.projNote') }}</p>
-      <div class="tw">
+      <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <table class="w-full border-collapse text-sm tabular-nums">
           <caption class="sr-only">
             {{
@@ -298,7 +304,7 @@ const title = computed(() => view.value)
         :title="t('ranking.r12.noNeedTitle')"
         :text="t('ranking.r12.noNeedText')"
       />
-      <div v-else class="tw">
+      <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <table class="w-full min-w-[640px] border-collapse text-sm tabular-nums">
           <caption class="sr-only">
             {{

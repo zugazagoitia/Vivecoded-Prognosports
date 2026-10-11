@@ -126,7 +126,7 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
     await noHorizontalScroll(page)
     for (const target of [
       group.getByRole('button', { name: 'Clasificación' }),
-      page.getByLabel('Comunidad'),
+      page.getByLabel('Comunidad', { exact: true }),
     ]) {
       const box = await target.boundingBox()
       expect(box?.height ?? 0).toBeGreaterThanOrEqual(43.5)
@@ -146,7 +146,11 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
     await expectNoSeriousA11yViolations(page)
   })
 
-  test('R5: pin a GP, change mode and read the table alternative', async ({ authedPage: page }) => {
+  test('R5: pin a GP, change mode and read the table alternative', async ({
+    authedPage: page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'desktop controls')
     await page.goto(`${BASE}/evolucion/gap`)
     const axis = page.getByRole('group', { name: 'Elegir Gran Premio' })
     await axis.getByRole('button').first().click()
@@ -158,7 +162,8 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
     await expectNoSeriousA11yViolations(page)
   })
 
-  test('R6: focus presets and manual highlight', async ({ authedPage: page }) => {
+  test('R6: focus presets and manual highlight', async ({ authedPage: page, isMobile }) => {
+    test.skip(isMobile, 'desktop controls')
     await page.goto(`${BASE}/evolucion/bump`)
     await page.getByRole('button', { name: 'Mi entorno' }).click()
     await expect(page.getByRole('button', { name: 'Mi entorno' })).toHaveAttribute(

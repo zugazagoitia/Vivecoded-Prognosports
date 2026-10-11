@@ -126,7 +126,7 @@ const barClass = (r: (typeof rows.value)[number]) =>
 
     <div v-if="!table" class="flex flex-col gap-2">
       <b class="text-heading text-sm">{{ title }}</b>
-      <div class="tw">
+      <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <svg
           :viewBox="`0 0 ${W} ${H}`"
           class="block h-auto w-full min-w-[640px]"
@@ -211,7 +211,7 @@ const barClass = (r: (typeof rows.value)[number]) =>
         <li>{{ t('ranking.r3.legend.won') }}</li>
       </ul>
     </div>
-    <div v-else class="tw">
+    <div v-else class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{

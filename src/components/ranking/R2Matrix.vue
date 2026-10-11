@@ -61,22 +61,28 @@ const legend = computed(() => legendFor(metric.value))
 
 <template>
   <RankCard :title="t('ranking.r2.title')" :subtitle="t('ranking.r2.subtitle')" :padded="false">
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 px-5 pt-4">
-      <div class="flex items-center gap-2">
+    <div class="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2 px-5 pt-4">
+      <div class="flex max-w-full min-w-0 flex-wrap items-center gap-2">
         <span class="text-muted text-xs font-semibold tracking-wide uppercase">{{
           t('ranking.r2.metric')
         }}</span>
         <SegmentedControl
           v-model="metric"
+          class="max-w-full overflow-x-auto"
           :options="metricOptions"
           :label="t('ranking.r2.metric')"
         />
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex max-w-full min-w-0 flex-wrap items-center gap-2">
         <span class="text-muted text-xs font-semibold tracking-wide uppercase">{{
           t('ranking.r2.color')
         }}</span>
-        <SegmentedControl v-model="color" :options="colorOptions" :label="t('ranking.r2.color')" />
+        <SegmentedControl
+          v-model="color"
+          class="max-w-full overflow-x-auto"
+          :options="colorOptions"
+          :label="t('ranking.r2.color')"
+        />
       </div>
     </div>
     <!-- Scrollable region: focusable so keyboard users can scroll it. -->
@@ -100,7 +106,6 @@ const legend = computed(() => legendFor(metric.value))
                 c.g === undefined ? t('ranking.r2.pendingTitle', { name: c.gp.name }) : c.gp.name
               "
               class="py-1.5"
-              :class="c.g === undefined ? 'opacity-70' : ''"
             >
               {{ c.gp.code }}
             </th>

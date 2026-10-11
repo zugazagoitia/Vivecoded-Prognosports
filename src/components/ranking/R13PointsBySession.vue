@@ -134,7 +134,7 @@ const cardTitle: Record<string, string> = { q: 'q', sp: 'sp', r: 'r', real: 'rea
     </ul>
 
     <template v-if="view === 'me' && me">
-      <div class="tw">
+      <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <svg
           :viewBox="`0 0 ${W} ${H}`"
           class="block h-auto w-full min-w-[640px]"
@@ -201,29 +201,31 @@ const cardTitle: Record<string, string> = { q: 'q', sp: 'sp', r: 'r', real: 'rea
           </g>
         </svg>
       </div>
-      <table class="sr-only">
-        <caption>
-          {{
-            t('ranking.r13.me.aria')
-          }}
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">{{ t('ranking.gp') }}</th>
-            <th v-for="p in PARTS_R13" :key="p" scope="col">{{ PART_LABEL[p] }}</th>
-            <th scope="col">{{ t('ranking.total') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="s in stacks" :key="s.gp.id">
-            <th scope="row">{{ s.gp.name }}</th>
-            <td v-for="p in PARTS_R13" :key="p">
-              {{ s.parts.find((x) => x.part === p)?.value ?? 0 }}
-            </td>
-            <td>{{ s.total }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="sr-only">
+        <table>
+          <caption>
+            {{
+              t('ranking.r13.me.aria')
+            }}
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ t('ranking.gp') }}</th>
+              <th v-for="p in PARTS_R13" :key="p" scope="col">{{ PART_LABEL[p] }}</th>
+              <th scope="col">{{ t('ranking.total') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="s in stacks" :key="s.gp.id">
+              <th scope="row">{{ s.gp.name }}</th>
+              <td v-for="p in PARTS_R13" :key="p">
+                {{ s.parts.find((x) => x.part === p)?.value ?? 0 }}
+              </td>
+              <td>{{ s.total }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </template>
 
     <ul v-else-if="view === 'share'" class="m-0 flex list-none flex-col gap-1 p-0">
@@ -245,7 +247,9 @@ const cardTitle: Record<string, string> = { q: 'q', sp: 'sp', r: 'r', real: 'rea
             :class="BG[x.part]"
             :style="{ width: `${x.pct}%` }"
             :title="`${PART_LABEL[x.part]}: ${x.value} ${t('ranking.pts')}`"
-            >{{ x.label }}</span
+            ><span v-if="x.label" class="rk-white rounded-sm bg-gray-900/70 px-1">{{
+              x.label
+            }}</span></span
           >
         </span>
         <b class="text-heading text-right tabular-nums">{{ s.total }}</b>

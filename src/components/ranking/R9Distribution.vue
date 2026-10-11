@@ -77,7 +77,7 @@ const title = computed(() => (view.value === 'hist' ? 'hist' : 'ridge'))
       </PButton>
     </template>
 
-    <div v-if="table" class="tw">
+    <div v-if="table" class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
       <table class="w-full border-collapse text-sm tabular-nums">
         <caption class="sr-only">
           {{
@@ -116,7 +116,7 @@ const title = computed(() => (view.value === 'hist' ? 'hist' : 'ridge'))
     </div>
 
     <div v-else-if="view === 'hist'" class="flex flex-col gap-2">
-      <div class="tw">
+      <div class="tw" tabindex="0" role="region" :aria-label="t('ranking.scroll')">
         <svg
           :viewBox="`0 0 ${W} ${H}`"
           class="block h-auto w-full min-w-[640px]"
