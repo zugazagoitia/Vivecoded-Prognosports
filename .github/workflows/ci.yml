@@ -189,6 +189,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # E2E solo bloquea en PR contra master (y en push a master): es la verificación previa a PRD.
+    # En el resto (PR a develop, push a develop) se ejecuta pero un fallo no bloquea `ci-ok`.
+    continue-on-error: ${{ github.base_ref != 'master' && github.ref != 'refs/heads/master' }}
     # Un job por proyecto de Playwright: el tiempo total pasa a ser el del más lento.
     strategy:
       fail-fast: false
