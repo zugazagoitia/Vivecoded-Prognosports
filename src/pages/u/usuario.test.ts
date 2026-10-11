@@ -55,7 +55,7 @@ describe('Profile of another user (U2)', () => {
 
   it('your own profile is not U2', async () => {
     await open('/u/ana')
-    expect(await screen.findByText('Este es tu propio perfil.')).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: 'ana' })).toBeTruthy()
     expect(screen.queryByTestId('duel-score')).toBeNull()
   })
 

@@ -125,11 +125,9 @@ describe('Mi perfil (U1) desktop', () => {
     )
   })
 
-  it('another user shows a notice instead of the own profile', async () => {
+  it('another user is the U2 screen, not the own profile', async () => {
     await open('/u/beto')
-    expect(
-      await screen.findByRole('heading', { name: 'Perfil de otro usuario', level: 3 }),
-    ).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: 'beto' })).toBeTruthy()
     expect(screen.queryByLabelText('Resumen de la temporada')).toBeNull()
   })
 })
