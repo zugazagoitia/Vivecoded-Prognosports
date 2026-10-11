@@ -15,6 +15,7 @@ import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import recover from './es/recover.json'
 import reset from './es/reset.json'
+import results from './es/results.json'
 import sessions from './es/sessions.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
@@ -47,6 +48,7 @@ export const i18n = createI18n({
       ...landing,
       ...recover,
       ...reset,
+      ...results,
       ...verify,
     },
   },

@@ -13,6 +13,7 @@ const fallback: Record<string, string> = {
   'route.gp': 'Gran Premio',
   'route.gps': 'Grandes Premios',
   'route.predict': 'Pronosticar',
+  'route.results': 'Resultados',
   'route.ranking': 'Clasificación',
   'route.circuits': 'Circuitos',
   'route.circuit': 'Circuito',

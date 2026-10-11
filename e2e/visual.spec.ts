@@ -54,6 +54,28 @@ test.describe('visual regression', () => {
         })
       })
 
+      test('resultados', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61`)
+        await expect(page.getByText('Resultado real', { exact: true })).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`resultados-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
+      test('resultados-desglose', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61?vista=desglose`)
+        await expect(page.getByText('Puntos de la sesión')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`resultados-desglose-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
         await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
