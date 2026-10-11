@@ -1,0 +1,66 @@
+{
+  "hit": {
+    "exact": "exacto",
+    "near": "a una posición",
+    "far": "a dos posiciones",
+    "miss": "fallo",
+    "points": "{n} punto | {n} puntos",
+    "hidden": "Oculto hasta que cierre la sesión",
+    "legend": {
+      "label": "Leyenda de aciertos",
+      "exact": "verde, exacto",
+      "near": "ámbar, a una posición",
+      "far": "azul, a dos",
+      "miss": "fallo, sin color"
+    }
+  },
+  "form": {
+    "label": "Últimos Grandes Premios",
+    "gp": "GP {n}",
+    "chip": "{gp}: {place}",
+    "won": "victoria",
+    "podium": "podio",
+    "up": "Sube {n} puesto | Sube {n} puestos",
+    "down": "Baja {n} puesto | Baja {n} puestos",
+    "same": "Sin cambios de puesto"
+  },
+  "slot": {
+    "emptyPrompt": "Pulsa para elegir piloto",
+    "emptyDrag": "Arrastra un piloto o pulsa para elegir",
+    "empty": "{place} vacío",
+    "filled": "{place} {driver}",
+    "remove": "Quitar a {driver} de {place}",
+    "moveUp": "Subir a {driver} un puesto",
+    "moveDown": "Bajar a {driver} un puesto",
+    "keys": "Intro elige, Supr quita, Alt y flechas reordenan"
+  },
+  "validation": {
+    "ok": "Correcto",
+    "warn": "Revisar",
+    "err": "Error"
+  },
+  "saveBar": {
+    "label": "Cambios sin guardar",
+    "changes": "Tienes {n} cambio sin guardar | Tienes {n} cambios sin guardar",
+    "discard": "Descartar",
+    "save": "Guardar cambios",
+    "saving": "Guardando..."
+  },
+  "leave": {
+    "title": "¿Salir sin guardar?",
+    "body": "Tienes cambios sin guardar. Si sales ahora se perderán.",
+    "stay": "Seguir editando",
+    "leave": "Descartar y salir"
+  },
+  "sheet": {
+    "close": "Cerrar selector"
+  },
+  "highlight": {
+    "label": "Resaltar",
+    "you": "Tú",
+    "top5": "Top 5",
+    "around": "Mi entorno",
+    "all": "Todos",
+    "locked": "{name}, siempre resaltado"
+  }
+}

@@ -9,6 +9,7 @@
   "section": {
     "title": "No hemos podido cargar {what}",
     "titleGeneric": "No hemos podido cargar esta sección",
+    "safe": "Tus pronósticos están a salvo.",
     "retry": "Reintentar",
     "home": "Ir al inicio"
   },

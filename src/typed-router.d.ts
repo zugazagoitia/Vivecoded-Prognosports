@@ -88,6 +88,55 @@ declare module 'vue-router/auto-routes' {
       { id: ParamValue<false> },
       | never
     >,
+    '/dev/componentes': RouteRecordInfo<
+      '/dev/componentes',
+      '/dev/componentes',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/dev/datos': RouteRecordInfo<
+      '/dev/datos',
+      '/dev/datos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/dev/estados': RouteRecordInfo<
+      '/dev/estados',
+      '/dev/estados',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/dev/graficos': RouteRecordInfo<
+      '/dev/graficos',
+      '/dev/graficos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/dev/ranknav': RouteRecordInfo<
+      '/dev/ranknav',
+      '/dev/ranknav',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/dev/tokens': RouteRecordInfo<
+      '/dev/tokens',
+      '/dev/tokens',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/fundamentos': RouteRecordInfo<
+      '/fundamentos',
+      '/fundamentos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/gps/[competicion]/[temporada]/[gp]/': RouteRecordInfo<
       '/gps/[competicion]/[temporada]/[gp]/',
       '/gps/:competicion/:temporada/:gp',
@@ -121,6 +170,13 @@ declare module 'vue-router/auto-routes' {
       '/ranking/:comunidad/:temporada',
       { comunidad: ParamValue<true>, temporada: ParamValue<true> },
       { comunidad: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/ranking/[comunidad]/[temporada]/[seccion]/': RouteRecordInfo<
+      '/ranking/[comunidad]/[temporada]/[seccion]/',
+      '/ranking/:comunidad/:temporada/:seccion',
+      { comunidad: ParamValue<true>, seccion: ParamValue<true>, temporada: ParamValue<true> },
+      { comunidad: ParamValue<false>, seccion: ParamValue<false>, temporada: ParamValue<false> },
       | never
     >,
     '/ranking/[comunidad]/[temporada]/[seccion]/[vista]': RouteRecordInfo<
@@ -251,6 +307,62 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | 'id'
     }
+    'src/pages/dev/componentes.vue': {
+      routes:
+        | '/dev/componentes'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/datos.vue': {
+      routes:
+        | '/dev/datos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/estados.vue': {
+      routes:
+        | '/dev/estados'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/graficos.vue': {
+      routes:
+        | '/dev/graficos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/ranknav.vue': {
+      routes:
+        | '/dev/ranknav'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/dev/tokens.vue': {
+      routes:
+        | '/dev/tokens'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/fundamentos.vue': {
+      routes:
+        | '/fundamentos'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/gps/[competicion]/[temporada]/[gp]/index.vue': {
       routes:
         | '/gps/[competicion]/[temporada]/[gp]/'
@@ -286,6 +398,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/ranking/[comunidad]/[temporada]/index.vue': {
       routes:
         | '/ranking/[comunidad]/[temporada]/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/ranking/[comunidad]/[temporada]/[seccion]/index.vue': {
+      routes:
+        | '/ranking/[comunidad]/[temporada]/[seccion]/'
       views:
         | never
       pathParamNames:

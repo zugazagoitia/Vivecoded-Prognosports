@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@import './tokens.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-body);
+  }
+
+  /* The theme change animates only the page ground. */
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+      transition: background-color 200ms ease-out;
+    }
+  }
+}

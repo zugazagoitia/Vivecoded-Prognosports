@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { messageFor } from '@/api/messages'
+import PButton from './PButton.vue'
+import PIcon from './PIcon.vue'
+import { iconFor } from './icons'
 
 const props = defineProps<{
   /** Noun phrase completing "No hemos podido cargar …" (e.g. "la clasificación"). */
@@ -10,7 +13,6 @@ const props = defineProps<{
 }>()
 defineEmits<{ retry: [] }>()
 const { t } = useI18n()
-const icon = 'error'
 const title = computed(() =>
   props.what ? t('errors.section.title', { what: props.what }) : t('errors.section.titleGeneric'),
 )
@@ -18,12 +20,48 @@ const title = computed(() =>
 
 <template>
   <section class="section-error" role="alert">
-    <span class="material-symbols-outlined" aria-hidden="true">{{ icon }}</span>
+    <span class="section-error-ic"><PIcon :name="iconFor('cloud_off')" :size="24" /></span>
     <h2>{{ title }}</h2>
     <p v-if="error">{{ messageFor(error) }}</p>
+    <p>{{ t('errors.section.safe') }}</p>
     <div class="section-error-actions">
-      <button type="button" @click="$emit('retry')">{{ t('errors.section.retry') }}</button>
-      <RouterLink to="/">{{ t('errors.section.home') }}</RouterLink>
+      <PButton @click="$emit('retry')">{{ t('errors.section.retry') }}</PButton>
+      <PButton to="/" variant="ghost">{{ t('errors.section.home') }}</PButton>
     </div>
   </section>
 </template>
+
+<style scoped>
+.section-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1.5rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+.section-error-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--color-err-tint);
+  color: var(--color-err-fg);
+}
+h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-heading);
+}
+.section-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+</style>

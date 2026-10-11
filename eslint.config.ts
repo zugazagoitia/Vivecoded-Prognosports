@@ -67,8 +67,21 @@ export default tseslint.config(
       'src/components/layout/**/*.vue',
       'src/App.vue',
       'src/components/BetaBanner.vue',
+      // Chart language (F5): Spanish copy lives next to the components until the i18n catalogue.
+      'src/components/charts/**/*.vue',
     ],
     rules: { 'vue/no-bare-strings-in-template': 'off' },
+  },
+
+  {
+    // F3 base components: short design-system names (Chip, Menu...), optional props default to
+    // undefined, and labels are wired with a dynamic `:for` (id generated per instance).
+    files: ['src/components/ui/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+      'vue/require-default-prop': 'off',
+      'vuejs-accessibility/label-has-for': ['error', { required: { some: ['nesting', 'id'] } }],
+    },
   },
 
   {

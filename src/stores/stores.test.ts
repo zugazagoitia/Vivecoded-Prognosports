@@ -97,10 +97,61 @@ describe('session store', () => {
 })
 
 describe('theme store', () => {
+  function mockSystemDark(dark: boolean) {
+    const listeners: (() => void)[] = []
+    vi.stubGlobal('matchMedia', () => ({
+      matches: dark,
+      addEventListener: (_: string, cb: () => void) => listeners.push(cb),
+    }))
+    return {
+      change(next: boolean) {
+        vi.stubGlobal('matchMedia', () => ({ matches: next, addEventListener: () => {} }))
+        listeners.forEach((cb) => cb())
+      },
+    }
+  }
+  const html = () => document.documentElement
+
+  beforeEach(() => html().classList.remove('dark'))
+
   it('persists the mode and restores it', () => {
     useThemeStore().set('dark')
     setActivePinia(createPinia())
     expect(useThemeStore().mode).toBe('dark')
+  })
+
+  it('defaults to system and follows matchMedia', () => {
+    const media = mockSystemDark(true)
+    const theme = useThemeStore()
+    expect(theme.mode).toBe('system')
+    theme.init()
+    expect(html().classList.contains('dark')).toBe(true)
+    expect(html().dataset.theme).toBe('dark')
+    media.change(false)
+    expect(html().classList.contains('dark')).toBe(false)
+    expect(html().dataset.theme).toBe('light')
+  })
+
+  it('light and dark ignore the system preference', () => {
+    mockSystemDark(true)
+    const theme = useThemeStore()
+    theme.set('light')
+    expect(html().classList.contains('dark')).toBe(false)
+    theme.set('dark')
+    expect(html().classList.contains('dark')).toBe(true)
+    expect(localStorage.getItem(STORAGE_KEYS.theme)).toBe('dark')
+  })
+
+  it('syncs from another tab through the storage event', () => {
+    mockSystemDark(false)
+    const theme = useThemeStore()
+    theme.init()
+    window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEYS.theme, newValue: 'dark' }))
+    expect(theme.mode).toBe('dark')
+    expect(html().classList.contains('dark')).toBe(true)
+    window.dispatchEvent(new StorageEvent('storage', { key: STORAGE_KEYS.theme, newValue: null }))
+    expect(theme.mode).toBe('system')
+    expect(html().classList.contains('dark')).toBe(false)
   })
 })
 

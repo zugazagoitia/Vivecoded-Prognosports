@@ -5,6 +5,13 @@ import { expect, test } from './support/fixtures'
 const PUBLIC_PAGES = [
   { name: 'login', path: '/login' },
   { name: 'not-found', path: '/404' },
+  { name: 'fundamentos', path: '/fundamentos' },
+  { name: 'tokens', path: '/dev/tokens' },
+  { name: 'datos', path: '/dev/datos' },
+  { name: 'graficos', path: '/dev/graficos' },
+  { name: 'estados', path: '/dev/estados' },
+  { name: 'componentes', path: '/dev/componentes' },
+  { name: 'ranknav', path: '/dev/ranknav' },
 ]
 
 test.describe('visual regression', () => {
@@ -25,7 +32,11 @@ test.describe('visual regression', () => {
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
         await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
-        await expect(page).toHaveScreenshot(`home-${scheme}.png`, { fullPage: true })
+        // The footer build line changes with every commit.
+        await expect(page).toHaveScreenshot(`home-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
       })
     })
   }
