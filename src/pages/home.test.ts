@@ -106,6 +106,18 @@ describe('Home (H1) desktop', () => {
     expect(bar.getAttribute('aria-valuenow')).toBe('1')
   })
 
+  it("other members' predictions in the tipps map do not count as the user's", async () => {
+    const row = { driver: { id: 11, code: 'HAM' }, position: 1 }
+    // Real API: a map by user id with every member; only users 2 and 3 predicted.
+    server.use(
+      http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () =>
+        ok({ '1': [], '2': [row], '3': [row] }),
+      ),
+    )
+    await open()
+    expect(await screen.findByText('0 de 3 hechos')).toBeTruthy()
+  })
+
   it('KPIs come from the same standing as the ranking neighbourhood', async () => {
     await open()
     const k = buildKpis(standingOfMock(), 1)

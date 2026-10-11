@@ -51,7 +51,9 @@ describe('Invitación', () => {
   })
 
   it('rejected join turns into expired', async () => {
-    server.use(http.post('*/v2/communities/:id/:inv', () => fail(400, 'Invalid invitation', 606)))
+    server.use(
+      http.post('*/v2/communities/:id/join/:inv', () => fail(400, 'Invalid invitation', 606)),
+    )
     const { user } = await open('PADDOCK-7KQ2')
     await user.click(await screen.findByRole('button', { name: 'Unirme a la comunidad' }))
     expect(

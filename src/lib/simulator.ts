@@ -80,9 +80,9 @@ export function sprintRaceOf(sessions: readonly RaceSession[]): RaceSession | un
   )
 }
 
-/** `POST .../calculations` body for a simulated result. */
+/** `POST .../calculations` body for a simulated result (`driver` is the bare id: real API). */
 export function buildCalcRequest(sim: readonly number[]) {
-  return { results: sim.map((id, i) => ({ position: i + 1, driver: { id } })) }
+  return { results: sim.map((id, i) => ({ position: i + 1, driver: id })) }
 }
 
 // --- Points of the user ------------------------------------------------------------------

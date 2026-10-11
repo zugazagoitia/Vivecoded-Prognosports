@@ -1,7 +1,5 @@
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
-import { useQuery } from '@tanstack/vue-query'
-import { communitiesApi } from '@/api'
-import { UserSchema, type UserPoints } from '@/api/schemas'
+import type { UserPoints } from '@/api/schemas'
 import { useNow } from '@/composables/useNow'
 import { gpShortName, sortedSessions, userTimeZone } from '@/lib/gp'
 import {
@@ -19,7 +17,7 @@ import {
   winnersOf,
   type Player,
 } from '@/lib/results'
-import { keys } from '@/queries/keys'
+import { useCommunityMembers } from '@/queries/community'
 import {
   useActor,
   useGpCommunityPoints,
@@ -32,22 +30,6 @@ import {
 } from '@/queries/gp'
 import { useSessionStore } from '@/stores/session'
 import { isClosed } from '@/utils/dates'
-
-/** Members of the active community (`GET /v2/communities/{id}/members`, a `User[]`). */
-export function useCommunityMembers() {
-  const actor = useActor()
-  return useQuery({
-    queryKey: computed(() => keys.members(actor.communityId.value ?? '')),
-    queryFn: async ({ signal }) => {
-      const raw = await communitiesApi.listMembers(actor.communityId.value!, signal)
-      return raw.flatMap((m) => {
-        const parsed = UserSchema.safeParse(m)
-        return parsed.success ? [parsed.data] : []
-      })
-    },
-    enabled: computed(() => actor.ready.value),
-  })
-}
 
 /**
  * Everything the results screen (G5) shows for one session of a GP: the moment (derived from the
@@ -91,7 +73,10 @@ export function useResults(
   const tipps = useSessionTipps(args, sessionId)
   const points = useGpCommunityPoints(args)
   const prevPoints = useGpCommunityPoints(prevArgs)
-  const members = useCommunityMembers()
+  const members = useCommunityMembers(
+    () => actor.communityId.value ?? '',
+    () => actor.ready.value,
+  )
   const rulesets = useGpRulesets(args)
 
   const classifiedResults = computed(() => classified(results.data.value))

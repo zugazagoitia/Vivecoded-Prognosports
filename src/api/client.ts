@@ -55,6 +55,19 @@ function isEnvelope(b: unknown): b is Envelope {
   )
 }
 
+/**
+ * Real API (verified against production and a local backend): authorisation failures come as
+ * HTTP 200 with `{ success:false, message }` and no status: «No autorizado. Token inválido» /
+ * «Token no encontrado» (missing, revoked or expired token) and «No autorizado. No tienes
+ * permiso para eso». Remove when the backend answers 401/403. See src/api/README.md.
+ */
+export function authFailureStatus(message: string | undefined): 401 | 403 | undefined {
+  if (!message || !/^no autorizado\./i.test(message)) return undefined
+  if (/\btoken\b/i.test(message)) return 401
+  if (/permiso/i.test(message)) return 403
+  return undefined
+}
+
 async function readBody(res: Response): Promise<unknown> {
   const text = await res.text()
   if (!text) return undefined
@@ -100,12 +113,21 @@ export async function request(path: string, opts: RequestOptions = {}): Promise<
   const parsed = await readBody(res)
   const env = isEnvelope(parsed) ? parsed : undefined
 
-  if (res.status === 401 && !opts.noSessionExpiry) emitSessionExpired()
+  // The real API answers an invalid/expired token with HTTP 200 and `success:false` (see
+  // `authFailureStatus`): it is treated as the 401/403 it stands for.
+  const authStatus = env && !env.success && res.ok ? authFailureStatus(env.message) : undefined
+  if ((res.status === 401 || authStatus === 401) && !opts.noSessionExpiry) emitSessionExpired()
 
   if (!res.ok || (env && !env.success)) {
-    const status = env?.status ?? res.status
+    const status = authStatus ?? env?.status ?? res.status
     const apiMsg = env?.message ?? (typeof parsed === 'string' && parsed ? parsed : undefined)
-    throw new ApiError(status, env?.code, apiMsg || genericMessage(status), 'http', parsed)
+    throw new ApiError(
+      status,
+      env?.code,
+      (authStatus ? undefined : apiMsg) || genericMessage(status),
+      'http',
+      parsed,
+    )
   }
   return env ? env.result : parsed
 }

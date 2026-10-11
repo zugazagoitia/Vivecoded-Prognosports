@@ -58,7 +58,7 @@ describe('Community settings (H6)', () => {
     expect(screen.getByText('Cerrada · con invitación')).toBeTruthy()
     expect(screen.queryByRole('textbox', { name: 'Nombre' })).toBeNull()
     expect(
-      await screen.findByText('Conjunto «Clásica 2026», público y usado por 4 comunidades.'),
+      await screen.findByText('Conjunto «Default Rule Set», público y usado por 4 comunidades.'),
     ).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Quitar imagen' }).hasAttribute('disabled')).toBe(
       true,

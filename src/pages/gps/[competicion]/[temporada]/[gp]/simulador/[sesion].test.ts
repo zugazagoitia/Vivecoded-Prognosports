@@ -112,7 +112,7 @@ describe('Simulator (G6)', () => {
   })
 
   it('every change posts the result (debounced) and nothing else is written', async () => {
-    const bodies: { results: { position: number; driver: { id: number } }[] }[] = []
+    const bodies: { results: { position: number; driver: number }[] }[] = []
     server.use(
       http.post(CALC, async ({ request }) => {
         bodies.push((await request.json()) as never)
@@ -126,7 +126,7 @@ describe('Simulator (G6)', () => {
     await user.click(screen.getByRole('button', { name: 'Bajar NOR' }))
     await user.click(screen.getByRole('button', { name: 'Bajar NOR' }))
     await waitFor(() => expect(bodies.length).toBe(2)) // two quick changes: one request
-    expect(bodies[1]!.results.map((r) => r.driver.id)).toEqual([101, 102, 100, 103, 104])
+    expect(bodies[1]!.results.map((r) => r.driver)).toEqual([101, 102, 100, 103, 104])
   })
 
   it('announces the settled figures in a polite live region', async () => {

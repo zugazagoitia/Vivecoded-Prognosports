@@ -3,7 +3,9 @@ import { useQueries, useQuery } from '@tanstack/vue-query'
 import { competitionsApi, gpsApi } from '@/api'
 import type { RaceSession } from '@/api/schemas'
 import { useCommunityStore } from '@/stores/community'
+import { useSessionStore } from '@/stores/session'
 import { keys } from './keys'
+import { mineOf } from './gp'
 
 type Id = string | number
 
@@ -40,6 +42,7 @@ export function useGpTippStatus(
   sessions: MaybeRefOrGetter<readonly RaceSession[]>,
 ) {
   const community = useCommunityStore()
+  const session = useSessionStore()
   const results = useQueries({
     queries: computed(() =>
       toValue(sessions).map((s) => ({
@@ -72,7 +75,7 @@ export function useGpTippStatus(
   const done = computed(() => {
     const out: Record<number, boolean> = {}
     toValue(sessions).forEach((s, i) => {
-      out[s.id] = (results.value[i]?.data?.length ?? 0) > 0
+      out[s.id] = mineOf(results.value[i]?.data, session.user?.id).length > 0
     })
     return out
   })

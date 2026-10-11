@@ -187,7 +187,7 @@ describe('GP detail (G2)', () => {
       name: /Tus puntos en Miami: 2024 \d+, 2025 \d+/,
     })
     expect(history.querySelectorAll('[data-bar-height]').length).toBe(2)
-    expect(await screen.findByText('Clásica 2026 · sin excepciones')).toBeTruthy()
+    expect(await screen.findByText('Clásica 2026 · con excepción en este GP')).toBeTruthy()
     expect(screen.getByText('5 exacta')).toBeTruthy()
     expect(screen.getByText('3 a ±1')).toBeTruthy()
     expect(screen.getByText('1 a ±2')).toBeTruthy()
@@ -256,7 +256,9 @@ describe('GP detail (G2)', () => {
   })
 
   it('a finished session without your prediction says it explicitly', async () => {
-    server.use(http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () => ok([])))
+    server.use(
+      http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () => ok({ '1': [] })),
+    )
     await open(`${PATH}?sesion=61`)
     expect(await screen.findByText('No pronosticaste esta sesión.')).toBeTruthy()
     const t = await tab(/^Sprint/)

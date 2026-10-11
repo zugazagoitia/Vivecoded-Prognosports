@@ -1,8 +1,9 @@
-import { http } from 'msw'
+import { http, HttpResponse } from 'msw'
 import { fail, ok } from '../envelope'
 import { grandPrixes } from '../fixtures'
 import {
   calculations,
+  calculationsFor,
   grid,
   results,
   tipps,
@@ -27,14 +28,19 @@ export const gpWeekendHandlers = [
     ok(grid(Number(params.session))),
   ),
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community/calculations', ({ params }) =>
-    ok(Number(params.session) === WEEKEND_SESSIONS.sprint ? calculations : {}),
+    ok(Number(params.session) === WEEKEND_SESSIONS.sprint ? calculations : calculationsFor({}, 0)),
   ),
   // Own predictions of the weekend GP; other GPs fall through to the calendar handler (G1).
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', ({ params }) =>
     Number(params.gp) === WEEKEND_GP ? ok(tipps(Number(params.session))) : undefined,
   ),
   http.get('*/v2/rulesets/:community/:comp/:season/:gp', () => ok(weekendRuleset)),
-  http.get('*/v2/rulesets/:community/:comp/:season', () => ok(weekendRuleset)),
+  // Real API: the community/season route of the spec does not exist (404 text/plain).
+  http.get(
+    '*/v2/rulesets/:community/:comp/:season',
+    ({ request }) =>
+      new HttpResponse(`Endpoint GET ${new URL(request.url).pathname} not found`, { status: 404 }),
+  ),
   // Falls through (returns nothing) for any other GP: the circuit handlers answer those.
   http.get('*/v2/communities/:c/:comp/:season/points/:gp', ({ params }) =>
     Number(params.gp) === WEEKEND_GP && Number(params.season) === WEEKEND_SEASON

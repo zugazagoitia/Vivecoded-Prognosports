@@ -176,12 +176,16 @@ export function useSessionTipps(
   return Object.assign(q, { mine })
 }
 
-/** The user's own rows (rows without `user` are the caller's by definition of the endpoint). */
+/**
+ * The user's own rows. The endpoint returns every member's rows (keyed by user id, see
+ * `TippsResponseSchema`); rows without `user` (the list form of the spec) are the caller's.
+ * Without a known user only anonymous rows qualify: other members' rows are never mixed in.
+ */
 export function mineOf<T extends { user?: { id: number } | null }>(
   all: readonly T[] | undefined,
   userId: number | undefined,
 ): T[] {
-  return (all ?? []).filter((p) => p.user == null || userId == null || p.user.id === userId)
+  return (all ?? []).filter((p) => p.user == null || (userId != null && p.user.id === userId))
 }
 
 /** Points per predicted position of the user in a scored session (8.11 `calculations`). */
@@ -211,6 +215,7 @@ export function useSessionCalculations(
         a.gp,
         toValue(session)!,
         actor.communityId.value!,
+        actor.userId.value,
         signal,
       )
     },

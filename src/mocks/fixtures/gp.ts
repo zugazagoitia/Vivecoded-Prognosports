@@ -6,7 +6,7 @@ import {
 } from '@/api/schemas'
 import type { z } from 'zod'
 import { defineFixture } from './define'
-import { community, users } from './index'
+import { community, tippsByUser, users } from './index'
 
 /**
  * Data of the GP weekend (G2): the sprint weekend of round 6 (Miami in the shared fixtures).
@@ -46,13 +46,51 @@ const ROSTER: [code: string, first: string, last: string, color: string][] = [
 export const drivers: DriverInput[] = ROSTER.map(([code, firstname, lastname, color], i) =>
   defineFixture('driver', DriverSchema, { id: 100 + i, code, firstname, lastname, color }),
 )
-const byCode = (code: string) => drivers.find((d) => d.code === code)!
+const TEAMS: Record<string, { id: number; name: string }> = {
+  '#ff8000': { id: 1, name: 'McLaren' },
+  '#27c4b0': { id: 2, name: 'Mercedes' },
+  '#d92b2b': { id: 3, name: 'Ferrari' },
+  '#3671c6': { id: 4, name: 'Red Bull' },
+  '#229971': { id: 5, name: 'Aston Martin' },
+  '#0093cc': { id: 6, name: 'Alpine' },
+  '#52e252': { id: 7, name: 'Audi' },
+  '#64c4ff': { id: 8, name: 'Williams' },
+  '#6692ff': { id: 9, name: 'Racing Bulls' },
+  '#b6babd': { id: 10, name: 'Haas' },
+  '#9b9b9b': { id: 11, name: 'Cadillac' },
+}
+const NUMBERS = [4, 63, 16, 1, 81, 44, 12, 14, 10, 27, 55, 23, 22, 30, 31, 87, 18, 6, 11, 77]
+
+/**
+ * A driver as the real API sends it inside results, grid and the drivers of a GP: with `number`
+ * and `team` (`teamcolor` included). The roster of `drivers` has neither.
+ */
+export function withTeam(d: DriverInput, i: number): DriverInput {
+  const team = TEAMS[d.color ?? '']!
+  return defineFixture('driver', DriverSchema, {
+    ...d,
+    number: NUMBERS[i],
+    team: { id: team.id, name: team.name, teamcolor: d.color },
+  })
+}
+
+/** The driver of `results` and `grid` rows: real API, no `color` (the team carries it). */
+function onTrack(d: DriverInput, i: number): DriverInput {
+  const { color: _color, ...rest } = withTeam(d, i)
+  return rest
+}
+
+const byCode = (code: string) =>
+  withTeam(
+    drivers.find((d) => d.code === code)!,
+    drivers.findIndex((d) => d.code === code),
+  )
 
 /** Official order of the sprint: NOR, RUS, LEC, VER, PIA, HAM, ANT, ALO... (roster order). */
 export function results(session: number) {
   if (session !== WEEKEND_SESSIONS.sprint) return []
   return drivers.map((driver, i) =>
-    defineFixture('result', RaceResultSchema, { driver, position: i + 1 }),
+    defineFixture('result', RaceResultSchema, { driver: onTrack(driver, i), position: i + 1 }),
   )
 }
 
@@ -83,7 +121,7 @@ function predictions(codes: string[], userId: number) {
  * `GET .../tipps/{community}`: the user's own predictions, plus everyone's once the session is
  * closed (the sprint). The qualifying (open) has none from the user.
  */
-export function tipps(session: number) {
+export function tippsRows(session: number) {
   if (session === WEEKEND_SESSIONS.sprint) {
     return [
       ...predictions(MINE_SPRINT, 1),
@@ -94,18 +132,41 @@ export function tipps(session: number) {
   return []
 }
 
-/** Points per predicted position of user 1 in the sprint (5 exact, 3 at ±1, 1 at ±2). */
-export const calculations = {
-  pointsByPosition: { '1': 5, '2': 3, '3': 1, '4': 1, '5': 0 },
-  totalHits: 3,
+/** `GET .../tipps/{community}` as the real API sends it: a map by user id (see `tippsByUser`). */
+export function tipps(session: number) {
+  return tippsByUser(
+    tippsRows(session).map((p) => ({ userId: p.user!.id, driver: p.driver, position: p.position })),
+    users.map((u) => u.id),
+    session,
+  )
 }
+
+/**
+ * Answer of `GET|POST .../tipps/{community}/calculations` as the real API sends it: every field is
+ * a map by user id (the spec says a flat object). User 1 has the given points per predicted
+ * position and hits; the other members are listed with no points.
+ */
+export function calculationsFor(pointsByPosition: Record<string, number>, totalHits: number) {
+  const mine = String(users[0]!.id)
+  const byUser = <T>(own: T, empty: T) =>
+    Object.fromEntries(users.map((u) => [String(u.id), String(u.id) === mine ? own : empty]))
+  return {
+    hitsAmount: byUser(totalHits, 0),
+    hitsBySession: byUser({ '1': totalHits }, { '1': 0 }),
+    pointsByPosition: byUser(pointsByPosition, {}),
+    totalHits: byUser(totalHits, 0),
+  }
+}
+
+/** Points per predicted position of user 1 in the sprint (5 exact, 3 at ±1, 1 at ±2). */
+export const calculations = calculationsFor({ '1': 5, '2': 3, '3': 1, '4': 1, '5': 0 }, 3)
 
 /** Start grids of the sprint and the race: 18 on track and 2 starting from the pit lane. */
 export function grid(session: number) {
   if (session === WEEKEND_SESSIONS.q) return []
   return drivers.map((driver, i) =>
     defineFixture('grid', StartGridPositionSchema, {
-      driver,
+      driver: onTrack(driver, i),
       position: i + 1,
       isFromPit: i >= 18,
       note: i === 18 ? 'cambio de unidad de potencia' : i === 19 ? 'cambio de alerón' : undefined,
