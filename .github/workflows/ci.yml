@@ -184,88 +184,12 @@ jobs:
             echo "::notice::Script 'size' no definido todavía (T14); presupuesto omitido."
           fi
 
-  e2e:
-    name: e2e (${{ matrix.project }})
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    # E2E solo bloquea en PR contra master (y en push a master): es la verificación previa a PRD.
-    # En el resto (PR a develop, push a develop) se ejecuta pero un fallo no bloquea `ci-ok`.
-    continue-on-error: ${{ github.base_ref != 'master' && github.ref != 'refs/heads/master' }}
-    # Un job por proyecto de Playwright: el tiempo total pasa a ser el del más lento.
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { project: chromium, browser: chromium }
-          - { project: mobile, browser: chromium }
-          - { project: firefox, browser: firefox }
-          - { project: webkit, browser: webkit }
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      # T10 añade el script `e2e` (Playwright). Mientras no exista, los pasos siguientes se omiten;
-      # al fusionar T10 el job se activa solo, sin editar este fichero.
-      - name: Detectar script e2e
-        id: detect
-        run: |
-          if node -e "process.exit(require('./package.json').scripts?.['e2e:ci'] ? 0 : 1)"; then
-            echo "enabled=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Script 'e2e' no definido todavía (T10); E2E omitido."
-          fi
-      # E2E prueba exactamente el dist/ del job build (modo production), sin reconstruir.
-      # T10 debe servir ese directorio (p. ej. `vite preview`) y no ejecutar `vite build`.
-      - if: steps.detect.outputs.enabled == 'true'
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: dist-production
-          path: dist/
-      - name: Versión de Playwright
-        id: playwright
-        if: steps.detect.outputs.enabled == 'true'
-        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
-      - name: Caché de navegadores de Playwright
-        id: playwright-cache
-        if: steps.detect.outputs.enabled == 'true'
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ steps.playwright.outputs.version }}
-      - name: Instalar navegadores
-        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
-      - name: Instalar dependencias del sistema
-        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps ${{ matrix.browser }}
-      - name: Ejecutar E2E
-        if: steps.detect.outputs.enabled == 'true'
-        run: pnpm e2e:ci --project=${{ matrix.project }}
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: ${{ !cancelled() && steps.detect.outputs.enabled == 'true' }}
-        with:
-          name: playwright-report-${{ matrix.project }}
-          path: |
-            playwright-report/
-            test-results/
-          if-no-files-found: ignore
-          retention-days: 7
-
   # Check único y estable para la protección de ramas (§21.10): falla si cualquier job falla.
   ci-ok:
     name: ci-ok
     if: ${{ always() }}
-    # e2e NO está aquí: ci-ok no espera a los e2e (lentos). Para master existe `ci-ok-prod`.
+    # e2e vive en su propio workflow (e2e.yml): CI debe terminar rápido porque deploy.yml
+    # arranca cuando CI completa.
     needs: [lint, typecheck, test, audit, build, size]
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -278,25 +202,5 @@ jobs:
           echo "$RESULTS"
           if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
             echo "::error::Algún job de CI no terminó correctamente."
-            exit 1
-          fi
-
-  # Puerta de producción: solo en PR/push a master. Exige todo lo de ci-ok más los e2e.
-  # En el resto de ramas se omite (un check omitido no bloquea).
-  ci-ok-prod:
-    name: ci-ok-prod
-    if: ${{ always() && (github.base_ref == 'master' || github.ref == 'refs/heads/master') }}
-    needs: [ci-ok, e2e]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions: {}
-    steps:
-      - name: Comprobar resultado de los jobs
-        env:
-          RESULTS: ${{ toJSON(needs.*.result) }}
-        run: |
-          echo "$RESULTS"
-          if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
-            echo "::error::CI o e2e no terminaron correctamente."
             exit 1
           fi

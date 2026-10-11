@@ -33,7 +33,9 @@ Antes de dar algo por terminado: `pnpm typecheck`, `pnpm lint`, `pnpm test` y lo
 
 ## CI (`.github/workflows/ci.yml`)
 
-Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size`, `e2e` y `ci-ok` (agrega todos; es el check obligatorio). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde.
+Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size` y `ci-ok` (agrega todos; es el check obligatorio). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde.
+
+Los e2e viven en `.github/workflows/e2e.yml` (matriz por proyecto, construyen su propio `dist/`), **separados de CI a propósito**: `deploy.yml` arranca cuando CI termina y no debe esperar a los e2e. En PR/push a `develop` no bloquean; `e2e-ok` (solo en PR/push a `master`) es el check de producción.
 
 - Si CI falla, **reproduce en local con las mismas condiciones** antes de tocar nada, y distingue si el fallo lo causa tu rama o ya existía en `develop`.
 - **Variables de CI sin definir llegan como cadena vacía** (`VITE_SENTRY_DSN: ${{ vars.X }}` → `""`). El esquema de `src/env.ts` trata `""` como «no definido» en las variables opcionales; mantén esa norma al añadir variables.
