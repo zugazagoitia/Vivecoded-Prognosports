@@ -7,7 +7,7 @@ defineProps<{ caption: string }>()
 </script>
 
 <template>
-  <div class="tw">
+  <div class="tw relative" role="region" tabindex="0" :aria-label="caption">
     <table
       class="admin-table [&_td]:border-border [&_th]:border-border [&_th]:bg-surface-muted [&_tbody_tr:hover_td]:bg-surface-hover [&_th]:text-muted w-full border-collapse text-sm leading-5 tabular-nums [&_.r]:text-right [&_tbody_tr:last-child_td]:border-b-0 [&_td]:border-b [&_td]:px-3 [&_td]:py-2.5 [&_td]:whitespace-nowrap [&_th]:border-b [&_th]:px-3 [&_th]:py-2.5 [&_th]:text-left [&_th]:whitespace-nowrap [&_th.r]:text-right"
     >

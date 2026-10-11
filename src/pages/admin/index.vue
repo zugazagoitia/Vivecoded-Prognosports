@@ -212,6 +212,7 @@ const rowClass =
 <template>
   <!-- AdminMovil: index of sections and quick tasks -->
   <div v-if="phone" class="flex flex-col gap-4">
+    <h1 class="sr-only">{{ t('admin.panel.title') }}</h1>
     <p
       class="bg-info-tint text-info-fg flex items-start gap-3 rounded-sm px-4 py-3 text-sm"
       role="note"

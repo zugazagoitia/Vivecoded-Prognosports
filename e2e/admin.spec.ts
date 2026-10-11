@@ -122,7 +122,9 @@ test.describe('admin layout (N4)', () => {
     test.skip(info.project.name !== 'mobile', 'phone only')
     await loginAs(page, true)
     await page.goto('/admin')
-    await expect(page.getByRole('heading', { level: 1, name: 'Administración' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { level: 1, name: 'Panel de administración' }),
+    ).toBeVisible()
     await expect(page.getByRole('navigation', { name: 'Administración' })).toBeHidden()
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
