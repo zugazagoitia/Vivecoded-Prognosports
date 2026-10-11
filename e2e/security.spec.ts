@@ -23,6 +23,7 @@ test.describe('security', () => {
   for (const path of [
     '/',
     '/login',
+    '/registro',
     '/ruta-que-no-existe',
     '/home',
     '/circuits',
@@ -31,6 +32,7 @@ test.describe('security', () => {
     '/dev/datos',
     '/dev/estados',
     '/dev/graficos',
+    '/recuperar',
     '/terms',
     '/privacy',
     '/faq',

@@ -4,7 +4,7 @@ import { focusRing } from './styles'
 
 defineOptions({ inheritAttrs: false })
 
-defineProps<{ label?: string; help?: string; disabled?: boolean }>()
+defineProps<{ label?: string; help?: string; error?: string; disabled?: boolean }>()
 const model = defineModel<boolean>({ default: false })
 const id = `cb-${useId()}`
 </script>
@@ -17,7 +17,12 @@ const id = `cb-${useId()}`
       v-model="model"
       type="checkbox"
       :disabled="disabled"
-      :aria-describedby="help ? `${id}-help` : undefined"
+      :aria-invalid="error ? true : undefined"
+      :aria-describedby="
+        [error ? `${id}-err` : undefined, help ? `${id}-help` : undefined]
+          .filter(Boolean)
+          .join(' ') || undefined
+      "
       :class="[
         'accent-brand-500 mt-0.5 size-[18px] flex-none cursor-pointer rounded-sm disabled:cursor-not-allowed disabled:opacity-50',
         focusRing,
@@ -28,6 +33,9 @@ const id = `cb-${useId()}`
         <slot>{{ label }}</slot>
       </label>
       <span v-if="help" :id="`${id}-help`" class="text-muted text-xs leading-4">{{ help }}</span>
+      <span v-if="error" :id="`${id}-err`" class="text-err mt-1 text-xs leading-4">{{
+        error
+      }}</span>
     </div>
   </div>
 </template>

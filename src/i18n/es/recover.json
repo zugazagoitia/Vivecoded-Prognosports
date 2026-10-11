@@ -1,0 +1,29 @@
+{
+  "recover": {
+    "request": {
+      "title": "¿Has olvidado tu contraseña?",
+      "intro": "Escribe el correo de tu cuenta y te enviaremos un código de 6 caracteres para crear una nueva.",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tucorreo{'@'}ejemplo.com",
+      "send": "Enviar código",
+      "wait": "Reenviar en {n} s",
+      "back": "Volver a iniciar sesión"
+    },
+    "sent": {
+      "title": "Revisa tu correo",
+      "before": "Si ",
+      "after": " tiene cuenta, en unos minutos recibirás un código de 6 caracteres. Caduca en {minutes} minutos.",
+      "haveCode": "Ya tengo el código",
+      "spam": "¿No llega? Mira en spam.",
+      "change": "Cambiar correo"
+    },
+    "email": {
+      "required": "Escribe tu correo electrónico.",
+      "invalid": "Escribe un correo válido, por ejemplo tucorreo{'@'}ejemplo.com."
+    },
+    "error": {
+      "title": "No hemos podido enviar el código",
+      "description": "Comprueba tu conexión e inténtalo de nuevo en unos instantes."
+    }
+  }
+}

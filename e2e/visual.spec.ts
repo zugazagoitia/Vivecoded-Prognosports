@@ -5,6 +5,7 @@ import { expect, test } from './support/fixtures'
 const PUBLIC_PAGES = [
   { name: 'landing', path: '/' },
   { name: 'login', path: '/login' },
+  { name: 'registro', path: '/registro' },
   { name: 'not-found', path: '/404' },
   { name: 'fundamentos', path: '/fundamentos' },
   { name: 'tokens', path: '/dev/tokens' },
@@ -13,6 +14,7 @@ const PUBLIC_PAGES = [
   { name: 'estados', path: '/dev/estados' },
   { name: 'componentes', path: '/dev/componentes' },
   { name: 'ranknav', path: '/dev/ranknav' },
+  { name: 'recuperar', path: '/recuperar' },
   { name: 'terms', path: '/terms' },
   { name: 'privacy', path: '/privacy' },
   { name: 'faq', path: '/faq' },
