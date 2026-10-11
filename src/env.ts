@@ -1,5 +1,15 @@
 import { z } from 'zod'
 
+/** CI passes unset repo variables as `""`; for optional vars that means "not configured". */
+const emptyAsUndefined = (v: unknown) => (v === '' ? undefined : v)
+
+/** Optional telemetry: a malformed DSN (e.g. a placeholder in a CI variable) counts as "not configured". */
+const optionalDsn = (v: unknown): string | undefined => {
+  if (typeof v !== 'string') return undefined
+  const dsn = v.trim()
+  return z.url().safeParse(dsn).success ? dsn : undefined
+}
+
 export const envSchema = z.object({
   VITE_API_BASE_URL: z
     .url({ error: 'debe ser una URL válida (p. ej. https://api.prognosports.com)' })
@@ -9,8 +19,10 @@ export const envSchema = z.object({
   VITE_GIT_SHA: z.string().min(1, 'no puede estar vacío'),
   VITE_GIT_DATE: z.string().min(1, 'no puede estar vacío'),
   VITE_APP_VERSION: z.string().min(1, 'no puede estar vacío'),
-  VITE_SENTRY_DSN: z.url({ error: 'debe ser una URL válida (DSN de Sentry)' }).optional(),
-  VITE_CF_ANALYTICS_TOKEN: z.string().optional(),
+  // Telemetría opcional: un DSN malformado (p. ej. un placeholder en la variable de CI) se ignora
+  // en vez de impedir que la app arranque.
+  VITE_SENTRY_DSN: z.preprocess(optionalDsn, z.string().optional()),
+  VITE_CF_ANALYTICS_TOKEN: z.preprocess(emptyAsUndefined, z.string().optional()),
 })
 
 export type Env = z.infer<typeof envSchema>

@@ -12,6 +12,17 @@ describe('parseEnv', () => {
   it('accepts a valid environment', () => {
     expect(parseEnv(valid)).toEqual(valid)
   })
+  it('treats empty optional variables (unset CI vars) as not configured', () => {
+    const env = parseEnv({ ...valid, VITE_SENTRY_DSN: '', VITE_CF_ANALYTICS_TOKEN: '' })
+    expect(env.VITE_SENTRY_DSN).toBeUndefined()
+    expect(env.VITE_CF_ANALYTICS_TOKEN).toBeUndefined()
+  })
+  it('ignores a malformed optional Sentry DSN instead of failing startup', () => {
+    expect(parseEnv({ ...valid, VITE_SENTRY_DSN: 'not-a-dsn' }).VITE_SENTRY_DSN).toBeUndefined()
+    expect(
+      parseEnv({ ...valid, VITE_SENTRY_DSN: ' https://k@o1.ingest.sentry.io/1 ' }).VITE_SENTRY_DSN,
+    ).toBe('https://k@o1.ingest.sentry.io/1')
+  })
   it('names every offending variable', () => {
     try {
       parseEnv({ ...valid, VITE_API_BASE_URL: 'nope', VITE_GIT_SHA: undefined })
