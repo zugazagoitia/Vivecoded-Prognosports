@@ -1,3 +1,9 @@
+@import 'tailwindcss/theme' theme(reference);
+@import './tokens.css' reference;
+@custom-variant dark (&:where(.dark, .dark *));
+@import 'tailwindcss/utilities' layer(utilities) source(none);
+@source '../components/ranking';
+
 /*
  * Ranking screens (R0-R13). The only colours fixed in both themes, as the design documents:
  * the text on the sequential scale cells (`--seq-1..7`, picked for contrast) and the white on

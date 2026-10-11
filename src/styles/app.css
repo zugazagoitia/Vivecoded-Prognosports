@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import './tokens.css';
 
+/* The ranking screens (lazy chunks) compile their own utilities in ranking.css. */
+@source not '../components/ranking';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
