@@ -70,6 +70,19 @@ export function useMobileTitle(title: MaybeRefOrGetter<string | undefined>): voi
   })
 }
 
+/** Dynamic «Volver» destination a page gives to the mobile header (e.g. predict -> its GP). */
+const pageBackHref = ref<string | undefined>()
+
+/** Sets the mobile header's back link while the calling page is mounted. */
+export function useMobileBackHref(href: MaybeRefOrGetter<string | undefined>): void {
+  watchEffect(() => {
+    pageBackHref.value = toValue(href)
+  })
+  onScopeDispose(() => {
+    pageBackHref.value = undefined
+  })
+}
+
 export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | undefined> }) {
   const i18n = useI18n()
   const t = i18n.t.bind(i18n)
@@ -97,7 +110,7 @@ export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | und
   const active = computed(() => activeTabFor(route.path))
   const back = computed(() => !isRootPath(route.path))
   /** Optional fixed destination a screen declares in `meta.backHref`. */
-  const backHref = computed(() => route.meta.backHref)
+  const backHref = computed(() => pageBackHref.value ?? route.meta.backHref)
 
   const title = computed(() => {
     const given = toValue(overrides?.title) ?? pageTitle.value

@@ -13,6 +13,7 @@ import gp from './es/gp.json'
 import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
+import predict from './es/predict.json'
 import recover from './es/recover.json'
 import reset from './es/reset.json'
 import sessions from './es/sessions.json'
@@ -35,6 +36,7 @@ export const i18n = createI18n({
       errors,
       ...legal,
       nav,
+      predict,
       sessions,
       data,
       states,

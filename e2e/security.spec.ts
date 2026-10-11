@@ -30,6 +30,7 @@ test.describe('security', () => {
     '/gps',
     '/circuits/18',
     '/gps/1/10/6',
+    '/gps/1/10/6/pronosticar/60',
     '/dev/tokens',
     '/dev/datos',
     '/dev/estados',

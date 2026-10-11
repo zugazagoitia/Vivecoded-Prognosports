@@ -30,6 +30,7 @@ import {
   WEEKEND_SEASON,
   WEEKEND_SESSIONS,
 } from '../../src/mocks/fixtures/gp'
+import { gpDrivers, tippsFromBody, type TippsBody } from '../../src/mocks/fixtures/predict'
 import {
   circuitDetail,
   gpPoints,
@@ -87,6 +88,8 @@ export async function mockApi(page: Page): Promise<void> {
   )
   /** Usernames created through the mocked `POST /auth/register`. */
   const registered = new Set<string>()
+  /** Predictions saved through the mocked `POST .../tipps/{community}` (G3), by session id. */
+  const savedTipps = new Map<number, unknown[]>()
   /** The unverified mock user turns verified after a successful verify-email. */
   let verified = false
   await page.route('**/v2/**', async (route) => {
@@ -179,12 +182,29 @@ export async function mockApi(page: Page): Promise<void> {
       const gp = grandPrixes.find((g) => String(g.id) === path.split('/')[4])
       return gp ? json(route, 200, gp) : invalid(route, 'Gran premio inválido')
     }
+    // Predict (G3): drivers of the GP and the write of the prediction.
+    if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+\/[^/]+\/drivers$/.test(path)) {
+      return authed ? json(route, 200, gpDrivers) : json(route, 401, null, 'Tu sesión ha caducado.')
+    }
+    const tippsWrite = /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/tipps\/[^/]+$/.exec(path)
+    if (method === 'POST' && tippsWrite) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      savedTipps.set(Number(tippsWrite[1]), tippsFromBody(request.postDataJSON() as TippsBody))
+      return json(route, 200, 'ok')
+    }
     const sessionPath = /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/(results|grid|tipps)/.exec(
       path,
     )
     if (method === 'GET' && sessionPath) {
       if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
       const session = Number(sessionPath[1])
+      if (
+        sessionPath[2] === 'tipps' &&
+        !path.endsWith('/calculations') &&
+        savedTipps.has(session)
+      ) {
+        return json(route, 200, savedTipps.get(session))
+      }
       if (sessionPath[2] === 'results') return json(route, 200, results(session))
       if (sessionPath[2] === 'grid') return json(route, 200, grid(session))
       return json(

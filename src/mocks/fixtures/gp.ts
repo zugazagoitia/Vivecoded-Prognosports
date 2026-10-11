@@ -131,6 +131,12 @@ export const weekendRuleset = {
   isPublic: true,
   creator: users[0],
   data: {
+    // Positions to predict per session id (G3): qualifying 5, sprint 5, race 8.
+    predictedPositions: {
+      [String(WEEKEND_SESSIONS.q)]: 5,
+      [String(WEEKEND_SESSIONS.sprint)]: 5,
+      [String(WEEKEND_SESSIONS.race)]: 8,
+    },
     pointsByEqualsPosition: Object.fromEntries(
       Object.values(WEEKEND_SESSIONS).map((s) => [String(s), { '1': 5, '2': 5, '3': 5 }]),
     ),
