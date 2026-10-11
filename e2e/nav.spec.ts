@@ -12,7 +12,11 @@ test.describe('AppNav + SiteFooter', () => {
     test.describe(scheme, () => {
       test.use({ colorScheme: scheme })
 
-      test('visitor: landmarks, axe, no overflow, snapshot', async ({ page, isMobile }) => {
+      test('visitor: landmarks, axe, no overflow, snapshot', async ({
+        page,
+        isMobile,
+        browserName,
+      }) => {
         test.skip(
           isMobile,
           'the landing draws its own phone chrome (P1); AppNav on phones is hidden there',
@@ -25,18 +29,24 @@ test.describe('AppNav + SiteFooter', () => {
         ).toBeVisible()
         await expectNoSeriousA11yViolations(page)
         await noHorizontalScroll(page)
+        if (browserName !== 'chromium') return // screenshots are Chromium-only
         await expect(page.getByRole('banner')).toHaveScreenshot(`nav-visitor-${scheme}.png`)
         await expect(page.getByRole('contentinfo')).toHaveScreenshot(`footer-${scheme}.png`, {
           mask: [page.getByText(/^v\S+ · build /)],
         })
       })
 
-      test('player: axe, no overflow, snapshot', async ({ authedPage: page, isMobile }) => {
+      test('player: axe, no overflow, snapshot', async ({
+        authedPage: page,
+        isMobile,
+        browserName,
+      }) => {
         test.skip(isMobile, 'signed-in phones use MobileBar + TabBar (N2), not AppNav')
         await page.goto('/home')
         await expect(page.getByRole('button', { name: 'Mi perfil' })).toBeVisible()
         await expectNoSeriousA11yViolations(page)
         await noHorizontalScroll(page)
+        if (browserName !== 'chromium') return // screenshots are Chromium-only
         await expect(page.getByRole('banner')).toHaveScreenshot(`nav-player-${scheme}.png`)
       })
 
