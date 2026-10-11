@@ -100,7 +100,7 @@ const legend = computed(() => legendFor(metric.value))
                 c.g === undefined ? t('ranking.r2.pendingTitle', { name: c.gp.name }) : c.gp.name
               "
               class="py-1.5"
-              :class="c.g === undefined ? 'text-border-input' : ''"
+              :class="c.g === undefined ? 'opacity-70' : ''"
             >
               {{ c.gp.code }}
             </th>

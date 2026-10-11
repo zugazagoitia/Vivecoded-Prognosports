@@ -103,14 +103,14 @@ const areaPts = computed(
         <span class="text-muted block text-sm">{{
           t('ranking.r8.standing', { pos: me.pos, pts: me.total })
         }}</span>
-        <b class="text-series-you text-[22px]">{{ t('ranking.you') }}</b>
+        <b class="text-heading border-series-you border-b-4 text-[22px]">{{ t('ranking.you') }}</b>
       </div>
       <div class="flex items-baseline justify-center gap-3">
-        <b class="text-series-you text-[44px] leading-[48px] tabular-nums" data-score="mine">{{
+        <b class="text-heading text-[44px] leading-[48px] tabular-nums" data-score="mine">{{
           score.mine
         }}</b>
         <span class="text-muted text-sm">{{ tiesText(score.ties) }}</span>
-        <b class="text-series-2 text-[44px] leading-[48px] tabular-nums" data-score="theirs">{{
+        <b class="text-heading text-[44px] leading-[48px] tabular-nums" data-score="theirs">{{
           score.theirs
         }}</b>
       </div>
@@ -118,7 +118,7 @@ const areaPts = computed(
         <span class="text-muted block text-sm">{{
           t('ranking.r8.standing', { pos: rival.pos, pts: rival.total })
         }}</span>
-        <b class="text-series-2 text-[22px]">{{ rname }}</b>
+        <b class="text-heading border-series-2 border-b-4 text-[22px]">{{ rname }}</b>
       </div>
     </div>
 

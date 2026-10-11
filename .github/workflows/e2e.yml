@@ -55,14 +55,15 @@ jobs:
             echo "enabled=false" >> "$GITHUB_OUTPUT"
             echo "::notice::Script 'e2e' no definido todavía (T10); E2E omitido."
           fi
-      # E2E prueba exactamente el dist/ del job build (modo production), sin reconstruir.
+      # E2E prueba un dist/ de modo production con TODOS los flags activos (scripts/build-e2e.mjs):
+      # las pantallas del ranking tras flag solo se pueden probar así. El bundle desplegado los deja apagados.
       # T10 debe servir ese directorio (p. ej. `vite preview`) y no ejecutar `vite build`.
-      - name: Compilar (production)
+      - name: Compilar (production, con los feature flags activos)
         if: steps.detect.outputs.enabled == 'true'
         env:
           VITE_GIT_SHA: e2e
           VITE_GIT_DATE: 1970-01-01T00:00:00+00:00
-        run: pnpm exec vite build --mode production
+        run: node scripts/build-e2e.mjs
       - name: Versión de Playwright
         id: playwright
         if: steps.detect.outputs.enabled == 'true'
