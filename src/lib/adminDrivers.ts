@@ -144,7 +144,7 @@ export function poolWhere(
 
 export const FALLBACK_TEAM_COLOR = 'var(--color-gray-500)'
 
-/** The API sends colours with or without `#` («cc0000» / «#cc0000»): always a CSS colour. */
+/** The API sends colours with or without the leading hash: always return a CSS colour. */
 export function cssColor(color: string | null | undefined): string | undefined {
   const c = color?.trim()
   if (!c) return undefined
