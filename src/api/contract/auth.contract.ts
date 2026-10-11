@@ -19,6 +19,19 @@ describe.skipIf(!TOKEN)('authenticated GET endpoints', () => {
     userId = me.id
   })
 
+  // Issue #95: the real API sends `verified_at`; the app must map it to `verified`.
+  it('GET /v2/user/me -> verified_at is normalised to verified', async () => {
+    const raw = (await live('raw GET /v2/user/me', () => request('/v2/user/me'))) as Record<
+      string,
+      unknown
+    >
+    const me = await userApi.getMe()
+    const rawVerified = raw.verified_at ?? raw.verified
+    expect(me.verified, 'UserSchema lost the verification date: check the field name').toBe(
+      rawVerified ?? undefined,
+    )
+  })
+
   it('GET /v2/gps/{c}/{s}/{gp}/sessions/{session}/grid -> StartGridPositionSchema[]', async () => {
     await live('StartGridPositionSchema[] GET .../sessions/{session}/grid', () =>
       gpsApi.getGrid(C, S, G, SES),

@@ -130,7 +130,7 @@ export const UserResumeSchema = z.object({
   worstGP: n(z.object({ first: z.unknown(), second: z.unknown() })),
 })
 
-export const UserSchema = z.object({
+const UserShape = z.object({
   id,
   username: z.string(),
   email: n(z.string()),
@@ -145,10 +145,42 @@ export const UserSchema = z.object({
   resume: n(UserResumeSchema),
   hasProfileImage: n(z.boolean()),
   verified: n(z.string()),
+  verified_at: n(z.string()),
   created: n(z.string()),
   updated: n(z.string()),
   lastActivity: n(z.string()),
+  last_activity: n(z.string()),
+  time_zone: n(z.string()),
+  has_profile_image: n(z.boolean()),
+  current_community: n(z.unknown()),
 })
+
+/**
+ * The real API sends snake_case (`verified_at`, `last_activity`, `time_zone`...) while the spec
+ * says camelCase / `verified`. Both are accepted and normalised to the app model.
+ */
+export const UserSchema = UserShape.transform(
+  ({
+    verified_at,
+    last_activity,
+    time_zone,
+    has_profile_image,
+    current_community,
+    verified,
+    lastActivity,
+    timeZone,
+    hasProfileImage,
+    currentCommunity,
+    ...rest
+  }) => ({
+    ...rest,
+    verified: verified ?? verified_at,
+    lastActivity: lastActivity ?? last_activity,
+    timeZone: timeZone ?? time_zone,
+    hasProfileImage: hasProfileImage ?? has_profile_image,
+    currentCommunity: currentCommunity ?? current_community,
+  }),
+)
 export type User = z.infer<typeof UserSchema>
 
 /** Removes `hashedPassword` from any raw user-like object (defence in depth). */

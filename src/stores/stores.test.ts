@@ -66,7 +66,7 @@ describe('community store', () => {
 
 describe('session store', () => {
   it('logout empties token, user, cache and dependent stores', async () => {
-    vi.spyOn(userApi, 'getMe').mockResolvedValue({ id: 1, username: 'a' })
+    vi.spyOn(userApi, 'getMe').mockResolvedValue({ id: 1, username: 'a' } as never)
     vi.spyOn(authApi, 'login').mockResolvedValue('tok')
     vi.spyOn(authApi, 'logout').mockResolvedValue(undefined)
     const reset = vi.fn()
