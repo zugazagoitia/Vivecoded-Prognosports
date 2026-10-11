@@ -291,6 +291,8 @@ export async function mockApi(page: Page): Promise<void> {
             average: MOCK_SEASON_AVERAGE,
             totalPoints: 600,
             wonGrandPrixes: [{ id: 3 }, { id: 9 }],
+            standings: 4,
+            totalHits: 48,
           })
         : json(route, 401, null, 'Tu sesión ha caducado.')
     }

@@ -1,0 +1,102 @@
+{
+  "profile": {
+    "title": "Mi perfil",
+    "otherUser": {
+      "title": "Perfil de otro usuario",
+      "text": "Esta pantalla todavía no está disponible."
+    },
+    "header": {
+      "photo": "Foto de {name}",
+      "since": "en PrognoSports desde {date}",
+      "champion": "Campeón {year}",
+      "communities": "{n} comunidades | {n} comunidad | {n} comunidades",
+      "settings": "Ajustes de la cuenta"
+    },
+    "kpi": {
+      "label": "Resumen de la temporada",
+      "points": "Puntos {season}",
+      "pointsDetail": "{pos} en {community}",
+      "average": "Media por GP",
+      "averageDetail": "mejor que el {pct} %",
+      "won": "GP ganados",
+      "wonDetail": "de {n} en {season}",
+      "hits": "Aciertos",
+      "hitsDetail": "en la temporada",
+      "none": "—",
+      "error": "tu resumen de la temporada",
+      "empty": {
+        "title": "Aún no hay puntos",
+        "text": "Cuando se puntúe el primer Gran Premio verás aquí tu temporada."
+      },
+      "mobile": {
+        "position": "Puesto",
+        "positionDetail": "de {n}",
+        "points": "Puntos",
+        "pointsDetail": "{season}",
+        "average": "Media/GP",
+        "averageDetail": "comunidad {avg}",
+        "won": "GP ganados",
+        "wonDetail": "de {n}"
+      }
+    },
+    "season": {
+      "title": "Tu temporada",
+      "link": "Mi temporada",
+      "alt": "Tus puntos por GP frente al rango de la comunidad",
+      "legendYou": "Tus puntos",
+      "legendRange": "Rango de la comunidad",
+      "legendMedian": "Mediana",
+      "empty": {
+        "title": "Aún no hay GP disputados",
+        "text": "Tu temporada aparecerá cuando se puntúe el primer Gran Premio."
+      },
+      "error": "tu temporada",
+      "view": "Vista",
+      "chart": "Gráfico",
+      "table": "Ver como tabla",
+      "axis": "Grandes Premios",
+      "pin": "Ver el detalle de {name}",
+      "panel": "{name}: tus puntos {mine} · mínimo {min} · máximo {max} · mediana {median}",
+      "panelNoMine": "{name}: sin puntos tuyos · mínimo {min} · máximo {max} · mediana {median}",
+      "tableCaption": "Tus puntos por GP frente al rango de la comunidad",
+      "colGp": "GP",
+      "colMine": "Tus puntos",
+      "colMin": "Mínimo",
+      "colMax": "Máximo",
+      "colMedian": "Mediana"
+    },
+    "communities": {
+      "title": "Tus comunidades",
+      "all": "Ver todas",
+      "position": "{pos}.º de {n}",
+      "note": "Percentil: 100 = primero de la comunidad.",
+      "strip": "Percentil {pct}",
+      "empty": "Aún no perteneces a ninguna comunidad.",
+      "rowError": "No disponible",
+      "loading": "Cargando…",
+      "error": "tus comunidades"
+    },
+    "history": {
+      "title": "Historial en {community}",
+      "caption": "Historial de temporadas en {community}",
+      "season": "Temporada",
+      "position": "Puesto final",
+      "points": "Puntos",
+      "champion": "Campeón",
+      "current": "{season} (en curso)",
+      "medal": "Puesto {n}",
+      "you": "{name} (tú)",
+      "error": "tu historial"
+    },
+    "mobile": {
+      "bars": "Puntos por GP",
+      "barsAlt": "Tus puntos por GP",
+      "mySeason": "Mi temporada",
+      "myCommunities": "Mis comunidades",
+      "notifications": "Notificaciones",
+      "settings": "Ajustes de la cuenta",
+      "logout": "Cerrar sesión",
+      "links": "Accesos del perfil"
+    }
+  }
+}

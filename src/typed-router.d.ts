@@ -305,11 +305,11 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/u/[usuario]': RouteRecordInfo<
-      '/u/[usuario]',
-      '/u/:usuario',
-      { usuario: ParamValue<true> },
-      { usuario: ParamValue<false> },
+    '/u/[[usuario]]': RouteRecordInfo<
+      '/u/[[usuario]]',
+      '/u/:usuario?',
+      { usuario?: ParamValueZeroOrOne<true> },
+      { usuario?: ParamValueZeroOrOne<false> },
       | never
     >,
     '/unirse/[codigo]': RouteRecordInfo<
@@ -653,9 +653,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'src/pages/u/[usuario].vue': {
+    'src/pages/u/[[usuario]].vue': {
       routes:
-        | '/u/[usuario]'
+        | '/u/[[usuario]]'
       views:
         | never
       pathParamNames:
