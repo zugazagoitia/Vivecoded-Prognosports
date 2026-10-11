@@ -6,6 +6,7 @@ import circuits from './es/circuits.json'
 import community from './es/community.json'
 import common from './es/common.json'
 import communities from './es/communities.json'
+import createCommunity from './es/createCommunity.json'
 import consensus from './es/consensus.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
@@ -48,6 +49,7 @@ export const i18n = createI18n({
       predict,
       sessions,
       consensus,
+      ...createCommunity,
       data,
       states,
       ui,

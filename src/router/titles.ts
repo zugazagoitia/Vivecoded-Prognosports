@@ -21,6 +21,7 @@ const fallback: Record<string, string> = {
   'route.circuit': 'Circuito',
   'route.communities': 'Comunidades',
   'route.communitiesExplore': 'Explorar comunidades',
+  'route.createCommunity': 'Crear comunidad',
   'route.community': 'Comunidad',
   'route.user': 'Perfil',
   'route.admin': 'Administración',
