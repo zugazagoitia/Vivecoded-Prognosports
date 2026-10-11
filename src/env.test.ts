@@ -12,6 +12,11 @@ describe('parseEnv', () => {
   it('accepts a valid environment', () => {
     expect(parseEnv(valid)).toEqual(valid)
   })
+  it('treats empty optional variables (unset CI vars) as not configured', () => {
+    const env = parseEnv({ ...valid, VITE_SENTRY_DSN: '', VITE_CF_ANALYTICS_TOKEN: '' })
+    expect(env.VITE_SENTRY_DSN).toBeUndefined()
+    expect(env.VITE_CF_ANALYTICS_TOKEN).toBeUndefined()
+  })
   it('names every offending variable', () => {
     try {
       parseEnv({ ...valid, VITE_API_BASE_URL: 'nope', VITE_GIT_SHA: undefined })
