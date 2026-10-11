@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import OtherUser from '@/components/profile/OtherUser.vue'
 import ProfileCommunities from '@/components/profile/ProfileCommunities.vue'
 import ProfileHeader from '@/components/profile/ProfileHeader.vue'
 import ProfileHistory from '@/components/profile/ProfileHistory.vue'
@@ -9,7 +9,6 @@ import ProfileKpis from '@/components/profile/ProfileKpis.vue'
 import ProfileMobile from '@/components/profile/ProfileMobile.vue'
 import ProfileSeasonChart from '@/components/profile/ProfileSeasonChart.vue'
 import { createProfileState, provideProfile } from '@/components/profile/useProfile'
-import { EmptyState } from '@/components/states'
 import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { useSessionStore } from '@/stores/session'
 
@@ -21,9 +20,7 @@ definePage({
   },
 })
 
-// `/u`, `/u/me` and `/u/<own username>` are the own profile (U1). Another user is U2, which is a
-// separate screen: until it exists a neutral notice is shown.
-const { t } = useI18n()
+// `/u`, `/u/me` and `/u/<own username>` are the own profile (U1); anything else is another user (U2).
 const route = useRoute()
 const session = useSessionStore()
 const mobile = useMediaQuery(MOBILE_QUERY)
@@ -33,7 +30,12 @@ const param = computed(() => {
 })
 const isOwn = computed(() => {
   const p = decodeURIComponent(param.value).toLowerCase()
-  return p === '' || p === 'me' || p === (session.user?.username ?? '').toLowerCase()
+  return (
+    p === '' ||
+    p === 'me' ||
+    p === String(session.user?.id ?? '') ||
+    p === (session.user?.username ?? '').toLowerCase()
+  )
 })
 
 const profile = createProfileState()
@@ -51,12 +53,5 @@ provideProfile(profile)
     </div>
     <ProfileHistory />
   </div>
-  <div v-else class="pg-main">
-    <h1 class="sr-only">{{ t('profile.otherUser.title') }}</h1>
-    <EmptyState
-      icon="person"
-      :title="t('profile.otherUser.title')"
-      :text="t('profile.otherUser.text')"
-    />
-  </div>
+  <OtherUser v-else :param="decodeURIComponent(param)" />
 </template>

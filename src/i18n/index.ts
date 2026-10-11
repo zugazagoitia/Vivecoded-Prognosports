@@ -31,6 +31,7 @@ import simulator from './es/simulator.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
+import userProfile from './es/userProfile.json'
 import verify from './es/verify.json'
 
 export const i18n = createI18n({
@@ -71,6 +72,7 @@ export const i18n = createI18n({
       ...reset,
       ...results,
       ...simulator,
+      userProfile,
       ...verify,
     },
   },
