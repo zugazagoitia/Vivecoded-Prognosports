@@ -23,6 +23,7 @@ import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import predict from './es/predict.json'
+import ranking from './es/ranking.json'
 import profile from './es/profile.json'
 import recover from './es/recover.json'
 import reset from './es/reset.json'
@@ -70,6 +71,7 @@ export const i18n = createI18n({
       ...invitation,
       ...landing,
       ...profile,
+      ...ranking,
       ...recover,
       ...reset,
       ...results,

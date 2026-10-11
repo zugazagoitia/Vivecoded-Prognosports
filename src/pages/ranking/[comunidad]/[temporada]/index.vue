@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import RankingPage from '@/components/ranking/RankingPage.vue'
+
+/** `/ranking/:comunidad/:temporada`: the summary (R0), same as `/…/resumen`. */
 definePage({
   meta: {
     layout: 'app',
@@ -9,6 +12,5 @@ definePage({
 </script>
 
 <template>
-  <h1>Clasificación</h1>
-  <p>Pendiente de implementar.</p>
+  <RankingPage seccion="resumen" />
 </template>

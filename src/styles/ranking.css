@@ -1,0 +1,88 @@
+/*
+ * Ranking screens (R0-R13). The only colours fixed in both themes, as the design documents:
+ * the text on the sequential scale cells (`--seq-1..7`, picked for contrast) and the white on
+ * coloured circles / segments. Everything else uses tokens.
+ */
+.rk-sq1,
+.rk-sq2,
+.rk-sq3,
+.rk-sq4 {
+  color: #0d1b2e;
+}
+.rk-sq5,
+.rk-sq6,
+.rk-sq7 {
+  color: #ffffff;
+}
+.rk-sq1 {
+  background: var(--color-seq-1);
+}
+.rk-sq2 {
+  background: var(--color-seq-2);
+}
+.rk-sq3 {
+  background: var(--color-seq-3);
+}
+.rk-sq4 {
+  background: var(--color-seq-4);
+}
+.rk-sq5 {
+  background: var(--color-seq-5);
+}
+.rk-sq6 {
+  background: var(--color-seq-6);
+}
+.rk-sq7 {
+  background: var(--color-seq-7);
+}
+:root.dark .rk-sq1,
+:root.dark .rk-sq2,
+:root.dark .rk-sq3,
+:root.dark .rk-sq4,
+:root[data-theme='dark'] .rk-sq1,
+:root[data-theme='dark'] .rk-sq2,
+:root[data-theme='dark'] .rk-sq3,
+:root[data-theme='dark'] .rk-sq4 {
+  color: #ffffff;
+}
+:root.dark .rk-sq5,
+:root[data-theme='dark'] .rk-sq5 {
+  /* white on the plain seq-5 is 4.42:1; a touch darker reaches AA */
+  background: color-mix(in srgb, var(--color-seq-5) 92%, black);
+}
+:root.dark .rk-sq6,
+:root[data-theme='dark'] .rk-sq6 {
+  color: #0d1b2e;
+}
+:root.dark .rk-sq7,
+:root[data-theme='dark'] .rk-sq7 {
+  color: #0d1b2e;
+}
+.rk-white {
+  color: #ffffff;
+}
+.rk-white-fill {
+  fill: #ffffff;
+}
+
+.rk-tone-you {
+  color: var(--color-series-you);
+}
+.rk-tone-s2 {
+  color: var(--color-series-2);
+}
+.rk-tone-s3 {
+  color: var(--color-series-3);
+}
+.rk-tone-s4 {
+  color: var(--color-series-4);
+}
+.rk-tone-s5 {
+  color: var(--color-series-5);
+}
+.rk-tone-s6 {
+  color: var(--color-series-6);
+}
+.rk-tone-rest {
+  color: var(--color-series-rest);
+}
