@@ -28,6 +28,7 @@ test.describe('security', () => {
     '/home',
     '/circuits',
     '/circuits/18',
+    '/gps/1/10/6',
     '/dev/tokens',
     '/dev/datos',
     '/dev/estados',
