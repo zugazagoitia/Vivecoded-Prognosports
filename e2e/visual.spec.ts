@@ -87,6 +87,18 @@ test.describe('visual regression', () => {
         })
       })
 
+      test('pronosticar', async ({ authedPage: page }) => {
+        // Race of the weekend GP: open and already predicted (8 slots filled).
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/62`)
+        await expect(page.getByText('Listo para guardar')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`pronosticar-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /), page.getByRole('timer')],
+        })
+      })
+
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
         await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()

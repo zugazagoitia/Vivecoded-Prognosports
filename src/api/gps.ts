@@ -110,7 +110,8 @@ export const submitTipps = (
 ) =>
   request(`${sess(comp, season, g, s)}/tipps/${seg(community)}`, {
     method: 'POST',
-    body: tipps,
+    // schema.d.ts: the body is an object with the list under `tipps` (not a bare array).
+    body: { tipps },
     signal,
   })
 export const getCalculations = (
