@@ -1,0 +1,123 @@
+{
+  "mobileTitle": "Parrilla y consenso",
+  "title": "Parrilla y consenso",
+  "subtitle": "Gran Premio de {gp} · {session} · {community}",
+  "subtitleOpen": "Gran Premio de {gp} · {session} (abierta) · {community}",
+  "home": "Inicio",
+  "list": "Grandes Premios",
+  "sessionGroup": "Sesión",
+  "viewGroup": "Vista",
+  "byPosition": "Por posición",
+  "byDriver": "Por piloto",
+  "grid": {
+    "title": "Parrilla de salida",
+    "hint": "Pulsa un piloto",
+    "slot": "P{n} {name}",
+    "pit": "Salen desde el pit lane",
+    "pitSlot": "{name}, sale desde el pit lane: {note}",
+    "pitSlotNoNote": "{name}, sale desde el pit lane",
+    "penalty": "{code}: {note}",
+    "of": "Parrilla de la {session}",
+    "empty": {
+      "title": "Aún no hay parrilla de salida",
+      "text": "Se publica tras la clasificación. Los pronósticos de la comunidad se ven igualmente, por posición."
+    }
+  },
+  "locked": {
+    "title": "Los pronósticos de la comunidad se verán al cierre",
+    "today": "Se verán hoy a las {time} (tu hora). Hasta entonces solo tú ves el tuyo.",
+    "day": "Se verán el {weekday} a las {time} (tu hora). Hasta entonces solo tú ves el tuyo.",
+    "noDate": "Se verán cuando cierre la sesión. Hasta entonces solo tú ves el tuyo.",
+    "predict": "Hacer mi pronóstico",
+    "edit": "Editar mi pronóstico"
+  },
+  "card": {
+    "title": "¿Qué ha pronosticado la comunidad?",
+    "subPosition": "Cada barra reparte los votos de esa posición entre los pilotos más elegidos.",
+    "subDriver": "Pulsa un piloto en la parrilla para ver dónde lo pusieron los demás.",
+    "players": "De {n} jugador | De {n} jugadores",
+    "asTable": "Ver como tabla",
+    "asChart": "Ver como gráfico",
+    "visible": "Visible porque la sesión ya cerró.",
+    "results": "Ver la tabla de pronósticos y puntos",
+    "noResults": "Aún no hay resultado oficial: cuando se publique verás quién acabó en cada posición.",
+    "error": "los pronósticos de la comunidad"
+  },
+  "row": {
+    "mine": "tú: {code}",
+    "mineSr": "Tu elección: {code}.",
+    "finished": "Acabó {code}.",
+    "finishedHit": "Acabó {code} ({kind}).",
+    "segment": "{code}: {votes} de {players}",
+    "others": "Otros: {votes} de {players}",
+    "mineMark": "tu elección",
+    "none": "Sin votos."
+  },
+  "legend": {
+    "first": "Más votado",
+    "second": "2.º",
+    "third": "3.º",
+    "mine": "Tu elección",
+    "finisher": "A la derecha: quién acabó en esa posición",
+    "others": "otros"
+  },
+  "driver": {
+    "title": "{name} · sale P{n}",
+    "titleNoGrid": "{name}",
+    "out": "Fuera",
+    "foot": "Cuántos jugadores pusieron a este piloto en cada posición y cuántos lo dejaron fuera.",
+    "finished": "Acabó {n}.º.",
+    "finishedOut": "Acabó fuera de los {n} primeros.",
+    "noResult": "Aún no hay resultado oficial.",
+    "value": "{n} jugador | {n} jugadores",
+    "chart": "Pronósticos del piloto por posición",
+    "pick": "Elige un piloto en la parrilla para ver su reparto de votos."
+  },
+  "table": {
+    "caption": "Pronósticos de la comunidad por posición",
+    "captionDriver": "Jugadores que pusieron a {name} en cada posición",
+    "position": "Posición",
+    "first": "Más votado",
+    "second": "2.º más votado",
+    "third": "3.º más votado",
+    "others": "Otros",
+    "mine": "Tu elección",
+    "finisher": "Acabó",
+    "players": "Jugadores",
+    "votes": "{n} de {total}",
+    "none": "—"
+  },
+  "kpi": {
+    "top": "Piloto más votado al 1.º",
+    "topDetail": "{n} de {total} jugador | {n} de {total} jugadores",
+    "original": "Apuesta más original",
+    "originalValue": "{code} al 1.º",
+    "originalOne": "{names} · solo una persona",
+    "originalMany": "{names}",
+    "originalAnon": "Solo una persona",
+    "agree": "Tu pronóstico coincide",
+    "agreeValue": "{n} %",
+    "agreeDetail": "con la elección mayoritaria",
+    "agreeNone": "No pronosticaste esta sesión",
+    "none": "—"
+  },
+  "empty": {
+    "title": "Nadie ha pronosticado esta sesión",
+    "text": "Cuando haya pronósticos, aquí verás cómo se reparten por posición y por piloto."
+  },
+  "circuit": {
+    "layout": "Trazado de {name}",
+    "stats": "{lap} · {laps} vueltas · {total}",
+    "history": "Tu historial en este circuito"
+  },
+  "error": {
+    "grid": "la parrilla de salida"
+  },
+  "notFound": {
+    "session": {
+      "title": "No hemos encontrado esta sesión",
+      "text": "La sesión no existe en este Gran Premio o su enlace ha cambiado.",
+      "action": "Volver al Gran Premio"
+    }
+  }
+}

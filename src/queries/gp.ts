@@ -161,13 +161,16 @@ function tippsOptions(
 export function useSessionTipps(
   args: MaybeRefOrGetter<GpArgs | undefined>,
   session: MaybeRefOrGetter<Id | undefined>,
+  enabled: MaybeRefOrGetter<boolean> = true,
 ) {
   const actor = useActor()
   const q = useQuery({
     queryKey: computed(() => tippsOptions(actor, toValue(args), toValue(session)).queryKey),
     queryFn: ({ signal }) =>
       tippsOptions(actor, toValue(args), toValue(session)).queryFn({ signal }),
-    enabled: computed(() => tippsOptions(actor, toValue(args), toValue(session)).enabled),
+    enabled: computed(
+      () => tippsOptions(actor, toValue(args), toValue(session)).enabled && toValue(enabled),
+    ),
   })
   const mine = computed(() => mineOf(q.data.value, actor.userId.value))
   return Object.assign(q, { mine })
