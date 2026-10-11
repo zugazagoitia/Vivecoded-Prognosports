@@ -14,14 +14,19 @@ import { communityTone, initials } from '@/lib/communities'
 const props = withDefaults(
   defineProps<{
     community: { id: number; name: string; hasImage?: boolean | null | undefined }
-    size?: 32 | 48 | 56
+    size?: 32 | 48 | 56 | 72
   }>(),
   { size: 48 },
 )
 const failed = ref(false)
 const showImage = computed(() => props.community.hasImage === true && !failed.value)
 const tone = computed(() => communityTone(props.community))
-const box = { 32: 'size-8 text-xs', 48: 'size-12 text-lg', 56: 'size-14 text-xl' } as const
+const box = {
+  32: 'size-8 text-xs',
+  48: 'size-12 text-lg',
+  56: 'size-14 text-xl',
+  72: 'size-18 text-[26px]',
+} as const
 </script>
 
 <template>

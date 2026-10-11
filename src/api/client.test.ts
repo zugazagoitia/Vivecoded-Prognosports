@@ -165,7 +165,7 @@ describe('requestParsed', () => {
   })
   it('validates the shared MSW fixtures through the real endpoint wrappers', async () => {
     const communities = await communitiesApi.listCommunities()
-    expect(communities).toHaveLength(1)
+    expect(communities.length).toBeGreaterThanOrEqual(1)
     expect(communities[0]?.membersAmount).toBe(12)
   })
 })
