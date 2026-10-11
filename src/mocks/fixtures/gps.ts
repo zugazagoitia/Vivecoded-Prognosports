@@ -48,7 +48,24 @@ export function communitySeasonPoints(seasonId: number): Record<string, unknown[
           i === sessions.length - 1 ? pointsInGP - share * (sessions.length - 1) : share,
         ]),
       )
-      return { user, pointsInGP, accumulatedPoints, pointsBySession }
+      // Hits, as the real API sends them: `hitsBySession` is keyed by the session `key`.
+      const hitsInGP = ((Number(user.id) * 3 + gp.round!) % 8) + 3
+      const hitShare = Math.floor(hitsInGP / Math.max(sessions.length, 1))
+      const hitsBySession = Object.fromEntries(
+        sessions.map((s, i) => [
+          String(s.key),
+          i === sessions.length - 1 ? hitsInGP - hitShare * (sessions.length - 1) : hitShare,
+        ]),
+      )
+      return {
+        user,
+        pointsInGP,
+        accumulatedPoints,
+        pointsBySession,
+        hitsInGP,
+        hitsBySession,
+        bonusPoints: 0,
+      }
     })
   }
   return out

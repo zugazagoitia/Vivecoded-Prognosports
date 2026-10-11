@@ -56,6 +56,20 @@ Además: la spec describe las respuestas sin envelope y el login como `text/plai
 - La API no tiene zona horaria del circuito (solo coordenadas): `circuitTimeZone` usa una tabla país/ciudad; si no hay, se oculta «Hora del circuito».
 - «N de M han pronosticado» no se muestra: los pronósticos ajenos son privados hasta el cierre y no hay endpoint de recuento.
 
+### Ranking y estadísticas (R0–R13, sondeado el 2026-10-11)
+
+Sondeado con la cuenta de prueba (solo lecturas, sus comunidades no tenían ningún GP puntuado) y con un backend local con 17 GP puntuados.
+
+- `GET /v2/communities/{c}/{comp}/{season}/points` devuelve **todo el ranking de la temporada en una sola llamada**: `{ [grandPrixId]: UserPoints[] }`, solo con los GP que tienen puntos (`{}` si no hay ninguno). Las pantallas del ranking lo usan en lugar de pedir `points/{grandprix}` por GP; **un GP «disputado» es el que aparece en ese mapa** (el listado `GET /v2/gps/{c}/{s}` no trae `hasPointsInGrandPrix`).
+- `GET .../points/{grandprix}` devuelve a **todos** los miembros también para un GP sin puntuar (todo a 0), así que no sirve para saber si un GP está disputado.
+- `UserPoints` real: `accumulatedPoints`, `bonusPoints`, `hitPercentageBySession`, `hitPercentageInGP`, `hitsBySession`, `hitsInGP`, `pointsBySession`, `pointsInGP`, `standings`, `user` (`id`, `username`, `preferences`). `previousStandings` no apareció; el movimiento se calcula con los acumulados.
+- `pointsBySession` y `hitsBySession` van indexados por la **`key` de la sesión** (`1` = clasificación, `2` = carrera, `4` = sprint…), no por su `id` ni por su nombre. `UserResume.*BySession` va por nombre en español («Carrera», «Clasificación Sprint»). `kindOfKey` (`src/lib/rankingStats.ts`) acepta ambas formas.
+- `GET /v2/communities/{c}/{comp}/{season}/totaluserpoints` devuelve `{ [username]: total }` (por nombre de usuario, no por id; no distingue homónimos): no se usa. El palmarés calcula la clasificación final de cada temporada con `…/points`.
+- `GET /v2/communities/{c}/members`: cada elemento trae `isUserInCommunity` (la spec y `normaliseMembers` esperaban `userInCommunity`); se acepta también `isUserInCommunity`.
+- `UserPoints.user` solo trae `username` (sin nombre completo): los nombres de pila del diseño se derivan de la primera palabra del `username`.
+- Los GP de la temporada usan códigos de 2 a 4 letras (`CH`, `JAP`, `UK`…), no siempre de 3.
+- Sin datos puntuados en la cuenta de prueba no se ha podido verificar contra producción: `hitsInGP`, `bonusPoints` y `pointsBySession` con valores reales (sí se vieron en el backend local).
+
 ### Administración (épica M, verificado contra un backend local el 2026-10-11)
 
 Solo la forma de los campos; las escrituras viven en `src/api/admin.ts` y nunca se han lanzado contra `api.prognosports.com`.

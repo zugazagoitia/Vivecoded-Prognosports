@@ -9,11 +9,13 @@ import { gpHandlers } from './gps'
 import { gpWeekendHandlers } from './gpWeekend'
 import { invitationHandlers } from './invitation'
 import { predictHandlers } from './predict'
+import { rankingHandlers } from './ranking'
 import { simulatorHandlers } from './simulator'
 import { userHandlers } from './user'
 
 /** Default handlers shared by tests (setupServer) and `VITE_API_MOCK=true` dev (setupWorker). */
 export const handlers = [
+  ...rankingHandlers,
   ...adminHandlers,
   ...communityHomeHandlers,
   ...invitationHandlers,

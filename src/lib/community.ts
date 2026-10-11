@@ -91,7 +91,7 @@ export function normaliseMembers(raw: readonly unknown[]): CommunityMember[] {
     if (item == null || typeof item !== 'object') continue
     const r = item as Record<string, unknown>
     const user = (r.user && typeof r.user === 'object' ? r.user : r) as Record<string, unknown>
-    if (r.userInCommunity === false || r.left_date) continue
+    if (r.userInCommunity === false || r.isUserInCommunity === false || r.left_date) continue
     if (typeof user.id !== 'number' || typeof user.username !== 'string') continue
     out.push({
       id: user.id,

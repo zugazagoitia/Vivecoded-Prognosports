@@ -1,0 +1,481 @@
+{
+  "ranking": {
+    "title": "Ranking",
+    "you": "Tú",
+    "pts": "pts",
+    "leader": "Líder",
+    "error": "el ranking",
+    "community": "Comunidad",
+    "season": "Temporada",
+    "viewTable": "Ver como tabla",
+    "viewChart": "Ver gráfico",
+    "up": "sube {n}",
+    "down": "baja {n}",
+    "notFound": {
+      "title": "No se ha encontrado este ranking",
+      "text": "Es posible que el enlace sea incorrecto o que la vista ya no esté disponible.",
+      "action": "Ir a mis comunidades"
+    },
+    "empty": {
+      "title": "Aún no hay Grandes Premios con puntos",
+      "text": "En cuanto se puntúe el primer Gran Premio de la temporada aparecerá aquí."
+    },
+    "cols": {
+      "pos": "Pos.",
+      "posShort": "Pos.",
+      "player": "Jugador",
+      "points": "Puntos",
+      "pointsShort": "Puntos",
+      "gapLeader": "Dif. líder"
+    },
+    "r0": {
+      "kpis": "Resumen de tu temporada",
+      "position": "Tu posición",
+      "points": "Tus puntos",
+      "avg": "Media por GP",
+      "wins": "GP ganados",
+      "toLeader": "a {n} del líder",
+      "betterThan": "mejor que el {pct} % de la comunidad",
+      "ofPlayed": "de {n} disputados",
+      "standings": "Clasificación",
+      "seeFull": "Ver completa",
+      "form": "Forma (últimos 5 GP)",
+      "formNote": "Forma: puesto en cada uno de los últimos 5 GP. Morado lleno = ganó el GP.",
+      "podium": "Podio",
+      "lastGp": "Último GP · {name}",
+      "winner": "Ganador",
+      "yourPoints": "Tus puntos",
+      "communityAvg": "Media de la comunidad",
+      "seeGp": "Ver el GP",
+      "nextGp": "Próximo Gran Premio",
+      "nextName": "{name} · ronda {round}",
+      "closesIn": "{session} cierra en {time}",
+      "predict": "Pronosticar",
+      "noNext": "No hay próximo Gran Premio",
+      "nextWhat": "el próximo Gran Premio",
+      "race": "Lucha por el título · diferencia con el líder",
+      "raceSub": "Los 5 primeros y tú. El líder de cada momento está en 0.",
+      "raceAria": "Diferencia con el líder tras cada GP de los 5 primeros y tú",
+      "seeEvolution": "Ver evolución",
+      "empty": "Todavía no se ha disputado ningún Gran Premio con puntos.",
+      "notPlaying": "No apareces en la clasificación de esta temporada."
+    },
+    "r1": {
+      "title": "Clasificación general",
+      "subtitle": "Pulsa una cabecera para ordenar y una fila para ver su temporada.",
+      "near": "Solo mi entorno",
+      "detail": "Detalle",
+      "ofGp": "del GP",
+      "show": "Ver la temporada de {name}",
+      "hide": "Ocultar la temporada de {name}",
+      "expTitle": "Puntos de {name} por Gran Premio",
+      "expNote": " · raya = media de la comunidad · morado oscuro = ganó el GP",
+      "expAria": "Puntos por GP de {name}",
+      "seeProfile": "Ver perfil",
+      "communityAvg": "Media de la comunidad",
+      "cols": {
+        "form": "Forma",
+        "position": "Posición",
+        "total": "Puntos",
+        "gap": "Dif. líder",
+        "prev": "Dif. ant.",
+        "avg": "Media",
+        "wins": "Vict.",
+        "podiums": "Podios",
+        "hits": "Aciertos",
+        "gps": "GP"
+      },
+      "titles": {
+        "total": "Puntos totales",
+        "gap": "Puntos con el líder",
+        "prev": "Puntos con el de arriba",
+        "avg": "Media por GP",
+        "wins": "GP ganados",
+        "podiums": "Top 3 en un GP",
+        "hits": "Aciertos totales",
+        "gps": "GP disputados"
+      },
+      "legend": {
+        "form": "Forma: puesto en cada uno de los últimos 5 GP",
+        "position": "Posición: evolución en la general",
+        "prev": "Dif. ant.: puntos con el de arriba",
+        "avg": "Media: puntos por GP"
+      }
+    },
+    "r1m": {
+      "view": "Vista",
+      "views": {
+        "standings": "Clasificación",
+        "evolution": "Evolución",
+        "perGp": "Por GP"
+      },
+      "same": "sin cambios",
+      "mine": "a {gap} pts del líder · {move}",
+      "formLabel": "Forma",
+      "barsAria": "Puntos por GP",
+      "barsNote": "Puntos en cada GP · {from} → {to}",
+      "evoTitle": "Diferencia con el líder",
+      "evoAria": "Diferencia con el líder de los 5 primeros y tú",
+      "allViews": "Ver todas las vistas",
+      "perGpCaption": "Puntos en los últimos 5 GP",
+      "perGpNote": "Últimos 5 GP · desliza para ver más"
+    },
+    "r2": {
+      "title": "Resultados por Gran Premio",
+      "subtitle": "Una tabla en lugar de cuatro: elige qué muestra cada celda y cómo se colorea.",
+      "metric": "Métrica",
+      "color": "Color",
+      "metrics": {
+        "pts": "Puntos del GP",
+        "acc": "Acumulado",
+        "gpRank": "Puesto en el GP",
+        "rank": "Puesto en la general",
+        "hits": "Aciertos"
+      },
+      "colors": {
+        "none": "Sin color",
+        "heat": "Escala",
+        "best": "Solo el mejor"
+      },
+      "mean": "Media",
+      "pendingTitle": "{name} · pendiente",
+      "legendBold": "Negrita: el mejor del GP",
+      "legendFut": "Columnas atenuadas: GP pendientes"
+    },
+    "r3": {
+      "title": "Temporada de {name}",
+      "subtitle": "Cómo te ha ido en cada GP comparado con la comunidad.",
+      "view": "Vista",
+      "points": "Puntos",
+      "percentile": "Percentil",
+      "chartPts": "Tus puntos frente al rango de la comunidad",
+      "chartPct": "Tu percentil en cada GP",
+      "tableCaption": "Tu temporada GP a GP",
+      "kpi": {
+        "pos": "Posición",
+        "points": "Puntos",
+        "pct": "Percentil medio",
+        "pctNote": "100 = el mejor en cada GP",
+        "best": "mejor: {n}.º",
+        "of": "de {n}",
+        "streak": "Mejor racha",
+        "streakNote": "GP seguidos en el top 5"
+      },
+      "legend": {
+        "you": "Tus puntos",
+        "range": "Rango de la comunidad (mín.–máx.)",
+        "median": "Mediana",
+        "won": "1.º ganaste el GP",
+        "top": "Top 25 %",
+        "above": "Por encima de la mitad",
+        "below": "Por debajo de la mitad"
+      },
+      "cols": {
+        "yours": "Tus puntos",
+        "median": "Mediana",
+        "range": "Mín.–máx.",
+        "pct": "Percentil",
+        "place": "Puesto"
+      },
+      "cards": {
+        "best": "Tu mejor GP",
+        "worst": "Tu peor GP",
+        "easy": "GP más fácil para todos",
+        "note": "{pts} pts · mejor que el {pc} %",
+        "easyNote": "mediana más alta: {n} pts"
+      }
+    },
+    "r4": {
+      "title": "Palmarés de {name}",
+      "subtitle": "Todas las temporadas de la comunidad. Cada tarjeta abre su ranking.",
+      "what": "el palmarés",
+      "none": "La comunidad aún no tiene temporadas con puntos.",
+      "current": "(actual)",
+      "cardAria": "F1 {season}, {status}, campeón {name} con {pts} puntos",
+      "medals": "Medallero (temporadas cerradas)",
+      "medalsEmpty": "Aún no hay temporadas cerradas.",
+      "wins": "GP ganados",
+      "winsNote": "GP ganados: suma de todas las temporadas, también la actual.",
+      "slope": "Posición final por temporada",
+      "slopeHint": " · pulsa un nombre para resaltarlo",
+      "f1": "F1 {season}",
+      "cardPts": "{pts} pts · {margin}",
+      "podiumNames": "2.º {second} · 3.º {third}",
+      "pickPlayer": "Resaltar jugador"
+    },
+    "r5": {
+      "mode": "Modo",
+      "modes": {
+        "leader": "Con el líder",
+        "me": "Contigo",
+        "cum": "Acumulado",
+        "rate": "Ritmo"
+      },
+      "leader": {
+        "title": "Diferencia con el líder",
+        "sub": "Puntos que le faltan a cada uno para igualar al líder en cada momento. El líder está en 0."
+      },
+      "me": {
+        "title": "Diferencia contigo",
+        "sub": "Tu línea es el 0: arriba quien te supera, abajo quien va detrás. ¿A quién puedes alcanzar?"
+      },
+      "cum": {
+        "title": "Puntos acumulados",
+        "sub": "Total tras cada GP. Muestra la escala real, peor para ver diferencias pequeñas."
+      },
+      "rate": {
+        "title": "Ritmo · media de los últimos 3 GP",
+        "sub": "Quién está en racha, no quién va delante."
+      },
+      "aria": "{title} tras cada GP",
+      "after": "Tras {name}",
+      "hint": "Pulsa un GP del eje para cambiar.",
+      "legend": {
+        "change": "cambio de líder",
+        "rest": "Gris: resto de la comunidad",
+        "you": "Tú en morado; colores fijos para los 5 primeros",
+        "mark": "▼"
+      },
+      "fewTitle": "Hacen falta al menos 2 Grandes Premios",
+      "fewText": "Este gráfico aparece cuando se hayan disputado dos Grandes Premios con puntos."
+    },
+    "r6": {
+      "title": "Posición en la general tras cada GP",
+      "subtitle": "Tú en morado, los resaltados con color fijo y el resto en gris. Pulsa un GP para ver la clasificación de ese momento.",
+      "focusLabel": "Foco",
+      "focus": {
+        "top": "Top 5",
+        "near": "Mi entorno",
+        "all": "Todos"
+      },
+      "shape": "Forma",
+      "curves": "Curvas",
+      "lines": "Rectas",
+      "aria": "Posición en la general de cada jugador tras cada GP",
+      "after": "Tras {name}",
+      "highlight": "Resaltar"
+    },
+    "r7": {
+      "title": "Perfil de juego",
+      "subtitle": "Media por GP frente a regularidad. Arriba a la derecha, quien puntúa alto y siempre. Pulsa un punto.",
+      "measure": "Medida",
+      "points": "Puntos",
+      "hits": "Aciertos",
+      "chartAria": "Gráfico de dispersión: media por GP y regularidad",
+      "pointAria": "{name}: media {mean}, desviación {sd}",
+      "selected": "Seleccionado",
+      "note": "Arriba = más regular (desviación típica más baja). Líneas discontinuas: medias de la comunidad.",
+      "sdShort": "Desv. típica",
+      "profile": "Perfil",
+      "q": {
+        "hh": "Regular y alto",
+        "lh": "Regular, pero bajo",
+        "hl": "Alto, pero irregular",
+        "ll": "Irregular y bajo"
+      },
+      "rows": {
+        "mean": "Media por GP",
+        "sd": "Desviación típica",
+        "best": "Mejor GP",
+        "worst": "Peor GP",
+        "n": "GP disputados"
+      },
+      "sigma": "σ {v}",
+      "pickPlayer": "Elegir jugador"
+    },
+    "r8": {
+      "title": "Cara a cara",
+      "subtitle": "Tú contra quien elijas, GP a GP: ¿quién gana vuestros duelos?",
+      "rival": "Rival",
+      "scoreboard": "Marcador de duelos",
+      "standing": "{pos}.º en la general · {pts} pts",
+      "barsTitle": "Quién gana cada GP y por cuánto",
+      "barsAria": "Diferencia de puntos en cada GP entre tú y {name}",
+      "youWin": "GANAS TÚ ↑",
+      "theyWin": "GANA {name} ↓",
+      "cumTitle": "Diferencia acumulada",
+      "cumAria": "Diferencia acumulada: {label}",
+      "tie": "empate",
+      "compare": "Comparativa",
+      "diff": "Diferencia",
+      "acc": "Acumulado",
+      "noRivals": "No hay a quién comparar",
+      "noRivalsText": "Cuando haya más jugadores en la comunidad podrás compararte con ellos."
+    },
+    "r9": {
+      "view": "Vista",
+      "community": "Comunidad y tú",
+      "perPlayer": "Por jugador",
+      "hist": {
+        "title": "¿Cómo de buena es una puntuación?",
+        "sub": "Todas las puntuaciones de la temporada agrupadas de 5 en 5, con las tuyas encima."
+      },
+      "ridge": {
+        "title": "Distribución por jugador",
+        "sub": "Picos estrechos = regular; anchos = irregular. La raya es la mediana."
+      },
+      "histAria": "Histograma de puntos por GP de la comunidad con los tuyos encima",
+      "xTitle": "Puntos en un GP",
+      "medCommunity": "Mediana comunidad {n}",
+      "medMine": "Tu mediana {n}",
+      "legendAll": "Todas las puntuaciones de la comunidad ({n})",
+      "legendMine": "Las tuyas ({n})",
+      "med": "med. {n} · {range}",
+      "tableCaption": "Resumen de puntos por GP de cada jugador",
+      "cols": {
+        "min": "Mínimo",
+        "median": "Mediana",
+        "max": "Máximo",
+        "above": "GP por encima de 40"
+      },
+      "axisEnd": "{n} pts"
+    },
+    "r10": {
+      "title": "Mapa de calor de la temporada",
+      "subtitle": "Un solo tono: más oscuro, mejor. Legible para daltónicos y en modo oscuro. Borde dorado: ganador del GP.",
+      "metric": "Métrica",
+      "order": "Orden",
+      "metrics": {
+        "pct": "% del ganador",
+        "rank": "Puesto en el GP",
+        "hits": "Aciertos"
+      },
+      "orders": {
+        "total": "Por puntos",
+        "cons": "Por regularidad"
+      },
+      "total": "Total",
+      "regularity": "Regularidad",
+      "median": "Mediana del GP",
+      "difficulty": "Dificultad: más baja = más difícil",
+      "winner": "Ganador del GP",
+      "hitsWord": "aciertos"
+    },
+    "r11": {
+      "view": "Vista",
+      "views": {
+        "count": "Totales",
+        "grid": "% por sesión",
+        "me": "Tú vs. comunidad"
+      },
+      "count": {
+        "title": "Aciertos por sesión",
+        "sub": "Cuántos aciertos suma cada uno y en qué tipo de sesión."
+      },
+      "grid": {
+        "title": "% de acierto por sesión",
+        "sub": "Compara tasas, no totales: ¿quién es el especialista en clasificación o en carrera?"
+      },
+      "me": {
+        "title": "Tus puntos fuertes",
+        "sub": "Tu % de acierto frente a la media de la comunidad en cada tipo de sesión."
+      },
+      "legend": "Tipos de sesión",
+      "tableCaption": "Aciertos por tipo de sesión",
+      "gridNote": "Tamaño del círculo = % de acierto. Recuadro: el mejor de la comunidad en esa sesión.",
+      "diff": "Diferencia",
+      "avgTitle": "Media de la comunidad",
+      "legendYou": "Tu % de acierto",
+      "legendAvg": "Media de la comunidad",
+      "noRules": "No se han podido leer las reglas de la comunidad: los porcentajes no están disponibles."
+    },
+    "r12": {
+      "view": "Vista",
+      "views": {
+        "range": "En juego",
+        "proj": "Proyección",
+        "need": "Lo que necesitas"
+      },
+      "range": {
+        "title": "¿Quién puede ser campeón?",
+        "sub": "Puntos actuales más todos los que quedan en juego. Si la barra no llega a la línea del líder, ya no hay opciones."
+      },
+      "proj": {
+        "title": "Proyección a final de temporada",
+        "sub": "Si cada uno mantiene el ritmo de los últimos 5 GP, así acabaría la temporada."
+      },
+      "need": {
+        "title": "¿Cuánto necesitas por GP?",
+        "sub": "Puntos por GP necesarios para alcanzar al líder, frente a la media de cada uno."
+      },
+      "left": "Quedan {n} GP",
+      "maxInPlay": "Máximo en juego: {n} pts",
+      "alive": "{n} jugador aún puede ser campeón | {n} jugadores aún pueden ser campeones",
+      "noRules": "No se han podido leer las reglas de puntuación: el máximo en juego no está disponible.",
+      "max": "máx. {n}",
+      "state": {
+        "leader": "Líder",
+        "alive": "Puede ganar",
+        "out": "Sin opciones"
+      },
+      "legend": {
+        "current": "Puntos actuales",
+        "inPlay": "Puntos aún en juego",
+        "leader": "Líder hoy · {n}"
+      },
+      "projAria": "Proyección de puntos a final de temporada",
+      "projection": "PROYECCIÓN",
+      "projNote": "Línea discontinua: ritmo medio de los últimos 5 GP. Banda: entre su peor y su mejor GP recientes.",
+      "projTable": "Puntos actuales, ritmo y final proyectado",
+      "noProjTitle": "No hay proyección",
+      "noProjText": "La proyección necesita Grandes Premios disputados y otros por disputar.",
+      "noNeedTitle": "Nada que calcular",
+      "noNeedText": "No quedan Grandes Premios por disputar o aún no hay datos.",
+      "needNote": "Barra: su media por GP. Raya: puntos por GP que necesita para alcanzar al líder si este mantiene su media.",
+      "barAria": "Media {avg}, necesita {need} por GP",
+      "cols": {
+        "current": "Actuales",
+        "pace": "Ritmo",
+        "final": "Final proyectado",
+        "need": "Necesita por GP",
+        "vsAvg": "Frente a su media",
+        "difficulty": "Dificultad"
+      },
+      "level": {
+        "impossible": "Casi imposible",
+        "veryHard": "Muy difícil",
+        "hard": "Difícil",
+        "possible": "Posible"
+      },
+      "approx": "≈ {n}"
+    },
+    "r13": {
+      "view": "Vista",
+      "views": {
+        "me": "Tu temporada",
+        "share": "Reparto por jugador",
+        "alt": "Rankings alternativos"
+      },
+      "legend": "Tipos de puntos",
+      "me": {
+        "title": "Tus puntos por sesión en cada GP",
+        "sub": "Cada sesión con un color fijo; los fines de semana con sprint van marcados.",
+        "aria": "Tus puntos por sesión en cada GP"
+      },
+      "share": {
+        "title": "¿De dónde salen los puntos de cada uno?",
+        "sub": "Reparto por tipo de sesión: ¿eres de clasificación o de carrera?"
+      },
+      "alt": {
+        "title": "Rankings alternativos",
+        "sub": "¿Quién ganaría si solo contara una sesión?",
+        "q": "Solo clasificación",
+        "sp": "Solo sprint",
+        "r": "Solo carrera",
+        "real": "Clasificación real",
+        "note": "Flechas: puestos que se ganan o pierden frente a la clasificación real."
+      },
+      "mean": "media de la comunidad {n}",
+      "sprint": "SPRINT"
+    },
+    "ordinal": "{n}.º",
+    "gp": "GP",
+    "total": "Total",
+    "bandAhead": "POR DELANTE DE TI",
+    "bandBehind": "POR DETRÁS DE TI",
+    "mark": "▼",
+    "axis": "Elegir Gran Premio",
+    "axisAfter": "Ver tras {name}",
+    "scroll": "Tabla desplazable"
+  }
+}

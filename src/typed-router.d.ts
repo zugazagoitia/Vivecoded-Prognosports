@@ -353,6 +353,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/ranking/[comunidad]/': RouteRecordInfo<
+      '/ranking/[comunidad]/',
+      '/ranking/:comunidad',
+      { comunidad: ParamValue<true> },
+      { comunidad: ParamValue<false> },
+      | never
+    >,
     '/ranking/[comunidad]/[temporada]/': RouteRecordInfo<
       '/ranking/[comunidad]/[temporada]/',
       '/ranking/:comunidad/:temporada',
@@ -812,6 +819,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/privacy.vue': {
       routes:
         | '/privacy'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/ranking/[comunidad]/index.vue': {
+      routes:
+        | '/ranking/[comunidad]/'
       views:
         | never
       pathParamNames:
