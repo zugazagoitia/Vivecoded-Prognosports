@@ -55,3 +55,23 @@ Además: la spec describe las respuestas sin envelope y el login como `text/plai
 - Exigen sesión (no probados): `sessions/{s}/results|grid|tipps/{community}[/calculations]`, `points/{gp}`, `rulesets/{community}/{c}/{s}[/{gp}]`. La spec no define `/tipps/{community}/{user}`: se usa `/tipps/{community}` filtrando por usuario. La clave de `pointsBySession` y la de las reglas por sesión no están documentadas: se prueban id, key, code y name.
 - La API no tiene zona horaria del circuito (solo coordenadas): `circuitTimeZone` usa una tabla país/ciudad; si no hay, se oculta «Hora del circuito».
 - «N de M han pronosticado» no se muestra: los pronósticos ajenos son privados hasta el cierre y no hay endpoint de recuento.
+
+### Administración (épica M, verificado contra un backend local el 2026-10-11)
+
+Solo la forma de los campos; las escrituras viven en `src/api/admin.ts` y nunca se han lanzado contra `api.prognosports.com`.
+
+- `POST /v2/gps/` (solo `name`, `code`), `POST /v2/drivers` y `POST /v2/constructors` responden el cuerpo **sin `id`**: el creado se busca después en el listado (`GET /v2/gps`, `/v2/drivers`, `/v2/constructors/`) por código/nombre.
+- Alta de GP en la temporada: `POST /v2/seasons/{season}/gps` con `{ gp, circuit, variant, laps, round }` (ids de circuito/variante como cadena) funciona.
+- Edición de GP (no está en la spec): `PUT /v2/gps/{id}` cambia `name` y `code`; `PUT /v2/gps/{competition}/{season}/{id}` cambia `round`, `laps`, `circuit` y `variant`. En la spec `PUT /v2/gps/{grandprix}` figura como «Borrar» y sin cuerpo.
+- Parrilla: la ruta real es `PATCH /v2/gps/{c}/{s}/{gp}/sessions/{session}/grid` (y `.../grid/notification`, `.../grid/{driver}`), no la de la spec sin sesión. Cuerpo `{ grid: [{ position, driver, isFromPit, note }] }` con `driver` = id numérico (no `{ id }`).
+- Resultados: `POST .../sessions/{session}/results` con `{ results: { "<posición>": <idPiloto> }, fastLap }`. La lista `[{ position, driver }]` se rechaza («Solicitud inválida»). Solo se guardan si la sesión ya se disputó y el piloto está en el GP.
+- Pilotos del GP: `POST .../drivers` (sustituye la lista) responde HTTP 500 con cualquier array probado (incluido `[]`); con un objeto responde «Solicitud inválida». **Pendiente de backend**: forma del cuerpo desconocida.
+- No existen `POST /v2/notifications` (aviso manual) ni `POST .../sessions/{session}/calculations` (recálculo global): 404 con texto plano, sin envelope. M12 y M13 muestran «aún no disponible».
+- `GET /v2/notifications/channels` responde un mapa `{ mail: "Email", telegram: "Telegram" }` (la spec: lista de `{ id, label, enabled }`); `GET /v2/notifications/types` también es un mapa con claves en minúsculas con guion.
+- Colores (`color`, `teamcolor`) pueden venir con o sin `#`; `cssColor()` normaliza.
+- `GET /v2/seasons/{season}/drivers` no trae `team`; el equipo de cada piloto sale de `GET .../gps/{c}/{s}/{gp}/drivers`.
+- `User.rank` del administrador local trae solo `{ id, name, color }`, sin `admin`: el guard `admin` del frontend (`rank.admin === true`) no lo reconocería. Por confirmar si en producción llega `admin`.
+- `RuleSet.data` va indexado por la **clave** de sesión (1 Q, 2 R, 3 SQ, 4 SR); `POST /v2/rulesets` guarda `data` pero devuelve `isPublic` falso aunque se envíe `true`.
+- El `code` de la competición local es el nombre largo, no `f1`: el frontend usa `f1` (válido en producción).
+
+- `GET /v2/user/me`: `rank` llega como `{ id, name, color }` sin el booleano `admin` que la spec marca como requerido (comprobado en el backend local con un admin real; en producción un miembro devuelve `name: "Miembro"`). El frontend considera admin `rank.admin === true` o `rank.name` igual a «admin» (sin distinguir mayúsculas), `isAdmin` en `src/stores/session.ts`. Se podrá simplificar cuando el backend serialice `admin`.

@@ -1,3 +1,4 @@
+import { adminHandlers } from './admin'
 import { authHandlers } from './auth'
 import { calendarHandlers } from './calendar'
 import { circuitHandlers } from './circuits'
@@ -13,6 +14,7 @@ import { userHandlers } from './user'
 
 /** Default handlers shared by tests (setupServer) and `VITE_API_MOCK=true` dev (setupWorker). */
 export const handlers = [
+  ...adminHandlers,
   ...communityHomeHandlers,
   ...invitationHandlers,
   ...predictHandlers,
