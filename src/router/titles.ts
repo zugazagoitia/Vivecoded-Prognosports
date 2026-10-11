@@ -3,6 +3,7 @@ import type { Router } from 'vue-router'
 /** Fallback Spanish titles until T5 (i18n) lands; `setTitleResolver` swaps in `t()`. */
 const fallback: Record<string, string> = {
   'route.landing': 'Inicio',
+  'route.rules': 'Cómo se puntúa',
   'route.login': 'Iniciar sesión',
   'route.register': 'Crear cuenta',
   'route.recover': 'Recuperar contraseña',
@@ -12,6 +13,8 @@ const fallback: Record<string, string> = {
   'route.gp': 'Gran Premio',
   'route.predict': 'Pronosticar',
   'route.ranking': 'Clasificación',
+  'route.circuits': 'Circuitos',
+  'route.circuit': 'Circuito',
   'route.communities': 'Comunidades',
   'route.community': 'Comunidad',
   'route.user': 'Perfil',
@@ -22,6 +25,9 @@ const fallback: Record<string, string> = {
   'route.datos': 'Piezas de datos',
   'route.graficos': 'Gráficos',
   'route.estados': 'Estados',
+  'route.terms': 'Términos de uso',
+  'route.privacy': 'Política de privacidad',
+  'route.faq': 'Preguntas frecuentes',
   'route.loggedOut': 'Has cerrado sesión',
 }
 

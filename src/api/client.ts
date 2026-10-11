@@ -148,3 +148,6 @@ export function uploadImage(
 ): Promise<unknown> {
   return request(path, { method: 'POST', form: imageForm(file), signal })
 }
+
+/** Absolute URL of an API path (for `<img src>` of public images such as circuit layouts). */
+export const apiUrl = (path: string): string => baseUrl.replace(/\/+$/, '') + path

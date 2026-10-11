@@ -1,0 +1,117 @@
+{
+  "rules": {
+    "title": "Cómo se puntúa",
+    "intro": "Pronosticas el orden de los pilotos de cada sesión y sumas puntos según lo cerca que estés. Cada comunidad elige su propio reparto; aquí tienes el de «{name}», el más habitual.",
+    "home": "Inicio",
+    "toc": {
+      "label": "En esta página",
+      "sessions": "Sesiones y plazos",
+      "points": "Reparto de puntos",
+      "example": "Un ejemplo",
+      "bonus": "Bonus del GP",
+      "extras": "Detalles"
+    },
+    "sessions": {
+      "title": "Sesiones y plazos",
+      "text": "Cada fin de semana tiene hasta cuatro sesiones. Pronosticas cada una por separado y el plazo se cierra {bold} de que empiece.",
+      "bold": "cinco minutos antes",
+      "pick": "Sesión",
+      "drivers": "{n} piloto | {n} pilotos",
+      "closes": "{when} · 5 min antes",
+      "driversLabel": "Pilotos a pronosticar",
+      "closesLabel": "Cierre",
+      "availableLabel": "Disponible",
+      "names": {
+        "q": "Clasificación",
+        "sq": "Clasificación sprint",
+        "s": "Sprint",
+        "r": "Carrera"
+      },
+      "close": {
+        "fri1225": "Viernes 12:25",
+        "fri1125": "Viernes 11:25",
+        "sat1155": "Sábado 11:55",
+        "sun1455": "Domingo 14:55"
+      },
+      "available": {
+        "grid": "Desde que se publica la parrilla",
+        "sprint": "Fines de semana con sprint"
+      }
+    },
+    "points": {
+      "title": "Reparto de puntos",
+      "text": "Por cada piloto que pronosticas, los puntos dependen de la distancia entre la posición que le diste y la que ha tenido de verdad. Son los 8 conceptos del conjunto de reglas; cada comunidad puede cambiar los valores.",
+      "concept": "Concepto",
+      "example": "Ejemplo",
+      "points": "Puntos",
+      "caption": "Reparto de puntos de {name}",
+      "concepts": {
+        "exact": "Posición exacta",
+        "next": "Posición siguiente (acaba 1 más abajo)",
+        "previous": "Posición anterior (acaba 1 más arriba)",
+        "nextOfFollowing": "Siguiente de la siguiente (2 más abajo)",
+        "previousOfPrevious": "Anterior de la anterior (2 más arriba)",
+        "podium": "Piloto del podio que acaba fuera del podio",
+        "notInResults": "Piloto que no está en los resultados",
+        "topScorer": "Bonus al que más puntos suma en el GP"
+      },
+      "examples": {
+        "exact": "Pones 3.º y acaba 3.º",
+        "next": "Pones 3.º y acaba 4.º",
+        "previous": "Pones 3.º y acaba 2.º",
+        "nextOfFollowing": "Pones 3.º y acaba 5.º",
+        "previousOfPrevious": "Pones 3.º y acaba 1.º",
+        "podium": "Pones 2.º y acaba 6.º",
+        "notInResults": "Pones 8.º y se retira",
+        "topScorer": "Más puntos del fin de semana"
+      }
+    },
+    "rule": {
+      "exact": "Posición exacta",
+      "next": "Posición siguiente (acaba 1 más abajo)",
+      "previous": "Posición anterior (acaba 1 más arriba)",
+      "nextOfFollowing": "Siguiente de la siguiente (2 más abajo)",
+      "previousOfPrevious": "Anterior de la anterior (2 más arriba)",
+      "podium": "Piloto del podio que acaba fuera del podio",
+      "notInResults": "Piloto que no está en los resultados",
+      "far": "Más de dos posiciones de diferencia"
+    },
+    "example": {
+      "title": "Pruébalo con la carrera de Azerbaiyán",
+      "text": "Este es un pronóstico de ocho pilotos. Sube o baja pilotos y mira cómo cambian los puntos frente al resultado real.",
+      "hintTitle": "Pista",
+      "hint": "Pones a {name} {position}.º y acaba {finish} → {points} ({rule}).",
+      "caption": "Pronóstico de ejemplo frente al resultado real",
+      "position": "Tu pos.",
+      "driver": "Piloto",
+      "order": "Ordenar",
+      "finished": "Acabó",
+      "rule": "Regla",
+      "points": "Puntos",
+      "out": "Fuera del top 8",
+      "finish": "{n}.º",
+      "up": "Subir a {name}",
+      "down": "Bajar a {name}",
+      "reset": "Restablecer",
+      "total": "Total de la sesión",
+      "pointsN": "{n} punto | {n} puntos"
+    },
+    "bonus": {
+      "title": "Bonus del Gran Premio",
+      "text": "Cuando terminan todas las sesiones, quien más puntos haya sumado en el fin de semana se lleva un bonus. Si hay empate, lo comparten.",
+      "alertTitle": "+{n} puntos",
+      "alert": "para quien más puntos sume en el GP."
+    },
+    "extras": {
+      "title": "Detalles que conviene saber",
+      "fastest": "La {bold} se muestra en los resultados, pero no se pronostica ni puntúa.",
+      "fastestBold": "vuelta rápida",
+      "changes": "Puedes cambiar tu pronóstico tantas veces como quieras hasta el cierre.",
+      "visibility": "Los pronósticos de los demás se ven {bold}.",
+      "visibilityBold": "solo cuando se cierra el plazo",
+      "community": "Cada comunidad puede cambiar los puntos por acierto. Las reglas de la tuya están en su página.",
+      "money": "Esto no es una casa de apuestas: no se juega dinero.",
+      "cta": "Empezar a pronosticar"
+    }
+  }
+}

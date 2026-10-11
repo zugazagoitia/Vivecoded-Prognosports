@@ -18,7 +18,7 @@ Se sirven desde `public/_headers` (bloque `/*`; Vite lo copia a `dist/_headers`)
 
 ### CSP
 
-`default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com; connect-src 'self' https://api.prognosports.com; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`
+`default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com https://*.basemaps.cartocdn.com; connect-src 'self' https://api.prognosports.com; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`
 
 - Sin `unsafe-inline` ni `unsafe-eval`. Vite emite el JS y el CSS como ficheros; no hay scripts en línea. `style-src 'self'` basta hoy (no hay ECharts/MapLibre todavía).
 - Zod comprueba `new Function('')` para su JIT y eso se reporta como violación `script-src eval` aunque se capture; `src/lib/zod-csp.ts` fija `z.config({ jitless: true })` y se importa primero en `main.ts`.
@@ -27,8 +27,8 @@ Se sirven desde `public/_headers` (bloque `/*`; Vite lo copia a `dist/_headers`)
 - **Pendientes de otras tareas (se añaden en la misma línea de `_headers`)**:
   - Sentry (T14): su origen de ingest (p. ej. `https://*.ingest.sentry.io`) en `connect-src`.
   - Cloudflare Web Analytics: `https://static.cloudflareinsights.com` en `script-src` y `https://cloudflareinsights.com` en `connect-src`.
-  - Mapa (circuito): host de teselas en `img-src` y `connect-src`; y `style-src 'unsafe-inline'` solo si MapLibre lo exige, documentándolo aquí.
-- El e2e (`e2e/security.spec.ts`) inyecta la CSP de `dist/_headers` en los documentos servidos por `vite preview` y falla ante cualquier `securitypolicyviolation` en login, 404 e inicio (Chromium). Hay que ampliarlo con las pantallas nuevas (Pronosticar, Ranking, Circuito, Admin) cuando existan.
+  - Mapa (circuito, P4): resuelto sin MapLibre. `CircuitMap.vue` pinta teselas raster de CARTO (`https://{a-d}.basemaps.cartocdn.com/{light_all|dark_all}/z/x/y[@2x].png`) como `<img>`, así que solo hace falta `https://*.basemaps.cartocdn.com` en `img-src`. No necesita `connect-src`, `worker-src blob:` ni `style-src 'unsafe-inline'` (la posición de las teselas se fija por CSSOM). Atribución «© OpenStreetMap contributors © CARTO» siempre visible.
+- El e2e (`e2e/security.spec.ts`) inyecta la CSP de `dist/_headers` en los documentos servidos por `vite preview` y falla ante cualquier `securitypolicyviolation` en login, 404 e inicio (Chromium). Hay que ampliarlo con las pantallas nuevas (Pronosticar, Ranking, Admin; Circuito ya cubierto) cuando existan.
 
 ## Política del token de sesión (§23.3)
 

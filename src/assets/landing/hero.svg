@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <!-- PLACEHOLDER (original artwork, free of rights). The final race photo (WebP/AVIF, licensed) is still needed: see P1 / 23.6. -->
+  <rect width="1600" height="900" fill="#3a215e"/>
+  <g fill="none" stroke="#a18acc" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" opacity=".55">
+    <path d="M200 700 C 200 520, 420 560, 520 440 S 760 180, 980 260 S 1180 520, 1340 400 S 1500 200, 1420 140"/>
+  </g>
+  <g fill="none" stroke="#ebe1f5" stroke-width="6" stroke-dasharray="26 22" opacity=".6">
+    <path d="M200 700 C 200 520, 420 560, 520 440 S 760 180, 980 260 S 1180 520, 1340 400 S 1500 200, 1420 140"/>
+  </g>
+</svg>

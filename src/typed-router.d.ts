@@ -74,6 +74,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/circuits/': RouteRecordInfo<
+      '/circuits/',
+      '/circuits',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/circuits/[id]': RouteRecordInfo<
+      '/circuits/[id]',
+      '/circuits/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
     '/comunidades/': RouteRecordInfo<
       '/comunidades/',
       '/comunidades',
@@ -130,6 +144,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/faq': RouteRecordInfo<
+      '/faq',
+      '/faq',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/fundamentos': RouteRecordInfo<
       '/fundamentos',
       '/fundamentos',
@@ -161,6 +182,13 @@ declare module 'vue-router/auto-routes' {
     '/login': RouteRecordInfo<
       '/login',
       '/login',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/privacy': RouteRecordInfo<
+      '/privacy',
+      '/privacy',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -207,9 +235,23 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/rules': RouteRecordInfo<
+      '/rules',
+      '/rules',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/sesion-cerrada': RouteRecordInfo<
       '/sesion-cerrada',
       '/sesion-cerrada',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/terms': RouteRecordInfo<
+      '/terms',
+      '/terms',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -291,6 +333,22 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/circuits/index.vue': {
+      routes:
+        | '/circuits/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/circuits/[id].vue': {
+      routes:
+        | '/circuits/[id]'
+      views:
+        | never
+      pathParamNames:
+        | 'id'
+    }
     'src/pages/comunidades/index.vue': {
       routes:
         | '/comunidades/'
@@ -355,6 +413,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/faq.vue': {
+      routes:
+        | '/faq'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/fundamentos.vue': {
       routes:
         | '/fundamentos'
@@ -390,6 +456,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/login.vue': {
       routes:
         | '/login'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/privacy.vue': {
+      routes:
+        | '/privacy'
       views:
         | never
       pathParamNames:
@@ -443,9 +517,25 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/rules.vue': {
+      routes:
+        | '/rules'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/sesion-cerrada.vue': {
       routes:
         | '/sesion-cerrada'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/terms.vue': {
+      routes:
+        | '/terms'
       views:
         | never
       pathParamNames:

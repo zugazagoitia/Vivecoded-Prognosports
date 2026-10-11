@@ -21,13 +21,19 @@ test.describe('security', () => {
   })
 
   for (const path of [
+    '/',
     '/login',
     '/ruta-que-no-existe',
     '/home',
+    '/circuits',
+    '/circuits/18',
     '/dev/tokens',
     '/dev/datos',
     '/dev/estados',
     '/dev/graficos',
+    '/terms',
+    '/privacy',
+    '/faq',
   ]) {
     test(`no CSP violations on ${path}`, async ({ authedPage: page, browserName }) => {
       test.skip(browserName !== 'chromium', 'CSP violations are checked in Chromium')
