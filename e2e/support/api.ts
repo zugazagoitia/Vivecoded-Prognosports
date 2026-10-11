@@ -291,6 +291,8 @@ export async function mockApi(page: Page): Promise<void> {
             average: MOCK_SEASON_AVERAGE,
             totalPoints: 600,
             wonGrandPrixes: [{ id: 3 }, { id: 9 }],
+            standings: 4,
+            totalHits: 48,
           })
         : json(route, 401, null, 'Tu sesión ha caducado.')
     }
@@ -312,6 +314,13 @@ export async function mockApi(page: Page): Promise<void> {
       return authed
         ? json(route, 200, toWireUser(users[0]!))
         : json(route, 401, null, 'Tu sesión ha caducado.')
+    }
+    // Public profile of another user (U2), by id or username.
+    if (method === 'GET' && /^\/user\/[^/]+$/.test(path)) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      const key = decodeURIComponent(path.split('/')[2]!)
+      const user = users.find((u) => String(u.id) === key || u.username === key)
+      return user ? json(route, 200, toWireUser(user)) : invalid(route, 'Usuario inválido')
     }
     if (method === 'GET' && /^\/user\/[^/]+\/communities$/.test(path)) {
       return json(route, 200, unverifiedSession ? [] : [community])

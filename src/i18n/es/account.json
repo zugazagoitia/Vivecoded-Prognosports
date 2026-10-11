@@ -1,0 +1,153 @@
+{
+  "account": {
+    "title": "Ajustes de la cuenta",
+    "intro": "Tus datos, seguridad y avisos.",
+    "mobileTitle": "Ajustes",
+    "toc": "En esta página",
+    "sections": {
+      "datos": "Perfil",
+      "foto": "Foto",
+      "correo": "Correo y contraseña",
+      "sesiones": "Sesiones abiertas",
+      "telegram": "Telegram",
+      "avisos": "Avisos"
+    },
+    "loadError": "tus ajustes",
+    "profile": {
+      "title": "Perfil",
+      "text": "Lo que ven los demás en tu perfil",
+      "username": "Nombre de usuario",
+      "usernameHelp": "Por ahora el nombre de usuario no se puede cambiar.",
+      "bio": "Biografía",
+      "bioCounter": "{n}/{max}",
+      "location": "Localización",
+      "birthdate": "Fecha de nacimiento",
+      "timeZone": "Zona horaria",
+      "timeZoneHelp": "Las horas de sesión y de cierre se muestran en esta zona.",
+      "save": "Guardar",
+      "saved": "Perfil guardado.",
+      "errors": {
+        "bioMax": "La biografía admite como máximo 160 caracteres.",
+        "locationMax": "La localización admite como máximo 100 caracteres.",
+        "birthdate": "Escribe una fecha válida y en el pasado."
+      }
+    },
+    "photo": {
+      "title": "Foto de perfil",
+      "text": "JPG o PNG, hasta 2 MB. La recortarás antes de subirla.",
+      "upload": "Subir foto",
+      "remove": "Quitar",
+      "file": "Elegir foto de perfil",
+      "uploaded": "Foto actualizada.",
+      "removed": "Foto eliminada.",
+      "errors": {
+        "type": "La foto debe ser JPG o PNG.",
+        "size": "La imagen supera 2 MB."
+      },
+      "confirm": {
+        "title": "¿Quitar la foto?",
+        "text": "Volverás a mostrar tus iniciales.",
+        "action": "Quitar foto"
+      }
+    },
+    "security": {
+      "title": "Correo y contraseña",
+      "email": "Correo electrónico",
+      "emailHelp": "Te pediremos tu contraseña para confirmar el cambio.",
+      "changeEmail": "Cambiar",
+      "emailTitle": "Cambiar el correo",
+      "newEmail": "Correo nuevo",
+      "currentPassword": "Contraseña actual",
+      "newPassword": "Contraseña nueva",
+      "newPasswordHelp": "Al menos 8 caracteres.",
+      "repeatPassword": "Repite la nueva",
+      "changePassword": "Cambiar contraseña",
+      "emailChanged": "Correo actualizado.",
+      "passwordChanged": "Contraseña actualizada.",
+      "confirmEmail": "Cambiar correo",
+      "errors": {
+        "emailRequired": "Escribe tu correo.",
+        "emailInvalid": "Escribe un correo válido.",
+        "passwordRequired": "Escribe tu contraseña actual.",
+        "min": "Usa al menos 8 caracteres.",
+        "mismatch": "Las contraseñas no coinciden."
+      }
+    },
+    "sessions": {
+      "title": "Sesiones abiertas",
+      "text": "Dispositivos con tu cuenta iniciada",
+      "closeOthers": "Cerrar las demás",
+      "closeOthersCount": "Cerrar las demás sesiones ({n})",
+      "table": "Sesiones abiertas",
+      "session": "Sesión",
+      "created": "Creada",
+      "activity": "Última actividad",
+      "current": "Esta sesión",
+      "close": "Cerrar",
+      "closeAria": "Cerrar la sesión {name}",
+      "agent": "{browser} en {os}",
+      "unknown": "Dispositivo desconocido",
+      "closed": "Sesión cerrada.",
+      "closedOthers": "Se han cerrado las demás sesiones.",
+      "error": "tus sesiones",
+      "confirm": {
+        "title": "¿Cerrar las demás sesiones?",
+        "text": "Se cerrará la sesión en todos tus otros dispositivos."
+      }
+    },
+    "telegram": {
+      "title": "Telegram",
+      "linked": "Vinculado",
+      "linkedAs": "Vinculado como @{name}",
+      "text": "Recibes por Telegram los avisos que marques abajo.",
+      "unlink": "Desvincular",
+      "unlinked": "Telegram desvinculado.",
+      "notLinked": "No vinculado",
+      "notLinkedText": "Vincula tu cuenta de Telegram para recibir avisos por ese canal.",
+      "confirm": {
+        "title": "¿Desvincular Telegram?",
+        "text": "Dejarás de recibir avisos por Telegram."
+      }
+    },
+    "notifications": {
+      "title": "Avisos",
+      "text": "Elige qué recibes y por dónde",
+      "table": "Avisos por tipo y canal",
+      "type": "Aviso",
+      "channels": {
+        "mail": "Correo",
+        "telegram": "Telegram"
+      },
+      "switchLabel": "{name} por {channel}",
+      "telegramOff": "Vincula Telegram para activar este canal.",
+      "channelOff": "Canal no disponible.",
+      "saved": "Avisos guardados.",
+      "types": {
+        "INFO": {
+          "name": "Información",
+          "text": "Novedades y avisos generales de PrognoSports"
+        },
+        "SESSION_PRE_ALERT": {
+          "name": "Pre-alerta de sesión",
+          "text": "El día antes de cada sesión con pronóstico"
+        },
+        "SESSION_ALERT": {
+          "name": "Alerta de sesión",
+          "text": "Minutos antes del cierre si aún no has pronosticado"
+        },
+        "GRID_CHANGES": {
+          "name": "Cambios en la parrilla",
+          "text": "Si la organización cambia una parrilla publicada"
+        },
+        "POINTS_DISPATCHED": {
+          "name": "Puntos repartidos",
+          "text": "Cuando se calculan los puntos de una sesión"
+        }
+      }
+    },
+    "saveBar": {
+      "saved": "Cambios guardados.",
+      "error": "No se han podido guardar los cambios."
+    }
+  }
+}

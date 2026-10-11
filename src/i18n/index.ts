@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import register from './es/register.json'
+import account from './es/account.json'
 import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
@@ -22,6 +23,7 @@ import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
 import predict from './es/predict.json'
+import profile from './es/profile.json'
 import recover from './es/recover.json'
 import reset from './es/reset.json'
 import results from './es/results.json'
@@ -30,6 +32,7 @@ import simulator from './es/simulator.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
+import userProfile from './es/userProfile.json'
 import verify from './es/verify.json'
 
 export const i18n = createI18n({
@@ -38,6 +41,7 @@ export const i18n = createI18n({
   fallbackLocale: 'es',
   messages: {
     es: {
+      ...account,
       ...common,
       ...mobilenav,
       ...communities,
@@ -65,10 +69,12 @@ export const i18n = createI18n({
       ...gp,
       ...invitation,
       ...landing,
+      ...profile,
       ...recover,
       ...reset,
       ...results,
       ...simulator,
+      userProfile,
       ...verify,
     },
   },

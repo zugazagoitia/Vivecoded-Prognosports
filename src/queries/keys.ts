@@ -6,6 +6,12 @@ type Id = string | number
  */
 export const keys = {
   me: () => ['me'] as const,
+  /** Public profile of one user (U2). */
+  user: (user: Id) => ['user', user] as const,
+  /** Account settings (U3). */
+  timezones: () => ['timezones'] as const,
+  authTokens: () => ['auth-tokens'] as const,
+  notificationChannels: () => ['notification-channels'] as const,
   /** Public list of every community (H3). */
   exploreCommunities: () => ['explore-communities'] as const,
   userCommunities: (user: Id) => ['user-communities', user] as const,

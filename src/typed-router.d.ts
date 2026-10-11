@@ -74,6 +74,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/ajustes': RouteRecordInfo<
+      '/ajustes',
+      '/ajustes',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/circuits/': RouteRecordInfo<
       '/circuits/',
       '/circuits',
@@ -305,11 +312,11 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/u/[usuario]': RouteRecordInfo<
-      '/u/[usuario]',
-      '/u/:usuario',
-      { usuario: ParamValue<true> },
-      { usuario: ParamValue<false> },
+    '/u/[[usuario]]': RouteRecordInfo<
+      '/u/[[usuario]]',
+      '/u/:usuario?',
+      { usuario?: ParamValueZeroOrOne<true> },
+      { usuario?: ParamValueZeroOrOne<false> },
       | never
     >,
     '/unirse/[codigo]': RouteRecordInfo<
@@ -384,6 +391,14 @@ declare module 'vue-router/auto-routes' {
     'src/pages/admin/gps.vue': {
       routes:
         | '/admin/gps'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/ajustes.vue': {
+      routes:
+        | '/ajustes'
       views:
         | never
       pathParamNames:
@@ -653,9 +668,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'src/pages/u/[usuario].vue': {
+    'src/pages/u/[[usuario]].vue': {
       routes:
-        | '/u/[usuario]'
+        | '/u/[[usuario]]'
       views:
         | never
       pathParamNames:
