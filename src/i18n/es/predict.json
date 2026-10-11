@@ -1,0 +1,138 @@
+{
+  "title": "Pronosticar",
+  "laps": "{n} vuelta | {n} vueltas",
+  "privacy": "Tu pronóstico es privado hasta el cierre.",
+  "missing": "Falta {n} piloto | Faltan {n} pilotos",
+  "ready": "Listo para guardar",
+  "tabs": {
+    "label": "Sesión",
+    "saved": "(pronóstico guardado)"
+  },
+  "tab": {
+    "tomorrow": "Cierra mañana {time}",
+    "on": "Cierra el {day} {time}"
+  },
+  "pool": {
+    "title": "Pilotos",
+    "sort": "Ordenar",
+    "byTeam": "Equipo",
+    "byGrid": "Parrilla",
+    "byNumber": "Dorsal",
+    "gridGroup": "Orden de parrilla",
+    "numberGroup": "Por dorsal",
+    "noTeam": "Sin equipo",
+    "search": "Buscar piloto o equipo",
+    "help": "Pulsa un piloto para ponerlo en el hueco marcado, o arrástralo a cualquier hueco.",
+    "noMatch": "Ningún piloto coincide con «{q}»",
+    "empty": "Aún no hay pilotos inscritos en este Gran Premio.",
+    "row": "{driver}",
+    "rowUsed": "{driver}, ya está en el {place}"
+  },
+  "slots": {
+    "title": "Tu pronóstico · {session}",
+    "count": "{done} de {n}",
+    "progress": "Pilotos elegidos",
+    "clear": "Vaciar",
+    "save": "Guardar pronóstico",
+    "saving": "Guardando…",
+    "saved": "Guardado"
+  },
+  "slot": {
+    "starts": "sale P{n}"
+  },
+  "unsaved": {
+    "title": "Cambios sin guardar.",
+    "text": "Si sales ahora, se perderán."
+  },
+  "recovered": {
+    "title": "Borrador recuperado.",
+    "text": "Es el pronóstico que dejaste sin guardar en este dispositivo.",
+    "discard": "Descartar borrador"
+  },
+  "validation": {
+    "missing": "Faltan pilotos por elegir",
+    "duplicates": "Hay pilotos repetidos",
+    "unknown": "Hay pilotos que no participan en este Gran Premio",
+    "closed": "El plazo para pronosticar esta sesión ha cerrado"
+  },
+  "close": {
+    "title": "Cierre",
+    "soon": "Pronto",
+    "when": "{day} a las {time} (tu hora)",
+    "remaining": "Tiempo hasta el cierre: {time}",
+    "mobile": "Cierra {session} en",
+    "mobileWhen": "{day} · {time} (tu hora)"
+  },
+  "shortcuts": {
+    "title": "Atajos",
+    "grid": "Rellenar con la parrilla",
+    "results": "Copiar el resultado {session}",
+    "mine": "Copiar mi pronóstico {session}",
+    "note": "Después ajusta el orden arrastrando o con las flechas."
+  },
+  "mobile": {
+    "hint": "Toca un hueco para elegir piloto",
+    "choose": "Elige el {place}",
+    "pick": "Elegir piloto",
+    "order": "Orden",
+    "slotFilled": "{place}: {driver}",
+    "slotEmpty": "{place}: vacío",
+    "sheetNote": "Atenuados: ya están en otro puesto. Abajo, la posición de salida."
+  },
+  "live": {
+    "placed": "{driver} en el {place}.",
+    "moved": "{driver}, ahora {place}.",
+    "removed": "{driver} quitado del {place}.",
+    "cleared": "Pronóstico vaciado.",
+    "filled": "Pronóstico rellenado.",
+    "discarded": "Cambios descartados.",
+    "saved": "Pronóstico {session} guardado.",
+    "full": "No queda ningún hueco libre. Elige un hueco para sustituir su piloto.",
+    "fiveMin": "Quedan menos de 5 minutos para el cierre."
+  },
+  "toast": {
+    "saved": "Pronóstico {session} guardado.",
+    "savedText": "Puedes cambiarlo hasta el cierre."
+  },
+  "errors": {
+    "invalid": "Revisa el pronóstico antes de guardarlo.",
+    "saveTitle": "No se ha podido guardar el pronóstico",
+    "generic": "Inténtalo de nuevo en unos instantes.",
+    "offlineTitle": "Sin conexión",
+    "offline": "No se ha guardado. Tu borrador sigue aquí; vuelve a pulsar Guardar cuando tengas conexión.",
+    "deadlineTitle": "El plazo ha cerrado",
+    "deadlineText": "El servidor ya no admite pronósticos de esta sesión.",
+    "deadline": "El plazo para pronosticar esta sesión ha cerrado y el pronóstico no se ha guardado."
+  },
+  "closedLive": {
+    "title": "El plazo ha cerrado.",
+    "unsaved": "Tus cambios sin guardar no se han enviado.",
+    "keep": "Ya no se puede guardar. Tus cambios sin guardar se muestran aquí solo para consulta."
+  },
+  "closed": {
+    "titleF": "{session} ya está cerrada.",
+    "titleM": "{session} ya está cerrado.",
+    "scored": "Tu pronóstico sumó {n} puntos.",
+    "scoredMax": "Tu pronóstico sumó {n} de {max} puntos.",
+    "scoredNone": "No enviaste ningún pronóstico para esta sesión.",
+    "waitingPoints": "Tu pronóstico está guardado. Los puntos llegan en cuanto se publican los resultados.",
+    "waiting": "Tu pronóstico está guardado. Los puntos llegan en cuanto se publican los resultados.",
+    "none": "Ya no se puede pronosticar y no enviaste ningún pronóstico.",
+    "results": "Ver resultados"
+  },
+  "notFound": {
+    "title": "Esta sesión no existe",
+    "text": "Puede que el enlace sea antiguo o que el Gran Premio no tenga esta sesión.",
+    "toGp": "Ver el Gran Premio"
+  },
+  "noPositions": {
+    "title": "No sabemos cuántos pilotos hay que pronosticar",
+    "text": "Las reglas de tu comunidad no indican cuántas posiciones se pronostican en esta sesión."
+  },
+  "error": {
+    "gp": "el Gran Premio",
+    "rules": "las reglas de la comunidad",
+    "tipps": "tu pronóstico",
+    "drivers": "los pilotos del Gran Premio"
+  }
+}

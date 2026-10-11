@@ -27,6 +27,7 @@
   "slot": {
     "emptyPrompt": "Pulsa para elegir piloto",
     "emptyDrag": "Arrastra un piloto o pulsa para elegir",
+    "emptyReadonly": "Sin piloto",
     "empty": "{place} vacío",
     "filled": "{place} {driver}",
     "remove": "Quitar a {driver} de {place}",

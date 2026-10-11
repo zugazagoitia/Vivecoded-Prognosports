@@ -1,0 +1,111 @@
+{
+  "results": {
+    "title": "{session} · pronósticos y resultados",
+    "subtitle": "Gran Premio de {gp} · Ronda {round} · {community}",
+    "mobileTitle": "Resultados",
+    "crumb": "Resultados",
+    "points": "{n} punto | {n} puntos",
+    "session": "Sesión",
+    "view": "Vista",
+    "views": { "community": "Comunidad", "breakdown": "Tu desglose" },
+    "community": {
+      "title": "Toda la comunidad",
+      "text": "La misma tabla cambia según el momento de la sesión."
+    },
+    "caption": "Pronósticos y puntos de la comunidad en {session}",
+    "scroll": "Tabla de la comunidad, desplázala en horizontal",
+    "col": {
+      "rank": "Pos.",
+      "player": "Jugador",
+      "exacts": "Exactos",
+      "session": "Sesión",
+      "total": "Total"
+    },
+    "you": "(tú)",
+    "real": "Resultado real",
+    "empty": {
+      "title": "Todavía no hay pronósticos",
+      "text": "Nadie de la comunidad ha pronosticado esta sesión."
+    },
+    "banner": {
+      "pre": "Los pronósticos se verán al cierre, el {weekday} {day} a las {time}.",
+      "preNoDate": "Los pronósticos se verán al cierre de la sesión.",
+      "open": "Pronósticos cerrados y visibles. Esperando el resultado oficial de la sesión.",
+      "res": "Resultado confirmado. Gana la sesión {name} con {points}.",
+      "resTie": "Resultado confirmado. Ganan la sesión {names} con {points} cada uno.",
+      "resNobody": "Resultado confirmado. Nadie ha sumado puntos en esta sesión."
+    },
+    "cell": {
+      "none": "Sin pronóstico",
+      "hidden": "Oculto hasta el cierre",
+      "mine": "Tu pronóstico",
+      "finished": "(acabó {n})"
+    },
+    "hit": {
+      "exact": "Exacto",
+      "near": "A una posición",
+      "far": "A dos posiciones",
+      "miss": "Fallo"
+    },
+    "legend": {
+      "label": "Leyenda",
+      "withPoints": "{label} · {n}",
+      "hidden": "Oculto hasta el cierre",
+      "mine": "Tu pronóstico (solo lo ves tú)",
+      "visible": "Pronóstico de cada jugador",
+      "stripe": "La raya de color es el equipo del piloto"
+    },
+    "kpi": {
+      "points": "Puntos de la sesión",
+      "pointsOf": "de {n} posibles",
+      "exacts": "Exactos",
+      "exactsEach": "{n} puntos cada uno",
+      "near": "A una o dos posiciones",
+      "nearEach": "{a} y {b} puntos",
+      "rank": "Puesto en la sesión",
+      "rankOf": "de 1 jugador | de {n} jugadores"
+    },
+    "breakdown": {
+      "title": "Tu pronóstico frente al resultado",
+      "caption": "Comparación de tu pronóstico con el resultado de {session}, posición a posición",
+      "pos": "Pos.",
+      "real": "Resultado real",
+      "mine": "Tu pronóstico",
+      "diff": "Diferencia",
+      "points": "Puntos",
+      "note": "Se compara cada piloto del resultado con la posición en que lo pusiste. Los puntos son los que calcula el servidor, así que la suma de esta columna puede no coincidir con los de la sesión.",
+      "none": "No pronosticaste esta sesión",
+      "noneText": "No hay pronóstico tuyo que comparar con el resultado."
+    },
+    "diff": {
+      "exact": "Exacto",
+      "down": "Lo pusiste 1 más abajo",
+      "up": "Lo pusiste 1 más arriba",
+      "two": "A dos posiciones",
+      "none": "No lo pusiste",
+      "far": "Lejos"
+    },
+    "bonus": {
+      "title": "Bonus del GP",
+      "label": "Más puntos en el GP",
+      "value": "{names} · {points}",
+      "text": "Quien más puntos suma en el fin de semana gana {award} extra; si hay empate, lo comparten. Se confirma cuando cierran todas las sesiones.",
+      "textNoAward": "Quien más puntos suma en el fin de semana gana un bonus; si hay empate, lo comparten. Se confirma cuando cierran todas las sesiones.",
+      "pending": "Pendiente de confirmar",
+      "provisional": "Provisional"
+    },
+    "sim": {
+      "title": "Simula otro resultado",
+      "text": "¿Y si el resultado hubiera sido otro? Prueba escenarios sin guardar nada.",
+      "action": "Abrir el simulador"
+    },
+    "error": { "gp": "el Gran Premio", "data": "los resultados" },
+    "notFound": {
+      "gpTitle": "Gran Premio no encontrado",
+      "gpText": "No existe ese Gran Premio en la temporada.",
+      "sessionTitle": "Sesión no encontrada",
+      "sessionText": "Ese Gran Premio no tiene esa sesión.",
+      "action": "Volver a Grandes Premios"
+    }
+  }
+}

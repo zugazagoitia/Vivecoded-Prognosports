@@ -192,7 +192,7 @@ export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> 
     name: s.name,
     code: s.code,
     date: new Date(s.at).toISOString(),
-    hasGrid: true,
+    hasGrid: s.code !== 'Q',
     hasFastLap: false,
   }))
   return defineFixture('grandPrix', GrandPrixSchema, {
@@ -214,7 +214,8 @@ export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> 
 
 /** 24 GPs, the first 17 already disputed at REFERENCE_NOW, with and without sprint. */
 export const grandPrixes: GrandPrixInput[] = Array.from({ length: TOTAL_ROUNDS }, (_, i) =>
-  mockGrandPrix(i + 1),
+  // Round 6 is the weekend shown by the GP detail (G2): it has laps (the others do not).
+  mockGrandPrix(i + 1, i + 1 === 6 ? { laps: 57 } : {}),
 )
 
 /** GPs whose last session is before `now`. */

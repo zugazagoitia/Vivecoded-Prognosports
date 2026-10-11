@@ -12,8 +12,29 @@ withDefaults(
     variant?: 'inverted' | 'surface'
     /** `fixed` to the bottom of the viewport, or in the page flow (catalogue). */
     position?: 'fixed' | 'static'
+    /** Overrides the «N cambios» text (G3: «Faltan 3 pilotos» / «Listo para guardar»). */
+    message?: string
+    /** Texts of the two buttons (G3: «Vaciar», «Guardar pronóstico»). */
+    discardLabel?: string
+    saveLabel?: string
+    /** Renders even with `count = 0` (G3 mobile: the bar is always there). */
+    always?: boolean
+    /** `false` disables Save (G3: until the N drivers are chosen). */
+    canSave?: boolean
+    /** On narrow screens the message takes a row and the buttons share the next one. */
+    stack?: boolean
   }>(),
-  { saving: false, variant: 'inverted', position: 'fixed' },
+  {
+    saving: false,
+    variant: 'inverted',
+    position: 'fixed',
+    message: undefined,
+    discardLabel: undefined,
+    saveLabel: undefined,
+    canSave: true,
+    always: false,
+    stack: false,
+  },
 )
 const emit = defineEmits<{ save: []; discard: [] }>()
 
@@ -22,7 +43,7 @@ const { t } = useI18n()
 
 <template>
   <section
-    v-if="count > 0"
+    v-if="count > 0 || always"
     :aria-label="t('data.saveBar.label')"
     :data-variant="variant"
     class="z-40 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg p-3 shadow-lg"
@@ -34,10 +55,14 @@ const { t } = useI18n()
     ]"
   >
     <PIcon name="pen-to-square" />
-    <p class="min-w-0 flex-1 text-sm font-medium" aria-live="polite">
-      {{ t('data.saveBar.changes', { n: formatNumber(count) }, count) }}
+    <p
+      :class="stack && 'max-[480px]:basis-[calc(100%-2rem)]'"
+      class="min-w-0 flex-1 text-sm font-medium"
+      aria-live="polite"
+    >
+      {{ message ?? t('data.saveBar.changes', { n: formatNumber(count) }, count) }}
     </p>
-    <div class="flex gap-2">
+    <div class="flex gap-2" :class="stack && 'max-[480px]:w-full max-[480px]:[&>*]:flex-1'">
       <PButton
         variant="ghost"
         :disabled="saving"
@@ -48,10 +73,10 @@ const { t } = useI18n()
         "
         @click="emit('discard')"
       >
-        {{ t('data.saveBar.discard') }}
+        {{ discardLabel ?? t('data.saveBar.discard') }}
       </PButton>
-      <PButton :loading="saving" @click="emit('save')">
-        {{ t('data.saveBar.save') }}
+      <PButton :loading="saving" :disabled="!canSave" @click="emit('save')">
+        {{ saveLabel ?? t('data.saveBar.save') }}
       </PButton>
     </div>
   </section>

@@ -4,16 +4,22 @@ import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
 import common from './es/common.json'
+import consensus from './es/consensus.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
 import legal from './es/legal.json'
 import faq from './es/faq.json'
+import gps from './es/gps.json'
+import gp from './es/gp.json'
 import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
+import predict from './es/predict.json'
 import recover from './es/recover.json'
 import reset from './es/reset.json'
+import results from './es/results.json'
 import sessions from './es/sessions.json'
+import simulator from './es/simulator.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
@@ -33,16 +39,22 @@ export const i18n = createI18n({
       errors,
       ...legal,
       nav,
+      predict,
       sessions,
+      consensus,
       data,
       states,
       ui,
       ...rules,
       ...circuits,
       faq,
+      ...gps,
+      ...gp,
       ...landing,
       ...recover,
       ...reset,
+      ...results,
+      ...simulator,
       ...verify,
     },
   },

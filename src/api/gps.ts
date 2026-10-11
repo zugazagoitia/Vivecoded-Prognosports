@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { request, requestParsed, seg, uploadImage } from './client'
+import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
 import {
   DriverSchema,
   GrandPrixSchema,
@@ -26,6 +26,10 @@ export const createGp = (body: Record<string, unknown>, signal?: AbortSignal) =>
   requestParsed('/v2/gps/', GrandPrixSchema, { method: 'POST', body, signal })
 export const updateGp = (g: Id, body: Record<string, unknown>, signal?: AbortSignal) =>
   requestParsed(`/v2/gps/${seg(g)}`, GrandPrixSchema, { method: 'PUT', body, signal })
+
+/** Public promotional JPEG of a GP (only exists when `GrandPrix.hasPromoImage`). */
+export const gpImageUrl = (comp: Id, season: Id, g: Id): string =>
+  apiUrl(`${gp(comp, season, g)}/image`)
 
 export const uploadGpImage = (
   comp: Id,
@@ -106,7 +110,8 @@ export const submitTipps = (
 ) =>
   request(`${sess(comp, season, g, s)}/tipps/${seg(community)}`, {
     method: 'POST',
-    body: tipps,
+    // schema.d.ts: the body is an object with the list under `tipps` (not a bare array).
+    body: { tipps },
     signal,
   })
 export const getCalculations = (

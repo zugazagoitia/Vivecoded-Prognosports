@@ -1,3 +1,4 @@
+import { WEEKEND_GP, WEEKEND_NOW, WEEKEND_SEASON } from '../src/mocks/fixtures/gp'
 import { expect, test } from './support/fixtures'
 
 // Visual regression (§20.7): Chromium engine only (user decision), light and dark,
@@ -37,6 +38,77 @@ test.describe('visual regression', () => {
           })
         })
       }
+
+      test('gp-detalle', async ({ authedPage: page, isMobile }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}?sesion=61`)
+        await expect(page.getByText('Terminada · 10 pts').first()).toBeVisible()
+        await expect(
+          page.getByText(isMobile ? 'Circuito y tu historial' : 'Tu historial en Miami'),
+        ).toBeVisible()
+        await expect(page.getByText('P1', { exact: true }).first()).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`gp-detalle-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
+      test('consenso', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/consenso/61`)
+        await expect(page.getByText('Piloto más votado al 1.º')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`consenso-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
+      test('resultados', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61`)
+        await expect(page.getByText('Resultado real', { exact: true })).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`resultados-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
+      test('resultados-desglose', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61?vista=desglose`)
+        await expect(page.getByText('Puntos de la sesión')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`resultados-desglose-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
+      test('pronosticar', async ({ authedPage: page }) => {
+        // Race of the weekend GP: open and already predicted (8 slots filled).
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/62`)
+        await expect(page.getByText('Listo para guardar')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`pronosticar-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /), page.getByRole('timer')],
+        })
+      })
+
+      test('simulador', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/61?semilla=7`)
+        await expect(page.getByText('La general con este resultado')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`simulador-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
 
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
