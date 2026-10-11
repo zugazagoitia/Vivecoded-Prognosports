@@ -69,6 +69,7 @@ describe('admin layout access', () => {
       'Principal',
       'Migas de pan',
       'Administración',
+      'Principal', // phone tab bar
     ])
   })
 })
