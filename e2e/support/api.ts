@@ -31,6 +31,7 @@ import {
   WEEKEND_SESSIONS,
 } from '../../src/mocks/fixtures/gp'
 import { gpDrivers, tippsFromBody, type TippsBody } from '../../src/mocks/fixtures/predict'
+import { simulatedCalculations } from '../../src/mocks/fixtures/simulator'
 import {
   circuitDetail,
   gpPoints,
@@ -139,6 +140,17 @@ export async function mockApi(page: Page): Promise<void> {
       const body = request.postDataJSON() as { token?: string; password?: string }
       if (!body.password) return json(route, 400, null, 'Debes enviar la nueva contraseña.')
       return body.token === MOCK_RESET_CODE ? json(route, 200, null) : json(route, 403, null, 'x')
+    }
+    // Simulator (G6): the simulation `POST .../calculations` (stores nothing). The GP drivers come
+    // from the predict mock (G3) below.
+    const simulation =
+      /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/tipps\/[^/]+\/calculations$/.exec(path)
+    if (method === 'POST' && simulation) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      const body = request.postDataJSON() as {
+        results?: { position: number; driver: { id: number } }[]
+      }
+      return json(route, 200, simulatedCalculations(Number(simulation[1]), body.results ?? []))
     }
     // GP calendar (G1). Seasons, season points and own predictions need a session.
     if (method === 'GET' && /^\/competitions\/[^/]+\/seasons$/.test(path)) {

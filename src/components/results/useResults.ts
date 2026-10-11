@@ -224,6 +224,9 @@ export function useResults(
     calculations,
     rules,
     rows,
+    /** Accumulated points before this GP by user (G6); undefined while loading or on error. */
+    before,
+    beforeLoading: prevPoints.isLoading,
     positions,
     anyPick,
     winners,
