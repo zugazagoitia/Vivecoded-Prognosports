@@ -1,4 +1,4 @@
-import { computed, toValue, type MaybeRefOrGetter } from 'vue'
+import { computed, onScopeDispose, ref, toValue, watchEffect, type MaybeRefOrGetter } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import type { IconName } from '@/components/ui/icons'
@@ -57,6 +57,32 @@ export function rankingTarget(
   return `/ranking/${comunidad ?? activeCommunity ?? 0}/${temporada ?? year}/clasificacion/general`
 }
 
+/** Dynamic title a page gives to the mobile header (e.g. «GP de Singapur»). */
+const pageTitle = ref<string | undefined>()
+
+/** Sets the mobile header title while the calling page is mounted (falls back to the route's). */
+export function useMobileTitle(title: MaybeRefOrGetter<string | undefined>): void {
+  watchEffect(() => {
+    pageTitle.value = toValue(title)
+  })
+  onScopeDispose(() => {
+    pageTitle.value = undefined
+  })
+}
+
+/** Dynamic «Volver» destination a page gives to the mobile header (e.g. predict -> its GP). */
+const pageBackHref = ref<string | undefined>()
+
+/** Sets the mobile header's back link while the calling page is mounted. */
+export function useMobileBackHref(href: MaybeRefOrGetter<string | undefined>): void {
+  watchEffect(() => {
+    pageBackHref.value = toValue(href)
+  })
+  onScopeDispose(() => {
+    pageBackHref.value = undefined
+  })
+}
+
 export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | undefined> }) {
   const i18n = useI18n()
   const t = i18n.t.bind(i18n)
@@ -84,10 +110,10 @@ export function useMobileNav(overrides?: { title?: MaybeRefOrGetter<string | und
   const active = computed(() => activeTabFor(route.path))
   const back = computed(() => !isRootPath(route.path))
   /** Optional fixed destination a screen declares in `meta.backHref`. */
-  const backHref = computed(() => route.meta.backHref)
+  const backHref = computed(() => pageBackHref.value ?? route.meta.backHref)
 
   const title = computed(() => {
-    const given = toValue(overrides?.title)
+    const given = toValue(overrides?.title) ?? pageTitle.value
     if (given) return given
     const key = route.meta.title?.replace(/^route\./, '')
     const path = key ? `mobileNav.titles.${key}` : ''

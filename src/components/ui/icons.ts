@@ -1,6 +1,7 @@
 import {
   faArrowDown,
   faArrowLeft,
+  faArrowRight,
   faArrowUp,
   faAt,
   faBan,
@@ -88,6 +89,7 @@ export const MATERIAL_TO_FA = {
   chevron_left: 'chevron-left',
   chevron_right: 'chevron-right',
   arrow_back: 'arrow-left',
+  arrow_forward: 'arrow-right',
   add: 'plus',
   remove: 'minus',
   close: 'xmark',
@@ -145,6 +147,7 @@ export const MATERIAL_TO_FA = {
 const REGISTRY: Record<string, IconDefinition> = {
   'arrow-down': faArrowDown,
   'arrow-left': faArrowLeft,
+  'arrow-right': faArrowRight,
   'arrow-up': faArrowUp,
   at: faAt,
   ban: faBan,

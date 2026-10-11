@@ -37,8 +37,24 @@ export const deleteCommunityImage = (c: Id, signal?: AbortSignal) =>
 
 const base = (c: Id, comp: Id, season: Id) =>
   `/v2/communities/${seg(c)}/${seg(comp)}/${seg(season)}`
+/**
+ * Season points of every member, grouped by Grand Prix id. The spec documents a map
+ * `grandPrixId -> UserPoints[]` (requires a session; unverifiable without one). A flat
+ * `UserPoints[]` is tolerated too and grouped by `grandPrix.id`.
+ */
+export const CommunitySeasonPointsSchema = z.union([
+  z.record(z.string(), z.array(UserPointsSchema)),
+  z.array(UserPointsSchema).transform((list) => {
+    const out: Record<string, z.infer<typeof UserPointsSchema>[]> = {}
+    for (const p of list) {
+      if (p.grandPrix?.id != null) (out[String(p.grandPrix.id)] ??= []).push(p)
+    }
+    return out
+  }),
+])
+export type CommunitySeasonPoints = z.infer<typeof CommunitySeasonPointsSchema>
 export const getCommunityPoints = (c: Id, comp: Id, season: Id, signal?: AbortSignal) =>
-  request(`${base(c, comp, season)}/points`, { signal })
+  requestParsed(`${base(c, comp, season)}/points`, CommunitySeasonPointsSchema, { signal })
 export const getCommunityPointsInGp = (c: Id, comp: Id, season: Id, gp: Id, signal?: AbortSignal) =>
   requestParsed(`${base(c, comp, season)}/points/${seg(gp)}`, z.array(UserPointsSchema), { signal })
 export const getTotalUserPoints = (c: Id, comp: Id, season: Id, signal?: AbortSignal) =>

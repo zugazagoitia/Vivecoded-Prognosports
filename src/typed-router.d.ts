@@ -158,6 +158,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/gps/': RouteRecordInfo<
+      '/gps/',
+      '/gps',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/gps/[competicion]/[temporada]/[gp]/': RouteRecordInfo<
       '/gps/[competicion]/[temporada]/[gp]/',
       '/gps/:competicion/:temporada/:gp',
@@ -165,9 +172,30 @@ declare module 'vue-router/auto-routes' {
       { competicion: ParamValue<false>, gp: ParamValue<false>, temporada: ParamValue<false> },
       | never
     >,
+    '/gps/[competicion]/[temporada]/[gp]/consenso/[sesion]': RouteRecordInfo<
+      '/gps/[competicion]/[temporada]/[gp]/consenso/[sesion]',
+      '/gps/:competicion/:temporada/:gp/consenso/:sesion',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, sesion: ParamValue<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, sesion: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
     '/gps/[competicion]/[temporada]/[gp]/pronosticar/[sesion]': RouteRecordInfo<
       '/gps/[competicion]/[temporada]/[gp]/pronosticar/[sesion]',
       '/gps/:competicion/:temporada/:gp/pronosticar/:sesion',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, sesion: ParamValue<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, sesion: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/gps/[competicion]/[temporada]/[gp]/resultados/[sesion]': RouteRecordInfo<
+      '/gps/[competicion]/[temporada]/[gp]/resultados/[sesion]',
+      '/gps/:competicion/:temporada/:gp/resultados/:sesion',
+      { competicion: ParamValue<true>, gp: ParamValue<true>, sesion: ParamValue<true>, temporada: ParamValue<true> },
+      { competicion: ParamValue<false>, gp: ParamValue<false>, sesion: ParamValue<false>, temporada: ParamValue<false> },
+      | never
+    >,
+    '/gps/[competicion]/[temporada]/[gp]/simulador/[sesion]': RouteRecordInfo<
+      '/gps/[competicion]/[temporada]/[gp]/simulador/[sesion]',
+      '/gps/:competicion/:temporada/:gp/simulador/:sesion',
       { competicion: ParamValue<true>, gp: ParamValue<true>, sesion: ParamValue<true>, temporada: ParamValue<true> },
       { competicion: ParamValue<false>, gp: ParamValue<false>, sesion: ParamValue<false>, temporada: ParamValue<false> },
       | never
@@ -429,6 +457,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/gps/index.vue': {
+      routes:
+        | '/gps/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'src/pages/gps/[competicion]/[temporada]/[gp]/index.vue': {
       routes:
         | '/gps/[competicion]/[temporada]/[gp]/'
@@ -437,9 +473,33 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'src/pages/gps/[competicion]/[temporada]/[gp]/consenso/[sesion].vue': {
+      routes:
+        | '/gps/[competicion]/[temporada]/[gp]/consenso/[sesion]'
+      views:
+        | never
+      pathParamNames:
+        | 'sesion'
+    }
     'src/pages/gps/[competicion]/[temporada]/[gp]/pronosticar/[sesion].vue': {
       routes:
         | '/gps/[competicion]/[temporada]/[gp]/pronosticar/[sesion]'
+      views:
+        | never
+      pathParamNames:
+        | 'sesion'
+    }
+    'src/pages/gps/[competicion]/[temporada]/[gp]/resultados/[sesion].vue': {
+      routes:
+        | '/gps/[competicion]/[temporada]/[gp]/resultados/[sesion]'
+      views:
+        | never
+      pathParamNames:
+        | 'sesion'
+    }
+    'src/pages/gps/[competicion]/[temporada]/[gp]/simulador/[sesion].vue': {
+      routes:
+        | '/gps/[competicion]/[temporada]/[gp]/simulador/[sesion]'
       views:
         | never
       pathParamNames:

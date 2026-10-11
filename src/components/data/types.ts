@@ -5,6 +5,8 @@ export interface SlotDriver {
   name: string
   /** CSS colour of the team (4 px bar only, never the text colour). */
   teamColor?: string
+  /** Second line («McLaren · sale P1»). */
+  subtitle?: string
 }
 
 export interface SlotDrop {

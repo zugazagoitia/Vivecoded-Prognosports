@@ -46,3 +46,12 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 `VITE_API_BASE_URL` es solo el origen (`https://api.prognosports.com`, sin `/v2`): las rutas de los envoltorios ya empiezan por `/v2` (igual que en la spec). La validación de entorno rechaza una URL que termine en `/v2` (evita peticiones a `/v2/v2/...`). Los mocks (MSW y `e2e/support/api.ts`) interceptan `*/v2/**` y no dependen del origen.
 
 Además: la spec describe las respuestas sin envelope y el login como `text/plain`; el cliente admite ambos (envelope o cuerpo directo).
+
+### Fin de semana de carrera (G2, sondeado sin sesión el 2026-10-11)
+
+- `GET /v2/gps/{competition}/{season}/{gp}` es público y devuelve el GP completo con `round` y `sessions`; `previousGrandPrix`/`nextGrandPrix` solo traen `id` (sin nombre ni código), por eso la pantalla toma anterior/siguiente de la lista de la temporada (por `round`). Un id inexistente da HTTP 200 con `success:false` («Gran premio inválido»).
+- Nombres de GP en inglés («Singapore Grand Prix»): el título quita el sufijo («Gran Premio de Singapore»). Sesiones: `code` `Q`/`R`/`SR` (+`SQ`), `name` `QUALIFY`/`RACE`/`SPRINT_RACE`, ids 1/2/4 compartidos entre GP, y la lista NO viene en orden cronológico. Solo `SR` y `R` tienen `hasGrid`.
+- `GET /v2/gps/{c}/{s}/{gp}/image` es una imagen JPEG pública si `hasPromoImage` (`gpImageUrl`).
+- Exigen sesión (no probados): `sessions/{s}/results|grid|tipps/{community}[/calculations]`, `points/{gp}`, `rulesets/{community}/{c}/{s}[/{gp}]`. La spec no define `/tipps/{community}/{user}`: se usa `/tipps/{community}` filtrando por usuario. La clave de `pointsBySession` y la de las reglas por sesión no están documentadas: se prueban id, key, code y name.
+- La API no tiene zona horaria del circuito (solo coordenadas): `circuitTimeZone` usa una tabla país/ciudad; si no hay, se oculta «Hora del circuito».
+- «N de M han pronosticado» no se muestra: los pronósticos ajenos son privados hasta el cierre y no hay endpoint de recuento.
