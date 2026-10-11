@@ -95,8 +95,8 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/comunidades/[id]': RouteRecordInfo<
-      '/comunidades/[id]',
+    '/comunidades/[id]/': RouteRecordInfo<
+      '/comunidades/[id]/',
       '/comunidades/:id',
       { id: ParamValue<true> },
       { id: ParamValue<false> },
@@ -385,13 +385,13 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'src/pages/comunidades/[id].vue': {
+    'src/pages/comunidades/[id]/index.vue': {
       routes:
-        | '/comunidades/[id]'
+        | '/comunidades/[id]/'
       views:
         | never
       pathParamNames:
-        | 'id'
+        | never
     }
     'src/pages/dev/componentes.vue': {
       routes:

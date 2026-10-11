@@ -19,6 +19,8 @@ export const keys = {
   userResume: (community: Id, user: Id, competition: Id, season: Id) =>
     ['user-resume', community, user, competition, season] as const,
   members: (community: Id) => ['members', community] as const,
+  /** Detail of one community (H5); also the group key of its settings (H6). */
+  community: (community: Id) => ['community', community] as const,
   /** Rule set applied to a season (no GP) or to one GP of a community. */
   ruleset: (community: Id, competition: Id, season: Id, ...rest: Id[]) =>
     ['ruleset', community, competition, season, ...rest] as const,
@@ -31,6 +33,7 @@ export const keys = {
 
 /** Areas whose keys carry the community id at index 1. */
 export const COMMUNITY_AREAS: ReadonlySet<unknown> = new Set([
+  'community',
   'points',
   'tipps',
   'user-resume',

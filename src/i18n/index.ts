@@ -3,6 +3,7 @@ import register from './es/register.json'
 import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
+import community from './es/community.json'
 import common from './es/common.json'
 import consensus from './es/consensus.json'
 import data from './es/data.json'
@@ -47,6 +48,7 @@ export const i18n = createI18n({
       ui,
       ...rules,
       ...circuits,
+      ...community,
       faq,
       ...gps,
       ...gp,

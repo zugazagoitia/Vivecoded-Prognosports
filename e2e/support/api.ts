@@ -12,6 +12,7 @@ import {
   season,
   users,
 } from '../../src/mocks/fixtures'
+import { communityDetail, communityMembers } from '../../src/mocks/fixtures/community'
 import {
   communitySeasonPoints,
   competitionSeasons,
@@ -140,6 +141,24 @@ export async function mockApi(page: Page): Promise<void> {
       const body = request.postDataJSON() as { token?: string; password?: string }
       if (!body.password) return json(route, 400, null, 'Debes enviar la nueva contraseña.')
       return body.token === MOCK_RESET_CODE ? json(route, 200, null) : json(route, 403, null, 'x')
+    }
+    // Community home (H5): detail, members, leave and regenerate for the ids of fixtures/community.
+    const communityOne = /^\/communities\/(\d+)(\/members|\/quit|\/recreate)?$/.exec(path)
+    if (communityOne) {
+      if (!authed) return json(route, 401, null, 'Tu sesión ha caducado.')
+      const cid = Number(communityOne[1])
+      const sub = communityOne[2]
+      if (method === 'POST' && sub === '/quit') return json(route, 200, 'ok')
+      if (method === 'POST' && sub === '/recreate') return json(route, 200, 'NUEVO-CODIGO')
+      if (method === 'GET' && !sub) {
+        const detail = communityDetail(cid)
+        return detail ? json(route, 200, detail) : invalid(route, 'Comunidad inválida')
+      }
+      if (method === 'GET' && sub === '/members') {
+        return communityDetail(cid)
+          ? json(route, 200, communityMembers(cid))
+          : invalid(route, 'Comunidad inválida')
+      }
     }
     // Simulator (G6): the simulation `POST .../calculations` (stores nothing). The GP drivers come
     // from the predict mock (G3) below.
