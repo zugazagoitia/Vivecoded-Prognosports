@@ -291,6 +291,13 @@ declare module 'vue-router/auto-routes' {
       { usuario: ParamValue<false> },
       | never
     >,
+    '/unirse/[codigo]': RouteRecordInfo<
+      '/unirse/[codigo]',
+      '/unirse/:codigo',
+      { codigo: ParamValue<true> },
+      { codigo: ParamValue<false> },
+      | never
+    >,
     '/verificar': RouteRecordInfo<
       '/verificar',
       '/verificar',
@@ -608,6 +615,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'usuario'
+    }
+    'src/pages/unirse/[codigo].vue': {
+      routes:
+        | '/unirse/[codigo]'
+      views:
+        | never
+      pathParamNames:
+        | 'codigo'
     }
     'src/pages/verificar.vue': {
       routes:

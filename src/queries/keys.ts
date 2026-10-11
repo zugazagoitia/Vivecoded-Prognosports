@@ -20,6 +20,8 @@ export const keys = {
     ['user-resume', community, user, competition, season] as const,
   members: (community: Id) => ['members', community] as const,
   /** Detail of one community (H5); also the group key of its settings (H6). */
+  /** Community behind an invitation code (H7); public data. */
+  invitation: (code: string) => ['invitation', code] as const,
   community: (community: Id) => ['community', community] as const,
   /** Rule set applied to a season (no GP) or to one GP of a community. */
   ruleset: (community: Id, competition: Id, season: Id, ...rest: Id[]) =>

@@ -21,6 +21,7 @@ const fallback: Record<string, string> = {
   'route.circuit': 'Circuito',
   'route.communities': 'Comunidades',
   'route.community': 'Comunidad',
+  'route.invitation': 'Invitación',
   'route.user': 'Perfil',
   'route.admin': 'Administración',
   'route.adminGps': 'Administración · Grandes Premios',

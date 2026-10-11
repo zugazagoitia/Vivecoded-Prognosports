@@ -14,6 +14,7 @@ import faq from './es/faq.json'
 import gps from './es/gps.json'
 import home from './es/home.json'
 import gp from './es/gp.json'
+import invitation from './es/invitation.json'
 import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
@@ -56,6 +57,7 @@ export const i18n = createI18n({
       ...gps,
       home,
       ...gp,
+      ...invitation,
       ...landing,
       ...recover,
       ...reset,

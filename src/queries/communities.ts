@@ -268,3 +268,28 @@ export function useQuitCommunity() {
     },
   })
 }
+
+/**
+ * Community behind an invitation code (H7). Resolved from the public list (no session needed, see
+ * `findCommunityByInvitation`). `data` is `null` when no community has that code (expired link).
+ * `isMember` is also derived from the user's own list when signed in.
+ */
+export function useInvitation(code: MaybeRefOrGetter<string>) {
+  const session = useSessionStore()
+  const mine = useMyCommunities()
+  const parsed = computed(() => parseInvitation(toValue(code)))
+  const query = useQuery({
+    queryKey: computed(() => keys.invitation(parsed.value)),
+    queryFn: async ({ signal }) =>
+      (await communitiesApi.findCommunityByInvitation(parsed.value, signal)) ?? null,
+    enabled: computed(() => parsed.value !== ''),
+    retry: false,
+  })
+  const isMember = computed(
+    () =>
+      session.user != null &&
+      query.data.value != null &&
+      (mine.data.value ?? []).some((c) => String(c.id) === String(query.data.value!.id)),
+  )
+  return { query, parsed, isMember, mine }
+}
