@@ -134,9 +134,14 @@ test.describe('Crear comunidad (H4)', () => {
     test.skip(isMobile, 'keyboard only')
     await mockCreate(page)
     await ready(page)
-    await page.getByRole('radio', { name: /Cerrada/ }).focus()
-    await page.keyboard.press('ArrowUp')
+    const closed = page.getByRole('radio', { name: /Cerrada/ })
+    await closed.focus()
+    await expect(closed).toBeFocused()
+    // Reka selects on the frame after focus while the key is still down: hold it for a frame
+    // instead of `press` (keydown+keyup in the same tick), which is flaky on slow runners.
+    await page.keyboard.down('ArrowUp')
     await expect(page.getByRole('radio', { name: /Abierta/ })).toBeChecked()
+    await page.keyboard.up('ArrowUp')
   })
 
   test('the name is limited to 40 characters and the preview follows it', async ({
