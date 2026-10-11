@@ -159,6 +159,10 @@ const UserShape = z.object({
  * The real API sends snake_case (`verified_at`, `last_activity`, `time_zone`...) while the spec
  * says camelCase / `verified`. Both are accepted and normalised to the app model.
  */
+type SnakeUserKeys =
+  'verified_at' | 'last_activity' | 'time_zone' | 'has_profile_image' | 'current_community'
+type UserModel = Omit<z.output<typeof UserShape>, SnakeUserKeys>
+
 export const UserSchema = UserShape.transform(
   ({
     verified_at,
@@ -172,7 +176,7 @@ export const UserSchema = UserShape.transform(
     hasProfileImage,
     currentCommunity,
     ...rest
-  }) => ({
+  }): UserModel => ({
     ...rest,
     verified: verified ?? verified_at,
     lastActivity: lastActivity ?? last_activity,
