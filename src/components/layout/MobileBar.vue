@@ -107,7 +107,7 @@ function goBack() {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-@media (max-width: 900px) {
+@media (width < 901px) {
   .mobile-bar {
     display: flex;
   }

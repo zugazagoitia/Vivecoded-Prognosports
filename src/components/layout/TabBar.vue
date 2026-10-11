@@ -5,7 +5,7 @@ import PIcon from '@/components/ui/PIcon.vue'
 import { useKeyboardOpen } from '@/composables/useKeyboardOpen'
 import { useMobileNav, type TabId } from '@/composables/useMobileNav'
 
-/** Bottom bar with the five main destinations (N2). Visible below the 900px collapse. */
+/** Bottom bar with the five main destinations (N2). Visible up to 900px; the desktop nav (AppNav) starts at 901px. */
 const props = defineProps<{ active?: TabId | null }>()
 
 const { t } = useI18n()
@@ -72,7 +72,7 @@ const current = computed(() => (props.active === undefined ? nav.active.value : 
   outline: 2px solid var(--color-focus-ring);
   outline-offset: -4px;
 }
-@media (max-width: 900px) {
+@media (width < 901px) {
   .tab-bar {
     display: flex;
   }
@@ -81,7 +81,7 @@ const current = computed(() => (props.active === undefined ? nav.active.value : 
   }
 }
 /* The layout reserves the bar's height so no content ends up behind it. */
-@media (max-width: 900px) {
+@media (width < 901px) {
   .layout-app-tabs {
     padding-bottom: calc(var(--tab-bar-h) + env(safe-area-inset-bottom, 0px));
   }
