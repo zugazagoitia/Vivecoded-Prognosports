@@ -95,7 +95,7 @@ const linkClass = [
   <!-- Signed-in phones use MobileBar + TabBar (N2); visitors keep this header. -->
   <header
     class="bg-surface border-border sticky top-0 z-40 border-b"
-    :class="{ 'max-[899px]:hidden': signedIn }"
+    :class="{ 'max-[901px]:hidden': signedIn }"
   >
     <div
       class="mx-auto flex min-h-14 w-full max-w-(--container-xl) items-center gap-1 px-4 sm:px-6"
@@ -112,7 +112,7 @@ const linkClass = [
         <AppLogo :size="28" />
       </RouterLink>
 
-      <nav :aria-label="t('nav.main')" class="hidden min-[900px]:flex min-[900px]:gap-0.5">
+      <nav :aria-label="t('nav.main')" class="hidden min-[901px]:flex min-[901px]:gap-0.5">
         <RouterLink
           v-for="l in links"
           :key="l.key"
@@ -151,7 +151,7 @@ const linkClass = [
               size="sm"
               icon="users"
               :aria-label="t('nav.community.switch')"
-              class="max-w-[130px] max-[899px]:hidden min-[1100px]:max-w-[220px]"
+              class="max-w-[130px] max-[901px]:hidden min-[1100px]:max-w-[220px]"
             >
               <span class="truncate">{{ community.active?.name ?? t('nav.community.none') }}</span>
               <PIcon name="chevron-down" :size="16" />
