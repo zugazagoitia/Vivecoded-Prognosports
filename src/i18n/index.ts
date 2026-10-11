@@ -3,14 +3,21 @@ import register from './es/register.json'
 import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
+import community from './es/community.json'
+import communitySettings from './es/community-settings.json'
 import common from './es/common.json'
+import communities from './es/communities.json'
+import createCommunity from './es/createCommunity.json'
 import consensus from './es/consensus.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
+import explore from './es/explore.json'
 import legal from './es/legal.json'
 import faq from './es/faq.json'
 import gps from './es/gps.json'
+import home from './es/home.json'
 import gp from './es/gp.json'
+import invitation from './es/invitation.json'
 import landing from './es/landing.json'
 import mobilenav from './es/mobilenav.json'
 import nav from './es/nav.json'
@@ -33,6 +40,8 @@ export const i18n = createI18n({
     es: {
       ...common,
       ...mobilenav,
+      ...communities,
+      ...explore,
       admin,
       ...register,
       ...auth,
@@ -42,14 +51,19 @@ export const i18n = createI18n({
       predict,
       sessions,
       consensus,
+      ...createCommunity,
       data,
       states,
       ui,
       ...rules,
       ...circuits,
+      ...community,
+      ...communitySettings,
       faq,
       ...gps,
+      home,
       ...gp,
+      ...invitation,
       ...landing,
       ...recover,
       ...reset,

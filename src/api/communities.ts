@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { request, requestParsed, seg, uploadImage } from './client'
+import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
 import { CommunityDetailSchema, CommunitySchema, UserPointsSchema, UserSchema } from './schemas'
 
 type Id = string | number
@@ -19,6 +19,18 @@ export const listMembers = (c: Id, signal?: AbortSignal) =>
   requestParsed(`/v2/communities/${seg(c)}/members`, z.array(z.unknown()), { signal })
 export const joinCommunity = (c: Id, invitation: string, signal?: AbortSignal) =>
   request(`/v2/communities/${seg(c)}/${seg(invitation)}`, { method: 'POST', signal })
+/**
+ * There is NO documented endpoint that resolves a community from an invitation code, but the
+ * public `GET /v2/communities` lists every community with its `invitation` (probed 2026-10-11,
+ * no session needed). So the code is matched against that list. Isolated here: replace the body
+ * if the backend adds a proper lookup. Returns undefined when no community has that code.
+ */
+export const findCommunityByInvitation = async (code: string, signal?: AbortSignal) => {
+  const wanted = code.trim().toLowerCase()
+  if (!wanted) return undefined
+  const all = await listCommunities(undefined, signal)
+  return all.find((c) => c.invitation?.trim().toLowerCase() === wanted)
+}
 export const quitCommunity = (c: Id, signal?: AbortSignal) =>
   request(`/v2/communities/${seg(c)}/quit`, { method: 'POST', signal })
 
@@ -32,6 +44,8 @@ export const recreateInvitation = (c: Id, signal?: AbortSignal) =>
 
 export const uploadCommunityImage = (c: Id, file: File | Blob, signal?: AbortSignal) =>
   uploadImage(`/v2/communities/${seg(c)}/image`, file, signal)
+/** Public image of a community (only exists when `hasImage`). */
+export const communityImageUrl = (c: Id): string => apiUrl(`/v2/communities/${seg(c)}/image`)
 export const deleteCommunityImage = (c: Id, signal?: AbortSignal) =>
   request(`/v2/communities/${seg(c)}/image`, { method: 'DELETE', signal })
 

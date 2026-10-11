@@ -95,11 +95,32 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/comunidades/[id]': RouteRecordInfo<
-      '/comunidades/[id]',
+    '/comunidades/[id]/': RouteRecordInfo<
+      '/comunidades/[id]/',
       '/comunidades/:id',
       { id: ParamValue<true> },
       { id: ParamValue<false> },
+      | never
+    >,
+    '/comunidades/[id]/ajustes': RouteRecordInfo<
+      '/comunidades/[id]/ajustes',
+      '/comunidades/:id/ajustes',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/comunidades/crear': RouteRecordInfo<
+      '/comunidades/crear',
+      '/comunidades/crear',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/comunidades/explorar': RouteRecordInfo<
+      '/comunidades/explorar',
+      '/comunidades/explorar',
+      Record<never, never>,
+      Record<never, never>,
       | never
     >,
     '/dev/componentes': RouteRecordInfo<
@@ -291,6 +312,13 @@ declare module 'vue-router/auto-routes' {
       { usuario: ParamValue<false> },
       | never
     >,
+    '/unirse/[codigo]': RouteRecordInfo<
+      '/unirse/[codigo]',
+      '/unirse/:codigo',
+      { codigo: ParamValue<true> },
+      { codigo: ParamValue<false> },
+      | never
+    >,
     '/verificar': RouteRecordInfo<
       '/verificar',
       '/verificar',
@@ -385,13 +413,37 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'src/pages/comunidades/[id].vue': {
+    'src/pages/comunidades/[id]/index.vue': {
       routes:
-        | '/comunidades/[id]'
+        | '/comunidades/[id]/'
       views:
         | never
       pathParamNames:
-        | 'id'
+        | never
+    }
+    'src/pages/comunidades/[id]/ajustes.vue': {
+      routes:
+        | '/comunidades/[id]/ajustes'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/comunidades/crear.vue': {
+      routes:
+        | '/comunidades/crear'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/comunidades/explorar.vue': {
+      routes:
+        | '/comunidades/explorar'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
     'src/pages/dev/componentes.vue': {
       routes:
@@ -608,6 +660,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'usuario'
+    }
+    'src/pages/unirse/[codigo].vue': {
+      routes:
+        | '/unirse/[codigo]'
+      views:
+        | never
+      pathParamNames:
+        | 'codigo'
     }
     'src/pages/verificar.vue': {
       routes:

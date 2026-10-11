@@ -1,0 +1,39 @@
+{
+  "invitation": {
+    "error": "la invitación",
+    "loading": "Cargando la invitación…",
+    "joinFailed": "No hemos podido unirte. Inténtalo de nuevo.",
+    "valid": {
+      "tag": "Enlace válido",
+      "invitedTo": "Te han invitado a",
+      "subtitle": "Invitación de {owner} · {members} · {competition}",
+      "subtitleNoOwner": "{members} · {competition}",
+      "players": "{n} jugador | {n} jugadores",
+      "rules": "Reglas",
+      "join": "Unirme a la comunidad",
+      "decline": "Ahora no",
+      "loginToJoin": "Iniciar sesión para unirme"
+    },
+    "rules": {
+      "sentence": "{set}: {exact} puntos por acierto exacto, {near} a una posición y {far} a dos.",
+      "sentenceNoSet": "{exact} puntos por acierto exacto, {near} a una posición y {far} a dos."
+    },
+    "expired": {
+      "tag": "Enlace caducado",
+      "title": "Esta invitación ya no funciona",
+      "text": "Quien la creó ha generado un enlace nuevo. Pídele el actual.",
+      "retry": "Probar con un código"
+    },
+    "member": {
+      "tag": "Ya eres miembro",
+      "title": "Ya juegas en {name}",
+      "text": "No hace falta unirse otra vez.",
+      "open": "Ir a la comunidad"
+    },
+    "banner": {
+      "lead": "Si no has iniciado sesión",
+      "text": ", te pedimos entrar o crear cuenta y volvemos a esta misma invitación sin perder el código.",
+      "cta": "Iniciar sesión"
+    }
+  }
+}

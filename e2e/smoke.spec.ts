@@ -36,7 +36,7 @@ test.describe('smoke', () => {
 
   test('home renders for a logged-in user', async ({ authedPage: page }) => {
     await page.goto('/home')
-    await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Hola, ana' })).toBeVisible()
     await expectNoSeriousA11yViolations(page)
   })
 
@@ -57,7 +57,7 @@ test.describe('smoke', () => {
       'macOS WebKit does not Tab to links by default (Option+Tab)',
     )
     await page.goto('/home')
-    await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Hola, ana' })).toBeVisible()
     await page.keyboard.press('Tab')
     const skip = page.getByRole('link', { name: 'Saltar al contenido' })
     await expect(skip).toBeFocused()

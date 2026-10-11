@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import PIcon from './PIcon.vue'
+import PTag from './PTag.vue'
 import type { IconName } from './icons'
 import { focusRing } from './styles'
 
@@ -9,6 +10,8 @@ export interface TabItem {
   label: string
   icon?: IconName
   disabled?: boolean
+  /** Counter shown in a grey pill after the label (part of the accessible name). */
+  count?: number
 }
 
 defineProps<{
@@ -20,7 +23,7 @@ const model = defineModel<string>({ required: true })
 </script>
 
 <template>
-  <TabsRoot v-model="model" class="flex flex-col">
+  <TabsRoot v-model="model" class="flex min-w-0 flex-col">
     <TabsList :aria-label="label" class="border-border flex overflow-x-auto border-b">
       <TabsTrigger
         v-for="tab in tabs"
@@ -34,13 +37,14 @@ const model = defineModel<string>({ required: true })
       >
         <PIcon v-if="tab.icon" :name="tab.icon" :size="16" />
         {{ tab.label }}
+        <PTag v-if="tab.count !== undefined">{{ tab.count }}</PTag>
       </TabsTrigger>
     </TabsList>
     <TabsContent
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
-      :class="['pt-4', focusRing]"
+      :class="['min-w-0 pt-4', focusRing]"
     >
       <slot :name="tab.value" :tab="tab" />
     </TabsContent>

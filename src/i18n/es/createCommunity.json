@@ -1,0 +1,114 @@
+{
+  "createCommunity": {
+    "title": "Crear comunidad",
+    "intro": "Cuatro pasos y listo. Después podrás cambiar la imagen y la invitación; el nombre, el acceso y las reglas quedan fijados.",
+    "crumb": "Crear",
+    "form": "Datos de la nueva comunidad",
+    "step": {
+      "basics": "Datos básicos",
+      "access": "Quién puede entrar",
+      "competition": "Competición",
+      "rules": "Reglas de puntuación"
+    },
+    "image": {
+      "label": "Imagen de la comunidad",
+      "upload": "Subir imagen",
+      "change": "Cambiar imagen",
+      "remove": "Quitar imagen",
+      "help": "Máx. 2 MB · JPG o PNG",
+      "type": "La imagen debe ser JPG o PNG.",
+      "size": "La imagen supera el máximo de 2 MB."
+    },
+    "name": {
+      "label": "Nombre de la comunidad",
+      "counter": "{n}/40",
+      "required": "Escribe un nombre para la comunidad.",
+      "max": "El nombre no puede tener más de 40 caracteres."
+    },
+    "description": {
+      "label": "Descripción",
+      "placeholder": "Cuéntales de qué va..."
+    },
+    "access": {
+      "group": "Quién puede entrar",
+      "open": "Abierta",
+      "openText": "Cualquiera puede unirse desde «Explorar». Aparece en el buscador.",
+      "closed": "Cerrada",
+      "closedText": "Solo con código o enlace de invitación. No aparece en el buscador."
+    },
+    "competition": {
+      "label": "Competición",
+      "season": "Temporada",
+      "current": "{name} (en curso)",
+      "note": "La comunidad juega la temporada completa con las reglas que elijas abajo.",
+      "required": "Elige una opción.",
+      "error": "No se han podido cargar las competiciones."
+    },
+    "rules": {
+      "group": "Reglas de puntuación",
+      "existing": "Usar unas reglas existentes",
+      "existingText": "Públicas o tuyas.",
+      "new": "Crear unas nuevas",
+      "newText": "Decide cuánto vale cada acierto.",
+      "set": "Conjunto de reglas",
+      "setPlaceholder": "Elige un conjunto",
+      "public": "pública",
+      "by": "de {name}",
+      "required": "Elige un conjunto de reglas.",
+      "error": "No se han podido cargar los conjuntos de reglas.",
+      "name": "Nombre de las reglas",
+      "namePlaceholder": "Reglas de mi peña",
+      "nameRequired": "Escribe un nombre para las reglas.",
+      "points": "Escribe un número entero de 0 o más.",
+      "tableExisting": "Puntos del conjunto de reglas elegido",
+      "tableNew": "Puntos por acierto y sesión",
+      "hit": "Acierto",
+      "pointsCol": "Puntos",
+      "q": "Clasificación",
+      "sprint": "Sprint",
+      "race": "Carrera",
+      "cellLabel": "{concept} en {session}",
+      "alertTitle": "Máximo teórico por sesión",
+      "alertText": "{q} en clasificación, {s} en sprint y {r} en carrera. Se actualiza mientras editas.",
+      "concept": {
+        "exact": "Posición exacta",
+        "next": "Posición siguiente",
+        "previous": "Posición anterior",
+        "next2": "Siguiente de la siguiente",
+        "previous2": "Anterior de la anterior",
+        "notInPodium": "Del podio, fuera del podio",
+        "notInResults": "Fuera de resultados",
+        "bonus": "Bonus del GP"
+      },
+      "conceptLong": {
+        "exact": "Posición exacta",
+        "next": "Posición siguiente (acaba 1 más abajo)",
+        "previous": "Posición anterior (acaba 1 más arriba)",
+        "next2": "Siguiente de la siguiente (2 más abajo)",
+        "previous2": "Anterior de la anterior (2 más arriba)",
+        "notInPodium": "Piloto del podio que acaba fuera del podio",
+        "notInResults": "Piloto que no está en los resultados",
+        "bonus": "Bonus al que más aciertos consigue en el GP"
+      }
+    },
+    "preview": {
+      "title": "Vista previa",
+      "fallbackName": "Tu comunidad",
+      "by": "por {user} · ahora",
+      "open": "Abierta",
+      "closed": "Cerrada",
+      "players": "1 jugador",
+      "where": "{competition} · {season}",
+      "after": "Después de crearla",
+      "a": "Recibes un enlace de invitación para copiar.",
+      "b": "Quedas como creador: puedes cambiar la imagen y regenerar la invitación.",
+      "c": "Puedes pronosticar el próximo GP al momento."
+    },
+    "cancel": "Cancelar",
+    "submit": "Crear comunidad",
+    "created": "Comunidad «{name}» creada",
+    "imageFailed": "La comunidad se ha creado, pero no se pudo subir la imagen. Puedes subirla desde los ajustes.",
+    "failed": "No se pudo crear la comunidad",
+    "failedText": "Revisa los datos e inténtalo de nuevo. No se ha perdido nada de lo que escribiste."
+  }
+}
