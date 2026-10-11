@@ -189,6 +189,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # E2E solo bloquea en PR contra master (y en push a master): es la verificación previa a PRD.
+    # En el resto (PR a develop, push a develop) se ejecuta pero un fallo no bloquea `ci-ok`.
+    continue-on-error: ${{ github.base_ref != 'master' && github.ref != 'refs/heads/master' }}
     # Un job por proyecto de Playwright: el tiempo total pasa a ser el del más lento.
     strategy:
       fail-fast: false
@@ -262,7 +265,8 @@ jobs:
   ci-ok:
     name: ci-ok
     if: ${{ always() }}
-    needs: [lint, typecheck, test, audit, build, size, e2e]
+    # e2e NO está aquí: ci-ok no espera a los e2e (lentos). Para master existe `ci-ok-prod`.
+    needs: [lint, typecheck, test, audit, build, size]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
@@ -274,5 +278,25 @@ jobs:
           echo "$RESULTS"
           if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
             echo "::error::Algún job de CI no terminó correctamente."
+            exit 1
+          fi
+
+  # Puerta de producción: solo en PR/push a master. Exige todo lo de ci-ok más los e2e.
+  # En el resto de ramas se omite (un check omitido no bloquea).
+  ci-ok-prod:
+    name: ci-ok-prod
+    if: ${{ always() && (github.base_ref == 'master' || github.ref == 'refs/heads/master') }}
+    needs: [ci-ok, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Comprobar resultado de los jobs
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
+            echo "::error::CI o e2e no terminaron correctamente."
             exit 1
           fi

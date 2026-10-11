@@ -26,8 +26,9 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     locale: 'es-ES',
     timezoneId: 'Europe/Madrid',
-    trace: 'retain-on-failure',
-    video: 'retain-on-failure',
+    // Recording every test (video) starves the 2-vCPU CI runners; the trace is enough to debug.
+    trace: CI ? 'on-first-retry' : 'retain-on-failure',
+    video: CI ? 'off' : 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
   projects: [
