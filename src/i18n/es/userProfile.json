@@ -1,0 +1,66 @@
+{
+  "mobileTitle": "Perfil",
+  "crumbRanking": "Ranking",
+  "notFound": {
+    "title": "No se ha encontrado al usuario",
+    "text": "Puede que el enlace sea incorrecto o que la cuenta ya no exista.",
+    "action": "Ir al ranking"
+  },
+  "own": {
+    "pending": "Este es tu propio perfil."
+  },
+  "error": {
+    "user": "el perfil",
+    "duel": "vuestro duelo"
+  },
+  "header": {
+    "meta": "{'@'}{username}",
+    "since": "desde {year}",
+    "place": "{place} en {community}",
+    "headToHead": "Cara a cara completo",
+    "avatar": "Avatar de {name}"
+  },
+  "duel": {
+    "title": "Vuestro duelo en {year}",
+    "subtitle": "Quién sumó más puntos en cada GP",
+    "you": "Tú · {place}",
+    "them": "{name} · {place}",
+    "pts": "{n} pts",
+    "tiesNone": "sin empates",
+    "tiesOne": "1 empate",
+    "tiesMany": "{n} empates",
+    "scoreSr": "{wa} GP ganados por ti, {ties}, {wb} por {name}",
+    "endYou": "+{n} para ti",
+    "endThem": "{n} para {name}",
+    "endTie": "Empate",
+    "chartAlt": "Diferencia acumulada con {name}: {label}",
+    "tableCaption": "Diferencia de puntos por GP con {name}",
+    "colGp": "GP",
+    "colYou": "Tú",
+    "colThem": "{name}",
+    "colDiff": "Diferencia acumulada",
+    "chartEmptyTitle": "Aún no hay datos para comparar",
+    "chartEmptyText": "El gráfico aparecerá cuando se hayan disputado al menos dos Grandes Premios.",
+    "formYou": "Tu forma",
+    "formThem": "Su forma"
+  },
+  "kpi": {
+    "points": "Puntos {year}",
+    "leader": "líder",
+    "average": "Media por GP",
+    "averageYou": "tú: {n}",
+    "won": "GP ganados",
+    "wonYou": "tú: {n}",
+    "common": "Comunidades en común",
+    "commonNone": "ninguna",
+    "commonUnavailable": "no disponible"
+  },
+  "notice": {
+    "closedOnly": "Sus pronósticos solo se ven en sesiones ya cerradas.",
+    "link": "Ver sus pronósticos de {gp}"
+  },
+  "notMember": {
+    "title": "No compartís la comunidad activa",
+    "text": "{name} no es miembro de {community}, así que no hay duelo que mostrar. Cambia de comunidad para ver otras."
+  }
+}

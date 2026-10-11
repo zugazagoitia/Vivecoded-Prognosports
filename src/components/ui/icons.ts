@@ -55,6 +55,7 @@ import {
   faRankingStar,
   faRightFromBracket,
   faRightToBracket,
+  faRightLeft,
   faRotateRight,
   faRoute,
   faShareNodes,
@@ -149,6 +150,7 @@ export const MATERIAL_TO_FA = {
   lock_reset: 'unlock-keyhole',
   mark_email_read: 'envelope-circle-check',
   upload: 'upload',
+  compare_arrows: 'right-left',
 } as const
 
 /** Registry: only the icons listed here are bundled (per-icon import, no full set). */
@@ -209,6 +211,7 @@ const REGISTRY: Record<string, IconDefinition> = {
   'ranking-star': faRankingStar,
   'right-from-bracket': faRightFromBracket,
   'right-to-bracket': faRightToBracket,
+  'right-left': faRightLeft,
   'rotate-right': faRotateRight,
   route: faRoute,
   'share-nodes': faShareNodes,
