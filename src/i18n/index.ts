@@ -18,6 +18,7 @@ import recover from './es/recover.json'
 import reset from './es/reset.json'
 import results from './es/results.json'
 import sessions from './es/sessions.json'
+import simulator from './es/simulator.json'
 import rules from './es/rules.json'
 import states from './es/states.json'
 import ui from './es/ui.json'
@@ -51,6 +52,7 @@ export const i18n = createI18n({
       ...recover,
       ...reset,
       ...results,
+      ...simulator,
       ...verify,
     },
   },

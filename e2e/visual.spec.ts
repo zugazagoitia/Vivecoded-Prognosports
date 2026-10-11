@@ -87,6 +87,17 @@ test.describe('visual regression', () => {
         })
       })
 
+      test('simulador', async ({ authedPage: page }) => {
+        await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/61?semilla=7`)
+        await expect(page.getByText('La general con este resultado')).toBeVisible()
+        await page.waitForLoadState('networkidle')
+        await expect(page).toHaveScreenshot(`simulador-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByText(/^v\S+ · build /)],
+        })
+      })
+
       test('home', async ({ authedPage: page }) => {
         await page.goto('/home')
         await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()

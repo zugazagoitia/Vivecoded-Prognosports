@@ -32,6 +32,7 @@ test.describe('security', () => {
     '/gps/1/10/6',
     '/gps/1/10/6/consenso/61',
     '/gps/1/10/6/resultados/61',
+    '/gps/1/10/6/simulador/61',
     '/dev/tokens',
     '/dev/datos',
     '/dev/estados',
