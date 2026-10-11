@@ -69,6 +69,12 @@ web_modules/
 .env
 .env.*
 !.env.example
+# Tracked env files hold only public VITE_* config, never secrets
+!.env
+!.env.beta
+!.env.production
+.env.local
+.env.*.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -147,3 +153,13 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Playwright
+e2e/.results
+playwright-report
+test-results
+
+# Wrangler
+.wrangler
+
+reports

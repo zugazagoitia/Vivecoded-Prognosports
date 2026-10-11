@@ -1,0 +1,13 @@
+dist
+node_modules
+pnpm-lock.yaml
+docs
+src/typed-router.d.ts
+api/openapi.json
+src/api/schema.d.ts
+public/mockServiceWorker.js
+coverage
+e2e/.results
+playwright-report
+e2e/__screenshots__
+reports

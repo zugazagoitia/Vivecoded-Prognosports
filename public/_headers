@@ -1,0 +1,29 @@
+# Cabeceras de Workers Static Assets (T12, docs/requisitos.md §22.6-22.7).
+# Vite copia public/ a dist/, y Wrangler lee dist/_headers. Límites: 100 reglas, 2000 caracteres/línea.
+# Solo aplican a respuestas de assets estáticos (suficiente: no hay Worker propio).
+
+# Ficheros con hash de Vite: inmutables.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# index.html (raíz y fallback SPA de rutas profundas): siempre revalidar.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+
+# Seguridad (T13, docs/security.md). Cloudflare une estas cabeceras con las de reglas
+# específicas (no las pisa), así que aquí no va Cache-Control.
+# CSP: connect-src admite la API de producción; el origen de ingest de Sentry (T14) se
+# añade en la línea marcada SENTRY cuando exista el DSN (p. ej. https://*.ingest.sentry.io).
+# Cloudflare Web Analytics, si se activa, requiere script-src/connect-src de cloudflareinsights.com.
+# Mapa (MapLibre/teselas): se añadirá el host de teselas a img-src/connect-src con esa pantalla.
+# Todo debe quedar en UNA línea (la sintaxis de _headers no admite continuaciones).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com; connect-src 'self' https://api.prognosports.com; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Frame-Options: DENY

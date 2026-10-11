@@ -1,0 +1,16 @@
+{
+  "network": "Ha fallado la conexión con el servidor.",
+  "timeout": "El servidor ha tardado demasiado en responder.",
+  "forbidden": "No tienes permiso para hacer esto.",
+  "notFound": "No se ha encontrado lo que buscabas",
+  "unauthorized": "Tu sesión ha caducado. Vuelve a iniciar sesión.",
+  "server": "Algo ha fallado en el servidor. Inténtalo de nuevo.",
+  "unknown": "Algo ha salido mal. Inténtalo de nuevo.",
+  "section": {
+    "title": "No hemos podido cargar {what}",
+    "titleGeneric": "No hemos podido cargar esta sección",
+    "retry": "Reintentar",
+    "home": "Ir al inicio"
+  },
+  "offline": "Sin conexión. Puedes ver lo último que cargaste, pero no guardar pronósticos hasta que vuelva."
+}

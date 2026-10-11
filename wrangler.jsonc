@@ -1,0 +1,18 @@
+// Despliegue en Cloudflare Workers con Static Assets (T12, docs/requisitos.md §22).
+// Sin código de Worker: Cloudflare sirve `dist/` directamente (las peticiones a assets son gratuitas).
+// Nada sensible aquí (§22.10): el token y el account id llegan por CLOUDFLARE_API_TOKEN /
+// CLOUDFLARE_ACCOUNT_ID en el entorno de GitHub. El nombre del Worker se pasa con `--name`
+// en cada despliegue (prognosports | prognosports-beta); este es el de producción.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "prognosports",
+  "compatibility_date": "2026-10-01",
+  // Solo workers.dev (sin DNS ni custom domains). Sin URLs de preview por versión: los previews son Workers por PR.
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    // Rutas profundas (/ranking/x/2026) devuelven index.html sin invocar un Worker.
+    "not_found_handling": "single-page-application",
+  },
+}

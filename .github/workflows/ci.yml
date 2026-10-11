@@ -1,0 +1,269 @@
+# CI de PrognoSports (T11, docs/requisitos.md §21).
+#
+# Contrato del artefacto de build (lo consumen e2e y los jobs de deploy de T12):
+#   - Un artefacto por modo de Vite: `dist-beta` y `dist-production`.
+#   - Cada uno contiene el contenido de `dist/` en su raíz (sin carpeta `dist/` extra).
+#   - Se construye una sola vez, con VITE_GIT_SHA / VITE_GIT_DATE del commit probado.
+#   - Retención corta (7 días); el deploy debe descargar el artefacto, nunca reconstruir.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [develop, master]
+
+# Una ejecución por rama o PR; un push nuevo cancela la anterior (§21.6).
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+# Permisos mínimos por defecto; cada job los declara de nuevo (§21.4).
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:coverage
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  audit:
+    name: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # Sin `pnpm install` ni caché: el audit solo lee pnpm-lock.yaml (una caché vacía rompe el post-step).
+      # Falla con vulnerabilidades high o critical en dependencias de producción (§21.13).
+      - run: pnpm audit --prod --audit-level high
+
+  build:
+    name: build (${{ matrix.mode }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [beta, production]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # Historial completo: el clon superficial no basta para resolver el commit probado (§21.7).
+          fetch-depth: 0
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Calcular VITE_GIT_SHA y VITE_GIT_DATE
+        env:
+          # En PR, github.sha es el merge commit; se prueba y se despliega el head real.
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          echo "VITE_GIT_SHA=$(git rev-parse --short "$COMMIT_SHA")" >> "$GITHUB_ENV"
+          echo "VITE_GIT_DATE=$(git log -1 --format=%cI "$COMMIT_SHA")" >> "$GITHUB_ENV"
+      # El typecheck ya corre en su propio job; aquí solo se compila.
+      - run: pnpm exec vite build --mode ${{ matrix.mode }}
+        env:
+          ANALYZE: 'true'
+          # Source maps a Sentry (T14): solo si los secretos existen (no en PRs de forks).
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_CF_ANALYTICS_TOKEN: ${{ vars.VITE_CF_ANALYTICS_TOKEN }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: bundle-report-${{ matrix.mode }}
+          path: reports/bundle.html
+          if-no-files-found: ignore
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-${{ matrix.mode }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  size:
+    name: size
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist-production
+          path: dist/
+      # `pnpm size` (T14) lee dist/: scripts/bundle-budget.ts + .size-limit.json.
+      - name: Presupuesto de bundle
+        run: |
+          if node -e "process.exit(require('./package.json').scripts?.size ? 0 : 1)"; then
+            pnpm run size
+          else
+            echo "::notice::Script 'size' no definido todavía (T14); presupuesto omitido."
+          fi
+
+  e2e:
+    name: e2e
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # T10 añade el script `e2e` (Playwright). Mientras no exista, los pasos siguientes se omiten;
+      # al fusionar T10 el job se activa solo, sin editar este fichero.
+      - name: Detectar script e2e
+        id: detect
+        run: |
+          if node -e "process.exit(require('./package.json').scripts?.['e2e:ci'] ? 0 : 1)"; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Script 'e2e' no definido todavía (T10); E2E omitido."
+          fi
+      # E2E prueba exactamente el dist/ del job build (modo production), sin reconstruir.
+      # T10 debe servir ese directorio (p. ej. `vite preview`) y no ejecutar `vite build`.
+      - if: steps.detect.outputs.enabled == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist-production
+          path: dist/
+      - name: Versión de Playwright
+        id: playwright
+        if: steps.detect.outputs.enabled == 'true'
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - name: Caché de navegadores de Playwright
+        id: playwright-cache
+        if: steps.detect.outputs.enabled == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+      - name: Instalar navegadores
+        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps
+      - name: Instalar dependencias del sistema
+        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps
+      - name: Ejecutar E2E
+        if: steps.detect.outputs.enabled == 'true'
+        run: pnpm e2e:ci
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() && steps.detect.outputs.enabled == 'true' }}
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # Check único y estable para la protección de ramas (§21.10): falla si cualquier job falla.
+  ci-ok:
+    name: ci-ok
+    if: ${{ always() }}
+    needs: [lint, typecheck, test, audit, build, size, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Comprobar resultado de los jobs
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
+            echo "::error::Algún job de CI no terminó correctamente."
+            exit 1
+          fi
