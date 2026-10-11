@@ -30,13 +30,26 @@ export const previousSeasonGps = Array.from({ length: 22 }, (_, i) => {
 export function communitySeasonPoints(seasonId: number): Record<string, unknown[]> {
   const list = seasonId === previousSeason.id ? previousSeasonGps : grandPrixes
   const out: Record<string, unknown[]> = {}
+  const running = new Map<number, number>()
   for (const gp of list) {
     if (Date.parse(gp.lastSessionDate ?? '') > Date.parse(REFERENCE_NOW)) continue
-    out[String(gp.id)] = users.map((user) => ({
-      user,
-      pointsInGP: ((Number(user.id) * 7 + gp.round! * 5) % 37) + 18,
-      accumulatedPoints: 0,
-    }))
+    const sessions = [...(gp.sessions ?? [])].sort(
+      (a, b) => Date.parse(a.date!) - Date.parse(b.date!),
+    )
+    out[String(gp.id)] = users.map((user) => {
+      const pointsInGP = ((Number(user.id) * 7 + gp.round! * 5) % 37) + 18
+      const accumulatedPoints = (running.get(Number(user.id)) ?? 0) + pointsInGP
+      running.set(Number(user.id), accumulatedPoints)
+      // Split over the sessions (the race, the last one, takes the remainder), keyed by session id.
+      const share = Math.floor(pointsInGP / Math.max(sessions.length, 1))
+      const pointsBySession = Object.fromEntries(
+        sessions.map((s, i) => [
+          String(s.id),
+          i === sessions.length - 1 ? pointsInGP - share * (sessions.length - 1) : share,
+        ]),
+      )
+      return { user, pointsInGP, accumulatedPoints, pointsBySession }
+    })
   }
   return out
 }
