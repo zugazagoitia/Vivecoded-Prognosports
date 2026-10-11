@@ -4,6 +4,7 @@ import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
 import common from './es/common.json'
+import consensus from './es/consensus.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
 import legal from './es/legal.json'
@@ -36,6 +37,7 @@ export const i18n = createI18n({
       ...legal,
       nav,
       sessions,
+      consensus,
       data,
       states,
       ui,
