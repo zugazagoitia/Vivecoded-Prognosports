@@ -15,6 +15,6 @@ export const circuitHandlers = [
     ok(gpPoints(Number(params.gp), Number(params.season))),
   ),
   http.get('*/v2/user/:u/communities/:c/:comp/:season/resume', () =>
-    ok({ average: MOCK_SEASON_AVERAGE, totalPoints: 600 }),
+    ok({ average: MOCK_SEASON_AVERAGE, totalPoints: 600, wonGrandPrixes: [{ id: 3 }, { id: 9 }] }),
   ),
 ]

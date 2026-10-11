@@ -260,7 +260,11 @@ export async function mockApi(page: Page): Promise<void> {
       /^\/user\/[^/]+\/communities\/[^/]+\/[^/]+\/[^/]+\/resume$/.test(path)
     ) {
       return authed
-        ? json(route, 200, { average: MOCK_SEASON_AVERAGE, totalPoints: 600 })
+        ? json(route, 200, {
+            average: MOCK_SEASON_AVERAGE,
+            totalPoints: 600,
+            wonGrandPrixes: [{ id: 3 }, { id: 9 }],
+          })
         : json(route, 401, null, 'Tu sesión ha caducado.')
     }
     if (method === 'GET' && /^\/circuits\/[^/]+\/[^/]+\/layout$/.test(path)) {

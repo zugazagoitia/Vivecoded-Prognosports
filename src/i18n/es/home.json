@@ -1,0 +1,189 @@
+{
+  "title": "Inicio",
+  "greeting": "Hola, {name}",
+  "subtitle": "{date} · {competition} {season} · ronda {round} de {total}",
+  "subtitleNoRound": "{date} · {competition} {season}",
+  "communities": {
+    "label": "Comunidad",
+    "chips": "Comunidades",
+    "empty": "Aún no tienes comunidades."
+  },
+  "cmd": {
+    "label": "Qué tienes que hacer ahora",
+    "noNext": {
+      "title": "No hay próximo Gran Premio",
+      "text": "Cuando se publique el siguiente fin de semana aparecerá aquí."
+    },
+    "error": "tu próximo Gran Premio"
+  },
+  "next": {
+    "label": "Próximo Gran Premio",
+    "title": "Gran Premio de {name}",
+    "detail": "{circuit} · {laps} vueltas",
+    "detailNoLaps": "{circuit}",
+    "withSprint": " · con sprint",
+    "weekend": "Ver el fin de semana",
+    "image": "Imagen promocional del Gran Premio de {name}"
+  },
+  "predictions": {
+    "title": "Tus pronósticos",
+    "progress": "{done} de {total} hechos",
+    "progressLabel": "Pronósticos hechos",
+    "list": "Sesiones del fin de semana",
+    "yourTime": "{time} (tu hora)",
+    "closesIn": "cierra en",
+    "finished": "Terminada",
+    "closedWaiting": "Cerrada, esperando resultados",
+    "noSessions": "Este Gran Premio aún no tiene sesiones.",
+    "error": "tus pronósticos"
+  },
+  "row": {
+    "done": "Hecho",
+    "doneScored": "Hecho · {n} pts",
+    "noPrediction": "Sin pronóstico",
+    "closed": "Cerrada",
+    "soon": "Cierra pronto",
+    "pending": "Pendiente",
+    "predict": "Pronosticar",
+    "edit": "Editar",
+    "results": "Ver resultados",
+    "seeClosed": "Ver sesión",
+    "aria": "{action}: {session}"
+  },
+  "mobile": {
+    "title": "Inicio",
+    "nextLabel": "Próximo Gran Premio",
+    "kicker": "Próximo GP · Ronda {round}",
+    "kickerNoRound": "Próximo GP",
+    "sprint": " · Con sprint",
+    "days": "días",
+    "hours": "horas",
+    "min": "min",
+    "forClose": "para el cierre del {session}",
+    "timer": "Faltan {d} días, {h} horas y {m} minutos para el cierre del {session}",
+    "timerOne": "Faltan {d} días, {h} hora y {m} minutos para el cierre del {session}",
+    "sessionLine": "{when} · {text}",
+    "closesIn": "cierra en {time}",
+    "terminated": "terminada",
+    "terminatedPts": "terminada · {n} pts",
+    "made": "hecho",
+    "view": "Ver",
+    "progress": "{done}/{total}",
+    "diffTitle": "Diferencia con el líder",
+    "diffAlt": "Diferencia con el líder tras cada GP. Ahora: {value} puntos",
+    "nearTitle": "Tu entorno",
+    "leaderLabel": "líder"
+  },
+  "kpi": {
+    "position": "Puesto",
+    "points": "Puntos",
+    "average": "Media por GP",
+    "averageShort": "Media/GP",
+    "won": "GP ganados",
+    "wonOf": "de {n} disputados",
+    "wonOfShort": "de {n}",
+    "behind": "a {n} del líder",
+    "behindCompact": "{n} del líder",
+    "leading": "Vas líder",
+    "community": "comunidad: {avg}",
+    "communityShort": "comunidad {avg}",
+    "moveSince": "{arrow} {n} desde {gp}",
+    "moveEq": "= sin cambios",
+    "moveNone": "Primer GP disputado",
+    "label": "Tu temporada en cifras",
+    "error": "tus cifras",
+    "empty": {
+      "title": "Todavía no hay GP disputados",
+      "text": "Tus cifras aparecerán cuando se puntúe el primer Gran Premio de la temporada."
+    }
+  },
+  "near": {
+    "title": "Tu entorno en el ranking",
+    "ranking": "Ranking",
+    "you": "Tú",
+    "list": "Jugadores cerca de ti en el ranking",
+    "points": "{n} puntos",
+    "error": "tu entorno en el ranking",
+    "empty": {
+      "title": "Aún no hay ranking",
+      "text": "El ranking aparecerá cuando se puntúe el primer Gran Premio."
+    }
+  },
+  "chart": {
+    "you": "Tú",
+    "average": "Media",
+    "leader": "Líder",
+    "modesLabel": "Comparar",
+    "viewLabel": "Vista",
+    "modes": {
+      "leader": "Con el líder",
+      "rival": "Con el de delante",
+      "pos": "Posición"
+    },
+    "view": {
+      "chart": "Gráfico",
+      "table": "Ver como tabla"
+    },
+    "titles": {
+      "leader": "Tu diferencia con el líder",
+      "rival": "Tú contra {name}, justo delante",
+      "rivalLeading": "Tú contra {name}, tu perseguidor más cercano",
+      "pos": "Tu puesto tras cada GP"
+    },
+    "subtitles": {
+      "leader": "El líder está siempre en 0; la línea discontinua es la media de la comunidad.",
+      "rival": "Por encima de 0, te saca ventaja; por debajo, vas por delante.",
+      "rivalLeading": "Por encima de 0, te alcanza o te supera; por debajo, vas por delante.",
+      "pos": "El 1.º está arriba."
+    },
+    "alt": "{title}. Tras {n} GP: {value}",
+    "altPos": "{title}. Tras {n} GP: {value}",
+    "gpAxis": "Grandes Premios",
+    "pin": "Fijar Gran Premio de {name}",
+    "panel": "Gran Premio de {name}",
+    "panelLatest": "último GP",
+    "panelPinned": "fijado",
+    "tableCaption": "{title}: valores tras cada Gran Premio",
+    "tablePlayer": "Serie",
+    "toRanking": "Ir al ranking",
+    "error": "el gráfico de evolución",
+    "empty": {
+      "title": "Todavía no hay evolución que mostrar",
+      "text": "El gráfico aparecerá cuando se puntúe el primer Gran Premio de la temporada."
+    },
+    "noRival": "Aún no hay otro jugador con quien compararte."
+  },
+  "bySession": {
+    "caption": "Tus puntos por GP, por sesión",
+    "alt": "Tus puntos en cada GP desglosados por sesión",
+    "tableCaption": "Tus puntos por GP, por sesión",
+    "gp": "GP",
+    "total": "Total",
+    "noBreakdown": "La API aún no ofrece el desglose por sesión de esta temporada.",
+    "error": "tus puntos por sesión",
+    "keys": {
+      "q": "Clasificación",
+      "cs": "Clasif. sprint",
+      "sp": "Sprint",
+      "r": "Carrera",
+      "bonus": "Bonus"
+    }
+  },
+  "season": {
+    "title": "Mi temporada",
+    "open": "Abrir",
+    "alt": "Tus puntos en los {n} GP",
+    "best": "Mejor GP",
+    "bestValue": "{gp} · {pts} pts",
+    "tableCaption": "Tus puntos en cada GP",
+    "empty": "Aún no hay GP disputados.",
+    "error": "tu temporada"
+  },
+  "honours": {
+    "title": "Palmarés",
+    "open": "Abrir",
+    "wonGps": "GP ganados en {season}",
+    "standing": "{pos} en {season}",
+    "error": "tu palmarés"
+  }
+}

@@ -17,7 +17,7 @@ test.describe('mobile navigation', () => {
       ['Ranking', /\/ranking\/.*\/clasificacion\/general$/, 'Clasificación'],
       ['Comunidades', /\/comunidades$/, null],
       ['Perfil', /\/u\/me$/, 'Perfil'],
-      ['Inicio', /\/home$/, 'Inicio'],
+      ['Inicio', /\/home$/, 'Hola, ana'],
     ] as const) {
       await tabs.getByRole('link', { name }).click()
       await expect(page).toHaveURL(url)
@@ -74,8 +74,12 @@ test.describe('mobile navigation', () => {
       test('has no serious a11y violations and matches the snapshot', async ({
         authedPage: page,
       }) => {
+        // Fixed clock: the home countdown would change the snapshot.
+        await page.clock.setFixedTime(new Date('2026-07-04T07:00:00.000Z'))
         await page.goto('/home')
         await expect(page.getByRole('navigation', { name: 'Principal' })).toBeVisible()
+        await expect(page.getByRole('timer')).toBeVisible()
+        await page.waitForLoadState('networkidle')
         await expectNoSeriousA11yViolations(page)
         await expect(page).toHaveScreenshot(`mobile-nav-${scheme}.png`)
       })
