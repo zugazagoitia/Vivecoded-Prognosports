@@ -1,0 +1,51 @@
+{
+  "explore": {
+    "title": "Explorar comunidades",
+    "subtitle": "Únete a una abierta o pide el código de una cerrada.",
+    "home": "Inicio",
+    "communities": "Comunidades",
+    "create": "Crear comunidad",
+    "what": "las comunidades",
+    "tabsLabel": "Tipo de comunidad",
+    "tabs": {
+      "todas": "Todas",
+      "abiertas": "Abiertas",
+      "cerradas": "Cerradas",
+      "mias": "Mis comunidades"
+    },
+    "searchLabel": "Buscar comunidad",
+    "searchPlaceholder": "Buscar...",
+    "sortLabel": "Ordenar",
+    "sort": {
+      "jugadores": "Más jugadores",
+      "recientes": "Más recientes",
+      "nombre": "Nombre (A-Z)"
+    },
+    "table": "Comunidades",
+    "cols": {
+      "community": "Comunidad",
+      "access": "Acceso",
+      "players": "Jugadores",
+      "rules": "Reglas",
+      "created": "Creada",
+      "action": "Acción"
+    },
+    "by": "por {owner}",
+    "open": "Abierta",
+    "closed": "Cerrada",
+    "actions": {
+      "open": "Abrir",
+      "join": "Unirme",
+      "code": "Tengo un código",
+      "openAria": "Abrir {name}",
+      "joinAria": "Unirme a {name}",
+      "codeAria": "Tengo un código para {name}"
+    },
+    "joined": "Te has unido a {name}",
+    "joinFailed": "No hemos podido unirte a {name}. Inténtalo de nuevo.",
+    "empty": {
+      "title": "No se ha encontrado lo que buscabas",
+      "text": "Prueba con otra búsqueda o cambia de pestaña."
+    }
+  }
+}

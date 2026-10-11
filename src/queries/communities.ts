@@ -36,6 +36,16 @@ export function useMyCommunities() {
   })
 }
 
+/** `GET /v2/communities`: every community (open and closed); the explorer (H3) paginates it. */
+export function useExploreCommunities() {
+  const session = useSessionStore()
+  return useQuery({
+    queryKey: keys.exploreCommunities(),
+    queryFn: ({ signal }) => communitiesApi.listCommunities(undefined, signal),
+    enabled: computed(() => session.isAuthenticated),
+  })
+}
+
 export type StandingState =
   | { status: 'loading' }
   | { status: 'error'; error: unknown }

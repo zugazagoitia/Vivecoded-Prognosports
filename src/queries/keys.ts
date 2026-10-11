@@ -6,6 +6,8 @@ type Id = string | number
  */
 export const keys = {
   me: () => ['me'] as const,
+  /** Public list of every community (H3). */
+  exploreCommunities: () => ['explore-communities'] as const,
   userCommunities: (user: Id) => ['user-communities', user] as const,
   currentSeason: (competition: Id) => ['current-season', competition] as const,
   seasonCircuits: (season: Id) => ['season-circuits', season] as const,

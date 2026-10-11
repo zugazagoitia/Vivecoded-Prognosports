@@ -9,6 +9,7 @@ import communities from './es/communities.json'
 import consensus from './es/consensus.json'
 import data from './es/data.json'
 import errors from './es/errors.json'
+import explore from './es/explore.json'
 import legal from './es/legal.json'
 import faq from './es/faq.json'
 import gps from './es/gps.json'
@@ -37,6 +38,7 @@ export const i18n = createI18n({
       ...common,
       ...mobilenav,
       ...communities,
+      ...explore,
       admin,
       ...register,
       ...auth,
