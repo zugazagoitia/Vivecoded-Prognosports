@@ -26,6 +26,7 @@ const fallback: Record<string, string> = {
   'route.communitySettings': 'Ajustes de la comunidad',
   'route.invitation': 'Invitación',
   'route.user': 'Perfil',
+  'route.settings': 'Ajustes de la cuenta',
   'route.admin': 'Administración',
   'route.adminGps': 'Administración · Grandes Premios',
   'route.notFound': 'No se ha encontrado',

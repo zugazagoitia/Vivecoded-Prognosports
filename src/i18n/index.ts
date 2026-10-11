@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import register from './es/register.json'
+import account from './es/account.json'
 import admin from './es/admin.json'
 import auth from './es/auth.json'
 import circuits from './es/circuits.json'
@@ -40,6 +41,7 @@ export const i18n = createI18n({
   fallbackLocale: 'es',
   messages: {
     es: {
+      ...account,
       ...common,
       ...mobilenav,
       ...communities,

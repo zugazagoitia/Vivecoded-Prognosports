@@ -20,8 +20,18 @@ export const deleteUserImage = (user: string | number, signal?: AbortSignal) =>
 /** Binary image URL (use as <img src>); public endpoint. */
 export const userImagePath = (user: string | number) => `/v2/user/${seg(user)}/image`
 
-export const updateEmail = (user: string | number, email: string, signal?: AbortSignal) =>
-  request(`/v2/user/${seg(user)}/settings/email`, { method: 'PATCH', body: { email }, signal })
+/** The spec asks for the current `password` along with the new `email`. */
+export const updateEmail = (
+  user: string | number,
+  email: string,
+  password?: string,
+  signal?: AbortSignal,
+) =>
+  request(`/v2/user/${seg(user)}/settings/email`, {
+    method: 'PATCH',
+    body: { email, password },
+    signal,
+  })
 export const updatePassword = (
   user: string | number,
   body: Record<string, unknown>,
