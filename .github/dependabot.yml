@@ -1,17 +1,55 @@
+# Dependabot: actualizaciones semanales agrupadas, siempre hacia develop y sin auto-merge
+# (toda PR pasa por revisión y por `ci-ok`). No hay Dockerfile en el repo: sin ecosistema docker.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
+    target-branch: develop
     schedule:
       interval: weekly
+      day: monday
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7 # espera a que una versión nueva «madure» (cadena de suministro)
+      semver-major-days: 14
+    labels: [dependencies]
+    commit-message:
+      prefix: Bump
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+        exclude-patterns:
+          # Playwright debe coincidir con la imagen Docker de `pnpm e2e:update:linux`
+          # (mcr.microsoft.com/playwright:vX.Y.Z-noble) y exige regenerar las capturas: PR aparte.
+          - '@playwright/test'
+          - playwright
+          - playwright-core
+      playwright:
+        patterns:
+          - '@playwright/test'
+          - playwright
+          - playwright-core
+    ignore:
+      # Saltos mayores de las piezas centrales: se hacen a mano, con su issue.
+      - dependency-name: vue
+        update-types: [version-update:semver-major]
+      - dependency-name: vite
+        update-types: [version-update:semver-major]
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+
   - package-ecosystem: github-actions
-    directory: /
+    # La acción compuesta local también fija acciones por SHA.
+    directories: [/, /.github/actions/setup]
+    target-branch: develop
     schedule:
       interval: weekly
+      day: monday
+    cooldown:
+      default-days: 7
+    labels: [dependencies]
+    commit-message:
+      prefix: Bump
     groups:
       actions-minor-and-patch:
         update-types: [minor, patch]

@@ -7,14 +7,14 @@ on:
   push:
     branches: [develop, master]
   schedule:
-    - cron: '23 4 * * 1'
+    - cron: '23 4 * * 1' # semanal (lunes), también sobre la rama por defecto
+  workflow_dispatch:
 
 concurrency:
   group: codeql-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   analyze:
@@ -32,6 +32,19 @@ jobs:
         with:
           languages: javascript-typescript
           build-mode: none
+          # security-extended: más consultas de seguridad que el conjunto por defecto.
+          queries: security-extended
+          config: |
+            paths-ignore:
+              - dist
+              - dist-flags-off
+              - dist-beta
+              - dist-production
+              - coverage
+              - reports
+              - playwright-report
+              - test-results
+              - e2e/__screenshots__
       - uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
         with:
           category: /language:javascript-typescript
