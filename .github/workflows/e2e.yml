@@ -30,6 +30,7 @@ jobs:
         include:
           - { project: chromium, browser: chromium }
           - { project: mobile, browser: chromium }
+          - { project: flags-off, browser: chromium }
           - { project: firefox, browser: firefox }
           - { project: webkit, browser: webkit }
     permissions:
@@ -63,7 +64,8 @@ jobs:
         env:
           VITE_GIT_SHA: e2e
           VITE_GIT_DATE: 1970-01-01T00:00:00+00:00
-        run: pnpm exec jiti scripts/build-e2e.ts
+        # También compila dist-flags-off/ (todos los flags apagados) para el proyecto `flags-off`.
+        run: pnpm build:e2e
       - name: Versión de Playwright
         id: playwright
         if: steps.detect.outputs.enabled == 'true'
