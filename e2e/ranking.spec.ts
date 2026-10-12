@@ -77,6 +77,9 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
           await expect(page).toHaveScreenshot(`${s.code}-${scheme}.png`, {
             fullPage: true,
             mask: [page.getByText(/^v\S+ · build /)],
+            // The ▲/▼ glyphs fall back to a system font whose width differs between the CI runner
+            // and the Playwright image, shifting table columns by a pixel or two.
+            maxDiffPixelRatio: 0.012,
           })
         })
       }

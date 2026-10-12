@@ -139,7 +139,8 @@ test.describe('Mis comunidades (H2)', () => {
     await expectNoSeriousA11yViolations(page)
     if (browserName !== 'chromium') return
     await page.evaluate(() => document.fonts.ready)
-    await expect(table).toHaveScreenshot('comunidades-percentil.png')
+    // ▲/▼ glyph fallback font differs between CI runner and Playwright image.
+    await expect(table).toHaveScreenshot('comunidades-percentil.png', { maxDiffPixelRatio: 0.012 })
   })
 
   test('«Hacer activa» moves the tag and survives a reload', async ({ authedPage: page }) => {

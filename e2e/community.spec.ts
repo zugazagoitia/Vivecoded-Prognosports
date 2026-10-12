@@ -54,6 +54,8 @@ test.describe('Community home (H5)', () => {
         await expect(page).toHaveScreenshot(`comunidad-${scheme}.png`, {
           fullPage: true,
           mask: [page.getByText(/^v\S+ · build /)],
+          // ▲/▼ glyph fallback font differs between CI runner and Playwright image.
+          maxDiffPixelRatio: 0.012,
         })
       })
     })
