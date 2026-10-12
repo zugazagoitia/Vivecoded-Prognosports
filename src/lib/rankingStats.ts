@@ -1,4 +1,5 @@
 import type { RuleSetData } from '@/api/schemas'
+import { t } from '@/i18n'
 import {
   mean,
   median,
@@ -417,9 +418,9 @@ export function sideBar(total: number, leader: number, cons: boolean, sd: number
 
 export function heatLegend(m: HeatMetric): { lo: string; hi: string } {
   return {
-    pct: { lo: '0 %', hi: '100 % del ganador' },
-    rank: { lo: 'último', hi: '1.º' },
-    hits: { lo: '0', hi: '14 aciertos' },
+    pct: { lo: '0 %', hi: t('ranking.heat.winner') },
+    rank: { lo: t('ranking.heat.last'), hi: '1.º' },
+    hits: { lo: '0', hi: t('ranking.heat.hits') },
   }[m]
 }
 
