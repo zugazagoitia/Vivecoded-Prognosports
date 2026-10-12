@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import BottomSheet from '@/components/data/BottomSheet.vue'
 import PIcon from '@/components/ui/PIcon.vue'
@@ -58,19 +59,20 @@ const isClosed = computed(() => props.closed ?? (props.total > 0 && props.played
 const communityName = computed(
   () => props.communities.find((c) => c.id === props.communityId)?.name ?? '',
 )
+const { t } = useI18n()
 const seasonLabel = computed(
   () => props.seasons.find((s) => s.id === props.seasonId)?.label ?? String(props.seasonId),
 )
 const subtitle = computed(() => {
   const head = `${communityName.value} · ${props.competition} ${seasonLabel.value}`
   return isClosed.value
-    ? `${head} · temporada cerrada`
-    : `${head} · ${props.played} de ${props.total} Grandes Premios disputados`
+    ? `${head} · ${t('ranking.nav.closed')}`
+    : `${head} · ${t('ranking.nav.played', { played: props.played, total: props.total })}`
 })
 const seasonOptions = computed(() =>
   props.seasons.map((s) => ({
     value: s.id,
-    label: s.current ? `${s.label} · en curso` : s.label,
+    label: s.current ? t('ranking.nav.current', { label: s.label }) : s.label,
   })),
 )
 const communityOptions = computed(() =>
@@ -117,26 +119,34 @@ const chip =
 <template>
   <header class="flex flex-col gap-4">
     <div>
-      <h1 class="text-heading text-2xl font-bold">Ranking</h1>
+      <h1 class="text-heading text-2xl font-bold">{{ t('ranking.nav.title') }}</h1>
       <p class="text-muted mt-1 text-sm">{{ subtitle }}</p>
     </div>
 
     <div class="flex flex-col gap-3 md:flex-row md:items-end md:gap-4">
       <div class="md:w-64">
-        <PSelect v-model="community" label="Comunidad" :options="communityOptions" />
+        <PSelect
+          v-model="community"
+          :label="t('ranking.nav.community')"
+          :options="communityOptions"
+        />
       </div>
       <div class="flex min-w-0 flex-col gap-1">
         <div class="overflow-x-auto">
-          <SegmentedControl v-model="season" label="Temporada" :options="seasonOptions" />
+          <SegmentedControl
+            v-model="season"
+            :label="t('ranking.nav.season')"
+            :options="seasonOptions"
+          />
         </div>
         <p v-if="seasonsFallback" class="text-muted text-xs">
-          Tu comunidad aún no tiene puntos: se muestran todas las temporadas de la competición.
+          {{ t('ranking.nav.noPoints') }}
         </p>
       </div>
     </div>
 
     <ProgressBar
-      label="Progreso de la temporada"
+      :label="t('ranking.nav.progress')"
       :value="played"
       :min="0"
       :max="total"
@@ -145,7 +155,7 @@ const chip =
 
     <!-- Desktop: section tabs (links). -->
     <nav
-      aria-label="Secciones del ranking"
+      :aria-label="t('ranking.nav.sections')"
       class="border-border hidden overflow-x-auto border-b md:block"
     >
       <ul class="flex">
@@ -166,7 +176,7 @@ const chip =
       <div class="min-w-0 overflow-x-auto">
         <SegmentedControl
           v-model="mobileActive"
-          label="Secciones principales"
+          :label="t('ranking.nav.mainSections')"
           :options="mobileOptions"
         />
       </div>
@@ -178,11 +188,11 @@ const chip =
         ]"
         @click="sheetOpen = true"
       >
-        Ver todas las vistas
+        {{ t('ranking.nav.allViews') }}
         <PIcon name="chevron-down" :size="16" />
       </button>
     </div>
-    <BottomSheet v-model:open="sheetOpen" title="Todas las vistas">
+    <BottomSheet v-model:open="sheetOpen" :title="t('ranking.nav.allViewsTitle')">
       <div v-for="s in sections" :key="s.slug" class="mb-3">
         <h3 class="text-muted mb-1 text-xs font-semibold tracking-wide uppercase">{{ s.label }}</h3>
         <ul>
@@ -207,7 +217,7 @@ const chip =
     </BottomSheet>
 
     <!-- View chips, only when the section has more than one active view. -->
-    <nav v-if="views.length > 1" role="navigation" aria-label="Vistas">
+    <nav v-if="views.length > 1" role="navigation" :aria-label="t('ranking.nav.views')">
       <ul class="flex gap-2 overflow-x-auto py-0.5">
         <li v-for="v in views" :key="v.screen">
           <a
