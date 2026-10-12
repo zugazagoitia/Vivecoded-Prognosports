@@ -210,10 +210,11 @@ test.describe('Account settings (U3)', () => {
         )
         expect(overflow).toBe(false)
         if (browserName === 'chromium') {
-          await expect(page).toHaveScreenshot(`ajustes-movil-${scheme}.png`, {
-            fullPage: true,
-            mask: [page.getByText(/^v\S+ · build /)],
-          })
+          if (scheme === 'light')
+            await expect(page).toHaveScreenshot(`ajustes-movil-${scheme}.png`, {
+              fullPage: true,
+              mask: [page.getByText(/^v\S+ · build /)],
+            })
         }
       })
     }

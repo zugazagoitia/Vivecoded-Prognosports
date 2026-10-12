@@ -1,4 +1,5 @@
 import type { FlagName } from '@/flags'
+import { t } from '@/i18n'
 
 /** Predicate telling whether a feature flag is on (see `@/flags`). */
 export type FlagCheck = (flag: FlagName) => boolean
@@ -23,54 +24,173 @@ export interface RankSection {
 
 /** N3: sections and views of the ranking (R0-R13). Slugs: see issue N3 «A confirmar». */
 export const RANK_SECTIONS: readonly RankSection[] = [
-  { slug: 'resumen', label: 'Resumen', views: [{ slug: null, label: 'Resumen', screen: 'R0' }] },
+  {
+    slug: 'resumen',
+    get label() {
+      return t('ranking.nav.sec.resumen')
+    },
+    views: [
+      {
+        slug: null,
+        get label() {
+          return t('ranking.nav.view.resumen')
+        },
+        screen: 'R0',
+      },
+    ],
+  },
   {
     slug: 'clasificacion',
-    label: 'Clasificación',
+    get label() {
+      return t('ranking.nav.sec.clasificacion')
+    },
     mobile: true,
-    views: [{ slug: 'general', label: 'General', screen: 'R1' }],
+    views: [
+      {
+        slug: 'general',
+        get label() {
+          return t('ranking.nav.view.general')
+        },
+        screen: 'R1',
+      },
+    ],
   },
   {
     slug: 'por-gp',
-    label: 'Por Gran Premio',
+    get label() {
+      return t('ranking.nav.sec.por-gp')
+    },
     mobile: true,
     views: [
-      { slug: 'tabla', label: 'Tabla', screen: 'R2' },
-      { slug: 'mapa-de-calor', label: 'Mapa de calor', screen: 'R10', flag: 'HEATMAP' },
-      { slug: 'distribucion', label: 'Distribución', screen: 'R9', flag: 'DISTRIBUTION' },
-      { slug: 'por-sesion', label: 'Por sesión', screen: 'R13', flag: 'POINTS_BY_SESSION' },
+      {
+        slug: 'tabla',
+        get label() {
+          return t('ranking.nav.view.tabla')
+        },
+        screen: 'R2',
+      },
+      {
+        slug: 'mapa-de-calor',
+        get label() {
+          return t('ranking.nav.view.mapa-de-calor')
+        },
+        screen: 'R10',
+        flag: 'HEATMAP',
+      },
+      {
+        slug: 'distribucion',
+        get label() {
+          return t('ranking.nav.view.distribucion')
+        },
+        screen: 'R9',
+        flag: 'DISTRIBUTION',
+      },
+      {
+        slug: 'por-sesion',
+        get label() {
+          return t('ranking.nav.view.por-sesion')
+        },
+        screen: 'R13',
+        flag: 'POINTS_BY_SESSION',
+      },
     ],
   },
   {
     slug: 'evolucion',
-    label: 'Evolución',
+    get label() {
+      return t('ranking.nav.sec.evolucion')
+    },
     mobile: true,
     views: [
-      { slug: 'gap', label: 'Diferencias', screen: 'R5', flag: 'GAP' },
-      { slug: 'bump', label: 'Posiciones', screen: 'R6', flag: 'BUMP' },
-      { slug: 'titulo', label: 'Lucha por el título', screen: 'R12', flag: 'TITLE_RACE' },
+      {
+        slug: 'gap',
+        get label() {
+          return t('ranking.nav.view.gap')
+        },
+        screen: 'R5',
+        flag: 'GAP',
+      },
+      {
+        slug: 'bump',
+        get label() {
+          return t('ranking.nav.view.bump')
+        },
+        screen: 'R6',
+        flag: 'BUMP',
+      },
+      {
+        slug: 'titulo',
+        get label() {
+          return t('ranking.nav.view.titulo')
+        },
+        screen: 'R12',
+        flag: 'TITLE_RACE',
+      },
     ],
   },
   {
     slug: 'aciertos',
-    label: 'Aciertos',
+    get label() {
+      return t('ranking.nav.sec.aciertos')
+    },
     views: [
-      { slug: 'por-tipo', label: 'Por tipo de sesión', screen: 'R11', flag: 'HITS_BY_TYPE' },
-      { slug: 'regularidad', label: 'Regularidad', screen: 'R7', flag: 'CONSISTENCY' },
+      {
+        slug: 'por-tipo',
+        get label() {
+          return t('ranking.nav.view.por-tipo')
+        },
+        screen: 'R11',
+        flag: 'HITS_BY_TYPE',
+      },
+      {
+        slug: 'regularidad',
+        get label() {
+          return t('ranking.nav.view.regularidad')
+        },
+        screen: 'R7',
+        flag: 'CONSISTENCY',
+      },
     ],
   },
   {
     slug: 'comparar',
-    label: 'Comparar',
+    get label() {
+      return t('ranking.nav.sec.comparar')
+    },
     views: [
-      { slug: 'cara-a-cara', label: 'Cara a cara', screen: 'R8', flag: 'HEAD_TO_HEAD' },
-      { slug: 'mi-temporada', label: 'Mi temporada', screen: 'R3', flag: 'MY_SEASON' },
+      {
+        slug: 'cara-a-cara',
+        get label() {
+          return t('ranking.nav.view.cara-a-cara')
+        },
+        screen: 'R8',
+        flag: 'HEAD_TO_HEAD',
+      },
+      {
+        slug: 'mi-temporada',
+        get label() {
+          return t('ranking.nav.view.mi-temporada')
+        },
+        screen: 'R3',
+        flag: 'MY_SEASON',
+      },
     ],
   },
   {
     slug: 'palmares',
-    label: 'Palmarés',
-    views: [{ slug: null, label: 'Palmarés', screen: 'R4', flag: 'HONOURS' }],
+    get label() {
+      return t('ranking.nav.sec.palmares')
+    },
+    views: [
+      {
+        slug: null,
+        get label() {
+          return t('ranking.nav.view.palmares')
+        },
+        screen: 'R4',
+        flag: 'HONOURS',
+      },
+    ],
   },
 ]
 

@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import register from './es/register.json'
+import routes from './es/routes.json'
 import account from './es/account.json'
 import admin from './es/admin.json'
 import auth from './es/auth.json'
@@ -49,6 +50,7 @@ export const i18n = createI18n({
       ...explore,
       admin,
       ...register,
+      ...routes,
       ...auth,
       errors,
       ...legal,

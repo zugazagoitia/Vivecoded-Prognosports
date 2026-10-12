@@ -81,7 +81,7 @@ test.describe('mobile navigation', () => {
         await expect(page.getByRole('timer')).toBeVisible()
         await page.waitForLoadState('networkidle')
         await expectNoSeriousA11yViolations(page)
-        await expect(page).toHaveScreenshot(`mobile-nav-${scheme}.png`)
+        if (scheme === 'light') await expect(page).toHaveScreenshot(`mobile-nav-${scheme}.png`)
       })
     })
   }

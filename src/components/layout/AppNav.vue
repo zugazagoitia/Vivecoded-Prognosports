@@ -112,7 +112,7 @@ const linkClass = [
         <AppLogo :size="28" />
       </RouterLink>
 
-      <nav :aria-label="t('nav.main')" class="hidden min-[901px]:flex min-[901px]:gap-0.5">
+      <nav :aria-label="t('nav.main')" class="flex gap-0.5 max-[900px]:hidden">
         <RouterLink
           v-for="l in links"
           :key="l.key"
