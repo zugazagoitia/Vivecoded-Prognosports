@@ -1,33 +1,16 @@
-# E2E (Playwright) en su propio workflow, separado de CI a propósito.
-#
-# deploy.yml se dispara cuando CI termina; si los e2e vivieran en CI, el deploy de beta esperaría
-# a que acabaran. Aquí corren en paralelo y sin bloquear el despliegue.
-#   - PR a develop: solo chromium (2 shards) + mobile + flags-off; un fallo se ve en su check pero no bloquea.
-#   - push a develop/master, PR a master y cron nocturno: también firefox y webkit.
-#   - PR a master: `e2e-ok` es el check obligatorio de producción (exigirlo en la protección de master).
+# E2E (Playwright) como workflow reutilizable: lo invoca ci.yml (job `e2e`) y entra en `ci-ok`.
+# Corre la matriz completa en cada PR y cada push: chromium (2 shards), mobile, flags-off, firefox y webkit.
+# No tiene triggers propios, concurrency ni check aparte: hereda evento y concurrencia de CI.
 name: E2E
 
 on:
-  pull_request:
-  push:
-    branches: [develop, master]
-  # Pasada completa nocturna (los PR a develop no ejecutan firefox/webkit).
-  schedule:
-    - cron: '0 3 * * *'
-
-concurrency:
-  group: e2e-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  workflow_call:
 
 permissions: {}
 
 jobs:
   # Compila el dist/ una sola vez (production con todos los flags activos, scripts/build-e2e.ts)
   # y lo comparte con los jobs de la matriz: ninguno ejecuta `vite build`.
-  # Aquí también se decide la matriz:
-  #   - PR a develop: chromium (2 shards) + mobile + flags-off. Firefox/WebKit no comparan capturas y rara vez
-  #     fallan solos; no compensa su coste en cada PR.
-  #   - push a develop/master, PR a master (necesario para `e2e-ok`) y cron: todos los proyectos.
   # `pnpm build:e2e` compila también dist-flags-off/ (proyecto `flags-off`); ambos dirs viajan
   # en el mismo artefacto.
   build:
@@ -36,22 +19,11 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
-    outputs:
-      matrix: ${{ steps.plan.outputs.matrix }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - uses: ./.github/actions/setup
-      - name: Planificar matriz
-        id: plan
-        env:
-          FULL: ${{ github.event_name != 'pull_request' || github.base_ref == 'master' }}
-        run: |
-          base='{"project":"chromium","browser":"chromium","shard":"1/2","tag":"-s1"},{"project":"chromium","browser":"chromium","shard":"2/2","tag":"-s2"},{"project":"mobile","browser":"chromium","shard":"","tag":""},{"project":"flags-off","browser":"chromium","shard":"","tag":""}'
-          extra='{"project":"firefox","browser":"firefox","shard":"","tag":""},{"project":"webkit","browser":"webkit","shard":"","tag":""}'
-          if [ "$FULL" = "true" ]; then list="$base,$extra"; else list="$base"; fi
-          echo "matrix={\"include\":[$list]}" >> "$GITHUB_OUTPUT"
       - name: Compilar (production, con los feature flags activos)
         env:
           VITE_GIT_SHA: e2e
@@ -74,7 +46,14 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix: ${{ fromJSON(needs.build.outputs.matrix) }}
+      matrix:
+        include:
+          - { project: chromium, browser: chromium, shard: 1/2, tag: -s1 }
+          - { project: chromium, browser: chromium, shard: 2/2, tag: -s2 }
+          - { project: mobile, browser: chromium, shard: '', tag: '' }
+          - { project: flags-off, browser: chromium, shard: '', tag: '' }
+          - { project: firefox, browser: firefox, shard: '', tag: '' }
+          - { project: webkit, browser: webkit, shard: '', tag: '' }
     permissions:
       contents: read
     steps:
@@ -104,7 +83,7 @@ jobs:
       - name: Ejecutar E2E
         env:
           SHARD: ${{ matrix.shard }}
-          # En PR se corta tras 20 fallos (la señal ya es clara y ahorra minutos); en push/cron
+          # En PR se corta tras 20 fallos (la señal ya es clara y ahorra minutos); en push
           # se ejecuta todo para tener la lista completa de fallos.
           MAX_FAILURES: ${{ github.event_name == 'pull_request' && '--max-failures=20' || '' }}
         run: pnpm e2e:ci --project=${{ matrix.project }} ${SHARD:+--shard=$SHARD} $MAX_FAILURES
@@ -117,23 +96,3 @@ jobs:
             test-results/
           if-no-files-found: ignore
           retention-days: 7
-
-  # Check de producción: solo existe en PR/push a master; en el resto se omite (no bloquea).
-  # En esos eventos la matriz es completa, así que ningún job queda omitido.
-  e2e-ok:
-    name: e2e-ok
-    if: ${{ always() && (github.base_ref == 'master' || github.ref == 'refs/heads/master') }}
-    needs: [build, e2e]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions: {}
-    steps:
-      - name: Comprobar resultado de los e2e
-        env:
-          RESULTS: ${{ toJSON(needs.*.result) }}
-        run: |
-          echo "$RESULTS"
-          if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
-            echo "::error::Los e2e no terminaron correctamente."
-            exit 1
-          fi

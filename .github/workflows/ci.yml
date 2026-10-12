@@ -1,6 +1,6 @@
 # CI de PrognoSports (T11, docs/requisitos.md §21).
 #
-# Contrato del artefacto de build (lo consumen e2e y los jobs de deploy de T12):
+# Contrato del artefacto de build (lo consumen los jobs de deploy de T12):
 #   - Un artefacto por modo de Vite: `dist-beta` y `dist-production`.
 #   - Cada uno contiene el contenido de `dist/` en su raíz (sin carpeta `dist/` extra).
 #   - Se construye una sola vez, con VITE_GIT_SHA / VITE_GIT_DATE del commit probado.
@@ -156,13 +156,19 @@ jobs:
             echo "::notice::Script 'size' no definido todavía (T14); presupuesto omitido."
           fi
 
+  # E2E (Playwright, matriz completa) como workflow reutilizable: .github/workflows/e2e.yml.
+  # Va dentro de CI para que `ci-ok` sea el único check obligatorio; deploy.yml espera a que termine.
+  e2e:
+    name: e2e
+    permissions:
+      contents: read
+    uses: ./.github/workflows/e2e.yml
+
   # Check único y estable para la protección de ramas (§21.10): falla si cualquier job falla.
   ci-ok:
     name: ci-ok
     if: ${{ always() }}
-    # e2e vive en su propio workflow (e2e.yml): CI debe terminar rápido porque deploy.yml
-    # arranca cuando CI completa.
-    needs: [lint, typecheck, test, audit, build, size]
+    needs: [lint, typecheck, test, audit, build, size, e2e]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
