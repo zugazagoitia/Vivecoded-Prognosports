@@ -50,6 +50,7 @@ test.describe('Community home (H5)', () => {
         await page.goto(OWN)
         await expect(page.getByText('Mostrando 12 de 12 jugadores')).toBeVisible()
         await expect(page.getByRole('heading', { name: /en la comunidad$/ })).toBeVisible()
+        await page.evaluate(() => document.fonts.ready)
         await expect(page).toHaveScreenshot(`comunidad-${scheme}.png`, {
           fullPage: true,
           mask: [page.getByText(/^v\S+ · build /)],

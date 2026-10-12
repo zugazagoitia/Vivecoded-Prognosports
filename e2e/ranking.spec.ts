@@ -73,7 +73,11 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
           await expectNoSeriousA11yViolations(page)
           await noHorizontalScroll(page)
           if (browserName !== 'chromium') return
-          await expect(page).toHaveScreenshot(`${s.code}-${scheme}.png`, { fullPage: true })
+          await page.evaluate(() => document.fonts.ready)
+          await expect(page).toHaveScreenshot(`${s.code}-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
         })
       }
     })

@@ -138,6 +138,7 @@ test.describe('Mis comunidades (H2)', () => {
     await expect(page.getByText('Percentil medio')).toBeVisible()
     await expectNoSeriousA11yViolations(page)
     if (browserName !== 'chromium') return
+    await page.evaluate(() => document.fonts.ready)
     await expect(table).toHaveScreenshot('comunidades-percentil.png')
   })
 
