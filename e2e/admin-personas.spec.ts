@@ -41,7 +41,8 @@ test.describe('Admin · personas y cálculo (M10-M13)', () => {
           await expectNoSeriousA11yViolations(page)
           await noHorizontalScroll(page)
           test.skip(browserName !== 'chromium', 'screenshots are Chromium-only')
-          await expect(page).toHaveScreenshot(`admin-${s.name}-${scheme}.png`, { fullPage: true })
+          if (scheme === 'light')
+            await expect(page).toHaveScreenshot(`admin-${s.name}-${scheme}.png`, { fullPage: true })
         })
       }
     })

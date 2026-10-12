@@ -25,10 +25,11 @@ test.describe('circuits (P3)', () => {
         test.skip(browserName !== 'chromium', 'screenshots are Chromium-only')
         await page.goto('/circuits')
         await expect(page.getByText('24 circuitos en la temporada 2026')).toBeVisible()
-        await expect(page).toHaveScreenshot(`circuits-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`circuits-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

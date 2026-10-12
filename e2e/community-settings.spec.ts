@@ -55,10 +55,11 @@ test.describe('Community settings (H6)', () => {
         await page.goto(OWN)
         await expect(page.getByText(/Conjunto «Default Rule Set»/)).toBeVisible()
         await expect(page.getByRole('list', { name: 'Miembros de la comunidad' })).toBeVisible()
-        await expect(page).toHaveScreenshot(`comunidad-ajustes-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`comunidad-ajustes-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

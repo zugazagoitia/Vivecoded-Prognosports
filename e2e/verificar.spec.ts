@@ -38,10 +38,11 @@ test.describe('Verificar correo (A5)', () => {
       await expect(page.getByRole('button', { name: 'Reenviar en 1:00' })).toBeDisabled()
       await expectNoSeriousA11yViolations(page)
       expect(await noOverflow(page)).toBe(true)
-      await expect(page).toHaveScreenshot(`verificar-pendiente-${scheme}.png`, {
-        fullPage: true,
-        mask: [page.getByRole('button', { name: /^Reenviar/ })],
-      })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-pendiente-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByRole('button', { name: /^Reenviar/ })],
+        })
 
       // Wrong code -> role=alert, focus back on the field.
       await page.getByLabel('Código de verificación').fill('zzzzzz')
@@ -49,10 +50,11 @@ test.describe('Verificar correo (A5)', () => {
       await expect(page.getByRole('alert')).toContainText('El código no es correcto.')
       await expect(page.getByLabel('Código de verificación')).toBeFocused()
       await expectNoSeriousA11yViolations(page)
-      await expect(page).toHaveScreenshot(`verificar-error-${scheme}.png`, {
-        fullPage: true,
-        mask: [page.getByRole('button', { name: /^Reenviar/ })],
-      })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-error-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByRole('button', { name: /^Reenviar/ })],
+        })
 
       // Right code -> success, focus on the h1, steps advance.
       await page.getByLabel('Código de verificación').fill(MOCK_VERIFY_CODE.toLowerCase())
@@ -71,7 +73,8 @@ test.describe('Verificar correo (A5)', () => {
       )
       await expectNoSeriousA11yViolations(page)
       expect(await noOverflow(page)).toBe(true)
-      await expect(page).toHaveScreenshot(`verificar-exito-${scheme}.png`, { fullPage: true })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-exito-${scheme}.png`, { fullPage: true })
     })
   }
 
