@@ -77,7 +77,8 @@
     "order": "Orden",
     "slotFilled": "{place}: {driver}",
     "slotEmpty": "{place}: vacío",
-    "sheetNote": "Atenuados: ya están en otro puesto. Abajo, la posición de salida."
+    "sheetNote": "Atenuados: ya están en otro puesto. Abajo, la posición de salida.",
+    "noDrivers": "Todavía no hay pilotos confirmados para este Gran Premio."
   },
   "live": {
     "placed": "{driver} en el {place}.",

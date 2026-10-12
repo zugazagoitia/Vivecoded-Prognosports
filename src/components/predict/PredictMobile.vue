@@ -151,6 +151,9 @@ const slotLabel = (i: number) => {
           :options="orderOptions"
           :label="t('predict.mobile.order')"
         />
+        <p v-if="vm.pool.length === 0" class="text-muted m-0 py-6 text-center text-sm">
+          {{ t('predict.mobile.noDrivers') }}
+        </p>
         <section
           v-for="g in groups"
           :key="g.id"
