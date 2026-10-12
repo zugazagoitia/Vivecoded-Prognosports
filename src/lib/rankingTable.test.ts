@@ -28,6 +28,7 @@ import {
   topFiveAndMe,
   totalCell,
   yAxisMin,
+  gapTickValues,
 } from './rankingTable'
 
 const m = buildRanking(SAMPLE)
@@ -141,5 +142,15 @@ describe('R2 matrix logic', () => {
     expect(legendFor('pts')).toEqual({ text: 'Puntos en cada GP', lo: 'menos', hi: 'más' })
     expect(legendFor('rank').lo).toBe('peor')
     expect(legendFor('hits').text).toBe('Aciertos en cada GP')
+  })
+})
+
+describe('gapTickValues', () => {
+  it('keeps the label count small with nice steps', () => {
+    const t = gapTickValues(-660)
+    expect(t.length).toBeLessThanOrEqual(8)
+    expect(t[0]).toBe(0)
+    expect(gapTickValues(-60)).toEqual([0, -20, -40, -60])
+    expect(gapTickValues(0)).toEqual([0])
   })
 })

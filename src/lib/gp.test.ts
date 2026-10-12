@@ -348,3 +348,12 @@ describe('rules', () => {
     expect(ruleChips({ pointsByTopScorer: 0 }, s(61)).bonus).toBeUndefined()
   })
 })
+
+describe('localizeGpName', () => {
+  it('translates English names and strips the suffix', async () => {
+    const { localizeGpName } = await import('./gp')
+    expect(localizeGpName('Singapore')).toBe('Singapur')
+    expect(localizeGpName('Australian Grand Prix')).toBe('Australia')
+    expect(localizeGpName('Unknownia')).toBe('Unknownia')
+  })
+})

@@ -12,7 +12,7 @@ const names = [...block.matchAll(/^\s*([A-Z_]+):/gm)].flatMap((m) => (m[1] ? [m[
 if (names.length === 0)
   throw new Error('No se han encontrado los feature flags en src/flags/index.ts')
 
-const env: NodeJS.ProcessEnv = { ...process.env }
+const env: NodeJS.ProcessEnv = { ...process.env, VITE_SHOWCASE: 'true' }
 for (const name of names) env[`VITE_FF_${name}`] = 'true'
 
 const result = spawnSync('pnpm', ['exec', 'vite', 'build', '--mode', 'production'], {

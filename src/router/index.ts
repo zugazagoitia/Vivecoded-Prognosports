@@ -5,6 +5,7 @@ import { installFocusManagement } from './a11y'
 import { flagForRoute } from '@/components/layout/rankNav'
 import { isFlagEnabled } from './flags'
 import { evaluateGuards, loginLocation } from './guards'
+import { isShowcasePath, showcaseEnabled } from './showcase'
 import { getSessionProvider, onSessionExpired } from './session'
 import { installTitles } from './titles'
 
@@ -73,6 +74,8 @@ export function createAppRouter(): Router {
   })
 
   router.beforeEach(async (to) => {
+    // Design showcase pages (/fundamentos, /dev/*) only exist in dev, beta and the e2e build.
+    if (isShowcasePath(to.path) && !showcaseEnabled()) return '/404'
     // Flag off: behave as if the route did not exist (runs before any chunk is loaded).
     if (to.meta.flag && !isFlagEnabled(to.meta.flag) && to.path !== '/404') return '/404'
 

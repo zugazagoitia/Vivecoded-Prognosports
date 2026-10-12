@@ -47,7 +47,7 @@ async function start() {
     void import('@tanstack/vue-query-devtools').then(({ VueQueryDevtools }) => {
       const host = document.createElement('div')
       document.body.append(host)
-      createApp(VueQueryDevtools, { queryClient }).mount(host)
+      createApp(VueQueryDevtools, { queryClient }).use(VueQueryPlugin, { queryClient }).mount(host)
     })
   }
 }
