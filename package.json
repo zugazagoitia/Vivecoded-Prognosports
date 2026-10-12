@@ -23,7 +23,7 @@
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
     "check:dist": "bash scripts/check-dist-secrets.sh",
-    "build:e2e": "jiti scripts/build-e2e.ts && jiti scripts/build-e2e.ts --flags-off",
+    "build:e2e": "jiti scripts/build-e2e.ts && jiti scripts/build-e2e.ts --flags-off && jiti scripts/build-e2e.ts --panel",
     "e2e": "pnpm typecheck && pnpm build:e2e && playwright test",
     "e2e:ci": "playwright test",
     "e2e:fast": "pnpm typecheck && pnpm build:e2e && playwright test --project=chromium --project=mobile",

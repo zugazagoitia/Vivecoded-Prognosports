@@ -17,8 +17,12 @@ const flagsOff = process.argv.includes('--flags-off')
 const env: NodeJS.ProcessEnv = { ...process.env, VITE_SHOWCASE: 'true' }
 for (const name of names) env[`VITE_FF_${name}`] = flagsOff ? 'false' : 'true'
 
-const args = ['exec', 'vite', 'build', '--mode', 'production']
+// `--panel`: build in `beta` mode (the reviewer flag panel only mounts outside production) into
+// dist-panel/, used by e2e/flag-panel.spec.ts.
+const panel = process.argv.includes('--panel')
+const args = ['exec', 'vite', 'build', '--mode', panel ? 'beta' : 'production']
 if (flagsOff) args.push('--outDir', 'dist-flags-off')
+if (panel) args.push('--outDir', 'dist-panel')
 const result = spawnSync('pnpm', args, {
   stdio: 'inherit',
   env,

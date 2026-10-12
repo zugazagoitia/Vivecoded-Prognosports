@@ -63,6 +63,7 @@ jobs:
           path: |
             dist/
             dist-flags-off/
+            dist-panel/
           retention-days: 1
           if-no-files-found: error
 

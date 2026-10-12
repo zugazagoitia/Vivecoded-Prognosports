@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { measureBottomInset } from './bottomInset'
 import { FLAG_DEFS, FLAG_NAMES, envKey, isEnabled, setFlagOverride } from './index'
 
 // Reviewer-only tool (never in production): texts stay here on purpose.
@@ -22,10 +23,41 @@ watch(open, (v) => {
     /* storage unavailable: the state just isn't persisted */
   }
 })
+
+// Room taken by the bottom bars (tab bar, sticky save bar): the panel always sits above them.
+const inset = ref(0)
+const root = ref<HTMLElement | null>(null)
+let frame = 0
+function update() {
+  frame = 0
+  inset.value = measureBottomInset(document, window.innerHeight, root.value?.offsetHeight ?? 0)
+}
+function schedule() {
+  if (!frame) frame = requestAnimationFrame(update)
+}
+let observer: MutationObserver | undefined
+onMounted(() => {
+  update()
+  window.addEventListener('scroll', schedule, { passive: true, capture: true })
+  window.addEventListener('resize', schedule)
+  observer = new MutationObserver(schedule)
+  observer.observe(document.body, { childList: true, subtree: true, attributes: true })
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', schedule, { capture: true })
+  window.removeEventListener('resize', schedule)
+  observer?.disconnect()
+  if (frame) cancelAnimationFrame(frame)
+})
 </script>
 
 <template>
-  <aside class="flag-panel" :aria-label="PANEL_LABEL">
+  <aside
+    ref="root"
+    class="flag-panel"
+    :style="{ '--flag-inset': `${inset}px` }"
+    :aria-label="PANEL_LABEL"
+  >
     <ul v-if="open" id="flag-panel-list" class="list">
       <li v-for="name in FLAG_NAMES" :key="name">
         <button
@@ -61,7 +93,8 @@ watch(open, (v) => {
 .flag-panel {
   position: fixed;
   right: 0.75rem;
-  bottom: 0.75rem;
+  /* --flag-inset: measured height of the bottom bars (tab bar + safe area, sticky save bar). */
+  bottom: calc(var(--flag-inset, 0px) + 0.75rem);
   /* Above the tab bar (z-40) but below sheets and dialogs (z-50): never covers their controls. */
   z-index: 45;
   display: flex;
@@ -71,11 +104,10 @@ watch(open, (v) => {
   max-width: calc(100vw - 1.5rem);
   pointer-events: none;
 }
-/* Phones show the bottom tab bar (<= 900px): sit above it so it never covers a tab. */
 @media (max-width: 900px) {
   .flag-panel {
     right: 0.25rem;
-    bottom: calc(var(--tab-bar-h, 64px) + 0.5rem + env(safe-area-inset-bottom, 0px));
+    bottom: calc(var(--flag-inset, 0px) + 0.5rem);
   }
   .flag-panel .bubble {
     width: 2.25rem;
@@ -113,7 +145,7 @@ watch(open, (v) => {
   padding: 0.25rem;
   width: 16rem;
   max-width: 100%;
-  max-height: 50vh;
+  max-height: min(50vh, calc(100dvh - var(--flag-inset, 0px) - 5rem));
   overflow: auto;
   list-style: none;
   background: var(--color-surface);
