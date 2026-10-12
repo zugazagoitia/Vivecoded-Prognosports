@@ -47,7 +47,7 @@ const atAdminRoot = computed(() => route.path.replace(/\/+$/, '') === '/admin')
       <Breadcrumb class="mb-4" :items="crumbs" />
       <div class="side-l">
         <!-- Phones (<640px) reach admin through the profile and M1's section index: no side menu. -->
-        <div class="hidden sm:block">
+        <div class="max-sm:hidden">
           <AdminSide />
         </div>
         <div class="min-w-0">

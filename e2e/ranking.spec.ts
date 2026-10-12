@@ -240,4 +240,20 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
     ).toBeVisible()
     await expectNoSeriousA11yViolations(page)
   })
+
+  // #126: the lazy ranking chunk re-emits `.hidden` after the eager `min-[901px]:flex`.
+  test('keeps the main nav links visible after opening Ranking (desktop)', async ({
+    authedPage: page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'desktop nav')
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/home')
+    const nav = page.getByRole('navigation', { name: 'Principal' })
+    await nav.getByRole('link', { name: 'Ranking' }).click()
+    await expect(page).toHaveURL(/\/ranking\//)
+    await page.waitForLoadState('networkidle')
+    await expect(nav).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'Inicio' })).toBeVisible()
+  })
 })
