@@ -93,7 +93,7 @@ watch(open, (v) => {
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  color: #fff;
+  color: var(--color-white);
   background: var(--color-brand-accent-700);
   border: 0;
   border-radius: 9999px;

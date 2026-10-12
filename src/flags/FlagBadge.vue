@@ -24,7 +24,7 @@ const LABEL = 'Feature flag'
   font-weight: 600;
   line-height: 1rem;
   white-space: nowrap;
-  color: #fff;
+  color: var(--color-white);
   background: var(--color-brand-accent-700);
   border-radius: 9999px;
 }
