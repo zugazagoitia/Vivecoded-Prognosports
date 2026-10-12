@@ -205,7 +205,7 @@ describe('Predict (G3)', () => {
     expect(body).toEqual({
       tipps: [100, 101, 102, 103, 104].map((id, i) => ({ position: i + 1, driver: { id } })),
     })
-    expect(live()).toContain('Pronóstico de la clasificación guardado.')
+    await waitFor(() => expect(live()).toContain('Pronóstico de la clasificación guardado.'))
     expect(screen.queryByText('Cambios sin guardar.')).toBeNull()
     // The unsaved draft does not stay on the device.
     expect(localStorage.getItem(DRAFT_Q)).toBeNull()

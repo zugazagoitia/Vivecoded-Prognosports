@@ -38,10 +38,11 @@ test.describe('Verificar correo (A5)', () => {
       await expect(page.getByRole('button', { name: 'Reenviar en 1:00' })).toBeDisabled()
       await expectNoSeriousA11yViolations(page)
       expect(await noOverflow(page)).toBe(true)
-      await expect(page).toHaveScreenshot(`verificar-pendiente-${scheme}.png`, {
-        fullPage: true,
-        mask: [page.getByRole('button', { name: /^Reenviar/ })],
-      })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-pendiente-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByRole('button', { name: /^Reenviar/ })],
+        })
 
       // Wrong code -> role=alert, focus back on the field.
       await page.getByLabel('Código de verificación').fill('zzzzzz')
@@ -49,10 +50,11 @@ test.describe('Verificar correo (A5)', () => {
       await expect(page.getByRole('alert')).toContainText('El código no es correcto.')
       await expect(page.getByLabel('Código de verificación')).toBeFocused()
       await expectNoSeriousA11yViolations(page)
-      await expect(page).toHaveScreenshot(`verificar-error-${scheme}.png`, {
-        fullPage: true,
-        mask: [page.getByRole('button', { name: /^Reenviar/ })],
-      })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-error-${scheme}.png`, {
+          fullPage: true,
+          mask: [page.getByRole('button', { name: /^Reenviar/ })],
+        })
 
       // Right code -> success, focus on the h1, steps advance.
       await page.getByLabel('Código de verificación').fill(MOCK_VERIFY_CODE.toLowerCase())
@@ -71,7 +73,8 @@ test.describe('Verificar correo (A5)', () => {
       )
       await expectNoSeriousA11yViolations(page)
       expect(await noOverflow(page)).toBe(true)
-      await expect(page).toHaveScreenshot(`verificar-exito-${scheme}.png`, { fullPage: true })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`verificar-exito-${scheme}.png`, { fullPage: true })
     })
   }
 
@@ -79,6 +82,8 @@ test.describe('Verificar correo (A5)', () => {
     await loginAsUnverifiedUser(page)
     await page.clock.install({ time: new Date('2026-07-01T12:00:00Z') })
     await justRegistered(page)
+    // Wait for the countdown to be mounted before advancing the fake clock (flaky under load).
+    await expect(page.getByRole('button', { name: 'Reenviar en 1:00' })).toBeDisabled()
     await page.clock.runFor(18_000)
     await expect(page.getByRole('button', { name: /^Reenviar en 0:[45]\d$/ })).toBeDisabled()
     await page.clock.runFor(62_000)

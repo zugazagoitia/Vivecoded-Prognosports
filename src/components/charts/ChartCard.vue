@@ -3,6 +3,7 @@ import { useElementSize, useEventListener, useMediaQuery } from '@vueuse/core'
 import { computed, nextTick, onMounted, ref, useId, useTemplateRef, watch } from 'vue'
 import ChartAxis from './ChartAxis.vue'
 import ChartPlot from './ChartPlot.vue'
+import { t } from '@/i18n'
 import PSegmentedControl from '@/components/ui/SegmentedControl.vue'
 import PTable from '@/components/ui/PTable.vue'
 import type { PTableColumn } from '@/components/ui/tableFeatures'
@@ -37,7 +38,11 @@ const props = withDefaults(
     unit?: string
     restLabel?: string
   }>(),
-  { subtitle: '', unit: 'puntos', restLabel: 'Resto de la comunidad' },
+  {
+    subtitle: '',
+    unit: () => t('ranking.chart.unit'),
+    restLabel: () => t('ranking.chart.rest'),
+  },
 )
 
 const uid = useId()
@@ -58,8 +63,8 @@ type TableRow = (typeof table.value.rows)[number]
 const tableColumns = computed<PTableColumn<TableRow>[]>(() => [
   {
     id: 'name',
-    header: 'Jugador',
-    accessorFn: (r) => (r.isMe ? `${r.name} (tú)` : r.name),
+    header: t('ranking.chart.player'),
+    accessorFn: (r) => (r.isMe ? `${r.name} ${t('ranking.chart.you')}` : r.name),
     enableSorting: false,
   },
   ...table.value.columns.map((c, i): PTableColumn<TableRow> => ({
@@ -74,8 +79,8 @@ const headline = computed(() => altText(series.value, undefined, props.unit))
 const legend = computed(() => focusSeries(series.value))
 const modeOptions = computed(() => props.modes.map((m) => ({ value: m.id, label: m.label })))
 const viewOptions = [
-  { value: 'chart' as const, label: 'Gráfico' },
-  { value: 'table' as const, label: 'Ver como tabla' },
+  { value: 'chart' as const, label: t('ranking.chart.chart') },
+  { value: 'table' as const, label: t('ranking.viewTable') },
 ]
 
 // Geometry: the plot scrolls horizontally when the GPs cannot keep 32 px (44 px on touch) targets.
@@ -144,9 +149,9 @@ const titleId = `ch-title-${uid}`
           v-if="modes.length > 1"
           v-model="modeId"
           :options="modeOptions"
-          label="Modo"
+          :label="t('ranking.chart.mode')"
         />
-        <PSegmentedControl v-model="view" :options="viewOptions" label="Vista" />
+        <PSegmentedControl v-model="view" :options="viewOptions" :label="t('ranking.chart.view')" />
       </div>
     </header>
 
@@ -199,7 +204,7 @@ const titleId = `ch-title-${uid}`
           :is-mine="(r) => r.isMe"
         />
 
-        <ul class="ch-legend" aria-label="Leyenda">
+        <ul class="ch-legend" :aria-label="t('ranking.chart.legend')">
           <li v-for="s in legend" :key="s.id" class="ch-legend-item">
             <svg
               class="ch-swatch"
@@ -211,7 +216,7 @@ const titleId = `ch-title-${uid}`
               <line x1="1" x2="21" y1="5" y2="5" :stroke-width="s.isMe ? 3.25 : 2.1" />
             </svg>
             <span :class="{ 'ch-legend-me': s.isMe }">{{
-              s.isMe ? `${s.name} (tú)` : s.name
+              s.isMe ? `${s.name} ${t('ranking.chart.you')}` : s.name
             }}</span>
           </li>
           <li class="ch-legend-item">

@@ -87,6 +87,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+dist-flags-off
 .output
 
 # Gatsby files

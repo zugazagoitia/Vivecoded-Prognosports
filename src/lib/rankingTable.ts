@@ -1,3 +1,4 @@
+import { t } from '@/i18n'
 import { mean, minus, type RankModel, type RankPlayer } from './ranking'
 
 /** Pure logic of the summary (R0), the standings (R1) and the matrix (R2). */
@@ -73,12 +74,12 @@ export function gapTickValues(min: number, maxTicks = 6): number[] {
 
 /** «Líder» for 0, otherwise «−20». */
 export function gapAxisLabel(v: number): string {
-  return v === 0 ? 'Líder' : minus(v)
+  return v === 0 ? t('ranking.gapLeader.top') : minus(v)
 }
 
 /** Value at the end of a line: «líder» or «−12». */
 export function endValue(v: number): string {
-  return v === 0 ? 'líder' : minus(v)
+  return v === 0 ? t('ranking.gapLeader.lower') : minus(v)
 }
 
 /** Bar width of a row: `round(total / leader × 100)`. */
@@ -160,7 +161,9 @@ export function mbarHeights(pts: readonly number[]): number[] {
 
 /** Mobile subtitle: «Líder» or «−34 del líder». */
 export function gapLabel(i: number, gap: number): string {
-  return i === 0 ? 'Líder' : `${minus(gap)} del líder`
+  return i === 0
+    ? t('ranking.gapLeader.top')
+    : t('ranking.gapLeader.fromLeader', { gap: minus(gap) })
 }
 
 /** Average of `pointsInGP` of ALL members in GP `g`. */

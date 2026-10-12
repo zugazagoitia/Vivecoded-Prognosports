@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 definePage({
   meta: {
     layout: 'empty',
@@ -9,8 +12,8 @@ definePage({
 
 <template>
   <section class="state">
-    <h1>Has cerrado sesión</h1>
-    <p>Hasta el próximo Gran Premio.</p>
-    <RouterLink class="btn" to="/login">Volver a entrar</RouterLink>
+    <h1>{{ t('pageState.loggedOut.title') }}</h1>
+    <p>{{ t('pageState.loggedOut.text') }}</p>
+    <RouterLink class="btn" to="/login">{{ t('pageState.loggedOut.action') }}</RouterLink>
   </section>
 </template>

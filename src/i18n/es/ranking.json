@@ -478,6 +478,70 @@
     "mark": "▼",
     "axis": "Elegir Gran Premio",
     "axisAfter": "Ver tras {name}",
-    "scroll": "Tabla desplazable"
+    "scroll": "Tabla desplazable",
+    "nav": {
+      "title": "Ranking",
+      "community": "Comunidad",
+      "season": "Temporada",
+      "progress": "Progreso de la temporada",
+      "sections": "Secciones del ranking",
+      "mainSections": "Secciones principales",
+      "allViews": "Ver todas las vistas",
+      "allViewsTitle": "Todas las vistas",
+      "views": "Vistas",
+      "current": "{label} · en curso",
+      "closed": "temporada cerrada",
+      "noPoints": "Tu comunidad aún no tiene puntos: se muestran todas las temporadas de la competición.",
+      "played": "{played} de {total} Grandes Premios disputados",
+      "sec": {
+        "resumen": "Resumen",
+        "clasificacion": "Clasificación",
+        "por-gp": "Por Gran Premio",
+        "evolucion": "Evolución",
+        "aciertos": "Aciertos",
+        "comparar": "Comparar",
+        "palmares": "Palmarés"
+      },
+      "view": {
+        "resumen": "Resumen",
+        "general": "General",
+        "tabla": "Tabla",
+        "mapa-de-calor": "Mapa de calor",
+        "distribucion": "Distribución",
+        "por-sesion": "Por sesión",
+        "gap": "Diferencias",
+        "bump": "Posiciones",
+        "titulo": "Lucha por el título",
+        "por-tipo": "Por tipo de sesión",
+        "regularidad": "Regularidad",
+        "cara-a-cara": "Cara a cara",
+        "mi-temporada": "Mi temporada",
+        "palmares": "Palmarés"
+      }
+    },
+    "chart": {
+      "chart": "Gráfico",
+      "mode": "Modo",
+      "view": "Vista",
+      "legend": "Leyenda",
+      "player": "Jugador",
+      "you": "(tú)",
+      "unit": "puntos",
+      "rest": "Resto de la comunidad",
+      "noData": "Sin datos.",
+      "youLead": "Lideras con {n} {unit}.",
+      "leads": "{name} lidera con {n} {unit}",
+      "youAre": "{head}; tú vas {rank} con {n}."
+    },
+    "gapLeader": {
+      "top": "Líder",
+      "lower": "líder",
+      "fromLeader": "{gap} del líder"
+    },
+    "heat": {
+      "winner": "100 % del ganador",
+      "last": "último",
+      "hits": "14 aciertos"
+    }
   }
 }
