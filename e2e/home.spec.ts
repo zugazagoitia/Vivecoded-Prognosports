@@ -48,7 +48,7 @@ test('home desktop: chart modes switch and the table alternative opens', async (
   await page.getByRole('button', { name: 'Posición' }).click()
   await expect(page.getByRole('heading', { name: 'Tu puesto tras cada GP' })).toBeVisible()
   await page.getByRole('button', { name: 'Ver como tabla' }).click()
-  await expect(page.getByRole('table')).toBeVisible()
+  await expect(page.getByRole('table', { name: /Tu puesto tras cada GP/ })).toBeVisible()
   await expectNoSeriousA11yViolations(page)
 })
 

@@ -12,7 +12,14 @@ import PIcon from '@/components/ui/PIcon.vue'
 import { focusRing } from '@/components/ui/styles'
 import { useNow } from '@/composables/useNow'
 import { useFlag } from '@/flags'
-import { gpPath, gpShortName, sessionLabel, sessionPath, sortedSessions } from '@/lib/gp'
+import {
+  gpPath,
+  gpShortName,
+  localizeGpName,
+  sessionLabel,
+  sessionPath,
+  sortedSessions,
+} from '@/lib/gp'
 import {
   compactMovement,
   firstName,
@@ -26,6 +33,7 @@ import {
   endValue,
   formCell,
   gapAxisLabel,
+  gapTickValues,
   gapToLeader,
   gapToLeaderSeries,
   gpAverage,
@@ -75,6 +83,15 @@ const pct = computed(() =>
     players.value.map((p) => p.avg),
   ),
 )
+// With few players a percentage is misleading («100 %» of 2): show the head count instead.
+const betterThanText = computed(() => {
+  const total = players.value.length
+  if (total < 10) {
+    const behind = players.value.filter((p) => p.avg < (me.value?.avg ?? 0)).length
+    return t('ranking.r0.aheadOf', { n: behind, total })
+  }
+  return t('ranking.r0.betterThan', { pct: pct.value })
+})
 const moveClass = computed(() => {
   const m = me.value?.move ?? 0
   return m > 0 ? 'text-ok-fg' : m < 0 ? 'text-err-fg' : 'text-muted'
@@ -149,9 +166,7 @@ const yMin = computed(() =>
   ),
 )
 const ticks = computed(() => {
-  const out = []
-  for (let v = 0; v >= yMin.value; v -= 20) out.push({ v, label: gapAxisLabel(v), zero: v === 0 })
-  return out
+  return gapTickValues(yMin.value).map((v) => ({ v, label: gapAxisLabel(v), zero: v === 0 }))
 })
 </script>
 
@@ -178,7 +193,11 @@ const ticks = computed(() => {
           </dt>
           <dd class="text-heading text-[28px] leading-9 font-bold tabular-nums">{{ me.total }}</dd>
           <dd class="text-muted text-[13px]">
-            {{ t('ranking.r0.toLeader', { n: gapToLeader(model, me) }) }}
+            {{
+              gapToLeader(model, me) === 0
+                ? t('ranking.r0.isLeader')
+                : t('ranking.r0.toLeader', { n: gapToLeader(model, me) })
+            }}
           </dd>
         </dl>
       </PCard>
@@ -190,7 +209,7 @@ const ticks = computed(() => {
           <dd class="text-heading text-[28px] leading-9 font-bold tabular-nums">
             {{ formatDec(me.avg) }}
           </dd>
-          <dd class="text-muted text-[13px]">{{ t('ranking.r0.betterThan', { pct }) }}</dd>
+          <dd class="text-muted text-[13px]">{{ betterThanText }}</dd>
         </dl>
       </PCard>
       <PCard class="!p-0">
@@ -333,7 +352,7 @@ const ticks = computed(() => {
 
         <PCard v-if="lastGp">
           <h2 class="t-header text-heading mb-2">
-            {{ t('ranking.r0.lastGp', { name: lastGp.name }) }}
+            {{ t('ranking.r0.lastGp', { name: localizeGpName(lastGp.name) }) }}
           </h2>
           <dl class="flex flex-col gap-2 text-sm">
             <div class="flex justify-between gap-3">

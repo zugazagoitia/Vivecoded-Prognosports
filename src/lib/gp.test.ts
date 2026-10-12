@@ -45,7 +45,7 @@ const SESSIONS = [
 
 describe('names', () => {
   it('strips «Grand Prix» and falls back to the circuit', () => {
-    expect(gpShortName({ name: 'Singapore Grand Prix' })).toBe('Singapore')
+    expect(gpShortName({ name: 'Singapore Grand Prix' })).toBe('Singapur')
     expect(gpShortName({ name: 'Gran Premio 6', circuit: { id: 1, locality: 'Miami' } })).toBe(
       'Miami',
     )
@@ -346,5 +346,14 @@ describe('rules', () => {
     expect(ruleChips(data, s(999)).exact).toBe('5–20')
     expect(ruleChips(undefined, s(61))).toEqual({})
     expect(ruleChips({ pointsByTopScorer: 0 }, s(61)).bonus).toBeUndefined()
+  })
+})
+
+describe('localizeGpName', () => {
+  it('translates English names and strips the suffix', async () => {
+    const { localizeGpName } = await import('./gp')
+    expect(localizeGpName('Singapore')).toBe('Singapur')
+    expect(localizeGpName('Australian Grand Prix')).toBe('Australia')
+    expect(localizeGpName('Unknownia')).toBe('Unknownia')
   })
 })

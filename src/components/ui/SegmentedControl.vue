@@ -40,7 +40,7 @@ function onKeydown(e: KeyboardEvent) {
     ref="root"
     role="group"
     :aria-label="label"
-    class="bg-surface-muted ring-border inline-flex gap-0.5 rounded-lg p-[3px] ring-1"
+    class="bg-surface-muted ring-border inline-flex max-w-full gap-0.5 overflow-x-auto rounded-lg p-[3px] ring-1"
     @keydown="onKeydown"
   >
     <button

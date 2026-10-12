@@ -7,11 +7,13 @@ import { ApiError } from '@/api'
 import CommunityPreview from '@/components/communities/CommunityPreview.vue'
 import OptionCards from '@/components/communities/OptionCards.vue'
 import RuleSetTable from '@/components/communities/RuleSetTable.vue'
+import ImageCropDialog from '@/components/community/ImageCropDialog.vue'
 import ConfirmLeaveDialog from '@/components/data/ConfirmLeaveDialog.vue'
 import { ErrorState } from '@/components/states'
 import Breadcrumb from '@/components/ui/Breadcrumb.vue'
 import PButton from '@/components/ui/PButton.vue'
 import PCard from '@/components/ui/PCard.vue'
+import PIcon from '@/components/ui/PIcon.vue'
 import PInput from '@/components/ui/PInput.vue'
 import PrognoAlert from '@/components/ui/PrognoAlert.vue'
 import PSelect from '@/components/ui/PSelect.vue'
@@ -194,6 +196,8 @@ function updatePoint(col: Column, index: number, raw: string) {
 const imageFile = ref<File>()
 const imageUrl = ref<string>()
 const imageError = ref('')
+const pending = ref<File>()
+const cropping = ref(false)
 const fileInput = useTemplateRef<HTMLInputElement>('fileInput')
 
 function revoke() {
@@ -208,9 +212,15 @@ function onFile(e: Event) {
   const problem = validateImage(file)
   imageError.value = problem ? t(`createCommunity.image.${problem}`) : ''
   if (problem) return
+  pending.value = file
+  cropping.value = true
+}
+function onCrop(blob: Blob) {
   revoke()
-  imageFile.value = file
-  imageUrl.value = URL.createObjectURL(file)
+  imageFile.value = new File([blob], 'community.jpg', { type: 'image/jpeg' })
+  imageUrl.value = URL.createObjectURL(blob)
+  cropping.value = false
+  pending.value = undefined
 }
 function removeImage() {
   revoke()
@@ -316,6 +326,7 @@ const rulesModeOptions = computed(() => [
         @submit.prevent="onSubmit"
       >
         <!-- 1 · Basics -->
+        <ImageCropDialog v-model:open="cropping" :file="pending" @crop="onCrop" />
         <PCard tag="section">
           <template #header>
             <span
@@ -334,7 +345,7 @@ const rulesModeOptions = computed(() => [
                 aria-hidden="true"
               >
                 <img v-if="imageUrl" :src="imageUrl" alt="" class="size-full object-cover" />
-                <span v-else class="text-3xl leading-none font-light">+</span>
+                <PIcon v-else name="image" :size="24" />
               </div>
               <input
                 ref="fileInput"

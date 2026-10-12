@@ -1,3 +1,4 @@
+import { t } from '@/i18n'
 import { mean, minus, type RankModel, type RankPlayer } from './ranking'
 
 /** Pure logic of the summary (R0), the standings (R1) and the matrix (R2). */
@@ -60,14 +61,25 @@ export function yAxisMin(values: readonly number[], step = 20): number {
   return v === 0 ? 0 : v
 }
 
+/** Tick values from 0 down to `min` (≤ 0) with a «nice» step so there are at most ~6 labels. */
+export function gapTickValues(min: number, maxTicks = 6): number[] {
+  if (min >= 0) return [0]
+  const raw = -min / (maxTicks - 1)
+  const pow = 10 ** Math.floor(Math.log10(raw))
+  const step = ([1, 2, 5, 10].map((m) => m * pow).find((s) => s >= raw) ?? raw) || 20
+  const out: number[] = []
+  for (let v = 0; v >= min; v -= step) out.push(v)
+  return out
+}
+
 /** «Líder» for 0, otherwise «−20». */
 export function gapAxisLabel(v: number): string {
-  return v === 0 ? 'Líder' : minus(v)
+  return v === 0 ? t('ranking.gapLeader.top') : minus(v)
 }
 
 /** Value at the end of a line: «líder» or «−12». */
 export function endValue(v: number): string {
-  return v === 0 ? 'líder' : minus(v)
+  return v === 0 ? t('ranking.gapLeader.lower') : minus(v)
 }
 
 /** Bar width of a row: `round(total / leader × 100)`. */
@@ -149,7 +161,9 @@ export function mbarHeights(pts: readonly number[]): number[] {
 
 /** Mobile subtitle: «Líder» or «−34 del líder». */
 export function gapLabel(i: number, gap: number): string {
-  return i === 0 ? 'Líder' : `${minus(gap)} del líder`
+  return i === 0
+    ? t('ranking.gapLeader.top')
+    : t('ranking.gapLeader.fromLeader', { gap: minus(gap) })
 }
 
 /** Average of `pointsInGP` of ALL members in GP `g`. */

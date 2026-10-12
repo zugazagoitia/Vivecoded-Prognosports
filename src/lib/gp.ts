@@ -36,8 +36,68 @@ function ms(d: Time): number {
  */
 export function gpShortName(gp: Pick<GrandPrix, 'name' | 'circuit'>): string {
   const stripped = gp.name.replace(/\s+grand\s+prix$/i, '').trim()
-  if (stripped && stripped !== gp.name.trim()) return stripped
-  return gp.circuit?.locality?.trim() || gp.circuit?.country?.trim() || gp.name
+  if (stripped && stripped !== gp.name.trim()) return localizeGpName(stripped)
+  return localizeGpName(gp.circuit?.locality?.trim() || gp.circuit?.country?.trim() || gp.name)
+}
+
+/** English place/demonym names the API sends -> Spanish for display (lookups keep the API name). */
+const GP_NAMES_ES: Record<string, string> = {
+  australian: 'Australia',
+  australia: 'Australia',
+  chinese: 'China',
+  japanese: 'Japón',
+  japan: 'Japón',
+  bahrain: 'Baréin',
+  'saudi arabian': 'Arabia Saudí',
+  'saudi arabia': 'Arabia Saudí',
+  miami: 'Miami',
+  'emilia romagna': 'Emilia-Romaña',
+  monaco: 'Mónaco',
+  canadian: 'Canadá',
+  canada: 'Canadá',
+  spanish: 'España',
+  spain: 'España',
+  austrian: 'Austria',
+  austria: 'Austria',
+  british: 'Gran Bretaña',
+  hungarian: 'Hungría',
+  hungary: 'Hungría',
+  belgian: 'Bélgica',
+  belgium: 'Bélgica',
+  dutch: 'Países Bajos',
+  netherlands: 'Países Bajos',
+  italian: 'Italia',
+  italy: 'Italia',
+  azerbaijan: 'Azerbaiyán',
+  singapore: 'Singapur',
+  'united states': 'Estados Unidos',
+  american: 'Estados Unidos',
+  mexican: 'México',
+  'mexico city': 'Ciudad de México',
+  mexico: 'México',
+  brazilian: 'Brasil',
+  'são paulo': 'São Paulo',
+  'sao paulo': 'São Paulo',
+  brazil: 'Brasil',
+  'las vegas': 'Las Vegas',
+  qatar: 'Catar',
+  'abu dhabi': 'Abu Dabi',
+  'united arab emirates': 'Emiratos Árabes Unidos',
+  portuguese: 'Portugal',
+  portugal: 'Portugal',
+  french: 'Francia',
+  france: 'Francia',
+  german: 'Alemania',
+  germany: 'Alemania',
+  turkish: 'Turquía',
+  turkey: 'Turquía',
+  russian: 'Rusia',
+  russia: 'Rusia',
+}
+
+export function localizeGpName(name: string): string {
+  const base = name.replace(/\s+grand\s+prix$/i, '').trim()
+  return GP_NAMES_ES[base.toLowerCase()] ?? base
 }
 
 /** Lap length (km): the GP's variant carries it in the real API; else the circuit's variant. */

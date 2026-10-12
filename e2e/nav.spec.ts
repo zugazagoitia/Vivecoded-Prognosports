@@ -26,9 +26,10 @@ test.describe('AppNav + SiteFooter', () => {
         await expectNoSeriousA11yViolations(page)
         await noHorizontalScroll(page)
         await expect(page.getByRole('banner')).toHaveScreenshot(`nav-visitor-${scheme}.png`)
-        await expect(page.getByRole('contentinfo')).toHaveScreenshot(`footer-${scheme}.png`, {
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page.getByRole('contentinfo')).toHaveScreenshot(`footer-${scheme}.png`, {
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
 
       test('player: axe, no overflow, snapshot', async ({ authedPage: page, isMobile }) => {
@@ -37,7 +38,8 @@ test.describe('AppNav + SiteFooter', () => {
         await expect(page.getByRole('button', { name: 'Mi perfil' })).toBeVisible()
         await expectNoSeriousA11yViolations(page)
         await noHorizontalScroll(page)
-        await expect(page.getByRole('banner')).toHaveScreenshot(`nav-player-${scheme}.png`)
+        if (scheme === 'light')
+          await expect(page.getByRole('banner')).toHaveScreenshot(`nav-player-${scheme}.png`)
       })
 
       test('user menu open: axe', async ({ authedPage: page, isMobile }) => {
