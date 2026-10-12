@@ -2,7 +2,7 @@
 #
 # deploy.yml se dispara cuando CI termina; si los e2e vivieran en CI, el deploy de beta esperaría
 # a que acabaran. Aquí corren en paralelo y sin bloquear el despliegue.
-#   - PR a develop: solo chromium (2 shards) + mobile; un fallo se ve en su check pero no bloquea.
+#   - PR a develop: solo chromium (2 shards) + mobile + flags-off; un fallo se ve en su check pero no bloquea.
 #   - push a develop/master, PR a master y cron nocturno: también firefox y webkit.
 #   - PR a master: `e2e-ok` es el check obligatorio de producción (exigirlo en la protección de master).
 name: E2E
@@ -26,11 +26,11 @@ jobs:
   # Compila el dist/ una sola vez (production con todos los flags activos, scripts/build-e2e.ts)
   # y lo comparte con los jobs de la matriz: ninguno ejecuta `vite build`.
   # Aquí también se decide la matriz:
-  #   - PR a develop: chromium (2 shards) + mobile. Firefox/WebKit no comparan capturas y rara vez
+  #   - PR a develop: chromium (2 shards) + mobile + flags-off. Firefox/WebKit no comparan capturas y rara vez
   #     fallan solos; no compensa su coste en cada PR.
   #   - push a develop/master, PR a master (necesario para `e2e-ok`) y cron: todos los proyectos.
-  # Si se añade una build con flags apagados (p. ej. dist-flags-off), compílala aquí y súbela como
-  # otro artefacto.
+  # `pnpm build:e2e` compila también dist-flags-off/ (proyecto `flags-off`); ambos dirs viajan
+  # en el mismo artefacto.
   build:
     name: e2e build
     runs-on: ubuntu-latest
@@ -52,7 +52,7 @@ jobs:
         env:
           FULL: ${{ github.event_name != 'pull_request' || github.base_ref == 'master' }}
         run: |
-          base='{"project":"chromium","browser":"chromium","shard":"1/2","tag":"-s1"},{"project":"chromium","browser":"chromium","shard":"2/2","tag":"-s2"},{"project":"mobile","browser":"chromium","shard":"","tag":""}'
+          base='{"project":"chromium","browser":"chromium","shard":"1/2","tag":"-s1"},{"project":"chromium","browser":"chromium","shard":"2/2","tag":"-s2"},{"project":"mobile","browser":"chromium","shard":"","tag":""},{"project":"flags-off","browser":"chromium","shard":"","tag":""}'
           extra='{"project":"firefox","browser":"firefox","shard":"","tag":""},{"project":"webkit","browser":"webkit","shard":"","tag":""}'
           if [ "$FULL" = "true" ]; then list="$base,$extra"; else list="$base"; fi
           echo "matrix={\"include\":[$list]}" >> "$GITHUB_OUTPUT"
@@ -60,11 +60,13 @@ jobs:
         env:
           VITE_GIT_SHA: e2e
           VITE_GIT_DATE: 1970-01-01T00:00:00+00:00
-        run: pnpm exec jiti scripts/build-e2e.ts
+        run: pnpm build:e2e # dist/ (flags activos) y dist-flags-off/ (todos apagados)
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-dist
-          path: dist/
+          path: |
+            dist/
+            dist-flags-off/
           retention-days: 1
           if-no-files-found: error
 
@@ -91,7 +93,7 @@ jobs:
       - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: e2e-dist
-          path: dist/
+          path: .
       - name: Versión de Playwright
         id: playwright
         run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
