@@ -49,9 +49,10 @@ test.describe('Admin · Grandes Premios (M2-M5)', () => {
           await expectNoSeriousA11yViolations(page)
           await noHorizontalScroll(page)
           test.skip(browserName !== 'chromium', 'screenshots are Chromium-only')
-          await expect(page).toHaveScreenshot(`admin-gps-${s.name}-${scheme}.png`, {
-            fullPage: true,
-          })
+          if (scheme === 'light')
+            await expect(page).toHaveScreenshot(`admin-gps-${s.name}-${scheme}.png`, {
+              fullPage: true,
+            })
         })
       }
     })

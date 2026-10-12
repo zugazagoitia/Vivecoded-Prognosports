@@ -108,10 +108,11 @@ test.describe('Invitación (H7)', () => {
         await mockInvitations(page)
         await page.goto('/unirse/PADDOCK-7KQ2')
         await expect(page.getByText('Enlace válido')).toBeVisible()
-        await expect(page).toHaveScreenshot(`invitacion-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`invitacion-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

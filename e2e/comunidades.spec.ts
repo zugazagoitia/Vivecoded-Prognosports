@@ -80,8 +80,6 @@ test.describe('Mis comunidades (H2)', () => {
         await expect(page.getByRole('heading', H1)).toBeVisible()
         await expect(page.getByText('Juegas en 3 comunidades.')).toBeVisible()
         await expect(page.getByRole('heading', { level: 3, name: 'Peña Paddock' })).toBeVisible()
-        // The flag is off in the production build the e2e suite runs against.
-        await expect(page.getByText('Tú en todas tus comunidades')).toHaveCount(0)
         await expect(page.getByText('Te faltan 2').first()).toBeVisible()
         await expect(page.getByText('Activa', { exact: true })).toHaveCount(1)
         await expectNoSeriousA11yViolations(page)
@@ -121,6 +119,29 @@ test.describe('Mis comunidades (H2)', () => {
       })
     })
   }
+
+  test('percentile block (flag on): rows, strips, summary, axe', async ({
+    authedPage: page,
+    browserName,
+  }) => {
+    await mockCommunities(page)
+    await page.goto('/comunidades')
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Tú en todas tus comunidades' }),
+    ).toBeVisible()
+    const table = page.getByRole('table', { name: 'Percentil por comunidad' })
+    await expect(table).toBeVisible()
+    // Each row has a strip with a text alternative.
+    const strips = table.getByRole('img', { name: /^Percentil \d+ en / })
+    await expect(strips.first()).toBeVisible()
+    await expect(page.getByText('Donde mejor te va')).toBeVisible()
+    await expect(page.getByText('Percentil medio')).toBeVisible()
+    await expectNoSeriousA11yViolations(page)
+    if (browserName !== 'chromium') return
+    await page.evaluate(() => document.fonts.ready)
+    // ▲/▼ glyph fallback font differs between CI runner and Playwright image.
+    await expect(table).toHaveScreenshot('comunidades-percentil.png', { maxDiffPixelRatio: 0.012 })
+  })
 
   test('«Hacer activa» moves the tag and survives a reload', async ({ authedPage: page }) => {
     await mockCommunities(page)

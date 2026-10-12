@@ -1,58 +1,8 @@
 import type { Router } from 'vue-router'
+import { t } from '@/i18n'
 
-/** Fallback Spanish titles until T5 (i18n) lands; `setTitleResolver` swaps in `t()`. */
-const fallback: Record<string, string> = {
-  'route.landing': 'Inicio',
-  'route.rules': 'Cómo se puntúa',
-  'route.login': 'Iniciar sesión',
-  'route.register': 'Crear cuenta',
-  'route.recover': 'Recuperar contraseña',
-  'route.reset': 'Restablecer contraseña',
-  'route.verify': 'Verificar correo',
-  'route.home': 'Inicio',
-  'route.gp': 'Gran Premio',
-  'route.gps': 'Grandes Premios',
-  'route.predict': 'Pronosticar',
-  'route.consensus': 'Parrilla y consenso',
-  'route.results': 'Resultados',
-  'route.simulator': 'Simulador de puntos',
-  'route.ranking': 'Clasificación',
-  'route.circuits': 'Circuitos',
-  'route.circuit': 'Circuito',
-  'route.communities': 'Comunidades',
-  'route.communitiesExplore': 'Explorar comunidades',
-  'route.createCommunity': 'Crear comunidad',
-  'route.community': 'Comunidad',
-  'route.communitySettings': 'Ajustes de la comunidad',
-  'route.invitation': 'Invitación',
-  'route.user': 'Perfil',
-  'route.settings': 'Ajustes de la cuenta',
-  'route.admin': 'Administración',
-  'route.adminGps': 'Administración · Grandes Premios',
-  'route.adminGpNew': 'Administración · Nuevo Gran Premio',
-  'route.adminGp': 'Administración · Gran Premio',
-  'route.adminGpDrivers': 'Administración · Pilotos del GP',
-  'route.adminGpSessions': 'Administración · Sesiones',
-  'route.adminCircuits': 'Administración · Circuitos',
-  'route.adminCircuit': 'Administración · Circuito',
-  'route.adminDrivers': 'Administración · Pilotos y equipos',
-  'route.adminRules': 'Administración · Reglas de puntuación',
-  'route.adminUsers': 'Administración · Usuarios',
-  'route.adminCommunities': 'Administración · Comunidades',
-  'route.adminNotifications': 'Administración · Notificaciones',
-  'route.adminCalcs': 'Administración · Cálculo de puntos',
-  'route.notFound': 'No se ha encontrado',
-  'route.tokens': 'Fundamentos',
-  'route.datos': 'Piezas de datos',
-  'route.graficos': 'Gráficos',
-  'route.estados': 'Estados',
-  'route.terms': 'Términos de uso',
-  'route.privacy': 'Política de privacidad',
-  'route.faq': 'Preguntas frecuentes',
-  'route.loggedOut': 'Has cerrado sesión',
-}
-
-let resolve: (key: string) => string = (key) => fallback[key] ?? key
+/** Titles come from `src/i18n/es/routes.json` (`route.*`); the resolver can be swapped (tests). */
+let resolve: (key: string) => string = (key) => t(key)
 
 export function setTitleResolver(fn: (key: string) => string): void {
   resolve = fn

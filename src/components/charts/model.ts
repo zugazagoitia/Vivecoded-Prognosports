@@ -1,5 +1,7 @@
 // Data transforms for the F5 chart language. Pure functions: the SVG components only draw their output.
 
+import { t } from '@/i18n'
+
 export interface ChartGp {
   code: string
   /** Name used in labels, e.g. "Italia" (aria-label: "Fijar Gran Premio de Italia"). */
@@ -131,16 +133,24 @@ export function ordinal(n: number): string {
 }
 
 /** Headline for `role="img"`: "Marta lidera con 684 puntos; tú vas 4.º con 612." */
-export function altText(series: SeriesSpec[], index?: number, unit = 'puntos'): string {
-  if (!series.length) return 'Sin datos.'
+export function altText(
+  series: SeriesSpec[],
+  index?: number,
+  unit = t('ranking.chart.unit'),
+): string {
+  if (!series.length) return t('ranking.chart.noData')
   const at = (s: SeriesSpec) => s.values[index ?? s.values.length - 1] ?? 0
   const ranked = [...series].sort((a, b) => at(b) - at(a) || a.name.localeCompare(b.name, 'es'))
   const leader = ranked[0] as SeriesSpec
   const meRank = ranked.findIndex((s) => s.isMe)
-  if (meRank === 0) return `Lideras con ${at(leader)} ${unit}.`
-  const head = `${leader.name} lidera con ${at(leader)} ${unit}`
+  if (meRank === 0) return t('ranking.chart.youLead', { n: at(leader), unit })
+  const head = t('ranking.chart.leads', { name: leader.name, n: at(leader), unit })
   if (meRank < 0) return `${head}.`
-  return `${head}; tú vas ${ordinal(meRank + 1)} con ${at(ranked[meRank] as SeriesSpec)}.`
+  return t('ranking.chart.youAre', {
+    head,
+    rank: ordinal(meRank + 1),
+    n: at(ranked[meRank] as SeriesSpec),
+  })
 }
 
 /** "Nice" tick values covering [min, max]. */

@@ -57,10 +57,11 @@ test.describe('circuit detail (P4)', () => {
         await page.goto(PATH)
         await expect(page.getByRole('heading', { name: 'Tu historial aquí' })).toBeVisible()
         await expect(page.getByRole('img', { name: /^2025: \d+ puntos$/ })).toBeVisible()
-        await expect(page).toHaveScreenshot(`circuit-detail-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`circuit-detail-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

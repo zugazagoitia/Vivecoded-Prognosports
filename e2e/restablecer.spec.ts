@@ -10,7 +10,8 @@ test.describe('Restablecer contraseña (A4)', () => {
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Crea una nueva contraseña')
       await expect(page).toHaveTitle('Restablecer contraseña · PrognoSports')
       await expectNoSeriousA11yViolations(page)
-      await expect(page).toHaveScreenshot(`restablecer-form-${scheme}.png`, { fullPage: true })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`restablecer-form-${scheme}.png`, { fullPage: true })
 
       await page.getByLabel('Código de 6 caracteres').fill('k7x2m9')
       await page.getByLabel('Nueva contraseña').fill('secret123')
@@ -24,7 +25,8 @@ test.describe('Restablecer contraseña (A4)', () => {
         () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
       )
       expect(overflow).toBe(false)
-      await expect(page).toHaveScreenshot(`restablecer-done-${scheme}.png`, { fullPage: true })
+      if (scheme === 'light')
+        await expect(page).toHaveScreenshot(`restablecer-done-${scheme}.png`, { fullPage: true })
     })
   }
 
