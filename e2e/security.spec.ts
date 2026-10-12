@@ -20,7 +20,31 @@ test.describe('security', () => {
     expect(csp).not.toMatch(/unsafe-(inline|eval)/)
   })
 
-  for (const path of ['/login', '/ruta-que-no-existe', '/home']) {
+  for (const path of [
+    '/',
+    '/login',
+    '/registro',
+    '/ruta-que-no-existe',
+    '/home',
+    '/circuits',
+    '/gps',
+    '/comunidades',
+    '/circuits/18',
+    '/gps/1/10/6',
+    '/gps/1/10/6/consenso/61',
+    '/gps/1/10/6/resultados/61',
+    '/gps/1/10/6/pronosticar/60',
+    '/gps/1/10/6/simulador/61',
+    '/comunidades/100',
+    '/dev/tokens',
+    '/dev/datos',
+    '/dev/estados',
+    '/dev/graficos',
+    '/recuperar',
+    '/terms',
+    '/privacy',
+    '/faq',
+  ]) {
     test(`no CSP violations on ${path}`, async ({ authedPage: page, browserName }) => {
       test.skip(browserName !== 'chromium', 'CSP violations are checked in Chromium')
       await page.route('**/*', async (route) => {

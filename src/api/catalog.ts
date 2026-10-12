@@ -1,5 +1,7 @@
 import { z } from 'zod'
-import { request, requestParsed, seg, uploadImage } from './client'
+import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
+import { getCommunity } from './communities'
+import { ApiError } from './errors'
 import {
   CircuitSchema,
   CircuitVariantSchema,
@@ -118,9 +120,38 @@ export const deleteRuleset = (r: Id, signal?: AbortSignal) =>
   request(`/v2/rulesets/${seg(r)}`, { method: 'DELETE', signal })
 export const getRulesetUsages = (r: Id, signal?: AbortSignal) =>
   request(`/v2/rulesets/${seg(r)}/usages`, { signal })
-export const getCommunityRuleset = (c: Id, comp: Id, season: Id, signal?: AbortSignal) =>
-  requestParsed(`/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}`, RuleSetSchema, { signal })
+/**
+ * Rule set of a community in a season. WORKAROUND: the spec documents
+ * `GET /v2/rulesets/{community}/{competition}/{season}` but the real API (production and local)
+ * answers 404 «Endpoint GET … not found» (text/plain). Then the community's `defaultRuleSet`
+ * (`GET /v2/communities/{id}`, same shape) is used. Remove the fallback when the backend serves
+ * the route (`corrections.contract.ts` fails with instructions when it does).
+ */
+export const getCommunityRuleset = async (c: Id, comp: Id, season: Id, signal?: AbortSignal) => {
+  try {
+    return await requestParsed(
+      `/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}`,
+      RuleSetSchema,
+      {
+        signal,
+      },
+    )
+  } catch (e) {
+    if (!(e instanceof ApiError) || e.kind !== 'http' || e.status !== 404) throw e
+    const community = await getCommunity(c, signal)
+    if (!community.defaultRuleSet) throw e
+    return community.defaultRuleSet
+  }
+}
 export const getCommunityGpRuleset = (c: Id, comp: Id, season: Id, gp: Id, signal?: AbortSignal) =>
   requestParsed(`/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}/${seg(gp)}`, RuleSetSchema, {
     signal,
   })
+
+/** Public PNG of a circuit variant's layout (only exists when `variant.hasLayoutImage`). */
+export const circuitLayoutUrl = (c: Id, v: Id): string =>
+  apiUrl(`/v2/circuits/${seg(c)}/${seg(v)}/layout`)
+
+/** One circuit with its variants (public). Unknown ids answer 200 with `success:false`. */
+export const getCircuit = (c: Id, signal?: AbortSignal) =>
+  requestParsed(`/v2/circuits/${seg(c)}`, CircuitSchema, { signal })

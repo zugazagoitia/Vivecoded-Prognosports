@@ -48,6 +48,6 @@ const layout = computed(() => layouts[route.meta.layout ?? 'app'])
   top: 0;
   z-index: 1000;
   padding: 0.5rem 1rem;
-  background: #fff;
+  background: var(--color-surface);
 }
 </style>

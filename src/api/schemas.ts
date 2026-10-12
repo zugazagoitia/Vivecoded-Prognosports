@@ -130,7 +130,7 @@ export const UserResumeSchema = z.object({
   worstGP: n(z.object({ first: z.unknown(), second: z.unknown() })),
 })
 
-export const UserSchema = z.object({
+const UserShape = z.object({
   id,
   username: z.string(),
   email: n(z.string()),
@@ -145,10 +145,50 @@ export const UserSchema = z.object({
   resume: n(UserResumeSchema),
   hasProfileImage: n(z.boolean()),
   verified: n(z.string()),
+  verified_at: n(z.string()),
   created: n(z.string()),
   updated: n(z.string()),
   lastActivity: n(z.string()),
+  last_activity: n(z.string()),
+  time_zone: n(z.string()),
+  has_profile_image: n(z.boolean()),
+  current_community: n(z.unknown()),
 })
+
+/**
+ * The real API sends snake_case (`verified_at`, `last_activity`, `time_zone`...) while the spec
+ * says camelCase / `verified`. Both are accepted and normalised to the app model.
+ */
+type SnakeUserKeys =
+  'verified_at' | 'last_activity' | 'time_zone' | 'has_profile_image' | 'current_community'
+type UserModel = Omit<z.output<typeof UserShape>, SnakeUserKeys>
+
+const timeZoneOfPreferences = (p: Record<string, unknown> | null | undefined) =>
+  typeof p?.['time-zone-id'] === 'string' ? p['time-zone-id'] : undefined
+
+export const UserSchema = UserShape.transform(
+  ({
+    verified_at,
+    last_activity,
+    time_zone,
+    has_profile_image,
+    current_community,
+    verified,
+    lastActivity,
+    timeZone,
+    hasProfileImage,
+    currentCommunity,
+    ...rest
+  }): UserModel => ({
+    ...rest,
+    verified: verified ?? verified_at,
+    lastActivity: lastActivity ?? last_activity,
+    // Real API: the time zone only exists as `preferences['time-zone-id']`.
+    timeZone: timeZone ?? time_zone ?? timeZoneOfPreferences(rest.preferences),
+    hasProfileImage: hasProfileImage ?? has_profile_image,
+    currentCommunity: currentCommunity ?? current_community,
+  }),
+)
 export type User = z.infer<typeof UserSchema>
 
 /** Removes `hashedPassword` from any raw user-like object (defence in depth). */
@@ -243,13 +283,35 @@ export const CommunityDetailSchema = CommunityShape.extend({ id: n(id) }).transf
   normaliseCommunity,
 )
 
+/** Author of a prediction: the real API only gives the id (the key of the per-user map). */
+const PredictionUserSchema = z.object({ id, username: n(z.string()) })
+
 export const PredictionSchema = z.object({
-  user: n(UserSchema),
+  user: n(PredictionUserSchema),
   gp: n(z.unknown()),
   driver: DriverSchema,
   position: z.number(),
   raceSession: n(z.unknown()),
 })
+
+/**
+ * `GET .../tipps/{community}`: the spec says a list, the real API sends a map by user id,
+ * `{ "<userId>": Prediction[] }`, with EVERY member of the community (an empty list for those
+ * without a prediction) and, in the rows, no `user`. Both forms are accepted and normalised to a
+ * flat list where each row carries its author (`user.id` from the key). A bare list keeps its rows
+ * as sent (without `user` they are the caller's). See src/api/README.md.
+ */
+export const TippsResponseSchema = z
+  .union([z.array(PredictionSchema), z.record(z.string(), z.array(PredictionSchema))])
+  .transform((v) => {
+    if (Array.isArray(v)) return v
+    return Object.entries(v).flatMap(([key, rows]) => {
+      const uid = Number(key)
+      return rows.map((p) =>
+        p.user == null && Number.isFinite(uid) ? { ...p, user: { id: uid } } : p,
+      )
+    })
+  })
 
 export const RaceResultSchema = z.object({
   gp: n(z.unknown()),
@@ -323,6 +385,50 @@ export const ScoreCalculationsResponseSchema = z.object({
   hitsBySession: n(z.unknown()),
   totalHits: n(z.number()),
 })
+export type ScoreCalculations = z.infer<typeof ScoreCalculationsResponseSchema>
+
+const PerUserNumber = z.union([z.number(), z.record(z.string(), z.number())])
+
+/**
+ * `GET|POST .../tipps/{community}/calculations` as the real API sends it: every field is a map by
+ * USER id (`pointsByPosition: { "<userId>": { "<position>": points } }`, `totalHits: { "<userId>":
+ * n }`, plus `hitsAmount` and `hitsBySession`), not the flat object of the spec. Both forms are
+ * accepted; `scoreCalculationsFor` extracts the user's. See src/api/README.md.
+ */
+export const ScoreCalculationsWireSchema = z.object({
+  pointsByPosition: n(z.record(z.string(), PerUserNumber)),
+  hits: n(z.unknown()),
+  hitsAmount: n(z.unknown()),
+  hitsBySession: n(z.unknown()),
+  totalHits: n(PerUserNumber),
+})
+
+/** The calculations of one user from the flat (spec) or per-user (real) form. */
+export function scoreCalculationsFor(
+  wire: z.output<typeof ScoreCalculationsWireSchema>,
+  userId: number | undefined,
+): ScoreCalculations {
+  const uid = userId == null ? undefined : String(userId)
+  const perUser = Object.values(wire.pointsByPosition ?? {}).some((v) => typeof v === 'object')
+  if (!perUser && typeof wire.totalHits !== 'object') {
+    return {
+      pointsByPosition: wire.pointsByPosition as Record<string, number> | null | undefined,
+      hits: wire.hits,
+      hitsBySession: wire.hitsBySession,
+      totalHits: wire.totalHits,
+    }
+  }
+  const pick = <T>(m: unknown): T | undefined =>
+    uid != null && m != null && typeof m === 'object' ? (m as Record<string, T>)[uid] : undefined
+  const points = pick<Record<string, number> | number>(wire.pointsByPosition)
+  const total = pick<number>(wire.totalHits)
+  return {
+    pointsByPosition: typeof points === 'object' ? points : undefined,
+    hits: wire.hits ?? pick(wire.hitsAmount),
+    hitsBySession: pick(wire.hitsBySession),
+    totalHits: total,
+  }
+}
 
 export type GrandPrix = z.infer<typeof GrandPrixSchema>
 export type RaceSession = z.infer<typeof RaceSessionSchema>

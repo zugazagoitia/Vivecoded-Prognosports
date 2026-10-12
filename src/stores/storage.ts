@@ -21,3 +21,21 @@ export const STORAGE_KEYS = {
   community: 'prognosports:community',
   theme: 'prognosports:theme',
 } as const
+
+/** sessionStorage access that never throws; used for the token when «Mantener la sesión» is off. */
+export function readSessionStorage(key: string): string | null {
+  try {
+    return globalThis.sessionStorage?.getItem(key) ?? null
+  } catch {
+    return null
+  }
+}
+
+export function writeSessionStorage(key: string, value: string | null): void {
+  try {
+    if (value === null) globalThis.sessionStorage?.removeItem(key)
+    else globalThis.sessionStorage?.setItem(key, value)
+  } catch {
+    // Storage unavailable: the value just will not survive a reload.
+  }
+}

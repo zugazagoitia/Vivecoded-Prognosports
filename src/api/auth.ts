@@ -49,11 +49,40 @@ export const changePassword = (
   signal?: AbortSignal,
 ) => request('/v2/auth/changepassword', { method: 'PATCH', body: b, signal })
 
+/**
+ * Second step of the recovery (A4): `PATCH /v2/auth/changepassword` with `{ email, token,
+ * password }` (schema.d.ts). `token` is the 6-character code from the e-mail. Anonymous; 403 =
+ * code rejected, 400 = password missing. TO CONFIRM with the backend: that the code is sent
+ * upper-case and that other sessions are revoked.
+ */
+export const resetPassword = (
+  b: { email: string; code: string; password: string },
+  signal?: AbortSignal,
+) =>
+  request('/v2/auth/changepassword', {
+    method: 'PATCH',
+    body: { email: b.email, token: b.code, password: b.password },
+    anonymous: true,
+    noSessionExpiry: true,
+    signal,
+  })
+
+/**
+ * `POST /v2/auth/send-verify-email` (A5): no body (schema.d.ts), authenticated as the unverified
+ * user. TO CONFIRM with the backend: the resend rate limit and whether `register` already sends
+ * the first code (the client assumes it does).
+ */
 export const sendVerifyEmail = (signal?: AbortSignal) =>
   request('/v2/auth/send-verify-email', { method: 'POST', signal })
 
+/**
+ * `POST /v2/auth/verify-email` (A5) with JSON body `{ token }` (schema.d.ts); `token` is the
+ * 6-character code from the e-mail. 400 = invalid/expired code. TO CONFIRM with the backend:
+ * that the code is sent upper-case, whether the endpoint needs the Bearer token (it is sent)
+ * and the attempt limit.
+ */
 export const verifyEmail = (token: string, signal?: AbortSignal) =>
-  request('/v2/auth/verify-email', { method: 'POST', query: { token }, anonymous: true, signal })
+  request('/v2/auth/verify-email', { method: 'POST', body: { token }, signal })
 
 export const listTokens = (signal?: AbortSignal) =>
   requestParsed('/v2/auth/tokens', z.array(AuthTokenSchema), { signal })

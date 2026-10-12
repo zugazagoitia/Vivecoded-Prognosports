@@ -7,6 +7,27 @@ test.describe('smoke', () => {
     await expectNoSeriousA11yViolations(page)
   })
 
+  test('fundamentos: no horizontal scroll, self-hosted font, responsive title', async ({
+    page,
+    isMobile,
+  }) => {
+    const external: string[] = []
+    page.on('request', (r) => {
+      if (!r.url().startsWith('http://localhost') && !r.url().startsWith('data:'))
+        external.push(r.url())
+    })
+    await page.goto('/fundamentos')
+    const h1 = page.getByRole('heading', { level: 1 })
+    await expect(h1).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    )
+    expect(overflow).toBe(false)
+    const size = await h1.evaluate((el) => getComputedStyle(el).fontSize)
+    expect(size).toBe(isMobile ? '24px' : '36px')
+    expect(external).toEqual([])
+  })
+
   test('404 renders', async ({ page }) => {
     await page.goto('/ruta-que-no-existe')
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
@@ -15,7 +36,7 @@ test.describe('smoke', () => {
 
   test('home renders for a logged-in user', async ({ authedPage: page }) => {
     await page.goto('/home')
-    await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Hola, ana' })).toBeVisible()
     await expectNoSeriousA11yViolations(page)
   })
 
@@ -36,7 +57,7 @@ test.describe('smoke', () => {
       'macOS WebKit does not Tab to links by default (Option+Tab)',
     )
     await page.goto('/home')
-    await expect(page.getByRole('heading', { level: 1, name: 'Inicio' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Hola, ana' })).toBeVisible()
     await page.keyboard.press('Tab')
     const skip = page.getByRole('link', { name: 'Saltar al contenido' })
     await expect(skip).toBeFocused()

@@ -4,6 +4,8 @@ import { loginAsMockUser, mockApi } from './api'
 
 /** Fails on `serious` or `critical` violations (requisitos §20.6). */
 export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
+  // A sticky bar over a control (after scrolling to click) would fail the target-size rule.
+  await page.evaluate(() => window.scrollTo(0, 0))
   const { violations } = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze()

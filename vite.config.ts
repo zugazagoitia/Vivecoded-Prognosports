@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process'
 import { fileURLToPath, URL } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -54,6 +55,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       VueRouter({ routesFolder: 'src/pages', dts: 'src/typed-router.d.ts' }),
       vue(),
+      tailwindcss(),
       apiOriginPlugin(env.VITE_API_BASE_URL),
       // Source maps to Sentry (CI only, needs SENTRY_AUTH_TOKEN/ORG/PROJECT). Maps never ship in dist/.
       withSentry &&
@@ -69,12 +71,26 @@ export default defineConfig(({ mode }) => {
       process.env.ANALYZE === 'true' &&
         visualizer({ filename: 'reports/bundle.html', gzipSize: true, brotliSize: true }),
     ],
-    build: { sourcemap: withSentry ? 'hidden' : false },
+    build: {
+      sourcemap: withSentry ? 'hidden' : false,
+      rollupOptions: {
+        output: {
+          // Zod and its CSP config (src/lib/zod-csp.ts) must evaluate together: schemas built at
+          // module scope elsewhere would otherwise probe `new Function` before `jitless` is set (T13).
+          manualChunks(id: string) {
+            if (id.includes('/node_modules/zod/') || id.endsWith('/src/lib/zod-csp.ts'))
+              return 'zod'
+            return undefined
+          },
+        },
+      },
+    },
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
     test: {
       environment: 'jsdom',
+      testTimeout: 15000,
       setupFiles: ['./src/test/setup.ts'],
       include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
       env: { VITE_API_BASE_URL: 'http://api.test', VITE_API_MOCK: 'false' },

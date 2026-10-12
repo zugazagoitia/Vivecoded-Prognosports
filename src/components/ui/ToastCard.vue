@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import PIcon from './PIcon.vue'
+
 export interface ToastAction {
   label: string
   onClick: () => void
@@ -9,7 +11,7 @@ defineProps<{
   description?: string
   action?: ToastAction
 }>()
-const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } as const
+const icons = { success: 'circle-check', error: 'circle-exclamation', info: 'copy' } as const
 </script>
 
 <template>
@@ -20,7 +22,7 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
     :aria-live="kind === 'error' ? 'assertive' : 'polite'"
     aria-atomic="true"
   >
-    <span class="material-symbols-outlined toast-icon" aria-hidden="true">{{ icons[kind] }}</span>
+    <PIcon class="toast-icon" :name="icons[kind]" :size="24" />
     <div class="toast-body">
       <strong class="toast-title">{{ title }}</strong>
       <span v-if="description" class="toast-desc">{{ description }}</span>
@@ -39,10 +41,10 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
   width: 22rem;
   max-width: calc(100vw - 2rem);
   padding: 0.875rem 1rem;
-  border-radius: var(--radius-lg, 0.75rem);
-  background: var(--surface, #fff);
-  color: var(--text, #111827);
-  box-shadow: var(--shadow-lg, 0 10px 30px rgb(0 0 0 / 0.18));
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-heading);
+  box-shadow: var(--shadow-lg);
 }
 .toast-body {
   display: flex;
@@ -53,20 +55,20 @@ const icons = { success: 'check_circle', error: 'error', info: 'content_copy' } 
   font-weight: 700;
 }
 .toast-desc {
-  color: var(--muted, #6b7280);
+  color: var(--color-text-muted);
   font-size: 0.875rem;
 }
 .toast-icon {
-  font-size: 1.5rem;
+  margin-top: 0.125rem;
 }
 .toast-success .toast-icon {
-  color: var(--success, #16a34a);
+  color: var(--color-ok);
 }
 .toast-error .toast-icon {
-  color: var(--danger, #dc2626);
+  color: var(--color-err);
 }
 .toast-info .toast-icon {
-  color: var(--brand, #2563eb);
+  color: var(--color-link);
 }
 .toast-action {
   align-self: flex-start;

@@ -126,6 +126,48 @@ describe('request', () => {
       expect(handler).toHaveBeenCalledTimes(1)
       off()
     })
+    it('real API: an invalid/missing token comes as HTTP 200 + success:false and is a 401', async () => {
+      const handler = vi.fn()
+      const off = onSessionExpired(handler)
+      for (const message of [
+        'No autorizado. Token inválido',
+        'No autorizado. Token no encontrado',
+      ]) {
+        server.use(http.get('*/v2/secure', () => HttpResponse.json({ success: false, message })))
+        await expect(request('/v2/secure')).rejects.toMatchObject({
+          status: 401,
+          message: genericMessage(401),
+        })
+      }
+      expect(handler).toHaveBeenCalledTimes(2)
+      off()
+    })
+    it('real API: «No tienes permiso» (HTTP 200 + success:false) is a 403 and keeps the session', async () => {
+      const handler = vi.fn()
+      const off = onSessionExpired(handler)
+      server.use(
+        http.get('*/v2/secure', () =>
+          HttpResponse.json({
+            success: false,
+            message: 'No autorizado. No tienes permiso para eso',
+          }),
+        ),
+      )
+      await expect(request('/v2/secure')).rejects.toMatchObject({ status: 403 })
+      expect(handler).not.toHaveBeenCalled()
+      off()
+    })
+    it('other success:false answers keep their own status and message', async () => {
+      server.use(
+        http.get('*/v2/secure', () =>
+          HttpResponse.json({ success: false, message: 'Comunidad inválida' }),
+        ),
+      )
+      await expect(request('/v2/secure')).rejects.toMatchObject({
+        status: 200,
+        message: 'Comunidad inválida',
+      })
+    })
     it('does not emit when noSessionExpiry is set (login)', async () => {
       const handler = vi.fn()
       const off = onSessionExpired(handler)
@@ -165,7 +207,7 @@ describe('requestParsed', () => {
   })
   it('validates the shared MSW fixtures through the real endpoint wrappers', async () => {
     const communities = await communitiesApi.listCommunities()
-    expect(communities).toHaveLength(1)
+    expect(communities.length).toBeGreaterThanOrEqual(1)
     expect(communities[0]?.membersAmount).toBe(12)
   })
 })

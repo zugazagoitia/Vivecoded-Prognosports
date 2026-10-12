@@ -20,8 +20,18 @@ export const deleteUserImage = (user: string | number, signal?: AbortSignal) =>
 /** Binary image URL (use as <img src>); public endpoint. */
 export const userImagePath = (user: string | number) => `/v2/user/${seg(user)}/image`
 
-export const updateEmail = (user: string | number, email: string, signal?: AbortSignal) =>
-  request(`/v2/user/${seg(user)}/settings/email`, { method: 'PATCH', body: { email }, signal })
+/** The spec asks for the current `password` along with the new `email`. */
+export const updateEmail = (
+  user: string | number,
+  email: string,
+  password?: string,
+  signal?: AbortSignal,
+) =>
+  request(`/v2/user/${seg(user)}/settings/email`, {
+    method: 'PATCH',
+    body: { email, password },
+    signal,
+  })
 export const updatePassword = (
   user: string | number,
   body: Record<string, unknown>,
@@ -61,6 +71,10 @@ export const getUserCumulatedPoints = (
   signal?: AbortSignal,
 ) => request(`${scope(user, community, competition, season)}/cummulatedpoints`, { signal })
 
+/**
+ * Real answer: a map `{ "<GP name>": points }` (the spec says `UserPoints[]`). Not used by any
+ * screen yet; the schema accepts both.
+ */
 export const getUserPoints = (
   user: string | number,
   community: string | number,
@@ -70,7 +84,7 @@ export const getUserPoints = (
 ) =>
   requestParsed(
     `${scope(user, community, competition, season)}/points`,
-    z.array(UserPointsSchema),
+    z.union([z.array(UserPointsSchema), z.record(z.string(), z.number())]),
     { signal },
   )
 

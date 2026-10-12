@@ -1,5 +1,6 @@
 import type { z } from 'zod'
 import {
+  CircuitSchema,
   CommunitySchema,
   CompetitionSchema,
   GrandPrixSchema,
@@ -13,6 +14,12 @@ export const REFERENCE_NOW = '2026-07-01T12:00:00.000Z'
 
 export const MOCK_TOKEN = 'mock-token'
 export const MOCK_PASSWORD = 'secret123'
+/** Valid recovery code accepted by the mocked PATCH changepassword. */
+export const MOCK_RESET_CODE = 'K7X2M9'
+/** Valid e-mail verification code accepted by the mocked POST verify-email (A5). */
+export const MOCK_VERIFY_CODE = 'A4F9B2'
+/** Token of a signed-in user whose e-mail is not verified yet (e2e mock). */
+export const MOCK_UNVERIFIED_TOKEN = 'mock-token-unverified'
 
 type UserInput = z.input<typeof UserSchema>
 type CommunityInput = z.input<typeof CommunitySchema>
@@ -33,6 +40,36 @@ export function mockUser(overrides: Partial<UserInput> = {}): UserInput {
   })
 }
 
+/**
+ * A user as the real API sends it, for the mocked `/user` endpoints: snake_case `verified_at` /
+ * `last_activity`, `hasProfileImage`, `updated`, NO `time_zone` (it lives in
+ * `preferences['time-zone-id']`) and a `rank` of `{ id, name, color }` without `admin` (an
+ * administrator is the rank named «admin»; colour without `#`). The fixtures hold the app model,
+ * the wire is what the app must parse.
+ */
+export function toWireUser(u: UserInput): Record<string, unknown> {
+  const { verified, timeZone, lastActivity, hasProfileImage, currentCommunity, rank, ...rest } = u
+  return {
+    ...rest,
+    rank: rank && {
+      id: rank.id,
+      name: rank.admin ? 'admin' : rank.name,
+      color: rank.color?.replace(/^#/, ''),
+    },
+    preferences: {
+      'use-long-team-names': false,
+      'time-zone-id': timeZone ?? 'Europe/Madrid',
+      'hide-tipps-until-start': false,
+      ...rest.preferences,
+    },
+    verified_at: verified ?? null,
+    last_activity: lastActivity ?? u.created,
+    updated: u.created,
+    hasProfileImage: hasProfileImage ?? false,
+    current_community: currentCommunity,
+  }
+}
+
 const NAMES = [
   'ana',
   'beto',
@@ -48,6 +85,27 @@ const NAMES = [
   'luis',
 ]
 
+/**
+ * Wire form of `GET .../tipps/{community}` (real API): a map by user id with EVERY member (an
+ * empty list for those without a prediction) and rows without `user`: `{ driver, position,
+ * raceSession }`. See src/api/README.md.
+ */
+export function tippsByUser(
+  rows: readonly { userId: number; driver: unknown; position: number }[],
+  memberIds: readonly number[],
+  session?: number,
+): Record<string, unknown[]> {
+  const out: Record<string, unknown[]> = Object.fromEntries(memberIds.map((id) => [String(id), []]))
+  for (const r of rows) {
+    ;(out[String(r.userId)] ??= []).push({
+      driver: r.driver,
+      position: r.position,
+      raceSession: { name: String(session ?? '') },
+    })
+  }
+  return out
+}
+
 /** The 12 members of the reference community; user 1 is the owner and an admin. */
 export const users: UserInput[] = NAMES.map((name, i) =>
   mockUser({
@@ -60,7 +118,8 @@ export const users: UserInput[] = NAMES.map((name, i) =>
 
 export const competition = defineFixture('competition', CompetitionSchema, {
   id: 1,
-  code: 'F1',
+  // Real API: lowercase `code` (it is also accepted in the URLs instead of the id).
+  code: 'f1',
   name: 'F1',
   fullname: 'Fórmula 1',
 })
@@ -115,6 +174,54 @@ export const SPRINT_ROUNDS = [2, 6, 10, 14, 18, 22]
 export const TOTAL_ROUNDS = 24
 export const DISPUTED_ROUNDS = 17
 
+const CIRCUIT_DATA: [name: string, locality: string, country: string][] = [
+  ['Albert Park Circuit', 'Melbourne', 'Australia'],
+  ['Shanghai International Circuit', 'Shanghái', 'China'],
+  ['Suzuka Circuit', 'Suzuka', 'Japón'],
+  ['Bahrain International Circuit', 'Sakhir', 'Baréin'],
+  ['Jeddah Corniche Circuit', 'Yeda', 'Arabia Saudí'],
+  ['Miami International Autodrome', 'Miami', 'Estados Unidos'],
+  ['Circuit Gilles Villeneuve', 'Montreal', 'Canadá'],
+  ['Circuit de Monaco', 'Mónaco', 'Mónaco'],
+  ['Circuit de Barcelona-Catalunya', 'Montmeló', 'España'],
+  ['Red Bull Ring', 'Spielberg', 'Austria'],
+  ['Silverstone Circuit', 'Silverstone', 'Reino Unido'],
+  ['Spa-Francorchamps', 'Stavelot', 'Bélgica'],
+  ['Hungaroring', 'Mogyoród', 'Hungría'],
+  ['Circuit Zandvoort', 'Zandvoort', 'Países Bajos'],
+  ['Autodromo Nazionale Monza', 'Monza', 'Italia'],
+  ['Madring', 'Madrid', 'España'],
+  ['Baku City Circuit', 'Bakú', 'Azerbaiyán'],
+  ['Marina Bay Street Circuit', 'Singapur', 'Singapur'],
+  ['Circuit of the Americas', 'Austin', 'Estados Unidos'],
+  ['Autódromo Hermanos Rodríguez', 'Ciudad de México', 'México'],
+  ['Autódromo José Carlos Pace', 'São Paulo', 'Brasil'],
+  ['Las Vegas Strip Circuit', 'Las Vegas', 'Estados Unidos'],
+  ['Lusail International Circuit', 'Lusail', 'Catar'],
+  ['Yas Marina Circuit', 'Abu Dabi', 'Emiratos Árabes Unidos'],
+]
+
+/** Circuits of the reference season, in round order. Every third one has no layout image. */
+export const circuits = CIRCUIT_DATA.map(([name, locality, country], i) =>
+  defineFixture('circuit', CircuitSchema, {
+    id: i + 1,
+    name,
+    locality,
+    country,
+    hasLogoImage: false,
+    variants: [
+      {
+        id: 1,
+        circuitId: i + 1,
+        name: 'GrandPrix',
+        distance: 5.3,
+        turns: 16,
+        hasLayoutImage: i % 3 !== 2,
+      },
+    ],
+  }),
+)
+
 const DAY = 86_400_000
 const HOUR = 3_600_000
 const FIRST_RACE = Date.parse('2026-03-08T14:00:00Z')
@@ -123,21 +230,23 @@ export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> 
   const race = FIRST_RACE + (round - 1) * 7 * DAY
   const sprint = SPRINT_ROUNDS.includes(round)
   const sessions = [
-    { key: 1, name: 'Qualifying', code: 'Q', at: race - DAY - 2 * HOUR },
+    { key: 1, name: 'QUALIFY', code: 'Q', at: race - DAY - 2 * HOUR },
     ...(sprint
       ? [
-          { key: 3, name: 'Sprint Qualifying', code: 'SQ', at: race - 2 * DAY - 2 * HOUR },
-          { key: 4, name: 'Sprint', code: 'S', at: race - DAY - 6 * HOUR },
+          // Real API: sprint weekends list a single `SR` (SPRINT_RACE) session (README).
+          { key: 4, name: 'SPRINT_RACE', code: 'SR', at: race - DAY - 6 * HOUR },
         ]
       : []),
-    { key: 2, name: 'Race', code: 'R', at: race },
+    { key: 2, name: 'RACE', code: 'R', at: race },
   ].map((s, i) => ({
     id: round * 10 + i,
+    // Real API: no `key`, and the id is the shared catalogue one (1 Q, 2 R, 3 SQ, 4 SR). The mock
+    // keeps unique ids per GP and `key` as the bridge to the rule sets (pending, README).
     key: s.key,
     name: s.name,
     code: s.code,
     date: new Date(s.at).toISOString(),
-    hasGrid: true,
+    hasGrid: s.code !== 'Q',
     hasFastLap: false,
   }))
   return defineFixture('grandPrix', GrandPrixSchema, {
@@ -147,16 +256,25 @@ export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> 
     round,
     competition,
     season,
+    circuit: circuits[(round - 1) % circuits.length],
+    // The GP's own variant carries no `hasLayoutImage` in the real API.
+    variant: { id: 1, circuitId: ((round - 1) % circuits.length) + 1, name: 'GrandPrix' },
     sessions,
     lastSessionDate: new Date(race).toISOString(),
     suspended: false,
+    laps: 57,
+    hasPromoImage: false,
+    // Real API: neighbours carry only the id (0 when there is none).
+    previousGrandPrix: { id: round > 1 ? round - 1 : 0 },
+    nextGrandPrix: { id: round < TOTAL_ROUNDS ? round + 1 : 0 },
     ...overrides,
   })
 }
 
 /** 24 GPs, the first 17 already disputed at REFERENCE_NOW, with and without sprint. */
 export const grandPrixes: GrandPrixInput[] = Array.from({ length: TOTAL_ROUNDS }, (_, i) =>
-  mockGrandPrix(i + 1),
+  // Round 6 is the weekend shown by the GP detail (G2): it has laps (the others do not).
+  mockGrandPrix(i + 1, i + 1 === 6 ? { laps: 57 } : {}),
 )
 
 /** GPs whose last session is before `now`. */

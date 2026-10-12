@@ -1,13 +1,14 @@
 import { z } from 'zod'
-import { request, requestParsed, seg, uploadImage } from './client'
+import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
 import {
   DriverSchema,
   GrandPrixSchema,
-  PredictionSchema,
   RaceResultSchema,
   RaceSessionSchema,
-  ScoreCalculationsResponseSchema,
+  ScoreCalculationsWireSchema,
+  scoreCalculationsFor,
   StartGridPositionSchema,
+  TippsResponseSchema,
 } from './schemas'
 
 type Id = string | number
@@ -26,6 +27,10 @@ export const createGp = (body: Record<string, unknown>, signal?: AbortSignal) =>
   requestParsed('/v2/gps/', GrandPrixSchema, { method: 'POST', body, signal })
 export const updateGp = (g: Id, body: Record<string, unknown>, signal?: AbortSignal) =>
   requestParsed(`/v2/gps/${seg(g)}`, GrandPrixSchema, { method: 'PUT', body, signal })
+
+/** Public promotional JPEG of a GP (only exists when `GrandPrix.hasPromoImage`). */
+export const gpImageUrl = (comp: Id, season: Id, g: Id): string =>
+  apiUrl(`${gp(comp, season, g)}/image`)
 
 export const uploadGpImage = (
   comp: Id,
@@ -88,12 +93,17 @@ const sess = (comp: Id, season: Id, g: Id, s: Id) => `${gp(comp, season, g)}/ses
 
 // Tipps and calculations
 export const getTipps = (comp: Id, season: Id, g: Id, s: Id, community: Id, signal?: AbortSignal) =>
-  requestParsed(`${sess(comp, season, g, s)}/tipps/${seg(community)}`, z.array(PredictionSchema), {
+  requestParsed(`${sess(comp, season, g, s)}/tipps/${seg(community)}`, TippsResponseSchema, {
     signal,
   })
 export interface PredictionInput {
   position: number
   driver: { id: number }
+}
+/** Simulated result of `POST .../calculations`: the real API wants the bare driver id. */
+export interface SimulatedResultInput {
+  position: number
+  driver: number
 }
 export const submitTipps = (
   comp: Id,
@@ -106,41 +116,50 @@ export const submitTipps = (
 ) =>
   request(`${sess(comp, season, g, s)}/tipps/${seg(community)}`, {
     method: 'POST',
-    body: tipps,
+    // schema.d.ts: the body is an object with the list under `tipps` (not a bare array).
+    body: { tipps },
     signal,
   })
-export const getCalculations = (
+/** Calculations of `userId` (the real answer holds every member's: see `ScoreCalculationsWireSchema`). */
+export const getCalculations = async (
   comp: Id,
   season: Id,
   g: Id,
   s: Id,
   community: Id,
+  userId: number | undefined,
   signal?: AbortSignal,
 ) =>
-  requestParsed(
-    `${sess(comp, season, g, s)}/tipps/${seg(community)}/calculations`,
-    ScoreCalculationsResponseSchema,
-    {
-      signal,
-    },
+  scoreCalculationsFor(
+    await requestParsed(
+      `${sess(comp, season, g, s)}/tipps/${seg(community)}/calculations`,
+      ScoreCalculationsWireSchema,
+      { signal },
+    ),
+    userId,
   )
-export const simulateCalculations = (
+export const simulateCalculations = async (
   comp: Id,
   season: Id,
   g: Id,
   s: Id,
   community: Id,
-  results: PredictionInput[],
+  userId: number | undefined,
+  results: SimulatedResultInput[],
   signal?: AbortSignal,
 ) =>
-  requestParsed(
-    `${sess(comp, season, g, s)}/tipps/${seg(community)}/calculations`,
-    ScoreCalculationsResponseSchema,
-    {
-      method: 'POST',
-      body: { results },
-      signal,
-    },
+  scoreCalculationsFor(
+    await requestParsed(
+      `${sess(comp, season, g, s)}/tipps/${seg(community)}/calculations`,
+      ScoreCalculationsWireSchema,
+      {
+        method: 'POST',
+        // Real API: `driver` is the bare id here (`{ id }` answers «Solicitud inválida»).
+        body: { results },
+        signal,
+      },
+    ),
+    userId,
   )
 
 // Results and grid

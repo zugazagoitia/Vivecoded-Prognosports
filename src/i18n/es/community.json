@@ -1,0 +1,144 @@
+{
+  "community": {
+    "home": "Inicio",
+    "list": "Comunidades",
+    "mobileTitle": "Comunidad",
+    "notMember": "No perteneces a esa comunidad. Pide una invitación a su creador.",
+    "notFound": {
+      "title": "No se ha encontrado la comunidad",
+      "text": "Es posible que el enlace sea incorrecto o que la comunidad ya no exista.",
+      "action": "Ir a mis comunidades"
+    },
+    "error": {
+      "community": "la comunidad",
+      "members": "los miembros",
+      "rules": "las reglas",
+      "weekend": "el Gran Premio en curso",
+      "seasons": "las temporadas anteriores"
+    },
+    "header": {
+      "open": "Abierta",
+      "closed": "Cerrada",
+      "createdByYou": "Creada por ti · {date}",
+      "createdBy": "Creada por {name} · {date}",
+      "created": "Creada · {date}",
+      "settings": "Ajustes",
+      "ranking": "Ver ranking",
+      "image": "Imagen de la comunidad {name}"
+    },
+    "tabs": {
+      "label": "Secciones de la comunidad",
+      "miembros": "Miembros",
+      "reglas": "Reglas",
+      "temporadas": "Temporadas"
+    },
+    "members": {
+      "title": "Miembros",
+      "search": "Buscar miembro",
+      "searchPlaceholder": "Buscar...",
+      "order": "Cambiar el orden",
+      "orderLabel": "Cambiar el orden: {dir}",
+      "desc": "Descendente",
+      "asc": "Ascendente",
+      "table": "Clasificación de la comunidad",
+      "place": "Puesto",
+      "player": "Jugador",
+      "form": "Forma (últimos 5 GP)",
+      "role": "Rol",
+      "points": "Puntos",
+      "owner": "Creador",
+      "playerRole": "Jugador",
+      "you": "(tú)",
+      "showing": "Mostrando {shown} de {m} jugador | Mostrando {shown} de {m} jugadores",
+      "empty": "No se ha encontrado lo que buscabas",
+      "emptyText": "Prueba con otro nombre.",
+      "noMembers": "Esta comunidad aún no tiene miembros.",
+      "formLabel": "Puesto en los últimos GP: {list}",
+      "formItem": "{gp}: {place}",
+      "formNone": "Aún sin Grandes Premios disputados",
+      "up": "sube {n} puesto | sube {n} puestos",
+      "down": "baja {n} puesto | baja {n} puestos",
+      "same": "sin cambios"
+    },
+    "rules": {
+      "title": "Reglas · {name}",
+      "titleBare": "Reglas",
+      "season": "Temporada {season}",
+      "table": "Puntos por tipo de acierto y sesión",
+      "hit": "Acierto",
+      "exact": "Posición exacta",
+      "next": "Posición siguiente (acaba 1 más abajo)",
+      "previous": "Posición anterior (acaba 1 más arriba)",
+      "nextOfFollowing": "Siguiente de la siguiente (2 más abajo)",
+      "previousOfPrevious": "Anterior de la anterior (2 más arriba)",
+      "notInPodium": "Piloto del podio que acaba fuera del podio",
+      "notInResults": "Piloto que no está en los resultados",
+      "bonus": "Bonus al que más aciertos consigue en el GP",
+      "max": "Máximo por sesión (sin bonus)",
+      "footnote": "Los GP con excepciones de reglas lo indican en su página.",
+      "none": "Sin reglas disponibles",
+      "noneText": "Todavía no hay reglas definidas para esta temporada."
+    },
+    "seasons": {
+      "title": "Temporadas anteriores",
+      "table": "Temporadas anteriores de la comunidad",
+      "season": "Temporada",
+      "champion": "Campeón",
+      "points": "Puntos",
+      "yourPlace": "Tu puesto",
+      "didNotPlay": "No jugaste",
+      "champion1": "Campeón: tú",
+      "honours": "Ver palmarés",
+      "ranking": "Ver ranking de la temporada {season}",
+      "empty": "Aún no hay temporadas anteriores",
+      "emptyText": "Cuando termine esta temporada, aparecerá aquí el campeón de cada una."
+    },
+    "weekend": {
+      "title": "{gp} en la comunidad",
+      "view": "Ver GP",
+      "leader": "Líder del fin de semana",
+      "leaderTie": "{name} y {n} más · {points}",
+      "leaderOne": "{name} · {points}",
+      "last": "Último GP · {gp}",
+      "lastOne": "{name} · {points} pts",
+      "lastTie": "{name} y {n} más · {points} pts",
+      "noScores": "Todavía nadie ha puntuado.",
+      "privacy": "Quién ha pronosticado cada sesión se mantiene en privado hasta el cierre."
+    },
+    "invite": {
+      "title": "Invitar",
+      "text": "Quien tenga este enlace podrá unirse. Si lo regeneras, el anterior deja de funcionar.",
+      "textOpen": "Comparte este enlace para invitar a más gente.",
+      "link": "Enlace de invitación",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado.",
+      "copyFailed": "No se ha podido copiar el enlace. Cópialo a mano.",
+      "regenerate": "Regenerar enlace",
+      "regenerated": "Enlace de invitación regenerado",
+      "confirm": {
+        "title": "¿Regenerar el enlace?",
+        "text": "El enlace actual dejará de funcionar y tendrás que compartir el nuevo.",
+        "action": "Regenerar"
+      },
+      "none": "Esta comunidad no tiene enlace de invitación."
+    },
+    "me": {
+      "title": "Tu posición",
+      "place": "Puesto",
+      "points": "Puntos",
+      "none": "Aún no apareces en la clasificación."
+    },
+    "leave": {
+      "title": "Zona de riesgo",
+      "text": "Si sales, dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.",
+      "owner": "Eres el creador: no puedes salir de tu propia comunidad. Si quieres dejarla, ábrela a otra persona desde los ajustes o contáctanos.",
+      "action": "Salir de la comunidad",
+      "confirm": {
+        "title": "¿Salir de {name}?",
+        "text": "Dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.",
+        "action": "Salir"
+      },
+      "done": "Has salido de la comunidad"
+    }
+  }
+}

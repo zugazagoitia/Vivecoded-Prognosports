@@ -2,7 +2,13 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { authApi, userApi, sanitizeUser, ApiError, type User } from '@/api'
 import { queryClient } from '@/queries/client'
-import { STORAGE_KEYS, readStorage, writeStorage } from './storage'
+import {
+  STORAGE_KEYS,
+  readSessionStorage,
+  readStorage,
+  writeSessionStorage,
+  writeStorage,
+} from './storage'
 
 let resetDependentStores: (() => void) | undefined
 /** Registered by `installStores` so session does not import the other stores (no cycles). */
@@ -11,13 +17,27 @@ export function onSessionCleared(fn: () => void): void {
 }
 
 export const useSessionStore = defineStore('session', () => {
-  const token = ref<string | null>(readStorage(STORAGE_KEYS.token))
+  const token = ref<string | null>(
+    readStorage(STORAGE_KEYS.token) ?? readSessionStorage(STORAGE_KEYS.token),
+  )
   const user = ref<Omit<User, 'hashedPassword'> | null>(null)
   const loaded = ref(false)
   let loading: Promise<void> | null = null
 
   const isAuthenticated = computed(() => !!token.value)
-  const isAdmin = computed(() => user.value?.rank?.admin === true)
+  /**
+   * Token AND not a known-unverified user: an unverified account (A5) is shown the visitor nav
+   * because the app is not usable until the e-mail is confirmed. `user` null (not loaded) counts
+   * as signed in.
+   */
+  const isSignedIn = computed(() => !!token.value && !(user.value && !user.value.verified))
+  /**
+   * The API does not serialise `rank.admin` (spec says required); only `rank.name`. Accept both until
+   * the backend is aligned (see src/api/README.md).
+   */
+  const isAdmin = computed(
+    () => user.value?.rank?.admin === true || user.value?.rank?.name?.toLowerCase() === 'admin',
+  )
 
   /** Drops token + user (no cache clearing; see `clearAll`). */
   function reset(): void {
@@ -26,6 +46,7 @@ export const useSessionStore = defineStore('session', () => {
     loaded.value = false
     loading = null
     writeStorage(STORAGE_KEYS.token, null)
+    writeSessionStorage(STORAGE_KEYS.token, null)
   }
 
   async function fetchUser(): Promise<void> {
@@ -54,11 +75,16 @@ export const useSessionStore = defineStore('session', () => {
     return loading
   }
 
-  async function login(username: string, password: string): Promise<void> {
+  /**
+   * `remember` (default) keeps the token in localStorage; `false` keeps it in sessionStorage
+   * so it dies with the tab (A1 «Mantener la sesión iniciada en este dispositivo»).
+   */
+  async function login(username: string, password: string, remember = true): Promise<void> {
     const t = await authApi.login({ username, password })
     queryClient.clear()
     token.value = t
-    writeStorage(STORAGE_KEYS.token, t)
+    writeStorage(STORAGE_KEYS.token, remember ? t : null)
+    writeSessionStorage(STORAGE_KEYS.token, remember ? null : t)
     user.value = null
     await fetchUser()
     loaded.value = true
@@ -83,5 +109,23 @@ export const useSessionStore = defineStore('session', () => {
     clearAll()
   }
 
-  return { token, user, loaded, isAuthenticated, isAdmin, ensureLoaded, login, logout, clearAll }
+  /** Re-reads `GET /user/me` into the store (e.g. after verifying the e-mail, A5). */
+  async function refreshUser(): Promise<void> {
+    await fetchUser()
+    loaded.value = true
+  }
+
+  return {
+    token,
+    user,
+    loaded,
+    isAuthenticated,
+    isSignedIn,
+    isAdmin,
+    ensureLoaded,
+    refreshUser,
+    login,
+    logout,
+    clearAll,
+  }
 })

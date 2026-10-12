@@ -31,9 +31,17 @@ export const useThemeStore = defineStore('theme', () => {
   /** Applies the stored theme and follows OS changes while in `system`. */
   function init(): void {
     apply()
+    globalThis.addEventListener?.('storage', onStorage)
     globalThis.matchMedia?.('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (mode.value === 'system') apply()
     })
+  }
+
+  /** Follows theme changes made in other tabs (the `storage` event only fires in the others). */
+  function onStorage(e: StorageEvent): void {
+    if (e.key !== STORAGE_KEYS.theme) return
+    mode.value = e.newValue && MODES.includes(e.newValue) ? (e.newValue as ThemeMode) : 'system'
+    apply()
   }
 
   return { mode, set, apply, init }

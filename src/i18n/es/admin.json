@@ -1,0 +1,746 @@
+{
+  "title": "Administración",
+  "nav": {
+    "label": "Administración",
+    "groups": {
+      "general": "General",
+      "temporada": "Temporada",
+      "catalogo": "Catálogo",
+      "personas": "Personas"
+    },
+    "items": {
+      "panel": "Panel",
+      "gps": "Grandes Premios",
+      "calculos": "Cálculo de puntos",
+      "circuitos": "Circuitos",
+      "pilotos": "Pilotos y equipos",
+      "reglas": "Reglas de puntuación",
+      "usuarios": "Usuarios",
+      "comunidades": "Comunidades",
+      "notificaciones": "Notificaciones"
+    }
+  },
+  "panel": {
+    "title": "Panel de administración",
+    "subtitle": "Temporada {year} · lo que hay que hacer esta semana.",
+    "mobileNotice": "La edición completa está pensada para escritorio. Aquí puedes consultar y hacer tareas rápidas.",
+    "kpi": {
+      "users": "Usuarios",
+      "usersDelta": "+{n} esta semana",
+      "communities": "Comunidades",
+      "communitiesDelta": "{n} cerradas",
+      "gps": "GP disputados",
+      "gpsDelta": "temporada {year}",
+      "predictions": "Pronósticos del {session}",
+      "predictionsNext": "Pronósticos de la próxima sesión",
+      "closesIn": "cierra en {h} h {m} min",
+      "closed": "cerrado",
+      "unknown": "—"
+    },
+    "prep": {
+      "title": "Preparación del GP de {name}",
+      "sub": "Ronda {round} · {state}",
+      "subNoRound": "{state}",
+      "open": "Abrir el GP",
+      "empty": "No hay próximo Gran Premio",
+      "emptyText": "Cuando haya un próximo Gran Premio en el calendario aparecerá aquí su preparación.",
+      "error": "la preparación del próximo GP",
+      "complete": "Completo",
+      "pending": "Pendiente",
+      "checks": {
+        "data": {
+          "title": "Datos del GP",
+          "detail": {
+            "default": "Nombre, ronda, circuito y variante"
+          }
+        },
+        "sessions": {
+          "title": "{n} sesión con hora y cierre | {n} sesiones con hora y cierre",
+          "detail": {
+            "default": "Cierre 5 min antes de cada una"
+          }
+        },
+        "drivers": {
+          "title": "{a} de {b} pilotos",
+          "detail": {
+            "same": "Igual que en {gp}",
+            "changes": "{k} cambio respecto a {gp} | {k} cambios respecto a {gp}",
+            "none": "Sin Gran Premio anterior con el que comparar"
+          }
+        },
+        "image": {
+          "title": "Imagen promocional",
+          "detail": {
+            "ok": "Subida",
+            "pending": "Sin subir · recomendado 1600 × 900, JPG o WebP"
+          }
+        },
+        "grid": {
+          "title": "Parrilla de {session} publicada",
+          "titleNone": "Parrilla de la sesión publicada",
+          "detail": {
+            "ok": "Con {n} salida desde el pit lane | Con {n} salidas desde el pit lane",
+            "pending": "Pendiente: todavía no hay parrilla"
+          }
+        },
+        "result": {
+          "title": "Resultado de {session}",
+          "titleNone": "Resultado de la sesión",
+          "detail": {
+            "ok": "Guardado",
+            "notPlayed": "Pendiente: la sesión aún no se ha disputado",
+            "missing": "Pendiente: falta introducir el resultado"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "title": "Próximas tareas",
+      "empty": "No hay tareas pendientes.",
+      "result": {
+        "title": "Resultado de {session}",
+        "detail": "La sesión ya se ha disputado"
+      },
+      "grid": {
+        "title": "Parrilla de {session}",
+        "detail": "Falta publicarla"
+      },
+      "prepare": {
+        "title": "Preparar {gp}",
+        "detail": "Faltan {list}"
+      },
+      "missing": {
+        "data": "datos",
+        "sessions": "sesiones",
+        "drivers": "pilotos",
+        "image": "imagen"
+      },
+      "mobileTitle": "Tareas",
+      "mobileResult": "Resultado de {session}",
+      "mobileResultDetail": "Pendiente",
+      "recalc": "Recalcular puntos"
+    },
+    "last": {
+      "title": "Último cálculo",
+      "link": "Ver cálculos"
+    },
+    "sections": {
+      "title": "Secciones",
+      "gps": "Grandes Premios",
+      "circuitos": "Circuitos",
+      "pilotos": "Pilotos y equipos",
+      "reglas": "Reglas",
+      "usuarios": "Usuarios",
+      "comunidades": "Comunidades",
+      "notificaciones": "Notificaciones",
+      "calculos": "Cálculo de puntos"
+    },
+    "retry": "Reintentar"
+  },
+  "gps": {
+    "title": "Grandes Premios",
+    "subtitle": "Calendario {year} · {n} ronda | Calendario {year} · {n} rondas",
+    "new": "Nuevo GP",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar GP o circuito",
+    "season": "Temporada",
+    "chips": {
+      "all": "Todos",
+      "inc": "Incompletos",
+      "ok": "Listos",
+      "label": "Filtros"
+    },
+    "table": {
+      "caption": "Grandes Premios de la temporada",
+      "round": "Ronda",
+      "gp": "Gran Premio",
+      "date": "Fecha",
+      "format": "Formato",
+      "prep": "Preparación",
+      "state": "Estado",
+      "actions": "Acciones"
+    },
+    "gpOf": "GP de {name}",
+    "format": {
+      "sprint": "Sprint",
+      "normal": "Normal"
+    },
+    "state": {
+      "played": "Disputado",
+      "live": "En curso",
+      "published": "Publicado",
+      "suspended": "Suspendido"
+    },
+    "prep": {
+      "sessions": "Sesiones",
+      "drivers": "Pilotos",
+      "image": "Imagen",
+      "results": "Resultados",
+      "ok": "{what}: completo",
+      "pending": "{what}: pendiente",
+      "neutral": "{what}: aún no se ha disputado",
+      "aria": "{k} de 4 apartados completos"
+    },
+    "legend": {
+      "title": "Preparación:",
+      "sessions": "sesiones",
+      "drivers": "pilotos",
+      "image": "imagen",
+      "results": "resultados",
+      "colors": "Verde = completo, ámbar = pendiente"
+    },
+    "edit": "Editar",
+    "editAria": "Editar GP de {name}",
+    "empty": "Esta temporada aún no tiene Grandes Premios",
+    "noMatch": "Ningún GP coincide con la búsqueda",
+    "error": "los Grandes Premios",
+    "noDate": "Sin fecha"
+  },
+  "gpEdit": {
+    "title": "Gran Premio de {name} {year}",
+    "titleNew": "Nuevo Gran Premio",
+    "published": "Publicado",
+    "draft": "Borrador",
+    "viewAsUser": "Ver como usuario",
+    "prevAria": "GP anterior: {name}",
+    "nextAria": "GP siguiente: {name}",
+    "notFound": "Este Gran Premio no existe",
+    "error": "el Gran Premio",
+    "sections": "Secciones",
+    "sectionNames": {
+      "datos": "Datos",
+      "sesiones": "Sesiones",
+      "pilotos": "Pilotos",
+      "imagen": "Imagen",
+      "resultados": "Resultados"
+    },
+    "badge": {
+      "ok": "completo",
+      "warn": "pendiente"
+    },
+    "status": {
+      "title": "Estado del Gran Premio",
+      "data": "Datos completos",
+      "dataWarn": "Faltan datos del GP",
+      "sessions": "{n} sesión con hora y cierre | {n} sesiones con hora y cierre",
+      "sessionsWarn": "Faltan sesiones o su hora",
+      "drivers": "{a} de {b} pilotos",
+      "image": "Imagen promocional",
+      "imageWarn": "Falta la imagen promocional",
+      "results": "{n} resultado pendiente (normal antes de disputarse) | {n} resultados pendientes (normal antes de disputarse)",
+      "resultsOk": "Resultados guardados"
+    },
+    "visible": "Visible para los usuarios",
+    "visibleHelp": "Por confirmar: la API no tiene un campo de visibilidad.",
+    "data": {
+      "title": "Datos",
+      "name": "Nombre",
+      "code": "Código",
+      "round": "Ronda",
+      "circuit": "Circuito",
+      "circuitPlaceholder": "Elige un circuito",
+      "variant": "Variante",
+      "variantPlaceholder": "Elige una variante",
+      "laps": "Vueltas",
+      "sprint": "Fin de semana con sprint",
+      "sprintHelp": "Por confirmar: no es un campo del GP; se deduce de sus sesiones."
+    },
+    "errors": {
+      "name": "Escribe el nombre del Gran Premio.",
+      "codeRequired": "Escribe el código.",
+      "codeFormat": "El código son de 2 a 4 letras o dígitos en mayúsculas (por confirmar).",
+      "round": "La ronda es un número entero a partir de 1.",
+      "circuit": "Elige un circuito.",
+      "variant": "Elige una variante.",
+      "laps": "Las vueltas son un número entero a partir de 1."
+    },
+    "sessions": {
+      "title": "Sesiones",
+      "timeline": "Ver en línea temporal",
+      "add": "Añadir sesión",
+      "caption": "Sesiones del Gran Premio",
+      "session": "Sesión",
+      "code": "Código",
+      "start": "Inicio ({zone})",
+      "close": "Cierre",
+      "drivers": "Pilotos",
+      "state": "Estado",
+      "view": "Ver",
+      "edit": "Editar",
+      "finished": "Terminada",
+      "open": "Pronósticos abiertos",
+      "closed": "Cerrada",
+      "empty": "Este GP aún no tiene sesiones",
+      "viewAria": "Ver {name}",
+      "editAria": "Editar {name}"
+    },
+    "drivers": {
+      "title": "Pilotos",
+      "summary": "{n} piloto en {e} equipos | {n} pilotos en {e} equipos",
+      "same": "igual que en {gp}",
+      "changes": "{k} cambio respecto a {gp} | {k} cambios respecto a {gp}",
+      "edit": "Editar pilotos",
+      "empty": "Todavía no hay pilotos asignados a este GP."
+    },
+    "image": {
+      "title": "Imagen promocional",
+      "text": "Se muestra en Inicio y en la página del GP. Recomendado 1600 × 900, JPG o WebP.",
+      "change": "Cambiar imagen",
+      "upload": "Subir imagen",
+      "remove": "Quitar imagen",
+      "alt": "Imagen promocional del GP de {name}",
+      "uploaded": "Imagen subida",
+      "removed": "Imagen quitada",
+      "badType": "Elige una imagen JPG, PNG o WebP."
+    },
+    "results": {
+      "title": "Resultados",
+      "enter": "Introducir resultados",
+      "saved": "Guardado y calculado",
+      "pending": "Pendientes (normal antes de disputarse)",
+      "unknown": "Cargando resultados…"
+    },
+    "newHint": "Guarda los datos para añadir sesiones, pilotos e imagen",
+    "toast": {
+      "created": "Gran Premio creado",
+      "saved": "Gran Premio guardado"
+    }
+  },
+  "gpDrivers": {
+    "title": "Pilotos del GP de {name}",
+    "crumb": "Pilotos",
+    "instructions": "1. Elige un piloto de la lista · 2. Pulsa el hueco de su equipo. × vacía un hueco.",
+    "cloneFrom": "Clonar de",
+    "clone": "Clonar",
+    "refOption": "{name} (ronda {round})",
+    "banner": {
+      "count": "{n}/{total} pilotos",
+      "same": "Sin cambios respecto a {gp}",
+      "changes": "{k} cambio respecto a {gp} | {k} cambios respecto a {gp}",
+      "noRef": "Sin Gran Premio de referencia",
+      "item": "{team}: {before} → {after}",
+      "none": "—",
+      "free": "hueco libre"
+    },
+    "pool": {
+      "title": "Pilotos de {year}",
+      "hint": "Pulsa un piloto para seleccionarlo.",
+      "selected": "Seleccionado: {name}. Ahora pulsa un hueco.",
+      "noTeam": "sin equipo",
+      "list": "Pilotos de la temporada"
+    },
+    "slot": {
+      "free": "Hueco libre",
+      "change": "Cambio",
+      "aria": "{team}, hueco {n}: {driver}",
+      "ariaFree": "libre",
+      "clearAria": "Vaciar hueco {n} de {team}"
+    },
+    "undo": "Deshacer cambios",
+    "save": "Guardar pilotos",
+    "missing": "Faltan {k} pilotos",
+    "emptyHint": "Este GP no tiene pilotos: clona los de otro GP o asígnalos a mano.",
+    "noDrivers": "Esta temporada no tiene pilotos todavía.",
+    "toast": {
+      "saved": "Pilotos guardados"
+    },
+    "error": "los pilotos"
+  },
+  "sessions": {
+    "title": "Sesiones del fin de semana",
+    "crumb": "Sesiones",
+    "subtitle": "{gp} · {range}",
+    "zone": "Zona horaria",
+    "zoneCircuit": "Hora del circuito ({offset})",
+    "zoneUser": "Tu hora ({offset})",
+    "tabsLabel": "Secciones de las sesiones",
+    "tabs": {
+      "calendario": "Calendario",
+      "parrilla": "Parrilla",
+      "resultados": "Resultados"
+    },
+    "error": "las sesiones",
+    "empty": "Este GP aún no tiene sesiones",
+    "calendar": {
+      "hint": "Pulsa una sesión para editarla. La raya roja marca el cierre de pronósticos (5 minutos antes).",
+      "legendPred": "Con pronóstico",
+      "legendFree": "Libres (sin pronóstico)",
+      "legendClose": "Cierre",
+      "closeTitle": "Cierre de pronósticos",
+      "blockAria": "{name}, {day} {from}–{to}, {pred}",
+      "withPred": "con pronóstico",
+      "withoutPred": "sin pronóstico",
+      "timeline": "Línea temporal de las sesiones",
+      "durationNote": "La duración es orientativa: la API no la guarda (por confirmar)."
+    },
+    "panel": {
+      "code": "Código",
+      "start": "Inicio ({zone})",
+      "startCircuit": "hora del circuito",
+      "startUser": "tu hora",
+      "duration": "Duración",
+      "minutes": "{n} min",
+      "close": "Cierre de pronósticos",
+      "closeValue": "5 min antes · {time}",
+      "noPred": "No tiene pronóstico",
+      "predicts": "Qué se pronostica",
+      "predictsValue": "Los {n} primeros",
+      "none": "—",
+      "uses": "La usan {c} comunidad. | La usan {c} comunidades.",
+      "usesTipps": "La usan {c} comunidad: {p} pronósticos guardados. | La usan {c} comunidades: {p} pronósticos guardados.",
+      "noUses": "Ninguna comunidad la usa.",
+      "save": "Guardar sesión",
+      "delete": "Eliminar",
+      "pick": "Elige una sesión de la línea temporal."
+    },
+    "delete": {
+      "title": "Eliminar la sesión",
+      "body": "Vas a eliminar «{name}» de este Gran Premio.",
+      "uses": "Atención: {c} comunidad la usa. | Atención: {c} comunidades la usan.",
+      "confirm": "Eliminar"
+    },
+    "add": {
+      "title": "Añadir sesión",
+      "session": "Sesión",
+      "sessionPlaceholder": "Elige una sesión",
+      "start": "Inicio ({zone})",
+      "submit": "Añadir",
+      "cancel": "Cancelar"
+    },
+    "grid": {
+      "title": "Parrilla de salida · {session}",
+      "subtitle": "Según la clasificación. Marca quién sale desde el pit lane y añade una nota si hay sanción.",
+      "draft": "Borrador",
+      "session": "Sesión",
+      "pos": "Pos.",
+      "driver": "Piloto",
+      "pit": "Pit lane",
+      "note": "Nota de incidencia",
+      "driverAria": "Piloto en P{n}",
+      "noteAria": "Nota de incidencia P{n}",
+      "pitAria": "Pit lane P{n}",
+      "choose": "Elegir piloto",
+      "notePlaceholder": "Opcional",
+      "notify": "Avisar a los jugadores del cambio de parrilla",
+      "publish": "Publicar parrilla",
+      "noGridSessions": "Este GP no tiene sesiones con parrilla."
+    },
+    "results": {
+      "title": "Resultado oficial",
+      "subtitle": "Al guardar se calculan los puntos de todas las comunidades.",
+      "session": "Sesión",
+      "position": "Posición {n}",
+      "fastLap": "Vuelta rápida (solo informativa)",
+      "saved": "Resultado guardado. Si lo cambias, se recalculará.",
+      "notPlayed": "La sesión aún no se ha disputado. Podrás guardar el resultado cuando termine.",
+      "clear": "Vaciar",
+      "save": "Guardar y calcular",
+      "duplicates": "No se puede repetir un piloto.",
+      "noPredSessions": "Este GP no tiene sesiones con pronóstico."
+    },
+    "toast": {
+      "saved": "Sesión guardada",
+      "deleted": "Sesión eliminada",
+      "added": "Sesión añadida",
+      "gridPublished": "Parrilla publicada",
+      "resultsSaved": "Resultado guardado"
+    }
+  },
+  "circuits": {
+    "title": "Circuitos",
+    "subtitle": "Catálogo de circuitos y variantes.",
+    "new": "Nuevo circuito",
+    "caption": "Circuitos",
+    "name": "Circuito",
+    "country": "País",
+    "variants": "Variantes",
+    "length": "Longitud",
+    "actions": "Acciones",
+    "edit": "Editar",
+    "editAria": "Editar {name}",
+    "empty": "Todavía no hay circuitos.",
+    "error": "los circuitos"
+  },
+  "circuitEdit": {
+    "titleNew": "Nuevo circuito",
+    "subtitle": "Datos del circuito y sus variantes.",
+    "notFound": "Este circuito no existe",
+    "error": "el circuito",
+    "data": {
+      "title": "Datos",
+      "name": "Nombre",
+      "country": "País",
+      "locality": "Ciudad",
+      "latitude": "Latitud",
+      "longitude": "Longitud",
+      "timezone": "Zona horaria",
+      "timezoneHelp": "Por confirmar: el circuito no guarda zona horaria en la API; se deduce del país.",
+      "timezoneNone": "Sin deducir",
+      "image": "Imagen del trazado",
+      "imageHelp": "Por confirmar: se sube como trazado de la primera variante.",
+      "upload": "Subir imagen",
+      "imageAlt": "Trazado de {name}",
+      "needSave": "Se habilita tras el primer guardado.",
+      "cancel": "Cancelar",
+      "save": "Guardar"
+    },
+    "variants": {
+      "title": "Variantes",
+      "add": "Añadir variante",
+      "caption": "Variantes del circuito",
+      "name": "Nombre",
+      "length": "Longitud",
+      "turns": "Curvas",
+      "edit": "Editar",
+      "editAria": "Editar variante {name}",
+      "empty": "Este circuito no tiene variantes.",
+      "modalNew": "Nueva variante",
+      "modalEdit": "Editar variante",
+      "distance": "Longitud (km)",
+      "save": "Guardar variante",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "name": "Escribe el nombre.",
+      "country": "Escribe el país.",
+      "coordinate": "Escribe un número válido.",
+      "variantName": "Escribe el nombre de la variante.",
+      "distance": "La longitud es un número mayor que 0.",
+      "turns": "Las curvas son un número entero (0 o más)."
+    },
+    "toast": {
+      "saved": "Circuito guardado",
+      "variantSaved": "Variante guardada"
+    }
+  },
+  "drivers": {
+    "title": "Pilotos y equipos",
+    "subtitle": "Catálogo de la temporada {year}.",
+    "newTeam": "Nuevo equipo",
+    "newDriver": "Nuevo piloto",
+    "tabsLabel": "Pilotos y equipos",
+    "tabs": {
+      "pilotos": "Pilotos",
+      "equipos": "Equipos"
+    },
+    "driversTable": {
+      "caption": "Pilotos de la temporada",
+      "number": "N.º",
+      "driver": "Piloto",
+      "code": "Código",
+      "team": "Equipo",
+      "actions": "Acciones",
+      "noTeam": "Sin equipo",
+      "editAria": "Editar {name}"
+    },
+    "teamsTable": {
+      "caption": "Equipos de la temporada",
+      "team": "Equipo",
+      "car": "Coche",
+      "fullname": "Nombre completo",
+      "editAria": "Editar {name}"
+    },
+    "edit": "Editar",
+    "emptyDrivers": "Todavía no hay pilotos en esta temporada.",
+    "emptyTeams": "Todavía no hay equipos en esta temporada.",
+    "error": "el catálogo",
+    "form": {
+      "newDriver": "Nuevo piloto",
+      "editDriver": "Editar piloto",
+      "newTeam": "Nuevo equipo",
+      "editTeam": "Editar equipo",
+      "firstname": "Nombre",
+      "lastname": "Apellidos",
+      "code": "Código (3 letras)",
+      "nationality": "Nacionalidad",
+      "birth": "Fecha de nacimiento",
+      "number": "Dorsal",
+      "color": "Color (hex)",
+      "teamName": "Nombre del equipo",
+      "car": "Coche",
+      "fullname": "Nombre completo",
+      "teamHelp": "Por confirmar: el equipo de un piloto no se puede cambiar desde estos formularios.",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "errors": {
+        "required": "Este campo es obligatorio.",
+        "number": "Escribe un número entero.",
+        "color": "Escribe un color hexadecimal, por ejemplo #ff8000."
+      }
+    },
+    "toast": {
+      "driverSaved": "Piloto guardado",
+      "teamSaved": "Equipo guardado"
+    }
+  },
+  "rules": {
+    "title": "Reglas de puntuación",
+    "subtitle": "Conjuntos de reglas que pueden usar las comunidades. Se crean y se borran; no se editan.",
+    "new": "Nuevo conjunto",
+    "list": "Conjuntos",
+    "public": "Público",
+    "private": "Privado",
+    "by": "de {creator}",
+    "usedBy": "usado por {n} comunidad | usado por {n} comunidades",
+    "usedUnknown": "uso por confirmar",
+    "empty": "Todavía no hay conjuntos de reglas.",
+    "error": "los conjuntos de reglas",
+    "concept": "Concepto",
+    "concepts": {
+      "exact": "Posición exacta",
+      "next": "Posición siguiente",
+      "previous": "Posición anterior",
+      "nextOfNext": "Siguiente de la siguiente",
+      "previousOfPrevious": "Anterior de la anterior",
+      "notInPodium": "Del podio, fuera del podio",
+      "notInResults": "No está en los resultados",
+      "bonus": "Bonus al mejor del GP"
+    },
+    "maxBySession": "Máximo por sesión",
+    "sessionFallback": "Sesión {key}",
+    "tableCaption": "Puntos por concepto y sesión",
+    "delete": "Eliminar",
+    "deleteInUse": "En uso",
+    "deleteTitle": "Eliminar el conjunto",
+    "deleteBody": "Vas a eliminar «{name}». Esta acción no se puede deshacer.",
+    "locked": "No se puede eliminar: lo usa {n} comunidad. | No se puede eliminar: lo usan {n} comunidades.",
+    "usage": {
+      "title": "Uso y excepciones",
+      "subtitle": "Comunidades que lo usan y GP con reglas distintas",
+      "community": "Comunidad",
+      "season": "Temporada",
+      "exceptions": "Excepciones por GP",
+      "none": "Ninguna",
+      "empty": "Ninguna comunidad usa este conjunto."
+    },
+    "form": {
+      "title": "Nuevo conjunto de reglas",
+      "cancel": "Cancelar",
+      "name": "Nombre",
+      "visibility": "Visibilidad",
+      "visPublic": "Público: cualquier comunidad puede usarlo",
+      "visPrivate": "Privado",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Para qué sirve este conjunto",
+      "exactHelp": "Puntos por posición separados por comas (20, 16, 12): su número fija cuántos pilotos se pronostican.",
+      "cellAria": "{concept}, {session}",
+      "create": "Crear conjunto"
+    },
+    "errors": {
+      "name": "Escribe el nombre del conjunto.",
+      "points": "Escribe un entero de 0 o más."
+    },
+    "toast": {
+      "created": "Conjunto creado",
+      "deleted": "Conjunto eliminado"
+    }
+  },
+  "users": {
+    "title": "Usuarios",
+    "subtitle": "Consulta de cuentas. Solo lectura.",
+    "notice": "La API no permite editar ni eliminar usuarios, así que esta pantalla es de consulta.",
+    "search": "Buscar usuarios",
+    "searchPlaceholder": "Buscar por nombre o correo",
+    "caption": "Cuentas de usuario",
+    "user": "Usuario",
+    "email": "Correo",
+    "created": "Alta",
+    "communities": "Comunidades",
+    "state": "Estado",
+    "verified": "Verificado",
+    "unverified": "Sin verificar",
+    "count": "Mostrando {n} de {total}",
+    "empty": "Ningún usuario coincide con «{q}».",
+    "error": "los usuarios",
+    "communitiesUnknown": "—"
+  },
+  "communities": {
+    "title": "Comunidades",
+    "subtitle": "Consulta de comunidades. Solo lectura.",
+    "notice": "La API no permite editar ni eliminar comunidades.",
+    "caption": "Comunidades",
+    "community": "Comunidad",
+    "access": "Acceso",
+    "players": "Jugadores",
+    "rules": "Reglas",
+    "actions": "Acciones",
+    "open": "Abierta",
+    "closed": "Cerrada",
+    "view": "Ver",
+    "viewAria": "Ver {name}",
+    "empty": "Todavía no hay comunidades.",
+    "error": "las comunidades"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "subtitle": "Avisos manuales y estado de los envíos automáticos.",
+    "newTitle": "Nuevo aviso",
+    "type": "Tipo",
+    "typeHelp": "Los avisos de sesión y de puntos se envían solos.",
+    "types": {
+      "info": "Información",
+      "gridChanges": "Cambios en la parrilla",
+      "sessionPreAlert": "Pre-alerta de sesión",
+      "sessionAlert": "Alerta de sesión",
+      "pointsDispatched": "Puntos repartidos"
+    },
+    "titleField": "Título",
+    "message": "Mensaje",
+    "channels": "Canales",
+    "preview": "Vista previa",
+    "previewEmpty": "Sin título",
+    "reach": "Llegará a los usuarios que tienen activado «{type}» en algún canal. El número de destinatarios no se puede calcular (por confirmar).",
+    "send": "Enviar",
+    "confirmTitle": "Enviar el aviso",
+    "confirmBody": "Se enviará a todos los usuarios con «{type}» activado. Esta acción no se puede deshacer.",
+    "confirm": "Enviar aviso",
+    "sent": "Aviso enviado",
+    "unavailable": "El envío manual aún no está disponible en la API (por confirmar con el backend). El aviso no se ha enviado.",
+    "channelsError": "No se han podido cargar los canales.",
+    "auto": {
+      "title": "Envíos automáticos",
+      "caption": "Envíos automáticos",
+      "active": "Activo",
+      "onPublish": "Al publicar",
+      "onCalc": "Al calcular"
+    },
+    "channelsCard": {
+      "title": "Canales",
+      "working": "Funcionando",
+      "disabled": "Desactivado"
+    }
+  },
+  "calcs": {
+    "title": "Cálculo de puntos",
+    "subtitle": "Recalcula los puntos de un GP o de una de sus sesiones.",
+    "warning": "Recalcular modifica los puntos de todas las comunidades. Úsalo solo tras corregir un resultado.",
+    "card": "Recalcular",
+    "gp": "Gran Premio",
+    "session": "Sesión",
+    "all": "Todas",
+    "gpOption": "{name} (ronda {round})",
+    "recalc": "Recalcular",
+    "noGps": "Todavía no hay Grandes Premios con resultados.",
+    "confirmTitle": "Recalcular puntos",
+    "confirmBody": "Se recalcularán los puntos de {scope} en todas las comunidades.",
+    "confirm": "Recalcular",
+    "done": "Cálculo terminado",
+    "failed": "El cálculo ha fallado",
+    "unavailable": "El recálculo global aún no está disponible en la API (por confirmar con el backend).",
+    "history": {
+      "title": "Últimos cálculos",
+      "caption": "Últimos cálculos de esta sesión del navegador",
+      "date": "Fecha",
+      "scope": "Alcance",
+      "state": "Estado",
+      "empty": "Todavía no se ha recalculado nada.",
+      "today": "hoy · {time}",
+      "yesterday": "ayer · {time}",
+      "days": "hace {n} día | hace {n} días",
+      "done": "Terminado",
+      "error": "Con error",
+      "running": "En curso"
+    },
+    "error": "los Grandes Premios"
+  }
+}

@@ -1,0 +1,113 @@
+/* F2 · Typography. Inter variable is self-hosted (@fontsource-variable/inter, imported in main.ts). */
+:root {
+  --font-sans: 'Inter Variable', Inter, system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scale. `title` drops to 24px below `md` (768px). */
+.t-title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .t-title {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+.t-hero {
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 600;
+}
+.t-subtitle {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.t-header {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.t-body {
+  font-size: 16px;
+  line-height: 24px;
+}
+.t-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+}
+.t-caption {
+  font-size: 12px;
+  line-height: 16px;
+}
+/* Table headers and field labels only. */
+.t-up,
+.table-head {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tn {
+  font-variant-numeric: tabular-nums;
+}
+.fw-500 {
+  font-weight: 500;
+}
+.fw-600 {
+  font-weight: 600;
+}
+.fw-700 {
+  font-weight: 700;
+}
+
+/* Long-form text (rules, FAQ, legal). Use as `class="prose"`. */
+.prose {
+  max-width: 65ch;
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-weight: 600;
+  margin-top: 1.5em;
+}
+.prose h2 {
+  font-size: 24px;
+  line-height: 32px;
+}
+.prose h3 {
+  font-size: 20px;
+  line-height: 28px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+}
+.prose a {
+  color: var(--brand-600, #5d34a0);
+  text-decoration: underline;
+}
+
+/* Placeholder gaps in draft legal texts (P6). Brackets keep them identifiable without colour. */
+.ph {
+  display: inline-block;
+  background: var(--color-warn-tint);
+  color: var(--color-warn-fg);
+  border-radius: 4px;
+  padding: 0 6px;
+  font-weight: 600;
+}

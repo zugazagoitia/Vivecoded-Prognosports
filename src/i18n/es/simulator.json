@@ -1,0 +1,83 @@
+{
+  "simulator": {
+    "title": "Simulador de puntos",
+    "subtitle": "{session} de {gp} · ordena un resultado posible y mira qué pasaría. No se guarda nada.",
+    "mobileTitle": "Simulador",
+    "crumb": "Simulador",
+    "scenarios": {
+      "label": "Escenarios",
+      "grid": "Como la parrilla",
+      "sprint": "Como el sprint",
+      "mine": "Tu pronóstico",
+      "chaos": "Caos"
+    },
+    "result": {
+      "title": "Resultado posible",
+      "hint": "A la derecha, tus puntos por posición",
+      "list": "Resultado posible, por posición",
+      "mine": "Tu pronóstico:",
+      "driverAt": "Piloto en {place} posición",
+      "up": "Subir {driver}",
+      "down": "Bajar {driver}"
+    },
+    "cell": {
+      "placed": "Lo pusiste {place}",
+      "notPlaced": "No lo pusiste",
+      "points": "{n} punto | {n} puntos"
+    },
+    "points": {
+      "label": "Tus puntos",
+      "of": "de {max}",
+      "sessionRank": "Puesto en la sesión",
+      "sessionRankOf": "{rank} de {n} jugador | {rank} de {n} jugadores",
+      "general": "En la general",
+      "gap": "Distancia al líder",
+      "unavailable": "Al cierre",
+      "recalculating": "Calculando…",
+      "exacts": "{n} exacto | {n} exactos"
+    },
+    "leader": "Líder",
+    "move": {
+      "up": "sube {n} puesto | sube {n} puestos",
+      "down": "baja {n} puesto | baja {n} puestos",
+      "same": "sin cambios",
+      "header": "Cambio de puesto"
+    },
+    "general": {
+      "title": "La general con este resultado",
+      "note": "Orientativo: sin otras sesiones del GP ni bonus",
+      "caption": "La general de la temporada si {session} acabara así",
+      "scroll": "Tabla de la general, desplázala en horizontal",
+      "pos": "Pos.",
+      "player": "Jugador",
+      "total": "Total",
+      "you": "(tú)",
+      "locked": {
+        "title": "La general se simula al cierre",
+        "text": "Hasta que la sesión cierre no se ven los pronósticos de la comunidad, así que solo puedes comparar con tu propio pronóstico."
+      },
+      "error": "No se ha podido cargar la general anterior."
+    },
+    "announce": "Tus puntos: {points}, {exacts}. {rank}. {general}",
+    "announceRank": "Puesto {rank} en la sesión",
+    "announceGeneral": "General: {before} a {after}",
+    "empty": {
+      "title": "Aún no tienes pronóstico en esta sesión",
+      "text": "El simulador compara un resultado posible con tu pronóstico. Pronostica primero y vuelve.",
+      "action": "Ir a pronosticar"
+    },
+    "error": {
+      "gp": "el Gran Premio",
+      "data": "los datos del simulador",
+      "calc": "No se ha podido calcular con el servidor. Se muestra el cálculo local con las reglas de tu comunidad."
+    },
+    "notFound": {
+      "gpTitle": "Gran Premio no encontrado",
+      "gpText": "No existe el Gran Premio que buscas o ya no está disponible.",
+      "sessionTitle": "Sesión no encontrada",
+      "sessionText": "Este Gran Premio no tiene la sesión que buscas.",
+      "action": "Ver los Grandes Premios"
+    },
+    "noGrid": "Esta sesión no tiene parrilla: parte de tu pronóstico o del orden de los pilotos."
+  }
+}

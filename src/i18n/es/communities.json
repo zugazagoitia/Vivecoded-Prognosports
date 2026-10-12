@@ -1,0 +1,79 @@
+{
+  "communities": {
+    "title": "Comunidades",
+    "home": "Inicio",
+    "intro": "Juegas en {count}. La activa es la que ves en Inicio y en el ranking.",
+    "introNone": "Todavía no juegas en ninguna comunidad.",
+    "count": "{n} comunidad | {n} comunidades",
+    "explore": "Explorar",
+    "create": "Crear comunidad",
+    "error": "tus comunidades",
+    "list": "Tus comunidades",
+    "card": {
+      "createdBy": "Creada por {owner} · desde {year}",
+      "createdByNoYear": "Creada por {owner}",
+      "you": "Tú",
+      "active": "Activa",
+      "open": "Abierta",
+      "closed": "Cerrada",
+      "players": "{n} jugador | {n} jugadores",
+      "position": "Tu puesto",
+      "points": "Puntos",
+      "leader": "Líder",
+      "noData": "—",
+      "openBtn": "Abrir",
+      "openLabel": "Abrir {name}",
+      "activate": "Hacer activa",
+      "activateLabel": "Hacer activa {name}",
+      "activated": "{name} es ahora tu comunidad activa",
+      "pending": "Te falta {n} | Te faltan {n}",
+      "upToDate": "Al día",
+      "statsError": "No hemos podido cargar tu situación.",
+      "retry": "Reintentar",
+      "ordinal": "{n}.º"
+    },
+    "createCard": {
+      "title": "Crear otra comunidad",
+      "text": "Con tus reglas y tus amigos"
+    },
+    "join": {
+      "title": "Unirme con un código",
+      "text": "Pega el código o el enlace de invitación que te hayan pasado.",
+      "label": "Código de invitación",
+      "placeholder": "PADDOCK-7KQ2",
+      "submit": "Unirme",
+      "invalid": "Este código no es válido o ha caducado.",
+      "failed": "No hemos podido unirte. Inténtalo de nuevo.",
+      "joined": "Te has unido a {name}"
+    },
+    "more": {
+      "title": "¿Buscas más rivales?",
+      "text": "Explora las comunidades abiertas y entra con un clic.",
+      "cta": "Ver comunidades abiertas"
+    },
+    "empty": {
+      "title": "Todavía no estás en ninguna comunidad",
+      "text": "Únete con un código, explora las comunidades abiertas o crea la tuya."
+    },
+    "percentile": {
+      "title": "Tú en todas tus comunidades",
+      "subtitle": "Cada comunidad puntúa distinto, así que se comparan por percentil: 100 = primero, 0 = último.",
+      "season": "Temporada",
+      "colCommunity": "Comunidad",
+      "colRules": "Reglas",
+      "colPosition": "Puesto",
+      "colPercentile": "Percentil · 0 a 100",
+      "colTrend": "Evolución",
+      "note": "Puntos grises: el resto de miembros. Zona sombreada: el cuartil superior.",
+      "stripLabel": "Percentil {n} en {name}",
+      "of": "/{n}",
+      "best": "Donde mejor te va",
+      "bestValue": "percentil {n}",
+      "average": "Percentil medio",
+      "averageValue": "en {count}",
+      "empty": "Sin datos de esta temporada en tus comunidades.",
+      "error": "tu percentil",
+      "table": "Percentil por comunidad"
+    }
+  }
+}

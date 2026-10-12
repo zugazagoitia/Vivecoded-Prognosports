@@ -1,0 +1,114 @@
+# E2E (Playwright) en su propio workflow, separado de CI a propósito.
+#
+# deploy.yml se dispara cuando CI termina; si los e2e vivieran en CI (30 min), el deploy de
+# beta esperaría a que acabaran. Aquí corren en paralelo y sin bloquear el despliegue.
+#   - PR a develop / push a develop: se ejecutan; un fallo se ve en su check pero no bloquea.
+#   - PR a master: `e2e-ok` es el check obligatorio de producción (exigirlo en la protección de master).
+name: E2E
+
+on:
+  pull_request:
+  push:
+    branches: [develop, master]
+
+concurrency:
+  group: e2e-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: e2e (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Un job por proyecto de Playwright: el tiempo total pasa a ser el del más lento.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { project: chromium, browser: chromium }
+          - { project: mobile, browser: chromium }
+          - { project: firefox, browser: firefox }
+          - { project: webkit, browser: webkit }
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # T10 añade el script `e2e` (Playwright). Mientras no exista, los pasos siguientes se omiten;
+      # al fusionar T10 el job se activa solo, sin editar este fichero.
+      - name: Detectar script e2e
+        id: detect
+        run: |
+          if node -e "process.exit(require('./package.json').scripts?.['e2e:ci'] ? 0 : 1)"; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Script 'e2e' no definido todavía (T10); E2E omitido."
+          fi
+      # E2E prueba un dist/ de modo production con TODOS los flags activos (scripts/build-e2e.ts):
+      # las pantallas del ranking tras flag solo se pueden probar así. El bundle desplegado los deja apagados.
+      # T10 debe servir ese directorio (p. ej. `vite preview`) y no ejecutar `vite build`.
+      - name: Compilar (production, con los feature flags activos)
+        if: steps.detect.outputs.enabled == 'true'
+        env:
+          VITE_GIT_SHA: e2e
+          VITE_GIT_DATE: 1970-01-01T00:00:00+00:00
+        run: pnpm exec jiti scripts/build-e2e.ts
+      - name: Versión de Playwright
+        id: playwright
+        if: steps.detect.outputs.enabled == 'true'
+        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - name: Caché de navegadores de Playwright
+        id: playwright-cache
+        if: steps.detect.outputs.enabled == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ matrix.browser }}-${{ steps.playwright.outputs.version }}
+      - name: Instalar navegadores
+        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - name: Instalar dependencias del sistema
+        if: steps.detect.outputs.enabled == 'true' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps ${{ matrix.browser }}
+      - name: Ejecutar E2E
+        if: steps.detect.outputs.enabled == 'true'
+        run: pnpm e2e:ci --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() && steps.detect.outputs.enabled == 'true' }}
+        with:
+          name: playwright-report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  # Check de producción: solo existe en PR/push a master; en el resto se omite (no bloquea).
+  e2e-ok:
+    name: e2e-ok
+    if: ${{ always() && (github.base_ref == 'master' || github.ref == 'refs/heads/master') }}
+    needs: [e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Comprobar resultado de los e2e
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -Eq '"(failure|cancelled|skipped)"'; then
+            echo "::error::Los e2e no terminaron correctamente."
+            exit 1
+          fi
