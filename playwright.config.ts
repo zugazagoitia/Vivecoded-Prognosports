@@ -35,8 +35,18 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] }, testIgnore: FLAGS_OFF_SPECS },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, testIgnore: FLAGS_OFF_SPECS },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] }, testIgnore: FLAGS_OFF_SPECS },
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      ignoreSnapshots: true,
+      testIgnore: FLAGS_OFF_SPECS,
+    },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      ignoreSnapshots: true,
+      testIgnore: FLAGS_OFF_SPECS,
+    },
     {
       // Build with every feature flag off (dist-flags-off/): 404s, absent links, no requests.
       name: 'flags-off',

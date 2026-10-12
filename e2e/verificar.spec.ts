@@ -79,6 +79,8 @@ test.describe('Verificar correo (A5)', () => {
     await loginAsUnverifiedUser(page)
     await page.clock.install({ time: new Date('2026-07-01T12:00:00Z') })
     await justRegistered(page)
+    // Wait for the countdown to be mounted before advancing the fake clock (flaky under load).
+    await expect(page.getByRole('button', { name: 'Reenviar en 1:00' })).toBeDisabled()
     await page.clock.runFor(18_000)
     await expect(page.getByRole('button', { name: /^Reenviar en 0:[45]\d$/ })).toBeDisabled()
     await page.clock.runFor(62_000)

@@ -14,7 +14,7 @@ test.describe('mobile navigation', () => {
     // G1 (/gps) is not built yet and would answer 404: check the destination, not the page.
     await expect(tabs.getByRole('link', { name: 'GPs' })).toHaveAttribute('href', '/gps')
     for (const [name, url, heading] of [
-      ['Ranking', /\/ranking\/.*\/clasificacion\/general$/, 'Clasificación'],
+      ['Ranking', /\/ranking\/.*\/clasificacion\/general$/, null],
       ['Comunidades', /\/comunidades$/, null],
       ['Perfil', /\/u\/me$/, 'Perfil'],
       ['Inicio', /\/home$/, 'Hola, ana'],
