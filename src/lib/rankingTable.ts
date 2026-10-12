@@ -61,6 +61,17 @@ export function yAxisMin(values: readonly number[], step = 20): number {
   return v === 0 ? 0 : v
 }
 
+/** Tick values from 0 down to `min` (≤ 0) with a «nice» step so there are at most ~6 labels. */
+export function gapTickValues(min: number, maxTicks = 6): number[] {
+  if (min >= 0) return [0]
+  const raw = -min / (maxTicks - 1)
+  const pow = 10 ** Math.floor(Math.log10(raw))
+  const step = ([1, 2, 5, 10].map((m) => m * pow).find((s) => s >= raw) ?? raw) || 20
+  const out: number[] = []
+  for (let v = 0; v >= min; v -= step) out.push(v)
+  return out
+}
+
 /** «Líder» for 0, otherwise «−20». */
 export function gapAxisLabel(v: number): string {
   return v === 0 ? t('ranking.gapLeader.top') : minus(v)

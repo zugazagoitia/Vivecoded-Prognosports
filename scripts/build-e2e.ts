@@ -14,7 +14,7 @@ if (names.length === 0)
 
 // `--flags-off`: same production build with every flag off, into dist-flags-off/ (project `flags-off`).
 const flagsOff = process.argv.includes('--flags-off')
-const env: NodeJS.ProcessEnv = { ...process.env }
+const env: NodeJS.ProcessEnv = { ...process.env, VITE_SHOWCASE: 'true' }
 for (const name of names) env[`VITE_FF_${name}`] = flagsOff ? 'false' : 'true'
 
 const args = ['exec', 'vite', 'build', '--mode', 'production']
