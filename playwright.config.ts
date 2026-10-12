@@ -13,7 +13,7 @@ export default defineConfig({
   outputDir: './e2e/.results',
   fullyParallel: true,
   forbidOnly: CI,
-  retries: CI ? 2 : 0,
+  retries: CI ? 1 : 0,
   reporter: CI
     ? [['github'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
