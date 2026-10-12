@@ -2,6 +2,7 @@ import { defineConfig, devices } from '@playwright/test'
 
 const PORT = Number(process.env.E2E_PORT ?? 4173)
 const FLAGS_OFF_PORT = 4174
+const PANEL_PORT = 4175
 const FLAGS_OFF_SPECS = /\.flags-off\.spec\.ts$/
 const CI = !!process.env.CI
 
@@ -75,6 +76,13 @@ export default defineConfig({
     {
       command: `pnpm exec vite preview --outDir dist-flags-off --port ${FLAGS_OFF_PORT} --strictPort`,
       url: `http://localhost:${FLAGS_OFF_PORT}`,
+      reuseExistingServer: !CI,
+      timeout: 60_000,
+    },
+    {
+      // Beta-mode build (dist-panel/) where the reviewer flag panel is mounted (e2e/flag-panel.spec.ts).
+      command: `pnpm exec vite preview --outDir dist-panel --port ${PANEL_PORT} --strictPort`,
+      url: `http://localhost:${PANEL_PORT}`,
       reuseExistingServer: !CI,
       timeout: 60_000,
     },
