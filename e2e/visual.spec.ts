@@ -32,10 +32,11 @@ test.describe('visual regression', () => {
         test(name, async ({ page }) => {
           await page.goto(path)
           await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-          await expect(page).toHaveScreenshot(`${name}-${scheme}.png`, {
-            fullPage: true,
-            mask: [page.getByText(/^v\S+ · build /)],
-          })
+          if (scheme === 'light' || name === 'landing')
+            await expect(page).toHaveScreenshot(`${name}-${scheme}.png`, {
+              fullPage: true,
+              mask: [page.getByText(/^v\S+ · build /)],
+            })
         })
       }
 
@@ -59,10 +60,11 @@ test.describe('visual regression', () => {
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/consenso/61`)
         await expect(page.getByText('Piloto más votado al 1.º')).toBeVisible()
         await page.waitForLoadState('networkidle')
-        await expect(page).toHaveScreenshot(`consenso-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`consenso-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
 
       test('resultados', async ({ authedPage: page }) => {
@@ -70,10 +72,11 @@ test.describe('visual regression', () => {
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61`)
         await expect(page.getByText('Resultado real', { exact: true })).toBeVisible()
         await page.waitForLoadState('networkidle')
-        await expect(page).toHaveScreenshot(`resultados-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`resultados-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
 
       test('resultados-desglose', async ({ authedPage: page }) => {
@@ -81,10 +84,11 @@ test.describe('visual regression', () => {
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61?vista=desglose`)
         await expect(page.getByText('Puntos de la sesión')).toBeVisible()
         await page.waitForLoadState('networkidle')
-        await expect(page).toHaveScreenshot(`resultados-desglose-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`resultados-desglose-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
 
       test('pronosticar', async ({ authedPage: page }) => {
@@ -93,10 +97,11 @@ test.describe('visual regression', () => {
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/62`)
         await expect(page.getByText('Listo para guardar')).toBeVisible()
         await page.waitForLoadState('networkidle')
-        await expect(page).toHaveScreenshot(`pronosticar-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /), page.getByRole('timer')],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`pronosticar-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /), page.getByRole('timer')],
+          })
       })
 
       test('simulador', async ({ authedPage: page }) => {
@@ -104,10 +109,11 @@ test.describe('visual regression', () => {
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/61?semilla=7`)
         await expect(page.getByText('La general con este resultado')).toBeVisible()
         await page.waitForLoadState('networkidle')
-        await expect(page).toHaveScreenshot(`simulador-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`simulador-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

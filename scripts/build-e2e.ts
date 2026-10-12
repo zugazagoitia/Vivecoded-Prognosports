@@ -2,7 +2,7 @@
 //
 // The flagged ranking screens (R3-R13) can only be tested if their flag is on in the built dist/
 // (production ignores the localStorage overrides on purpose). The deployed production bundle keeps
-// every flag off; "flag off" behaviour (404, no links, no requests) is covered by unit tests.
+// every flag off; that behaviour is covered by `e2e/*.flags-off.spec.ts` against `--flags-off`.
 import { spawnSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 
@@ -12,10 +12,14 @@ const names = [...block.matchAll(/^\s*([A-Z_]+):/gm)].flatMap((m) => (m[1] ? [m[
 if (names.length === 0)
   throw new Error('No se han encontrado los feature flags en src/flags/index.ts')
 
-const env: NodeJS.ProcessEnv = { ...process.env }
-for (const name of names) env[`VITE_FF_${name}`] = 'true'
+// `--flags-off`: same production build with every flag off, into dist-flags-off/ (project `flags-off`).
+const flagsOff = process.argv.includes('--flags-off')
+const env: NodeJS.ProcessEnv = { ...process.env, VITE_SHOWCASE: 'true' }
+for (const name of names) env[`VITE_FF_${name}`] = flagsOff ? 'false' : 'true'
 
-const result = spawnSync('pnpm', ['exec', 'vite', 'build', '--mode', 'production'], {
+const args = ['exec', 'vite', 'build', '--mode', 'production']
+if (flagsOff) args.push('--outDir', 'dist-flags-off')
+const result = spawnSync('pnpm', args, {
   stdio: 'inherit',
   env,
 })

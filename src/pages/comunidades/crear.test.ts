@@ -174,4 +174,11 @@ describe('Crear comunidad', () => {
     )
     expect(await screen.findByText('La imagen supera el máximo de 2 MB.')).toBeTruthy()
   })
+
+  it('opens the crop dialog for a valid image', async () => {
+    const { user } = await open_()
+    const file = screen.getByLabelText<HTMLInputElement>('Imagen de la comunidad')
+    await user.upload(file, new File([new Uint8Array(10)], 'ok.png', { type: 'image/png' }))
+    expect(await screen.findByRole('dialog')).toBeTruthy()
+  })
 })

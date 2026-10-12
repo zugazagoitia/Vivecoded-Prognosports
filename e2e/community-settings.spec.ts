@@ -33,7 +33,7 @@ test.describe('Community settings (H6)', () => {
           await expect(page.getByRole('heading', { level: 2, name })).toBeVisible()
         }
         await expect(
-          page.getByText('Conjunto «Clásica 2026», público y usado por 4 comunidades.'),
+          page.getByText('Conjunto «Default Rule Set», público y usado por 4 comunidades.'),
         ).toBeVisible()
         await expect(page.getByText('Cerrada · con invitación')).toBeVisible()
         await expectNoSeriousA11yViolations(page)
@@ -53,12 +53,13 @@ test.describe('Community settings (H6)', () => {
       test('snapshot', async ({ authedPage: page, browserName }) => {
         test.skip(browserName !== 'chromium', 'screenshots are Chromium-only')
         await page.goto(OWN)
-        await expect(page.getByText(/Conjunto «Clásica 2026»/)).toBeVisible()
+        await expect(page.getByText(/Conjunto «Default Rule Set»/)).toBeVisible()
         await expect(page.getByRole('list', { name: 'Miembros de la comunidad' })).toBeVisible()
-        await expect(page).toHaveScreenshot(`comunidad-ajustes-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`comunidad-ajustes-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

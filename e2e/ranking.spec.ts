@@ -73,7 +73,14 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
           await expectNoSeriousA11yViolations(page)
           await noHorizontalScroll(page)
           if (browserName !== 'chromium') return
-          await expect(page).toHaveScreenshot(`${s.code}-${scheme}.png`, { fullPage: true })
+          await page.evaluate(() => document.fonts.ready)
+          await expect(page).toHaveScreenshot(`${s.code}-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+            // The ▲/▼ glyphs fall back to a system font whose width differs between the CI runner
+            // and the Playwright image, shifting table columns by a pixel or two.
+            maxDiffPixelRatio: 0.012,
+          })
         })
       }
     })
@@ -239,5 +246,21 @@ test.describe('Ranking y estadísticas (R0-R13)', () => {
       page.getByRole('heading', { name: 'No se ha encontrado este ranking' }),
     ).toBeVisible()
     await expectNoSeriousA11yViolations(page)
+  })
+
+  // #126: the lazy ranking chunk re-emits `.hidden` after the eager `min-[901px]:flex`.
+  test('keeps the main nav links visible after opening Ranking (desktop)', async ({
+    authedPage: page,
+    isMobile,
+  }) => {
+    test.skip(isMobile, 'desktop nav')
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/home')
+    const nav = page.getByRole('navigation', { name: 'Principal' })
+    await nav.getByRole('link', { name: 'Ranking' }).click()
+    await expect(page).toHaveURL(/\/ranking\//)
+    await page.waitForLoadState('networkidle')
+    await expect(nav).toBeVisible()
+    await expect(nav.getByRole('link', { name: 'Inicio' })).toBeVisible()
   })
 })

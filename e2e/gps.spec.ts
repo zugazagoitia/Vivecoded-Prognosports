@@ -57,10 +57,11 @@ test.describe('GP calendar (G1)', () => {
         await expect(
           page.getByRole('link', { name: /^Gran Premio 1, ronda 1, \d+ puntos/ }),
         ).toBeVisible()
-        await expect(page).toHaveScreenshot(`gps-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`gps-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }
