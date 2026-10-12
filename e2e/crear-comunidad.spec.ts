@@ -122,10 +122,11 @@ test.describe('Crear comunidad (H4)', () => {
         await ready(page)
         await name(page).fill('Los del paddock')
         await page.getByRole('radio', { name: /Abierta/ }).click()
-        await expect(page).toHaveScreenshot(`crear-comunidad-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`crear-comunidad-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

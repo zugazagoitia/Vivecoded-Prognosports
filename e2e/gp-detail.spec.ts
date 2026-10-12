@@ -47,7 +47,7 @@ test.describe('GP detail (G2)', () => {
           await expect(
             page.getByRole('heading', { name: 'Parrilla de salida · carrera' }),
           ).toBeVisible()
-          await expect(page.getByText('Clásica 2026 · sin excepciones')).toBeVisible()
+          await expect(page.getByText('Clásica 2026 · con excepción en este GP')).toBeVisible()
           await expect(page.getByRole('heading', { name: 'Tu historial en Miami' })).toBeVisible()
         }
         await expectNoSeriousA11yViolations(page)

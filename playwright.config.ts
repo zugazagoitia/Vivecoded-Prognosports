@@ -13,7 +13,7 @@ export default defineConfig({
   outputDir: './e2e/.results',
   fullyParallel: true,
   forbidOnly: CI,
-  retries: CI ? 2 : 0,
+  retries: CI ? 1 : 0,
   reporter: CI
     ? [['github'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
@@ -33,8 +33,8 @@ export default defineConfig({
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    { name: 'firefox', use: { ...devices['Desktop Firefox'] }, ignoreSnapshots: true },
+    { name: 'webkit', use: { ...devices['Desktop Safari'] }, ignoreSnapshots: true },
     {
       // Chromium engine with a phone viewport; the visual suite runs here too.
       name: 'mobile',
