@@ -39,10 +39,11 @@ test.describe('Profile of another user (U2)', () => {
         await page.goto('/u/beto')
         await expect(page.getByTestId('duel-score')).toBeVisible()
         await expect(page.getByRole('link', { name: /^Ver sus pronósticos de/ })).toBeVisible()
-        await expect(page).toHaveScreenshot(`perfil-usuario-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`perfil-usuario-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

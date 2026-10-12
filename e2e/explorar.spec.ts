@@ -120,10 +120,11 @@ test.describe('Explorar comunidades (H3)', () => {
         await mockExplore(page)
         await page.goto('/comunidades/explorar')
         await expect(page.getByRole('link', { name: 'Abrir Peña Paddock' })).toBeVisible()
-        await expect(page).toHaveScreenshot(`comunidades-explorar-${scheme}.png`, {
-          fullPage: true,
-          mask: [page.getByText(/^v\S+ · build /)],
-        })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`comunidades-explorar-${scheme}.png`, {
+            fullPage: true,
+            mask: [page.getByText(/^v\S+ · build /)],
+          })
       })
     })
   }

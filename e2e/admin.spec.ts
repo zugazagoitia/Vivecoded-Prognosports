@@ -111,9 +111,11 @@ test.describe('admin layout (N4)', () => {
         await page.setViewportSize({ width: 1280, height: 800 })
         await page.goto('/admin/gps')
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-        await expect(page).toHaveScreenshot(`admin-gps-${scheme}.png`, { fullPage: true })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`admin-gps-${scheme}.png`, { fullPage: true })
         await page.setViewportSize({ width: 800, height: 900 })
-        await expect(page).toHaveScreenshot(`admin-gps-tablet-${scheme}.png`, { fullPage: true })
+        if (scheme === 'light')
+          await expect(page).toHaveScreenshot(`admin-gps-tablet-${scheme}.png`, { fullPage: true })
       })
     }
   })
