@@ -224,6 +224,7 @@ const slotLabel = (i: number) => {
       :saving="vm.saving"
       :can-save="vm.canSave"
       class="sticky bottom-20 z-30"
+      data-bottom-bar
       @discard="vm.clearAll()"
       @save="vm.submit()"
     />
