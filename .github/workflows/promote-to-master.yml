@@ -1,0 +1,81 @@
+# Mantiene UNA PR abierta `develop` -> `master` titulada «Develop», con la lista de cambios pendientes
+# de pasar a producción (docs/ci.md). Solo usa la CLI `gh` (sin acciones de terceros).
+#
+#   - Si develop no tiene commits nuevos respecto a master, no hace nada.
+#   - Si la PR ya existe, solo actualiza título y cuerpo; si no, la crea.
+#   - NO activa auto-merge. La PR se fusiona a mano con MERGE COMMIT (no squash) para que
+#     develop y master compartan historia.
+#   - Requiere Settings > Actions > General > «Allow GitHub Actions to create and approve pull requests».
+name: Promote to master
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: promote-to-master
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  promote:
+    name: PR develop -> master
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: develop
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Crear o actualizar la PR
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin master:refs/remotes/origin/master develop:refs/remotes/origin/develop
+          pending="$(git rev-list --count origin/master..origin/develop)"
+          if [ "$pending" -eq 0 ]; then
+            echo "::notice::develop no tiene cambios respecto a master; nada que promover."
+            exit 0
+          fi
+
+          # Un commit por PR fusionada en develop (squash); se omiten las fusiones de sincronización.
+          git log --first-parent --no-merges --format='%s' origin/master..origin/develop > "$RUNNER_TEMP/subjects.txt"
+          git log --first-parent --merges --format='%s' origin/master..origin/develop \
+            | grep -Ev '^Merge (branch|remote-tracking)' >> "$RUNNER_TEMP/subjects.txt" || true
+
+          section() { # título, opciones de grep, patrón (ERE) sobre el asunto
+            local items
+            items="$(grep "$2" -e "$3" "$RUNNER_TEMP/subjects.txt" | sed 's/^/- /' || true)"
+            [ -n "$items" ] && printf '\n### %s\n\n%s\n' "$1" "$items"
+            return 0
+          }
+          {
+            echo "Cambios en \`develop\` pendientes de pasar a \`master\` (producción): **${pending} commits**."
+            echo
+            echo "Cuerpo generado automáticamente en cada push a \`develop\` (\`.github/workflows/promote-to-master.yml\`); no lo edites a mano."
+            section 'Épicas' -E '^\[Épica\]'
+            section 'Correcciones' -E '^(Fix|fix)'
+            section 'Otros cambios' -Ev '^(\[Épica\]|Fix|fix)'
+            echo
+            echo '---'
+            echo
+            echo "**Fusionar con «Create a merge commit», nunca con squash**: así \`develop\` y \`master\` comparten historia."
+          } > "$RUNNER_TEMP/body.md"
+          # Límite de GitHub: 65536 caracteres.
+          head -c 60000 "$RUNNER_TEMP/body.md" > "$RUNNER_TEMP/body-trunc.md"
+
+          number="$(gh pr list --base master --head develop --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --title 'Develop' --body-file "$RUNNER_TEMP/body-trunc.md"
+            echo "PR #${number} actualizada."
+          else
+            gh pr create --base master --head develop --title 'Develop' --body-file "$RUNNER_TEMP/body-trunc.md"
+          fi

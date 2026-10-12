@@ -39,7 +39,8 @@ Los e2e viven en `.github/workflows/e2e.yml` (matriz por proyecto, construyen su
 
 - Si CI falla, **reproduce en local con las mismas condiciones** antes de tocar nada, y distingue si el fallo lo causa tu rama o ya existía en `develop`.
 - **Variables de CI sin definir llegan como cadena vacía** (`VITE_SENTRY_DSN: ${{ vars.X }}` → `""`). El esquema de `src/env.ts` trata `""` como «no definido» en las variables opcionales; mantén esa norma al añadir variables.
-- Los jobs que no instalan dependencias no deben usar `cache: pnpm` (el post-step de caché falla).
+- Los jobs que no instalan dependencias no deben usar `cache: pnpm` (el post-step de caché falla). La acción compuesta `.github/actions/setup` (tras `checkout`) ya lo resuelve con `install: 'false'`.
+- Convenciones de workflows, Dependabot y la PR automática `develop -> master` (se fusiona con **merge commit**, no squash): `docs/ci.md`. Las subidas de Playwright exigen actualizar la imagen de `e2e:update:linux` y regenerar capturas.
 
 ## E2E (Playwright)
 
