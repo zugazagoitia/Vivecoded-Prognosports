@@ -45,7 +45,7 @@ const SESSIONS = [
 
 describe('names', () => {
   it('strips «Grand Prix» and falls back to the circuit', () => {
-    expect(gpShortName({ name: 'Singapore Grand Prix' })).toBe('Singapore')
+    expect(gpShortName({ name: 'Singapore Grand Prix' })).toBe('Singapur')
     expect(gpShortName({ name: 'Gran Premio 6', circuit: { id: 1, locality: 'Miami' } })).toBe(
       'Miami',
     )
