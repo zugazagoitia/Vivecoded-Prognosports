@@ -4,6 +4,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { catalogApi } from '@/api'
+import { toaster } from '@/composables/useToast'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
 import AdminTable from '@/components/admin/AdminTable.vue'
 import { EmptyState, ErrorState, Skeleton } from '@/components/states'
@@ -112,6 +113,11 @@ async function onCreate() {
   if (!validation.value.valid) return
   try {
     const created = await create.mutateAsync(rulesetPayload(form, keys.value))
+    // The backend discards `data` on create (por confirmar con el backend): do not present it as complete.
+    const empty = ruleRows(created.data, keys.value).every((r) =>
+      Object.values(r.cells).every((v) => v == null),
+    )
+    if (empty) toaster.error(t('admin.rules.toast.createdEmpty'))
     void router.replace(`/admin/reglas/${created.id}`)
   } catch {
     // Toasted by the mutation; the form keeps its values.
@@ -120,6 +126,15 @@ async function onCreate() {
 const cellError = (c: string, k: string) =>
   touched.value && validation.value.cells[`${c}:${k}`] ? t('admin.rules.errors.points') : ''
 const bonusKey = '2'
+const invalidFields = computed(() => {
+  const out: string[] = []
+  if (validation.value.fields.name) out.push(t('admin.rules.form.name'))
+  for (const c of CONCEPTS)
+    for (const k of keys.value)
+      if (validation.value.cells[`${c.id}:${k}`])
+        out.push(`${t(`admin.rules.concepts.${c.id}`)} (${colLabel(k)})`)
+  return out
+})
 </script>
 
 <template>
@@ -336,6 +351,18 @@ const bonusKey = '2'
             </tbody>
           </AdminTable>
           <p class="text-muted text-xs">{{ t('admin.rules.form.exactHelp') }}</p>
+          <p class="bg-warn-tint text-warn-fg rounded-md px-3 py-2 text-sm">
+            {{ t('admin.rules.form.discardedNotice') }}
+          </p>
+          <p
+            v-if="touched && !validation.valid"
+            role="alert"
+            class="text-err text-sm"
+            data-testid="rules-invalid"
+          >
+            {{ t('admin.rules.form.invalidSummary', { fields: invalidFields.join(', ') }) }}
+            {{ t('admin.rules.errors.points') }}
+          </p>
           <div class="flex justify-end">
             <PButton
               type="submit"

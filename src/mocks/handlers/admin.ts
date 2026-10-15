@@ -59,7 +59,7 @@ export const adminHandlers = [
   writes('put', '*/v2/gps/:c/:s/:gp/sessions/:session', { id: 1 }),
   writes('delete', '*/v2/gps/:c/:s/:gp/sessions/:session'),
   writes('patch', '*/v2/gps/:c/:s/:gp/sessions/:session/grid'),
-  writes('patch', '*/v2/gps/:c/:s/:gp/sessions/:session/grid/notification'),
+  writes('post', '*/v2/gps/:c/:s/:gp/sessions/:session/grid/notification'),
   writes('post', '*/v2/gps/:c/:s/:gp/sessions/:session/results'),
   writes('post', '*/v2/gps/:c/:s/:gp/image'),
   writes('delete', '*/v2/gps/:c/:s/:gp/image'),

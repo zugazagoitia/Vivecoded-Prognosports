@@ -3,7 +3,9 @@ import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/vue
 import { catalogApi, communitiesApi, gpsApi, userApi } from '@/api'
 import * as adminApi from '@/api/admin'
 import { ApiError } from '@/api/errors'
-import type { GrandPrix } from '@/api/schemas'
+import type { Driver, GrandPrix } from '@/api/schemas'
+import { messageFor } from '@/api/messages'
+import { reportError } from '@/lib/report'
 import { toaster } from '@/composables/useToast'
 import { t } from '@/i18n'
 import { keys } from './keys'
@@ -56,6 +58,38 @@ export function useSeasonDrivers(season: MaybeRefOrGetter<Id | undefined>) {
     queryKey: computed(() => adminKeys.seasonDrivers(toValue(season) ?? '')),
     queryFn: ({ signal }) => catalogApi.listSeasonDrivers(toValue(season)!, signal),
     enabled: has(season),
+  })
+}
+
+/**
+ * `GET /v2/seasons/{s}/drivers` carries no team (src/api/README.md): it only comes with the drivers
+ * of a GP. Takes the latest GP of the season that already has drivers (up to `MAX_TEAM_LOOKUPS`
+ * requests). Resolves to a `driverId -> team` map; drivers not in it have an unknown team.
+ */
+const MAX_TEAM_LOOKUPS = 12
+export function useSeasonDriverTeams(
+  comp: MaybeRefOrGetter<Id>,
+  season: MaybeRefOrGetter<Id | undefined>,
+) {
+  return useQuery({
+    queryKey: computed(() => ['admin', 'season-driver-teams', toValue(comp), toValue(season)]),
+    queryFn: async ({ signal }) => {
+      const c = toValue(comp)
+      const s = toValue(season)!
+      const gps = [...(await gpsApi.listGps(c, s, signal))].sort(
+        (a, b) => (b.round ?? 0) - (a.round ?? 0),
+      )
+      const out = new Map<number, NonNullable<Driver['team']>>()
+      for (const g of gps.slice(0, MAX_TEAM_LOOKUPS)) {
+        const list = await gpsApi.listGpDrivers(c, s, g.id, signal)
+        if (!list.length) continue
+        for (const d of list) if (d.team) out.set(d.id, d.team)
+        break
+      }
+      return out
+    },
+    enabled: has(season),
+    staleTime: 5 * 60_000,
   })
 }
 
@@ -255,12 +289,33 @@ export function useUpdateGp(args: MaybeRefOrGetter<GpArgs>) {
   })
 }
 
+/**
+ * `PUT .../drivers` on a GP with predictions fails in the backend (foreign key while it deletes and
+ * re-inserts the list) as HTTP 200 `success:false` «Error inesperado del servidor». Remove the
+ * special case when the backend answers with a real 4xx message (src/api/README.md).
+ */
+export function gpDriversErrorMessage(e: unknown): string {
+  if (
+    e instanceof ApiError &&
+    e.kind === 'http' &&
+    (e.status >= 500 || (e.status === 200 && /error inesperado/i.test(e.message)))
+  )
+    return t('admin.gpDrivers.toast.hasPredictions')
+  return messageFor(e)
+}
+
 export function useReplaceGpDrivers(args: MaybeRefOrGetter<GpArgs>) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (body: Parameters<typeof adminApi.replaceGpDrivers>[3]) => {
       const a = toValue(args)
       return adminApi.replaceGpDrivers(a.comp, a.season, a.gp, body)
+    },
+    // The error toast is shown in `onError` (a GP with predictions needs a specific message).
+    meta: { silent: true },
+    onError: (e) => {
+      reportError(e, 'mutation')
+      toaster.error(gpDriversErrorMessage(e))
     },
     onSuccess: async () => {
       const a = toValue(args)
@@ -332,12 +387,22 @@ export function usePublishGrid(args: MaybeRefOrGetter<GpArgs>) {
     mutationFn: async (v: { session: Id; grid: adminApi.GridRowInput[]; notify: boolean }) => {
       const a = toValue(args)
       await adminApi.publishGrid(a.comp, a.season, a.gp, v.session, v.grid)
-      if (v.notify) await adminApi.notifyGrid(a.comp, a.season, a.gp, v.session)
+      // The grid is already saved: a failed notice must not look like a failed save.
+      let notifyFailed = false
+      if (v.notify) {
+        try {
+          await adminApi.notifyGrid(a.comp, a.season, a.gp, v.session)
+        } catch {
+          notifyFailed = true
+        }
+      }
+      return { notifyFailed }
     },
-    onSuccess: async () => {
+    onSuccess: async ({ notifyFailed }) => {
       const a = toValue(args)
       await qc.invalidateQueries({ queryKey: ['admin', 'grid', a.comp, a.season, a.gp] })
       toaster.success(t('admin.sessions.toast.gridPublished'))
+      if (notifyFailed) toaster.error(t('admin.sessions.toast.gridNotifyFailed'))
     },
   })
 }
