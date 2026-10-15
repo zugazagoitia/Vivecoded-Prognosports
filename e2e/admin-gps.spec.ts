@@ -72,8 +72,10 @@ test.describe('Admin · Grandes Premios (M2-M5)', () => {
     await expect(page.getByText('22/22 pilotos')).toBeVisible()
     await page.getByRole('button', { name: 'Guardar pilotos' }).click()
     await expect.poll(() => calls.length).toBe(1)
-    expect(calls[0]!.path).toBe('/gps/1/10/18/drivers')
-    expect((calls[0]!.body as unknown[]).length).toBe(22)
+    expect(calls[0]).toMatchObject({ method: 'PUT', path: '/gps/1/10/18/drivers' })
+    const body = calls[0]!.body as Record<string, { id: number }[]>
+    expect(Object.values(body).flat()).toHaveLength(22)
+    expect(Object.values(body).every((l) => l.length === 2)).toBe(true)
   })
 
   test('editing a GP sends only the changed fields', async ({ authedPage: page, viewport }) => {

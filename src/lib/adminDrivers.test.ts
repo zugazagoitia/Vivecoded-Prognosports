@@ -6,6 +6,7 @@ import {
   clearSlot,
   cssColor,
   diffSlots,
+  driversBody,
   driversPayload,
   poolWhere,
   slotChanged,
@@ -57,6 +58,10 @@ describe('slots', () => {
   it('payload and ops', () => {
     const next = assignDriver(base, 9, 1)
     expect(driversPayload(next)).toEqual([1, 9, 3, 4])
+    expect(driversBody(next)).toEqual({
+      [next[0]!.teamId]: [{ id: 1 }, { id: 9 }],
+      [next[2]!.teamId]: [{ id: 3 }, { id: 4 }],
+    })
     expect(toApiOps(base, next)).toEqual({ add: [9], remove: [2] })
   })
   it('poolWhere', () => {

@@ -258,9 +258,9 @@ export function useUpdateGp(args: MaybeRefOrGetter<GpArgs>) {
 export function useReplaceGpDrivers(args: MaybeRefOrGetter<GpArgs>) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (ids: number[]) => {
+    mutationFn: (body: Parameters<typeof adminApi.replaceGpDrivers>[3]) => {
       const a = toValue(args)
-      return adminApi.replaceGpDrivers(a.comp, a.season, a.gp, ids)
+      return adminApi.replaceGpDrivers(a.comp, a.season, a.gp, body)
     },
     onSuccess: async () => {
       const a = toValue(args)

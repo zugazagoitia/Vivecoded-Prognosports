@@ -90,20 +90,21 @@ export async function updateGpData(
 }
 
 /**
- * `POST .../drivers` "replaces the existing list with the one sent" (spec): the whole final list
- * goes in one call, not additions and removals. The body shape is not in the spec ("Drivers
- * list"): an array of `{ id }` is assumed.
+ * Replaces the whole list of drivers of the GP in one call. The OpenAPI says `POST` but the route
+ * is registered as `PUT`, and the body is a dictionary constructor -> drivers,
+ * `{ "<constructorId>": [{ "id": <driverId> }] }` (verified against the backend; see
+ * `src/api/README.md`). An array answers 500 with either method.
  */
 export const replaceGpDrivers = (
   comp: Id,
   season: Id,
   g: Id,
-  driverIds: readonly number[],
+  body: Record<number, { id: number }[]>,
   signal?: AbortSignal,
 ) =>
   request(`${gpScope(comp, season, g)}/drivers`, {
-    method: 'POST',
-    body: driverIds.map((id) => ({ id })),
+    method: 'PUT',
+    body,
     signal,
   })
 
