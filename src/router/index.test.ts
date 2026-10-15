@@ -40,9 +40,7 @@ describe('legacy redirects', () => {
     await router.push(from)
     expect(router.currentRoute.value.fullPath).toBe(to)
   })
-  // Bug: a string `redirect` is not parametrised by vue-router, so `:id` / `:usuario` stay literal.
-  // See https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/161
-  it.fails.each([
+  it.each([
     ['/communities/12', '/comunidades/12'],
     ['/user/pepe', '/u/pepe'],
   ])('param page %s -> %s', async (from, to) => {
