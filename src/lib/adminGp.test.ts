@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mockGrandPrix } from '@/mocks/fixtures'
 import {
+  adminGpPath,
   chipCounts,
   closedCommunities,
   closesIn,
@@ -169,5 +170,9 @@ describe('GP edit helpers', () => {
     expect(gpSchema.safeParse({ ...ok, laps: 'abc' }).success).toBe(false)
     expect(gpSchema.safeParse({ ...ok, name: ' ' }).success).toBe(false)
     expect(gpSchema.safeParse({ ...ok, code: 'sin' }).success).toBe(false)
+  })
+  it('adminGpPath uses the numeric competition id, never the f1 slug', () => {
+    expect(adminGpPath({ id: 39 }, { competition: 'f1', season: 9 })).toBe('/admin/gps/1/9/39')
+    expect(adminGpPath({ id: 39 }, { competition: 2, season: 9 })).toBe('/admin/gps/2/9/39')
   })
 })

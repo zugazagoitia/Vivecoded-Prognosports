@@ -395,10 +395,12 @@ export type GpForm = z.input<typeof gpSchema>
 
 /** Path of the admin screens of one GP. */
 export function adminGpPath(
-  gp: Pick<GrandPrix, 'id' | 'competition' | 'season'>,
+  gp: Pick<GrandPrix, 'id'> & Partial<Pick<GrandPrix, 'competition' | 'season'>>,
   fallback?: { competition?: string | number; season?: string | number },
 ): string {
-  const c = gp.competition?.id ?? fallback?.competition ?? 1
+  // Canonical URL: the numeric competition id; the route slug (`f1`) is only a fallback alias.
+  const fb = fallback?.competition
+  const c = gp.competition?.id ?? (/^\d+$/.test(String(fb ?? '')) ? fb : 1)
   const s = gp.season?.id ?? fallback?.season ?? ''
   return `/admin/gps/${c}/${s}/${gp.id}`
 }

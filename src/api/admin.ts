@@ -135,10 +135,10 @@ export const publishGrid = (
     signal,
   })
 
-/** `PATCH .../sessions/{session}/grid/notification`: notifies the players of the grid change. */
+/** `POST .../sessions/{session}/grid/notification` (the spec says PATCH; the backend registers POST, README): notifies the players of the grid change. */
 export const notifyGrid = (comp: Id, season: Id, g: Id, session: Id, signal?: AbortSignal) =>
   request(`${gpScope(comp, season, g)}/sessions/${seg(session)}/grid/notification`, {
-    method: 'PATCH',
+    method: 'POST',
     signal,
   })
 

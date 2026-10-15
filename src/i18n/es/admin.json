@@ -228,7 +228,8 @@
       "image": "Imagen promocional",
       "imageWarn": "Falta la imagen promocional",
       "results": "{n} resultado pendiente (normal antes de disputarse) | {n} resultados pendientes (normal antes de disputarse)",
-      "resultsOk": "Resultados guardados"
+      "resultsOk": "Resultados guardados",
+      "resultsNone": "Sin resultados: el GP aún no tiene sesiones"
     },
     "visible": "Visible para los usuarios",
     "visibleHelp": "Por confirmar: la API no tiene un campo de visibilidad.",
@@ -326,7 +327,6 @@
       "title": "Pilotos de {year}",
       "hint": "Pulsa un piloto para seleccionarlo.",
       "selected": "Seleccionado: {name}. Ahora pulsa un hueco.",
-      "noTeam": "sin equipo",
       "list": "Pilotos de la temporada"
     },
     "slot": {
@@ -342,7 +342,8 @@
     "emptyHint": "Este GP no tiene pilotos: clona los de otro GP o asígnalos a mano.",
     "noDrivers": "Esta temporada no tiene pilotos todavía.",
     "toast": {
-      "saved": "Pilotos guardados"
+      "saved": "Pilotos guardados",
+      "hasPredictions": "Este GP ya tiene pronósticos; no se pueden cambiar los pilotos."
     },
     "error": "los pilotos"
   },
@@ -443,6 +444,7 @@
       "deleted": "Sesión eliminada",
       "added": "Sesión añadida",
       "gridPublished": "Parrilla publicada",
+      "gridNotifyFailed": "La parrilla se ha guardado, pero no se pudo avisar a los jugadores.",
       "resultsSaved": "Resultado guardado"
     }
   },
@@ -530,7 +532,6 @@
       "code": "Código",
       "team": "Equipo",
       "actions": "Acciones",
-      "noTeam": "Sin equipo",
       "editAria": "Editar {name}"
     },
     "teamsTable": {
@@ -622,6 +623,8 @@
       "visPrivate": "Privado",
       "description": "Descripción",
       "descriptionPlaceholder": "Para qué sirve este conjunto",
+      "discardedNotice": "Aviso: la API actual guarda el conjunto sin las reglas indicadas (las descarta al crear). Se creará vacío hasta que el backend lo corrija.",
+      "invalidSummary": "Corrige estos campos: {fields}.",
       "exactHelp": "Puntos por posición separados por comas (20, 16, 12): su número fija cuántos pilotos se pronostican.",
       "cellAria": "{concept}, {session}",
       "create": "Crear conjunto"
@@ -632,6 +635,7 @@
     },
     "toast": {
       "created": "Conjunto creado",
+      "createdEmpty": "Conjunto creado sin reglas: la API ha descartado los puntos indicados",
       "deleted": "Conjunto eliminado"
     }
   },

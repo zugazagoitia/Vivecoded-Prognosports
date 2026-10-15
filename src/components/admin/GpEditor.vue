@@ -217,7 +217,9 @@ async function save() {
     })
     base.value = { ...form }
     await nextTick()
-    void router.replace(`/admin/gps/${comp.value}/${seasonId.value}/${created.id}`)
+    void router.replace(
+      adminGpPath({ id: created.id }, { competition: comp.value, season: seasonId.value }),
+    )
   } catch {
     // The mutation already toasted the error and the form keeps what was typed.
   }
@@ -243,6 +245,11 @@ const resultList = computed(() =>
 )
 const groups = computed(() => groupResults(resultList.value))
 const resultsKnown = computed(() => sessions.value.every((s) => haveResults.value[s.id] != null))
+// A GP without sessions has no results yet (and nothing to publish): not «saved», not «published».
+const resultsDone = computed(
+  () => sessions.value.length > 0 && groups.value.pending.length === 0 && resultsKnown.value,
+)
+const published = computed(() => form.visible && sessions.value.length > 0)
 const status = computed(() =>
   gp.value
     ? sectionStatus(
@@ -276,16 +283,18 @@ const checks = computed<ValidationItem[]>(() => {
       state: s.imagen === 'ok' ? 'ok' : 'warn',
       label: t(s.imagen === 'ok' ? 'admin.gpEdit.status.image' : 'admin.gpEdit.status.imageWarn'),
     },
-    groups.value.pending.length === 0 && resultsKnown.value
+    resultsDone.value
       ? { state: 'ok', label: t('admin.gpEdit.status.resultsOk') }
-      : {
-          state: 'warn',
-          label: t(
-            'admin.gpEdit.status.results',
-            { n: groups.value.pending.length },
-            groups.value.pending.length,
-          ),
-        },
+      : sessions.value.length === 0
+        ? { state: 'warn', label: t('admin.gpEdit.status.resultsNone') }
+        : {
+            state: 'warn',
+            label: t(
+              'admin.gpEdit.status.results',
+              { n: groups.value.pending.length },
+              groups.value.pending.length,
+            ),
+          },
   ]
 })
 
@@ -372,8 +381,8 @@ const sectionClass = 'scroll-mt-20'
       "
     >
       <template v-if="gp" #default>
-        <PTag :color="form.visible ? 'ok' : 'gray'">{{
-          t(form.visible ? 'admin.gpEdit.published' : 'admin.gpEdit.draft')
+        <PTag :color="published ? 'ok' : 'gray'">{{
+          t(published ? 'admin.gpEdit.published' : 'admin.gpEdit.draft')
         }}</PTag>
         <PButton variant="outline" size="sm" :to="gpPath(gp)" :icon="iconFor('visibility')">
           {{ t('admin.gpEdit.viewAsUser') }}

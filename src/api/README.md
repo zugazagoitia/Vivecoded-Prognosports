@@ -77,7 +77,7 @@ Solo la forma de los campos; las escrituras viven en `src/api/admin.ts` y nunca 
 - `POST /v2/gps/` (solo `name`, `code`), `POST /v2/drivers` y `POST /v2/constructors` responden el cuerpo **sin `id`**: el creado se busca después en el listado (`GET /v2/gps`, `/v2/drivers`, `/v2/constructors/`) por código/nombre.
 - Alta de GP en la temporada: `POST /v2/seasons/{season}/gps` con `{ gp, circuit, variant, laps, round }` (ids de circuito/variante como cadena) funciona.
 - Edición de GP (no está en la spec): `PUT /v2/gps/{id}` cambia `name` y `code`; `PUT /v2/gps/{competition}/{season}/{id}` cambia `round`, `laps`, `circuit` y `variant`. En la spec `PUT /v2/gps/{grandprix}` figura como «Borrar» y sin cuerpo.
-- Parrilla: la ruta real es `PATCH /v2/gps/{c}/{s}/{gp}/sessions/{session}/grid` (y `.../grid/notification`, `.../grid/{driver}`), no la de la spec sin sesión. Cuerpo `{ grid: [{ position, driver, isFromPit, note }] }` con `driver` = id numérico (no `{ id }`).
+- Parrilla: la ruta real es `PATCH /v2/gps/{c}/{s}/{gp}/sessions/{session}/grid` (y `.../grid/{driver}`); el aviso es `POST .../grid/notification` (la spec lo anota como PATCH, pero el PATCH cae en `grid/{driver}` y responde «Piloto inválido»), no la de la spec sin sesión. Cuerpo `{ grid: [{ position, driver, isFromPit, note }] }` con `driver` = id numérico (no `{ id }`).
 - Resultados: `POST .../sessions/{session}/results` con `{ results: { "<posición>": <idPiloto> }, fastLap }`. La lista `[{ position, driver }]` se rechaza («Solicitud inválida»). Solo se guardan si la sesión ya se disputó y el piloto está en el GP.
 - Pilotos del GP: la spec anota `POST .../drivers`, pero la ruta real es `PUT` (sustituye la lista) con un diccionario constructor → pilotos, `{ "<idConstructor>": [{ "id": <idPiloto> }] }`. Un array `[{ id }]` da HTTP 500 con POST y PUT, y POST con objeto da «Solicitud inválida». Verificado en local (#145). Pendiente de backend solo que el 500 debería ser un 4xx.
 - No existen `POST /v2/notifications` (aviso manual) ni `POST .../sessions/{session}/calculations` (recálculo global): 404 con texto plano, sin envelope. M12 y M13 muestran «aún no disponible».
@@ -89,6 +89,11 @@ Solo la forma de los campos; las escrituras viven en `src/api/admin.ts` y nunca 
 - El `code` de la competición local es el nombre largo, no `f1`: el frontend usa `f1` (válido en producción).
 
 - `GET /v2/user/me`: `rank` llega como `{ id, name, color }` sin el booleano `admin` que la spec marca como requerido (comprobado en el backend local con un admin real; en producción un miembro devuelve `name: "Miembro"`). El frontend considera admin `rank.admin === true` o `rank.name` igual a «admin» (sin distinguir mayúsculas), `isAdmin` en `src/stores/session.ts`. Se podrá simplificar cuando el backend serialice `admin`.
+
+- `PUT .../gps/{c}/{s}/{gp}/drivers` en un GP **con pronósticos** falla en el backend (clave foránea `grandprix_predictions` al borrar y reinsertar la lista) y responde HTTP 200 `{ success:false, message:"Error inesperado del servidor" }`. El cliente lo traduce a «Este GP ya tiene pronósticos; no se pueden cambiar los pilotos» (`gpDriversErrorMessage`); quitar el caso especial cuando el backend responda con un 4xx y mensaje propio.
+- `POST /v2/rulesets` descarta `data`: el conjunto se crea con todas las reglas vacías. La UI avisa antes y después de crear (por confirmar con el backend).
+- `GET /v2/seasons/{s}/drivers` no incluye `team`; solo lo trae `GET /v2/gps/{c}/{s}/{gp}/drivers`. `useSeasonDriverTeams` lo deduce del último GP de la temporada con pilotos (hasta 12 peticiones); sin dato, la UI no muestra equipo.
+- KPI «disputados / total» del panel (M1): el total es `season.totalEvents` de la API (24 en el semilla local) y el calendario lista 23 rondas; es dato del backend, no se corrige en el cliente.
 
 ### Contraste de mocks con la API real (2026-10-11)
 
