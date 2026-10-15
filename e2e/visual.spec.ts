@@ -42,7 +42,7 @@ test.describe('visual regression', () => {
 
       test('gp-detalle', async ({ authedPage: page, isMobile }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}?sesion=61`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}?sesion=4`)
         await expect(page.getByText('Terminada · 10 pts').first()).toBeVisible()
         await expect(
           page.getByText(isMobile ? 'Circuito y tu historial' : 'Tu historial en Miami'),
@@ -57,7 +57,7 @@ test.describe('visual regression', () => {
 
       test('consenso', async ({ authedPage: page }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/consenso/61`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/consenso/4`)
         await expect(page.getByText('Piloto más votado al 1.º')).toBeVisible()
         await page.waitForLoadState('networkidle')
         if (scheme === 'light')
@@ -69,7 +69,7 @@ test.describe('visual regression', () => {
 
       test('resultados', async ({ authedPage: page }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/4`)
         await expect(page.getByText('Resultado real', { exact: true })).toBeVisible()
         await page.waitForLoadState('networkidle')
         if (scheme === 'light')
@@ -81,7 +81,7 @@ test.describe('visual regression', () => {
 
       test('resultados-desglose', async ({ authedPage: page }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61?vista=desglose`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/4?vista=desglose`)
         await expect(page.getByText('Puntos de la sesión')).toBeVisible()
         await page.waitForLoadState('networkidle')
         if (scheme === 'light')
@@ -94,7 +94,7 @@ test.describe('visual regression', () => {
       test('pronosticar', async ({ authedPage: page }) => {
         // Race of the weekend GP: open and already predicted (8 slots filled).
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/62`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/2`)
         await expect(page.getByText('Listo para guardar')).toBeVisible()
         await page.waitForLoadState('networkidle')
         if (scheme === 'light')
@@ -106,7 +106,7 @@ test.describe('visual regression', () => {
 
       test('simulador', async ({ authedPage: page }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/61?semilla=7`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/4?semilla=7`)
         await expect(page.getByText('La general con este resultado')).toBeVisible()
         await page.waitForLoadState('networkidle')
         if (scheme === 'light')

@@ -2,8 +2,8 @@ import type { Page } from '@playwright/test'
 import { WEEKEND_GP, WEEKEND_NOW, WEEKEND_SEASON } from '../src/mocks/fixtures/gp'
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures'
 
-// Predict screen (G3) on the sprint weekend of round 6 at a fixed time: the sprint (61) is
-// closed, the qualifying (60) closes in 2 h 25 min and is empty, the race (62) is predicted.
+// Predict screen (G3) on the sprint weekend of round 6 at a fixed time: the sprint (4) is
+// closed, the qualifying (1) closes in 2 h 25 min and is empty, the race (2) is predicted.
 const BASE = `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar`
 
 async function freeze(page: Page) {
@@ -27,7 +27,7 @@ test.describe('Predict (G3)', () => {
         isMobile,
       }) => {
         await freeze(page)
-        await page.goto(`${BASE}/60`)
+        await page.goto(`${BASE}/1`)
         await expect(page.getByText('Faltan 5 pilotos')).toBeVisible()
         await expect(page.getByRole('button', { name: 'Guardar pronóstico' })).toBeDisabled()
         await expect(page.getByRole('progressbar', { name: 'Pilotos elegidos' })).toHaveAttribute(
@@ -47,7 +47,7 @@ test.describe('Predict (G3)', () => {
 
       test('closed sprint: alert and link to results, axe', async ({ authedPage: page }) => {
         await freeze(page)
-        await page.goto(`${BASE}/61`)
+        await page.goto(`${BASE}/4`)
         await expect(page.getByText('El sprint ya está cerrado.')).toBeVisible()
         await expect(page.getByRole('link', { name: 'Ver resultados' })).toBeVisible()
         await expectNoSeriousA11yViolations(page)
@@ -62,7 +62,7 @@ test.describe('Predict (G3)', () => {
   }) => {
     test.skip(isMobile, 'desktop flow')
     await freeze(page)
-    await page.goto(`${BASE}/60`)
+    await page.goto(`${BASE}/1`)
     await page.getByRole('button', { name: '1.º vacío' }).focus()
     await page.keyboard.press('Enter')
     await page.getByRole('button', { name: 'Lando Norris' }).focus()
@@ -92,7 +92,7 @@ test.describe('Predict (G3)', () => {
   }) => {
     test.skip(isMobile, 'desktop flow')
     await freeze(page)
-    await page.goto(`${BASE}/60`)
+    await page.goto(`${BASE}/1`)
     await page
       .getByRole('button', { name: 'Lando Norris' })
       .dragTo(page.locator('[data-position="3"]'))
@@ -109,17 +109,17 @@ test.describe('Predict (G3)', () => {
   test('leaving with unsaved changes asks first', async ({ authedPage: page, isMobile }) => {
     test.skip(isMobile, 'desktop flow')
     await freeze(page)
-    await page.goto(`${BASE}/60`)
+    await page.goto(`${BASE}/1`)
     await page.getByRole('button', { name: 'Lando Norris' }).click()
     await page.getByRole('tab', { name: /Carrera/ }).click()
     const dialog = page.getByRole('dialog')
     await expect(dialog.getByText('¿Salir sin guardar?')).toBeVisible()
     await expectNoSeriousA11yViolations(page)
     await dialog.getByRole('button', { name: 'Seguir editando' }).click()
-    await expect(page).toHaveURL(/pronosticar\/60$/)
+    await expect(page).toHaveURL(/pronosticar\/1$/)
     await page.getByRole('tab', { name: /Carrera/ }).click()
     await dialog.getByRole('button', { name: 'Descartar y salir' }).click()
-    await expect(page).toHaveURL(/pronosticar\/62$/)
+    await expect(page).toHaveURL(/pronosticar\/2$/)
     await expect(page.getByRole('button', { name: '1.º Max Verstappen' })).toBeVisible()
   })
 
@@ -129,7 +129,7 @@ test.describe('Predict (G3)', () => {
   }) => {
     test.skip(!isMobile, 'phone flow')
     await freeze(page)
-    await page.goto(`${BASE}/60`)
+    await page.goto(`${BASE}/1`)
     await page.getByRole('button', { name: '1.º: vacío' }).click()
     const sheet = page.getByRole('dialog', { name: 'Elige el 1.º' })
     await expect(sheet).toBeVisible()

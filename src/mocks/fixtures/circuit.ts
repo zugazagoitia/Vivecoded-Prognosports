@@ -78,9 +78,8 @@ export function variantGps(circuitId: number, variantId: number): GrandPrixInput
         lastSessionDate: p.date,
         sessions: [
           {
-            id: 1,
-            key: 2,
-            name: 'Race',
+            id: 2,
+            name: 'RACE',
             code: 'R',
             date: p.date,
             hasGrid: true,

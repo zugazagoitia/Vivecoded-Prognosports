@@ -60,7 +60,7 @@ test.describe('flag panel on phones', () => {
         authedPage: page,
       }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
-        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/60`)
+        await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/1`)
         const saveBar = page.locator('[data-bottom-bar]')
         await expect(saveBar).toBeVisible()
         const panel = page.locator(open ? '.flag-panel' : '.flag-panel .bubble')

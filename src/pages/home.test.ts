@@ -75,7 +75,7 @@ describe('Home (H1) desktop', () => {
     const section = await screen.findByRole('region', { name: 'Qué tienes que hacer ahora' })
     const rows = await within(section).findAllByRole('listitem')
     expect(rows).toHaveLength(3)
-    // Sprint (id 181): closes 08:00Z-5min -> in 55 min; already predicted.
+    // Sprint (id 4): closes 08:00Z-5min -> in 55 min; already predicted.
     expect(within(rows[0]!).getByText('Sprint')).toBeTruthy()
     expect(await within(rows[0]!).findByText('Hecho')).toBeTruthy()
     expect(within(rows[0]!).getByText('55 min')).toBeTruthy()
@@ -84,16 +84,16 @@ describe('Home (H1) desktop', () => {
       within(rows[0]!)
         .getByRole('link', { name: /Editar/ })
         .getAttribute('href'),
-    ).toBe('/gps/1/10/18/pronosticar/181')
-    // Qualifying (id 180): urgent.
+    ).toBe('/gps/1/10/18/pronosticar/4')
+    // Qualifying (id 1): urgent.
     expect(within(rows[1]!).getByText('Cierra pronto')).toBeTruthy()
     expect(within(rows[1]!).getByText('4 h 55 min')).toBeTruthy()
     expect(
       within(rows[1]!)
         .getByRole('link', { name: /Pronosticar/ })
         .getAttribute('href'),
-    ).toBe('/gps/1/10/18/pronosticar/180')
-    // Race (id 182): pending, more than 24 h.
+    ).toBe('/gps/1/10/18/pronosticar/1')
+    // Race (id 2): pending, more than 24 h.
     expect(within(rows[2]!).getByText('Pendiente')).toBeTruthy()
     expect(within(rows[2]!).getByText('1 d 6 h')).toBeTruthy()
   })

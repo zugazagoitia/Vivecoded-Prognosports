@@ -36,7 +36,7 @@ export function communitySeasonPoints(seasonId: number): Record<string, unknown[
     const sessions = [...(gp.sessions ?? [])].sort(
       (a, b) => Date.parse(a.date!) - Date.parse(b.date!),
     )
-    out[String(gp.id)] = users.map((user) => {
+    const rows = users.map((user) => {
       const pointsInGP = ((Number(user.id) * 7 + gp.round! * 5) % 37) + 18
       const accumulatedPoints = (running.get(Number(user.id)) ?? 0) + pointsInGP
       running.set(Number(user.id), accumulatedPoints)
@@ -48,12 +48,12 @@ export function communitySeasonPoints(seasonId: number): Record<string, unknown[
           i === sessions.length - 1 ? pointsInGP - share * (sessions.length - 1) : share,
         ]),
       )
-      // Hits, as the real API sends them: `hitsBySession` is keyed by the session `key`.
+      // Hits, as the real API sends them: `hitsBySession` is keyed by the session id (the API calls it `key`; it equals the shared id).
       const hitsInGP = ((Number(user.id) * 3 + gp.round!) % 8) + 3
       const hitShare = Math.floor(hitsInGP / Math.max(sessions.length, 1))
       const hitsBySession = Object.fromEntries(
         sessions.map((s, i) => [
-          String(s.key),
+          String(s.id),
           i === sessions.length - 1 ? hitsInGP - hitShare * (sessions.length - 1) : hitShare,
         ]),
       )
@@ -65,14 +65,21 @@ export function communitySeasonPoints(seasonId: number): Record<string, unknown[
         hitsInGP,
         hitsBySession,
         bonusPoints: 0,
+        hitPercentageInGP: hitsInGP / 10,
+        hitPercentageBySession: Object.fromEntries(
+          sessions.map((s) => [String(s.id), hitsInGP / 10]),
+        ),
       }
     })
+    // Real API: `standings` is the position in the GP by points scored (1 = best).
+    const byPoints = [...rows].sort((a, b) => b.pointsInGP - a.pointsInGP)
+    out[String(gp.id)] = rows.map((r) => ({ ...r, standings: byPoints.indexOf(r) + 1 }))
   }
   return out
 }
 
-/** Session of the next GP (round 18) the mock user already predicted: the sprint (id 181). */
-export const PREDICTED_SESSION_IDS = [181]
+/** Session of the next GP (round 18) the mock user already predicted: the sprint (id 4). */
+export const PREDICTED_SESSION_IDS = [4]
 
 /**
  * `GET .../sessions/{session}/tipps/{community}` for the mock user (user 1): the real map by user

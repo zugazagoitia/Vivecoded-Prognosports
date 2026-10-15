@@ -59,10 +59,10 @@ export function adminGpDrivers(round: number) {
 
 /** Independent session catalogue (`GET /v2/sessions`). */
 export const adminCatalogSessions = [
-  { id: 1, key: 1, code: 'Q', name: 'QUALIFY', hasGrid: false, hasFastLap: false },
-  { id: 2, key: 2, code: 'R', name: 'RACE', hasGrid: true, hasFastLap: true },
-  { id: 3, key: 3, code: 'SQ', name: 'SPRINT_QUALIFY', hasGrid: false, hasFastLap: false },
-  { id: 4, key: 4, code: 'SR', name: 'SPRINT_RACE', hasGrid: true, hasFastLap: false },
+  { id: 1, code: 'Q', name: 'QUALIFY', hasGrid: false, hasFastLap: false },
+  { id: 2, code: 'R', name: 'RACE', hasGrid: true, hasFastLap: true },
+  { id: 3, code: 'SQ', name: 'SPRINT_QUALIFY', hasGrid: false, hasFastLap: false },
+  { id: 4, code: 'SR', name: 'SPRINT_RACE', hasGrid: true, hasFastLap: false },
 ].map((s) => defineFixture('session', RaceSessionSchema, s))
 
 /** Usages of the rule sets of the catalogue: the list of communities (spec) per rule set id. */
