@@ -7,6 +7,7 @@ import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import { mean } from '@/lib/ranking'
 import {
   attempts,
+  availableKinds,
   bestByKind,
   diffText,
   dotSize,
@@ -34,7 +35,17 @@ const table = ref(false)
 const views = computed(() =>
   (['count', 'grid', 'me'] as const).map((v) => ({ value: v, label: t(`ranking.r11.views.${v}`) })),
 )
-const tries = computed(() => attempts(model.value.played, rules.value))
+const avail = computed(() => availableKinds(model.value.players, model.value))
+const tries = computed(() => {
+  const all = attempts(model.value.played, rules.value)
+  return {
+    cs: avail.value.cs ? all.cs : 0,
+    sp: avail.value.sp ? all.sp : 0,
+    q: avail.value.q ? all.q : 0,
+    r: avail.value.r ? all.r : 0,
+  }
+})
+const na = computed(() => t('ranking.r11.unavailable'))
 
 // Colour by session type (same as R13).
 const KIND_BG: Record<SessionKind, string> = {
@@ -76,9 +87,11 @@ const avgRates = computed(() =>
   }),
 )
 const hitsLabel = (h: Record<SessionKind, number>) =>
-  KINDS_R11.map((k) => KIND_SHORT[k] + ' ' + h[k]).join(', ')
-const pct = (r: number | undefined) => (r == null ? '—' : `${Math.round(r * 100)} %`)
-const tip = (k: SessionKind, h: number) => `${KIND_LONG[k]}: ${h} de ${tries.value[k]}`
+  KINDS_R11.map((k) => KIND_SHORT[k] + ' ' + (avail.value[k] ? h[k] : na.value)).join(', ')
+const pct = (r: number | undefined, k: SessionKind) =>
+  !avail.value[k] ? na.value : r == null ? '—' : `${Math.round(r * 100)} %`
+const tip = (k: SessionKind, h: number) =>
+  avail.value[k] ? `${KIND_LONG[k]}: ${h} de ${tries.value[k]}` : `${KIND_LONG[k]}: ${na.value}`
 const title = computed(() =>
   view.value === 'count' ? 'count' : view.value === 'grid' ? 'grid' : 'me',
 )
@@ -141,7 +154,14 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
             :data-me="r.p.you || undefined"
           >
             <th scope="row" class="px-3 py-2 text-left font-medium">{{ r.p.name }}</th>
-            <td v-for="k in KINDS_R11" :key="k" class="px-3 py-2 text-right">{{ r.hits[k] }}</td>
+            <td
+              v-for="k in KINDS_R11"
+              :key="k"
+              class="px-3 py-2 text-right"
+              :class="{ 'text-muted text-xs': !avail[k] }"
+            >
+              {{ avail[k] ? r.hits[k] : na }}
+            </td>
             <td class="text-heading px-3 py-2 text-right font-bold">{{ r.total }}</td>
           </tr>
         </tbody>
@@ -203,7 +223,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
                 ? 'bg-tint font-bold shadow-[inset_0_0_0_2px_var(--color-focus-ring)]'
                 : ''
             "
-            :title="`${KIND_LONG[k]}: ${r.hits[k]}/${tries[k]}`"
+            :title="tip(k, r.hits[k])"
           >
             <span
               v-if="r.rates[i] != null"
@@ -212,7 +232,9 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
               :style="{ width: `${dotSize(r.rates[i]!)}px`, height: `${dotSize(r.rates[i]!)}px` }"
               aria-hidden="true"
             />
-            <span class="w-10 text-xs tabular-nums">{{ pct(r.rates[i]) }}</span>
+            <span class="text-xs tabular-nums" :class="avail[k] ? 'w-10' : 'text-muted px-1'">{{
+              pct(r.rates[i], k)
+            }}</span>
           </span>
         </template>
       </div>
@@ -257,7 +279,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
             :title="t('ranking.you')"
           />
         </span>
-        <span v-else class="text-muted text-sm">—</span>
+        <span v-else class="text-muted text-sm">{{ avail[k] ? '—' : na }}</span>
         <b
           v-if="mine.rates[i] != null && avgRates[i] != null"
           class="text-sm"

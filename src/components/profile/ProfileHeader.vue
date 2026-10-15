@@ -5,6 +5,7 @@ import PButton from '@/components/ui/PButton.vue'
 import PTag from '@/components/ui/PTag.vue'
 import { memberSince } from '@/lib/profile'
 import ProfileAvatar from './ProfileAvatar.vue'
+import ProfileSoon from './ProfileSoon.vue'
 import { useProfile } from './useProfile'
 
 /** Identity card: avatar, name, «location · since», bio, tags and the link to the settings. */
@@ -64,6 +65,11 @@ const count = computed(() => profile.communities.data?.length ?? 0)
             {{ t('profile.header.communities', { n: count }, count) }}
           </PTag>
         </div>
+        <ProfileSoon
+          :telegram="!props.compact"
+          :champion="!profile.title"
+          :class="props.compact ? 'justify-center' : ''"
+        />
       </div>
       <PButton v-if="!props.compact" to="/ajustes" variant="outline" size="sm" icon="gear">
         {{ t('profile.header.settings') }}

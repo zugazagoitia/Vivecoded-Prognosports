@@ -12,6 +12,7 @@ import Kpi from '@/components/ui/Kpi.vue'
 import PButton from '@/components/ui/PButton.vue'
 import PIcon from '@/components/ui/PIcon.vue'
 import PTag from '@/components/ui/PTag.vue'
+import ProfileSoon from './ProfileSoon.vue'
 import PTitle from '@/components/ui/PTitle.vue'
 import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { useMobileTitle } from '@/composables/useMobileNav'
@@ -39,7 +40,7 @@ import { formatNumber } from '@/utils/numbers'
 /**
  * Public profile of ANOTHER member (U2): identity, the duel with you in the active community's
  * season (GP won, cumulative difference, form) and four compared figures. Read-only.
- * «Campeón/a» and «Nivel» tags are omitted: the API has no data for them (⚠️ U2 spec).
+ * «Campeón/a» and «Nivel» show as «Próximamente» placeholders: the API has no data for them.
  * Props: `user` (the loaded `GET /v2/user/{user}`).
  */
 const props = defineProps<{ user: User }>()
@@ -237,6 +238,7 @@ const kpis = computed(() => {
             })
           }}</PTag>
         </div>
+        <ProfileSoon />
       </div>
       <PButton v-if="headToHead && isMember" :to="h2hTo" icon="right-left" class="max-sm:w-full">
         {{ t('userProfile.header.headToHead') }}

@@ -375,6 +375,7 @@
       "legend": "Tipos de sesión",
       "tableCaption": "Aciertos por tipo de sesión",
       "gridNote": "Tamaño del círculo = % de acierto. Recuadro: el mejor de la comunidad en esa sesión.",
+      "unavailable": "No disponible",
       "diff": "Diferencia",
       "avgTitle": "Media de la comunidad",
       "legendYou": "Tu % de acierto",
