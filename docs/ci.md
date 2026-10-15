@@ -12,7 +12,11 @@ Complementa `docs/deploy.md` (despliegue) y `docs/security.md` (cabeceras/CSP). 
 - Los secretos (`CLOUDFLARE_*`) solo existen en los jobs de deploy y en el paso de wrangler; `SENTRY_AUTH_TOKEN` solo en el paso `vite build` de CI (vacío en forks).
 - `deploy-preview-cleanup.yml` usa `pull_request_target` (necesario para secretos al cerrar una PR) pero solo hace checkout de la rama base y nunca ejecuta código de la PR.
 - **Acción compuesta** `.github/actions/setup`: pnpm + Node (`.nvmrc`) + `pnpm install --frozen-lockfile` (opciones `install: 'false'` y `ignore-scripts: 'true'`). Se llama tras `actions/checkout`. Con `install: 'false'` no se activa `cache: pnpm` (ver AGENTS.md).
-- No se usa `paths-ignore` en CI ni e2e: `ci-ok` y `e2e-ok` son checks obligatorios y un workflow omitido por rutas deja el check «pendiente» para siempre. Si hace falta ahorrar minutos en cambios de solo documentación, hay que hacerlo dentro de los jobs, manteniendo `ci-ok`.
+- No se usa `paths-ignore` en CI ni e2e: `ci-ok` es el check obligatorio y un workflow omitido por rutas deja el check «pendiente» para siempre. Si hace falta ahorrar minutos en cambios de solo documentación, hay que hacerlo dentro de los jobs, manteniendo `ci-ok`.
+
+## E2E dentro de CI
+
+`e2e.yml` es un workflow reutilizable (`workflow_call`) que `ci.yml` invoca en el job `e2e`; `ci-ok` depende de él. Un único check obligatorio (`ci-ok`) cubre lint, tipos, tests, auditoría, build, tamaño y e2e, en PR a `develop` y a `master` y en cada push. La matriz es siempre completa (chromium x2 shards, mobile, flags-off, firefox, webkit; sin cron ni `e2e-ok`). Reintentos: 1; en PR `--max-failures=20`. El concurrency lo define CI (un push nuevo cancela el run entero, e2e incluido).
 
 ## CodeQL
 
@@ -31,4 +35,4 @@ Complementa `docs/deploy.md` (despliegue) y `docs/security.md` (cabeceras/CSP). 
 - Corre en cada push a `develop` y a mano (`workflow_dispatch`). Si `develop` no tiene commits respecto a `master`, no hace nada. Si la PR existe, solo actualiza título y cuerpo (lista de cambios agrupada: épicas, correcciones, otros). Solo usa `gh`; sin auto-merge.
 - **Fusionar siempre con «Create a merge commit», nunca squash**: así `develop` y `master` comparten historia y la siguiente PR no arrastra todo otra vez.
 - Requisito de repositorio: Settings > Actions > General > Workflow permissions > **«Allow GitHub Actions to create and approve pull requests»** (a fecha de este PR está activado).
-- Limitación: las PR creadas con `GITHUB_TOKEN` **no disparan workflows** `pull_request`. El check `ci-ok` sí aparece (es el del último push a `develop`, mismo SHA), pero `e2e-ok` (solo en PR a `master`) no se ejecuta. Opciones: cerrar y reabrir la PR a mano (el evento lo genera un usuario y sí dispara los workflows), o crear un token de GitHub App / PAT de ámbito mínimo y usarlo en el workflow en lugar de `github.token` (decisión del propietario; no incluido).
+- Limitación: las PR creadas con `GITHUB_TOKEN` **no disparan workflows** `pull_request`. Aun así `ci-ok` aparece en la PR (y por tanto los e2e): CI también corre en `push` a `develop` y los checks se asocian al SHA, que es el head de la PR `develop -> master`. No hace falta PAT. Si se quiere un run con evento `pull_request`, cerrar y reabrir la PR a mano.
