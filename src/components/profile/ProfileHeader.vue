@@ -50,7 +50,7 @@ const count = computed(() => profile.communities.data?.length ?? 0)
         <component
           :is="props.compact ? 'p' : 'h1'"
           id="profile-name"
-          class="text-heading m-0 font-bold"
+          class="text-heading m-0 font-bold wrap-anywhere"
           :class="props.compact ? 'text-base' : 'text-[28px] leading-9 max-[640px]:text-2xl'"
         >
           {{ name }}

@@ -47,13 +47,15 @@ export function bestAndAverage<T extends { percentile: number }>(
   return { best, average: rows.length ? Math.round(sum / rows.length) : 0 }
 }
 
-/** First letter of the first two words, upper case. */
+const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+
+/** First grapheme (not UTF-16 unit, so emoji stay whole) of the first two words, upper case. */
 export function initials(name: string): string {
   return name
     .trim()
     .split(/\s+/)
     .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
+    .map((w) => (segmenter.segment(w)[Symbol.iterator]().next().value?.segment ?? '').toUpperCase())
     .join('')
 }
 

@@ -68,11 +68,11 @@ const members = computed(() => props.community.membersAmount)
         <li v-if="members != null">
           <PTag>{{ t('players', { n: members }, members) }}</PTag>
         </li>
-        <li v-if="created">
-          <PTag>{{ created }}</PTag>
+        <li v-if="created" class="max-w-full min-w-0">
+          <PTag :title="created">{{ created }}</PTag>
         </li>
-        <li v-if="competition">
-          <PTag>{{ competition }}</PTag>
+        <li v-if="competition" class="max-w-full min-w-0">
+          <PTag :title="competition">{{ competition }}</PTag>
         </li>
       </ul>
     </div>

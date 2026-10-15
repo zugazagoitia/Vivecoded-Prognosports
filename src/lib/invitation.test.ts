@@ -15,9 +15,9 @@ describe('invitationState', () => {
     expect(invitationState({ community: { userIsMember: true } })).toBe('member')
     expect(invitationState({ community: { userIsMember: false }, isMember: true })).toBe('member')
   })
-  it('unknown code -> expired', () => {
-    expect(invitationState({ community: undefined })).toBe('expired')
-    expect(invitationState({ community: null })).toBe('expired')
+  it('unknown code -> invalid', () => {
+    expect(invitationState({ community: undefined })).toBe('invalid')
+    expect(invitationState({ community: null })).toBe('invalid')
   })
   it('otherwise valid', () => {
     expect(invitationState({ community: { userIsMember: false } })).toBe('valid')

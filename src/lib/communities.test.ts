@@ -64,6 +64,9 @@ describe('bestAndAverage', () => {
 describe('text helpers', () => {
   it('initials', () => {
     expect(initials('Amigos del paddock')).toBe('AD')
+    expect(initials('🏁🏁🏁')).toBe('🏁')
+    expect(initials('👨‍👩‍👧 club')).toBe('👨‍👩‍👧C')
+    expect(initials('日Ω')).toBe('日')
     expect(initials('Oficina F1')).toBe('OF')
     expect(initials('Peña Madring')).toBe('PM')
     expect(initials('  Solo ')).toBe('S')

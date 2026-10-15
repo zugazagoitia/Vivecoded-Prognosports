@@ -16,6 +16,8 @@ const props = defineProps<{
   totalRounds: number
   sprint: boolean
   weekend: WeekendState
+  /** The weekend is over but no session has official results: «Sin resultados», not «Disputado». */
+  noResults?: boolean
   /** «Marina Bay Street Circuit · 9–11 de octubre de 2026» (desktop) or the short mobile one. */
   subtitle: string
   previous?: GrandPrix
@@ -50,7 +52,9 @@ const label = (g: GrandPrix) => gpShortName(g)
         <PTag v-if="weekend === 'live'" color="warn" :icon="mobile ? undefined : 'clock'">{{
           t('gp.weekend.live')
         }}</PTag>
-        <PTag v-else-if="weekend === 'done'">{{ t('gp.weekend.done') }}</PTag>
+        <PTag v-else-if="weekend === 'done'">{{
+          noResults ? t('gp.weekend.noResults') : t('gp.weekend.done')
+        }}</PTag>
       </div>
       <PTitle v-if="!mobile">{{ t('gp.title', { name }) }}</PTitle>
       <h1 v-else class="sr-only">{{ t('gp.title', { name }) }}</h1>

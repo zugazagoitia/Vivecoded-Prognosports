@@ -18,6 +18,12 @@
       "sentence": "{set}: {exact} puntos por acierto exacto, {near} a una posición y {far} a dos.",
       "sentenceNoSet": "{exact} puntos por acierto exacto, {near} a una posición y {far} a dos."
     },
+    "invalid": {
+      "tag": "Código no válido",
+      "title": "No encontramos esta invitación",
+      "text": "Revisa que el código esté bien escrito o pídele el enlace a quien te invitó.",
+      "retry": "Probar con un código"
+    },
     "expired": {
       "tag": "Enlace caducado",
       "title": "Esta invitación ya no funciona",

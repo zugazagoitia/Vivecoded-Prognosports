@@ -82,8 +82,7 @@ describe('countdown and closing', () => {
     expect(formatClosing(session, close - before)).toBe(expected)
   })
 
-  // TODO(#162): a session without date makes the countdown NaN. Expected: zeros.
-  test.fails('a session without date yields a zero countdown, not NaN', () => {
+  test('a session without date yields a zero countdown, not NaN', () => {
     const parts = countdownParts({ date: null }, 0)
     expect(Number.isNaN(parts.d) || Number.isNaN(parts.h) || Number.isNaN(parts.m)).toBe(false)
   })
@@ -206,10 +205,10 @@ describe('standing queries', () => {
     expect(sortedAt(s, 1).map((u) => u.name)).toEqual(['carla', 'beto', 'ana'])
   })
 
-  test('positionAt shares the better place on ties; unknown user is undefined', () => {
+  test('positionAt shares the place on ties (dense); unknown user is undefined', () => {
     expect(positionAt(s, 1, 0)).toBe(1)
     expect(positionAt(s, 2, 0)).toBe(1)
-    expect(positionAt(s, 3, 0)).toBe(3)
+    expect(positionAt(s, 3, 0)).toBe(2)
     expect(positionAt(s, 99, 0)).toBeUndefined()
     expect(positionAt(s, 1, 9)).toBe(1)
   })
@@ -285,10 +284,22 @@ describe('KPIs', () => {
     expect(buildKpis(s, 2, 0).won).toBe(0)
   })
 
-  // TODO(#162): a GP where everybody scored 0 counts as «won» for every player.
-  test.fails('a GP with 0 points for everyone is not a win', () => {
+  test('a GP with 0 points for everyone is not a win', () => {
     const s = buildStanding({ '1': [row(1, 'a', 0, 0), row(2, 'b', 0, 0)] }, [gp(1, 1)])
     expect(miniBars(s, 1)[0]!.won).toBe(false)
+  })
+
+  test('home and ranking agree: dense places so a tie does not hide a move', () => {
+    const s = buildStanding(
+      {
+        '1': [row(1, 'a', 9, 9), row(2, 'b', 0, 0), row(3, 'c', 0, 0)],
+        '2': [row(1, 'a', 9, 18), row(2, 'b', 5, 5), row(3, 'c', 0, 0)],
+      },
+      [gp(1, 1), gp(2, 2)],
+    )
+    expect(positionAt(s, 3, 0)).toBe(2)
+    expect(positionAt(s, 3, 1)).toBe(3)
+    expect(buildKpis(s, 3).move).toEqual({ dir: 'dn', n: 1 })
   })
 
   test('movement and movementText', () => {

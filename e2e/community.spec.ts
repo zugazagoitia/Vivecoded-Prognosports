@@ -74,7 +74,9 @@ test.describe('Community home (H5)', () => {
     await page.goto(OWN)
     const button = page.getByRole('button', { name: 'Salir de la comunidad' })
     await expect(button).toBeDisabled()
-    await expect(button).toHaveAccessibleDescription(/Eres el creador: transfiere o elimina/)
+    await expect(button).toHaveAccessibleDescription(
+      /Eres el creador de la comunidad y no puedes salir/,
+    )
   })
 
   test('unknown community shows its own 404, a non-member is redirected', async ({

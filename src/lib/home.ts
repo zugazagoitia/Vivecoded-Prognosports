@@ -4,6 +4,7 @@ import type { ButtonVariant } from '@/components/ui/PButton.vue'
 import type { TagColor } from '@/components/ui/PTag.vue'
 import { t } from '@/i18n'
 import { CLOSING_SOON_MS, formatCloseIn, pointsOfSession, type GpAction } from '@/lib/gp'
+import { rankDescending } from '@/lib/community'
 import { CLOSE_MARGIN_MS } from '@/utils/dates'
 import { formatNumber, formatOrdinal, formatSigned } from '@/utils/numbers'
 
@@ -40,9 +41,15 @@ export function longToday(now: number, tz: string): string {
 export const closeAt = (s: Pick<RaceSession, 'date'>): number =>
   Date.parse(s.date ?? '') - CLOSE_MARGIN_MS
 
+/** Whole minutes left until the closing; 0 when already closed or the session has no valid date. */
+const minutesLeft = (s: Pick<RaceSession, 'date'>, now: number): number => {
+  const left = Math.floor((closeAt(s) - now) / MIN)
+  return Number.isFinite(left) ? Math.max(0, left) : 0
+}
+
 /** «1 d 3 h», «1 h 32 min», «45 min»: time left until the closing (session − 5 min). */
 export function formatClosing(session: Pick<RaceSession, 'date'>, now: number): string {
-  return formatCloseIn(Math.max(0, Math.floor((closeAt(session) - now) / MIN)))
+  return formatCloseIn(minutesLeft(session, now))
 }
 
 export interface CountdownParts {
@@ -51,7 +58,7 @@ export interface CountdownParts {
   m: number
 }
 export function countdownParts(session: Pick<RaceSession, 'date'>, now: number): CountdownParts {
-  const mins = Math.max(0, Math.floor((closeAt(session) - now) / MIN))
+  const mins = minutesLeft(session, now)
   return { d: Math.floor(mins / 1440), h: Math.floor((mins % 1440) / 60), m: mins % 60 }
 }
 
@@ -228,12 +235,15 @@ export function sortedAt(s: Standing, i: number): StandingUser[] {
   return [...s.users].sort(byTotal(i))
 }
 
-/** Position (1 = leader) of a user after GP `i`; ties share the better position. */
+/**
+ * Position (1 = leader) of a user after GP `i`. Dense ranking, like the ranking screens
+ * (`rankDescending`): ties share the place and the next one follows (1, 2, 2, 3), so Inicio and
+ * Ranking show the same place and movement.
+ */
 export function positionAt(s: Standing, userId: number, i: number): number | undefined {
   const me = s.users.find((u) => u.id === userId)
   if (!me) return undefined
-  const mine = me.cum[i] ?? 0
-  return 1 + s.users.filter((u) => (u.cum[i] ?? 0) > mine).length
+  return rankDescending(s.users.map((u) => ({ id: u.id, value: u.cum[i] ?? 0 }))).get(userId)
 }
 
 // --- KPIs ------------------------------------------------------------------------------------
@@ -588,8 +598,6 @@ export function miniBars(s: Standing, meId: number | undefined): MiniBar[] {
     gp,
     points: pts[i]!,
     height: max > 0 ? Math.round((pts[i]! / max) * 100) : 0,
-    won:
-      me.scores[i]?.pointsInGP != null &&
-      s.users.every((u) => (u.scores[i]?.pointsInGP ?? -Infinity) <= pts[i]!),
+    won: pts[i]! > 0 && s.users.every((u) => (u.scores[i]?.pointsInGP ?? -Infinity) <= pts[i]!),
   }))
 }

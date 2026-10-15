@@ -98,9 +98,9 @@ describe('classified', () => {
 })
 
 describe('rankWithTies', () => {
-  it('shares the place when points are equal and skips the next', () => {
+  it('shares the place when points are equal (dense ranking)', () => {
     const rows = [31, 28, 28, 20].map((points) => ({ hasPick: true, points }))
-    expect(rankWithTies(rows)).toEqual(['1.º', '2.º', '2.º', '4.º'])
+    expect(rankWithTies(rows)).toEqual(['1.º', '2.º', '2.º', '3.º'])
   })
   it('gives «—» to players without a prediction', () => {
     expect(

@@ -10,7 +10,8 @@
     "sprintShort": "Sprint",
     "weekend": {
       "live": "En curso",
-      "done": "Disputado"
+      "done": "Disputado",
+      "noResults": "Sin resultados"
     },
     "tz": {
       "label": "Zona horaria",

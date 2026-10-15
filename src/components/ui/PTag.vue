@@ -23,12 +23,12 @@ const colors: Record<TagColor, string> = {
 <template>
   <span
     :class="[
-      'inline-flex items-center gap-1 px-2 py-0.5 text-xs leading-4 font-medium whitespace-nowrap',
+      'inline-flex max-w-full items-center gap-1 px-2 py-0.5 text-xs leading-4 font-medium whitespace-nowrap',
       pill ? 'rounded-full' : 'rounded-sm',
       colors[color],
     ]"
   >
     <PIcon v-if="icon" :name="icon" :size="16" />
-    <slot />
+    <span class="min-w-0 truncate"><slot /></span>
   </span>
 </template>

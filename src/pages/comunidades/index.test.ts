@@ -1,6 +1,7 @@
 import { screen, waitFor, within } from '@testing-library/vue'
 import { http, HttpResponse } from 'msw'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { toaster } from '@/composables/useToast'
 import { fail, ok } from '@/mocks/envelope'
 import { MOCK_TOKEN, REFERENCE_NOW } from '@/mocks/fixtures'
 import { server } from '@/mocks/server'
@@ -48,6 +49,15 @@ async function open_(list: unknown[] = [mine, open, third], path = '/comunidades
 const card = (name: string) => screen.getByRole('heading', { level: 3, name }).closest('article')!
 
 describe('Mis comunidades', () => {
+  it('explains a redirect from a screen that needs a community', async () => {
+    const info = vi.spyOn(toaster, 'info')
+    const { router } = await open_(undefined, '/comunidades?aviso=sin-comunidad')
+    await waitFor(() =>
+      expect(info).toHaveBeenCalledWith(expect.stringMatching(/necesita una comunidad/)),
+    )
+    await waitFor(() => expect(router.currentRoute.value.query.aviso).toBeUndefined())
+  })
+
   it('lists the communities with their situation', async () => {
     await open_()
     expect(await screen.findByRole('heading', { level: 1, name: 'Comunidades' })).toBeTruthy()
