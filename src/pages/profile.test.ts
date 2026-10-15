@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { CommunitySchema } from '@/api/schemas'
 import { setFlagOverride } from '@/flags'
 import { ok } from '@/mocks/envelope'
-import { MOCK_TOKEN, users } from '@/mocks/fixtures'
+import { MOCK_TOKEN, toWireUser, users } from '@/mocks/fixtures'
 import { server } from '@/mocks/server'
 import { useCommunityStore } from '@/stores/community'
 import { useSessionStore } from '@/stores/session'
@@ -123,6 +123,25 @@ describe('Mi perfil (U1) desktop', () => {
     await waitFor(() =>
       expect(screen.getAllByRole('button', { name: /Reintentar/ }).length).toBeGreaterThan(0),
     )
+  })
+
+  it('shows «Próximamente» placeholders for Telegram, level/XP and Campeón/a', async () => {
+    await open()
+    await screen.findByRole('heading', { level: 1, name: 'ana' })
+    expect(screen.getByText('Telegram · Próximamente')).toBeTruthy()
+    expect(screen.getByText('Nivel y XP · Próximamente')).toBeTruthy()
+    expect(screen.getByText('Campeón/a · Próximamente')).toBeTruthy()
+  })
+
+  it('shows the full username, not its first word', async () => {
+    server.use(
+      http.get('*/v2/user/:id', () =>
+        ok(toWireUser({ ...users[0]!, username: 'ana maría-lópez' })),
+      ),
+    )
+    const result = await open()
+    useSessionStore(result.pinia).user = { ...users[0]!, username: 'ana maría-lópez' } as never
+    expect(await screen.findByRole('heading', { level: 1, name: 'ana maría-lópez' })).toBeTruthy()
   })
 
   it('another user is the U2 screen, not the own profile', async () => {

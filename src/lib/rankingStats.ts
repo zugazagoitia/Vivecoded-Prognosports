@@ -504,6 +504,25 @@ export function seasonByKind(
   return out
 }
 
+/**
+ * Session types the backend returns hit data for: at least one player has a `hitsBySession`
+ * entry mapped to the type. The rest are «No disponible», never 0.
+ */
+export function availableKinds(
+  players: readonly Pick<RankPlayer, 'hitsBySession'>[],
+  model: Pick<RankModel, 'played'>,
+): Record<SessionKind, boolean> {
+  const out = { cs: false, sp: false, q: false, r: false }
+  model.played.forEach((gp, g) => {
+    for (const p of players)
+      for (const key of Object.keys(p.hitsBySession[g] ?? {})) {
+        const k = kindOfKey(key, gp.sessions)
+        if (k) out[k] = true
+      }
+  })
+  return out
+}
+
 /** Positions predicted in a session of a GP according to the rule set. */
 export function predictedIn(
   gp: Pick<RankGp, 'sessions'>,
