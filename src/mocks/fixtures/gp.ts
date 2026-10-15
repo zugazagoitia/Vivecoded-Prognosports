@@ -10,54 +10,54 @@ import { community, tippsByUser, users } from './index'
 
 /**
  * Data of the GP weekend (G2): the sprint weekend of round 6 (Miami in the shared fixtures).
- * Sessions of GP 6: Q (id 60), SR (61, sprint race) and R (62). At `WEEKEND_NOW` the sprint has
+ * Sessions of GP 6: Q (id 1), SR (4, sprint race) and R (2), shared with every GP. At `WEEKEND_NOW` the sprint has
  * closed and has results, the qualifying closes in 2 h 25 min and the race is still far.
  */
 export const WEEKEND_GP = 6
 export const WEEKEND_SEASON = 10
 export const WEEKEND_NOW = '2026-04-11T09:30:00.000Z'
-export const WEEKEND_SESSIONS = { q: 60, sprint: 61, race: 62 } as const
+export const WEEKEND_SESSIONS = { q: 1, sprint: 4, race: 2 } as const
 
 type DriverInput = z.input<typeof DriverSchema>
 
 const ROSTER: [code: string, first: string, last: string, color: string][] = [
-  ['NOR', 'Lando', 'Norris', '#ff8000'],
-  ['RUS', 'George', 'Russell', '#27c4b0'],
-  ['LEC', 'Charles', 'Leclerc', '#d92b2b'],
-  ['VER', 'Max', 'Verstappen', '#3671c6'],
-  ['PIA', 'Oscar', 'Piastri', '#ff8000'],
-  ['HAM', 'Lewis', 'Hamilton', '#d92b2b'],
-  ['ANT', 'Kimi', 'Antonelli', '#27c4b0'],
-  ['ALO', 'Fernando', 'Alonso', '#229971'],
-  ['GAS', 'Pierre', 'Gasly', '#0093cc'],
-  ['HUL', 'Nico', 'Hülkenberg', '#52e252'],
-  ['SAI', 'Carlos', 'Sainz', '#64c4ff'],
-  ['ALB', 'Alexander', 'Albon', '#64c4ff'],
-  ['TSU', 'Yuki', 'Tsunoda', '#3671c6'],
-  ['LAW', 'Liam', 'Lawson', '#6692ff'],
-  ['OCO', 'Esteban', 'Ocon', '#b6babd'],
-  ['BEA', 'Oliver', 'Bearman', '#b6babd'],
-  ['STR', 'Lance', 'Stroll', '#229971'],
-  ['HAD', 'Isack', 'Hadjar', '#6692ff'],
-  ['PER', 'Sergio', 'Pérez', '#9b9b9b'],
-  ['BOT', 'Valtteri', 'Bottas', '#9b9b9b'],
+  ['NOR', 'Lando', 'Norris', 'ff8000'],
+  ['RUS', 'George', 'Russell', '27c4b0'],
+  ['LEC', 'Charles', 'Leclerc', 'd92b2b'],
+  ['VER', 'Max', 'Verstappen', '3671c6'],
+  ['PIA', 'Oscar', 'Piastri', 'ff8000'],
+  ['HAM', 'Lewis', 'Hamilton', 'd92b2b'],
+  ['ANT', 'Kimi', 'Antonelli', '27c4b0'],
+  ['ALO', 'Fernando', 'Alonso', '229971'],
+  ['GAS', 'Pierre', 'Gasly', '0093cc'],
+  ['HUL', 'Nico', 'Hülkenberg', '52e252'],
+  ['SAI', 'Carlos', 'Sainz', '64c4ff'],
+  ['ALB', 'Alexander', 'Albon', '64c4ff'],
+  ['TSU', 'Yuki', 'Tsunoda', '3671c6'],
+  ['LAW', 'Liam', 'Lawson', '6692ff'],
+  ['OCO', 'Esteban', 'Ocon', 'b6babd'],
+  ['BEA', 'Oliver', 'Bearman', 'b6babd'],
+  ['STR', 'Lance', 'Stroll', '229971'],
+  ['HAD', 'Isack', 'Hadjar', '6692ff'],
+  ['PER', 'Sergio', 'Pérez', '9b9b9b'],
+  ['BOT', 'Valtteri', 'Bottas', '9b9b9b'],
 ]
 
 export const drivers: DriverInput[] = ROSTER.map(([code, firstname, lastname, color], i) =>
   defineFixture('driver', DriverSchema, { id: 100 + i, code, firstname, lastname, color }),
 )
 const TEAMS: Record<string, { id: number; name: string }> = {
-  '#ff8000': { id: 1, name: 'McLaren' },
-  '#27c4b0': { id: 2, name: 'Mercedes' },
-  '#d92b2b': { id: 3, name: 'Ferrari' },
-  '#3671c6': { id: 4, name: 'Red Bull' },
-  '#229971': { id: 5, name: 'Aston Martin' },
-  '#0093cc': { id: 6, name: 'Alpine' },
-  '#52e252': { id: 7, name: 'Audi' },
-  '#64c4ff': { id: 8, name: 'Williams' },
-  '#6692ff': { id: 9, name: 'Racing Bulls' },
-  '#b6babd': { id: 10, name: 'Haas' },
-  '#9b9b9b': { id: 11, name: 'Cadillac' },
+  ff8000: { id: 1, name: 'McLaren' },
+  '27c4b0': { id: 2, name: 'Mercedes' },
+  d92b2b: { id: 3, name: 'Ferrari' },
+  '3671c6': { id: 4, name: 'Red Bull' },
+  '229971': { id: 5, name: 'Aston Martin' },
+  '0093cc': { id: 6, name: 'Alpine' },
+  '52e252': { id: 7, name: 'Audi' },
+  '64c4ff': { id: 8, name: 'Williams' },
+  '6692ff': { id: 9, name: 'Racing Bulls' },
+  b6babd: { id: 10, name: 'Haas' },
+  '9b9b9b': { id: 11, name: 'Cadillac' },
 }
 const NUMBERS = [4, 63, 16, 1, 81, 44, 12, 14, 10, 27, 55, 23, 22, 30, 31, 87, 18, 6, 11, 77]
 
@@ -70,7 +70,13 @@ export function withTeam(d: DriverInput, i: number): DriverInput {
   return defineFixture('driver', DriverSchema, {
     ...d,
     number: NUMBERS[i],
-    team: { id: team.id, name: team.name, teamcolor: d.color },
+    team: {
+      id: team.id,
+      name: team.name,
+      longname: `${team.name} Formula One Team`,
+      carname: `${team.name.slice(0, 3).toUpperCase()}-26`,
+      teamcolor: d.color,
+    },
   })
 }
 
@@ -181,6 +187,10 @@ export function weekendPoints() {
     user,
     pointsInGP: SPRINT_POINTS[i],
     pointsBySession: { [String(WEEKEND_SESSIONS.sprint)]: SPRINT_POINTS[i] },
+    bonusPoints: 0,
+    standings: i + 1,
+    hitPercentageInGP: 0.4,
+    hitPercentageBySession: { [String(WEEKEND_SESSIONS.sprint)]: 0.4 },
   }))
 }
 
@@ -213,6 +223,8 @@ export const weekendRuleset = {
     pointsByPreviousOfPreviousPosition: Object.fromEntries(
       Object.values(WEEKEND_SESSIONS).map((s) => [String(s), 1]),
     ),
+    pointsIfIsNotInPodium: {},
+    pointsIfIsNotInResults: {},
     pointsByTopScorer: 5,
   },
 }

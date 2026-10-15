@@ -109,8 +109,8 @@ export async function mockApi(page: Page): Promise<void> {
   )
   /** Usernames created through the mocked `POST /auth/register`. */
   const registered = new Set<string>()
-  /** Predictions saved through the mocked `POST .../tipps/{community}` (G3), by session id. */
-  const savedTipps = new Map<number, Record<string, unknown[]>>()
+  /** Predictions saved through the mocked `POST .../tipps/{community}` (G3), by `gp:session`. */
+  const savedTipps = new Map<string, Record<string, unknown[]>>()
   /** The unverified mock user turns verified after a successful verify-email. */
   let verified = false
   await page.route('**/v2/**', async (route) => {
@@ -243,35 +243,41 @@ export async function mockApi(page: Page): Promise<void> {
     if (method === 'GET' && /^\/gps\/[^/]+\/[^/]+\/[^/]+\/drivers$/.test(path)) {
       return authed ? json(route, 200, gpDrivers) : unauthorized(route)
     }
-    const tippsWrite = /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/tipps\/[^/]+$/.exec(path)
+    const tippsWrite = /^\/gps\/[^/]+\/[^/]+\/([^/]+)\/sessions\/(\d+)\/tipps\/[^/]+$/.exec(path)
     if (method === 'POST' && tippsWrite) {
       if (!authed) return unauthorized(route)
-      savedTipps.set(Number(tippsWrite[1]), tippsFromBody(request.postDataJSON() as TippsBody))
+      savedTipps.set(
+        `${tippsWrite[1]}:${tippsWrite[2]}`,
+        tippsFromBody(request.postDataJSON() as TippsBody),
+      )
       return json(route, 200, 'ok')
     }
-    const sessionPath = /^\/gps\/[^/]+\/[^/]+\/[^/]+\/sessions\/(\d+)\/(results|grid|tipps)/.exec(
+    const sessionPath = /^\/gps\/[^/]+\/[^/]+\/([^/]+)\/sessions\/(\d+)\/(results|grid|tipps)/.exec(
       path,
     )
     if (method === 'GET' && sessionPath) {
       if (!authed) return unauthorized(route)
-      const session = Number(sessionPath[1])
+      const gp = Number(sessionPath[1])
+      const session = Number(sessionPath[2])
+      // Session ids are shared by every GP: only the weekend GP has data.
+      const weekend = gp === WEEKEND_GP
       if (
-        sessionPath[2] === 'tipps' &&
+        sessionPath[3] === 'tipps' &&
         !path.endsWith('/calculations') &&
-        savedTipps.has(session)
+        savedTipps.has(`${gp}:${session}`)
       ) {
-        return json(route, 200, savedTipps.get(session))
+        return json(route, 200, savedTipps.get(`${gp}:${session}`))
       }
-      if (sessionPath[2] === 'results') return json(route, 200, results(session))
-      if (sessionPath[2] === 'grid') return json(route, 200, grid(session))
+      if (sessionPath[3] === 'results') return json(route, 200, weekend ? results(session) : [])
+      if (sessionPath[3] === 'grid') return json(route, 200, weekend ? grid(session) : [])
       return json(
         route,
         200,
         path.endsWith('/calculations')
-          ? session === WEEKEND_SESSIONS.sprint
+          ? weekend && session === WEEKEND_SESSIONS.sprint
             ? calculations
             : calculationsFor({}, 0)
-          : tipps(session),
+          : tipps(weekend ? session : 0),
       )
     }
     // Real API: `/rulesets/{community}/{competition}/{season}` (without GP) does not exist: 404 text.
@@ -336,7 +342,9 @@ export async function mockApi(page: Page): Promise<void> {
           }),
         )
       }
-      return authed ? json(route, 200, toWireUser(users[0]!)) : unauthorized(route)
+      return authed
+        ? json(route, 200, toWireUser({ ...users[0]!, currentCommunity: community }))
+        : unauthorized(route)
     }
     // Public profile of another user (U2), by id or username.
     if (method === 'GET' && /^\/user\/[^/]+$/.test(path)) {

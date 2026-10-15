@@ -67,7 +67,7 @@ describe('Parrilla y consenso (G4)', () => {
       screen
         .getByRole('link', { name: 'Ver la tabla de pronósticos y puntos' })
         .getAttribute('href'),
-    ).toBe(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/61`)
+    ).toBe(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/4`)
     expect(screen.getByText('Visible porque la sesión ya cerró.')).toBeTruthy()
   })
 
@@ -150,7 +150,7 @@ describe('Parrilla y consenso (G4)', () => {
     expect(screen.getByText(/^Gran Premio de Miami · Clasificación \(abierta\)/)).toBeTruthy()
     expect(screen.getByText(/Se verán hoy a las 13:55 \(tu hora\)/)).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Hacer mi pronóstico' }).getAttribute('href')).toBe(
-      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/60`,
+      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/1`,
     )
     expect(screen.queryByText('Piloto más votado al 1.º')).toBeNull()
     await screen.findByText('Aún no hay parrilla de salida').catch(() => undefined)
@@ -193,7 +193,7 @@ describe('Parrilla y consenso (G4)', () => {
   })
 
   it('unknown GP', async () => {
-    await open(61, 9999)
+    await open(4, 9999)
     expect(await screen.findByText('Este Gran Premio no existe')).toBeTruthy()
   })
 
@@ -202,6 +202,6 @@ describe('Parrilla y consenso (G4)', () => {
     await screen.findByRole('button', { name: 'P1 Lando Norris' })
     const group = screen.getByRole('group', { name: 'Sesión' })
     await user.click(within(group).getByRole('button', { name: 'Carrera' }))
-    await waitFor(() => expect(router.currentRoute.value.path).toBe(`${BASE}/62`))
+    await waitFor(() => expect(router.currentRoute.value.path).toBe(`${BASE}/2`))
   })
 })

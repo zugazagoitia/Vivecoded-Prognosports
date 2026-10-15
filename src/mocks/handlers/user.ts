@@ -7,7 +7,7 @@ export const userHandlers = [
     if (request.headers.get('Authorization') !== `Bearer ${MOCK_TOKEN}`) {
       return unauthorized()
     }
-    return ok(toWireUser(users[0]!))
+    return ok(toWireUser({ ...users[0]!, currentCommunity: community }))
   }),
   http.get('*/v2/user', () => ok(users.map(toWireUser))),
   http.get('*/v2/user/:id/communities', () => ok([community])),
