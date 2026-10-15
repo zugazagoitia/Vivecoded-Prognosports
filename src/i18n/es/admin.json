@@ -231,8 +231,9 @@
       "resultsOk": "Resultados guardados",
       "resultsNone": "Sin resultados: el GP aún no tiene sesiones"
     },
-    "visible": "Visible para los usuarios",
-    "visibleHelp": "Por confirmar: la API no tiene un campo de visibilidad.",
+    "suspended": "Suspendido",
+    "suspendedSwitch": "Gran Premio suspendido",
+    "suspendedHelp": "Un GP suspendido no admite pronósticos y no cuenta como disputado.",
     "data": {
       "title": "Datos",
       "name": "Nombre",

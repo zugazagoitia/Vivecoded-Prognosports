@@ -114,7 +114,7 @@ interface Form {
   variant: string
   laps: string
   sprint: boolean
-  visible: boolean
+  suspended: boolean
 }
 const blank = (): Form => ({
   name: '',
@@ -124,7 +124,7 @@ const blank = (): Form => ({
   variant: '',
   laps: '',
   sprint: false,
-  visible: true,
+  suspended: false,
 })
 const form = reactive<Form>(blank())
 const base = ref<Form>(blank())
@@ -141,7 +141,7 @@ function fromGp(): Form {
     variant: g.variant?.id != null ? String(g.variant.id) : '',
     laps: g.laps != null ? String(g.laps) : '',
     sprint: isSprintWeekend(g),
-    visible: !g.suspended,
+    suspended: g.suspended === true,
   }
 }
 watch(
@@ -195,13 +195,14 @@ async function save() {
   if (!parsed.value.success) return
   const d = parsed.value.data
   if (!isNew.value) {
-    const changes: Record<string, string | number> = {}
+    const changes: Record<string, string | number | boolean> = {}
     if (form.name !== base.value.name) changes.name = d.name
     if (form.code !== base.value.code) changes.code = d.code
     if (form.round !== base.value.round) changes.round = d.round
     if (form.laps !== base.value.laps) changes.laps = d.laps
     if (form.circuit !== base.value.circuit) changes.circuit = d.circuit
     if (form.variant !== base.value.variant) changes.variant = d.variant
+    if (form.suspended !== base.value.suspended) changes.suspended = form.suspended
     if (Object.keys(changes).length) await update.mutateAsync(changes).catch(() => undefined)
     if (!update.isError.value) base.value = { ...form }
     return
@@ -249,7 +250,7 @@ const resultsKnown = computed(() => sessions.value.every((s) => haveResults.valu
 const resultsDone = computed(
   () => sessions.value.length > 0 && groups.value.pending.length === 0 && resultsKnown.value,
 )
-const published = computed(() => form.visible && sessions.value.length > 0)
+const published = computed(() => !form.suspended && sessions.value.length > 0)
 const status = computed(() =>
   gp.value
     ? sectionStatus(
@@ -381,7 +382,8 @@ const sectionClass = 'scroll-mt-20'
       "
     >
       <template v-if="gp" #default>
-        <PTag :color="published ? 'ok' : 'gray'">{{
+        <PTag v-if="gp.suspended" color="gray">{{ t('admin.gpEdit.suspended') }}</PTag>
+        <PTag v-else :color="published ? 'ok' : 'gray'">{{
           t(published ? 'admin.gpEdit.published' : 'admin.gpEdit.draft')
         }}</PTag>
         <PButton variant="outline" size="sm" :to="gpPath(gp)" :icon="iconFor('visibility')">
@@ -451,8 +453,8 @@ const sectionClass = 'scroll-mt-20'
               <ValidationList :items="checks" />
             </div>
             <div>
-              <PSwitch v-model="form.visible" :label="t('admin.gpEdit.visible')" disabled />
-              <p class="text-muted max-w-60 text-xs">{{ t('admin.gpEdit.visibleHelp') }}</p>
+              <PSwitch v-model="form.suspended" :label="t('admin.gpEdit.suspendedSwitch')" />
+              <p class="text-muted max-w-60 text-xs">{{ t('admin.gpEdit.suspendedHelp') }}</p>
             </div>
           </div>
         </PCard>

@@ -47,7 +47,8 @@ const label = (g: GrandPrix) => gpShortName(g)
         <PTag v-if="sprint" color="info">{{
           mobile ? t('gp.sprintShort') : t('gp.withSprint')
         }}</PTag>
-        <PTag v-if="weekend === 'live'" color="warn" :icon="mobile ? undefined : 'clock'">{{
+        <PTag v-if="gp.suspended" color="gray">{{ t('gp.suspended.tag') }}</PTag>
+        <PTag v-else-if="weekend === 'live'" color="warn" :icon="mobile ? undefined : 'clock'">{{
           t('gp.weekend.live')
         }}</PTag>
         <PTag v-else-if="weekend === 'done'">{{ t('gp.weekend.done') }}</PTag>

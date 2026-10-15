@@ -58,7 +58,7 @@ export async function createGpInSeason(
 /**
  * Edits a GP (verified against a local backend; the spec documents none of this):
  * `PUT /v2/gps/{id}` changes `name` and `code`; `PUT /v2/gps/{comp}/{season}/{id}` changes the
- * season data `round`, `laps`, `circuit` and `variant` (ids as strings). Only what changed is sent.
+ * season data `round`, `laps`, `suspended` (boolean), `circuit` and `variant` (ids as strings). Only what changed is sent.
  */
 export async function updateGpData(
   comp: Id,
@@ -71,6 +71,7 @@ export async function updateGpData(
     laps?: number
     circuit?: Id
     variant?: Id
+    suspended?: boolean
   },
   signal?: AbortSignal,
 ) {

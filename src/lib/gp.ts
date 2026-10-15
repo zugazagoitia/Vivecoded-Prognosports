@@ -447,7 +447,8 @@ export function formatDateRange(dates: readonly Time[], tz: string, short = fals
 /** Closing within this time (and no prediction yet) is flagged as urgent. */
 export const CLOSING_SOON_MS = 24 * 3_600_000
 
-export type StatusKind = 'scored' | 'scoredNoPrediction' | 'closed' | 'closing' | 'done' | 'open'
+export type StatusKind =
+  'scored' | 'scoredNoPrediction' | 'closed' | 'closing' | 'done' | 'open' | 'suspended'
 
 export interface SessionStatus {
   kind: StatusKind
@@ -469,9 +470,12 @@ export interface StatusInput {
   closesInMs?: number
   /** It is the next open session to close. */
   isNext: boolean
+  /** The whole GP is suspended: it takes no predictions even if the session is in the future. */
+  suspended?: boolean
 }
 
 export function sessionStatus(i: StatusInput): SessionStatus {
+  if (i.suspended && i.state === 'open') return { kind: 'suspended', color: 'gray', bar: '' }
   if (i.state === 'scored') {
     return i.hasPrediction
       ? { kind: 'scored', color: 'gray', bar: 'done', points: i.points ?? undefined }
@@ -510,6 +514,8 @@ export function statusText(s: SessionStatus): string {
       return t('gp.status.closing', { time: formatCloseIn(s.minutes ?? 0) })
     case 'done':
       return t('gp.status.done')
+    case 'suspended':
+      return t('gp.status.suspended')
     default:
       return t('gp.status.open')
   }
