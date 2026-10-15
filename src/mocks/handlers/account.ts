@@ -1,5 +1,5 @@
 import { http } from 'msw'
-import { fail, ok } from '../envelope'
+import { fail, invalidCredentials, ok } from '../envelope'
 import { MOCK_PASSWORD, toWireUser } from '../fixtures'
 import {
   ACCOUNT_CHANNELS,
@@ -36,9 +36,16 @@ export function createAccountHandlers() {
   const handlers = [
     http.get('*/v2/user/me', () => ok(wireUser())),
     http.patch('*/v2/user/:id', async ({ request }) => {
-      const body = (await request.json()) as Record<string, unknown>
-      record('PATCH', 'user', body)
-      Object.assign(state.user, body)
+      const { password, preferences, ...fields } = (await request.json()) as Record<string, unknown>
+      record('PATCH', 'user', { password, preferences, ...fields })
+      // Real API: the current password is required; a missing/wrong one is HTTP 200 + success:false.
+      if (password !== state.password) return invalidCredentials()
+      Object.assign(state.user, fields)
+      // Real API: `birthdate` arrives as DD/MM/YYYY and is read back as YYYY-MM-DD.
+      if (typeof fields.birthdate === 'string')
+        state.user.birthdate = fields.birthdate.replace(/^(\d{2})\/(\d{2})\/(\d{4})$/, '$3-$2-$1')
+      const zone = (preferences as Record<string, unknown> | undefined)?.['time-zone-id']
+      if (typeof zone === 'string') state.user.timeZone = zone
       return ok(wireUser())
     }),
     http.post('*/v2/user/:id/image', () => {

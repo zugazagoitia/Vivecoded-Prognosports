@@ -24,9 +24,12 @@
       "birthdate": "Fecha de nacimiento",
       "timeZone": "Zona horaria",
       "timeZoneHelp": "Las horas de sesión y de cierre se muestran en esta zona.",
+      "currentPassword": "Confirma con tu contraseña",
+      "currentPasswordHelp": "Escribe tu contraseña actual para guardar los cambios del perfil.",
       "save": "Guardar",
       "saved": "Perfil guardado.",
       "errors": {
+        "passwordRequired": "Escribe tu contraseña actual para confirmar los cambios.",
         "bioMax": "La biografía admite como máximo 160 caracteres.",
         "locationMax": "La localización admite como máximo 100 caracteres.",
         "birthdate": "Escribe una fecha válida y en el pasado."

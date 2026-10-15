@@ -88,7 +88,22 @@ export async function mockAccountApi(page: Page): Promise<{ calls: AccountCall[]
     }
     if (method === 'PATCH' && /^\/user\/[^/]+$/.test(path)) {
       record('user')
-      Object.assign(user, body)
+      // Real API: the current password is required; a missing/wrong one is HTTP 200 + success:false.
+      const { password: given, preferences, ...fields } = body as Record<string, unknown>
+      if (given !== password) {
+        return route.fulfill({
+          status: 200,
+          headers: CORS,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: false, message: 'Credenciales inválidas' }),
+        })
+      }
+      Object.assign(user, fields)
+      // Real API: `birthdate` arrives as DD/MM/YYYY and is read back as YYYY-MM-DD.
+      if (typeof fields.birthdate === 'string')
+        user.birthdate = fields.birthdate.replace(/^(\d{2})\/(\d{2})\/(\d{4})$/, '$3-$2-$1')
+      const zone = (preferences as Record<string, unknown> | undefined)?.['time-zone-id']
+      if (typeof zone === 'string') user.timeZone = zone
       return json(route, 200, wire())
     }
     if (method === 'PATCH' && /\/settings\/password$/.test(path)) {
