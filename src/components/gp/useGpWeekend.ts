@@ -112,6 +112,7 @@ export function useGpWeekend(
         points: pointsOfSession(myPoints.value, s),
         closesInMs: closesIn,
         isNext: s.id === nextId.value,
+        suspended: gp.value?.suspended === true,
       })
       return {
         session: s,

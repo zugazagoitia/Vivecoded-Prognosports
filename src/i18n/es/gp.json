@@ -12,6 +12,12 @@
       "live": "En curso",
       "done": "Disputado"
     },
+    "suspended": {
+      "tag": "Suspendido",
+      "title": "Gran Premio suspendido",
+      "text": "Este Gran Premio se ha suspendido: no admite pronósticos ni cuenta como disputado.",
+      "toGp": "Ver el Gran Premio"
+    },
     "tz": {
       "label": "Zona horaria",
       "mine": "Mi hora",
@@ -39,7 +45,8 @@
       "closed": "Cerrada · sin resultados",
       "closing": "Cierra en {time}",
       "done": "Hecho · editable",
-      "open": "Abierta"
+      "open": "Abierta",
+      "suspended": "Suspendida"
     },
     "close": {
       "today": "Cierra hoy a las {time}.",

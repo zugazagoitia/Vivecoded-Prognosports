@@ -20,6 +20,7 @@ import HistoryBars from '@/components/gp/HistoryBars.vue'
 import { EmptyState, ErrorState, Skeleton } from '@/components/states'
 import Breadcrumb from '@/components/ui/Breadcrumb.vue'
 import PButton from '@/components/ui/PButton.vue'
+import PrognoAlert from '@/components/ui/PrognoAlert.vue'
 import PIcon from '@/components/ui/PIcon.vue'
 import PTitle from '@/components/ui/PTitle.vue'
 import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
@@ -149,6 +150,10 @@ const summaryClass =
           :can-circuit-tz="w.canCircuitTz.value"
           :mobile="mobile"
         />
+
+        <PrognoAlert v-if="gp.suspended" variant="warn" :title="t('gp.suspended.title')">
+          {{ t('gp.suspended.text') }}
+        </PrognoAlert>
 
         <!-- Desktop / tablet -->
         <TabsRoot

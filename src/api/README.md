@@ -23,6 +23,7 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 5. `Community`: la API real envía `members_amount` y `user_is_member` (snake_case; la spec dice camelCase) y `GET /communities/{id}` no incluía `id` (a 2026-10-11 ya lo trae; se sigue aceptando sin él). `CommunitySchema` acepta ambas formas y normaliza al modelo camelCase (`membersAmount`, `userIsMember`); `getCommunity` rellena `id` con el solicitado (`CommunityDetailSchema`).
 6. `RuleSet`: la API real envía `isPublic` (la spec dice `public`); se acepta cualquiera de las dos y el modelo expone `public`. `data.pointsByEqualsPosition` es `{ [sesión]: { [posición]: puntos } }` (objetos anidados, no números).
 7. `GrandPrix`: `/gps` y `/gps/{id}` no envían `round` (solo el listado por temporada), por lo que es opcional. Esas respuestas solo traen `id`, `name` y `code`.
+8. `GrandPrix.suspended`: el listado por temporada y `GET /v2/gps/{c}/{s}/{gp}` envían el booleano `suspended` (en `/v2/gps/{id}` no viene). El backend acepta pronósticos de un GP suspendido (verificado con GP 49 en local): el cliente los bloquea (#171, ver también #117). `PUT /v2/gps/{c}/{s}/{gp}` admite `{ "suspended": boolean }` (verificado en local; la spec no lo documenta).
 
 ### Circuitos públicos (P3, sondeado sin sesión el 2026-10-11)
 

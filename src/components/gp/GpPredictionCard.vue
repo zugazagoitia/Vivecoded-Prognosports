@@ -23,7 +23,8 @@ const props = defineProps<{
 defineEmits<{ retry: [] }>()
 const { t } = useI18n()
 
-const closed = computed(() => props.vm.state !== 'open')
+const suspended = computed(() => props.vm.status.kind === 'suspended')
+const closed = computed(() => props.vm.state !== 'open' || suspended.value)
 const cta = computed(() => ctaFor(closed.value, props.vm.hasPrediction))
 const ctaLabel = computed(() => t(`gp.prediction.${cta.value.kind}`))
 </script>
@@ -65,7 +66,7 @@ const ctaLabel = computed(() => t(`gp.prediction.${cta.value.kind}`))
       <PrognoAlert v-else-if="!closed" variant="warn" :title="t('gp.prediction.none')">
         {{ closeText }}
       </PrognoAlert>
-      <PrognoAlert v-else variant="info" :title="t('gp.prediction.noneClosed')">
+      <PrognoAlert v-else-if="!suspended" variant="info" :title="t('gp.prediction.noneClosed')">
         {{ t('gp.prediction.noneClosedText') }}
       </PrognoAlert>
       <p v-if="vm.state === 'closed' && cells.length" class="text-muted text-sm">
@@ -73,13 +74,14 @@ const ctaLabel = computed(() => t(`gp.prediction.${cta.value.kind}`))
       </p>
       <div class="flex flex-wrap items-center gap-2">
         <PButton
+          v-if="!suspended"
           :to="sessionPath(gp, cta.action, vm.session)"
           :variant="cta.variant"
           :icon="cta.icon"
         >
           {{ ctaLabel }}
         </PButton>
-        <template v-if="closed">
+        <template v-if="closed && !suspended">
           <PButton :to="sessionPath(gp, 'consenso', vm.session)" variant="outline" icon="users">
             {{ t('gp.prediction.gridConsensus') }}
           </PButton>

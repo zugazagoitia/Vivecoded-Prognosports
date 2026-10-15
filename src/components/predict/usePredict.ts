@@ -135,8 +135,10 @@ export function usePredict(
   // --- deadline ---
   /** The API refused a save because of the deadline although our clock still said open. */
   const forcedClosed = ref(false)
+  /** Suspended GP: the API still accepts predictions (backend gap, #171), so we block them here. */
+  const suspended = computed(() => gp.value?.suspended === true)
   const closed = computed(
-    () => forcedClosed.value || (session.value != null && closesIn.value <= 0),
+    () => forcedClosed.value || suspended.value || (session.value != null && closesIn.value <= 0),
   )
   const closesIn = computed(() => (session.value ? msToClose(session.value, now.value) : Infinity))
   const close = computed(() => (session.value ? closeParts(session.value, tz.value) : undefined))
@@ -609,6 +611,7 @@ export function usePredict(
     n,
     ruleset: rulesets,
     closed,
+    suspended,
     closesIn,
     close,
     soon,
