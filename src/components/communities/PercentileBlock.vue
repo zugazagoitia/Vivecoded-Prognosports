@@ -156,7 +156,7 @@ const poly = (ev: readonly number[]) =>
               <td class="px-2 py-2">
                 <RouterLink
                   :to="`/comunidades/${r.community.id}`"
-                  class="text-heading hover:text-link font-semibold break-words"
+                  class="text-heading hover:text-link font-semibold wrap-anywhere"
                   >{{ r.name }}</RouterLink
                 >
                 <div class="text-muted text-xs">

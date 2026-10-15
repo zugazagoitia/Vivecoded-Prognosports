@@ -62,8 +62,8 @@ const href = computed(() => `/comunidades/${props.community.id}`)
     <header class="flex items-start gap-3">
       <CommunityMark :community="community" />
       <div class="flex min-w-0 flex-1 flex-col gap-0.5">
-        <h3 class="t-header text-heading break-words">{{ community.name }}</h3>
-        <p v-if="byline" class="text-muted text-sm">{{ byline }}</p>
+        <h3 class="t-header text-heading wrap-anywhere">{{ community.name }}</h3>
+        <p v-if="byline" class="text-muted text-sm wrap-anywhere">{{ byline }}</p>
       </div>
       <PTag v-if="active" color="solid">{{ t('communities.card.active') }}</PTag>
     </header>

@@ -39,10 +39,10 @@ describe('Invitación', () => {
     await waitFor(() => expect(router.currentRoute.value.path).toBe('/comunidades/200'))
   })
 
-  it('unknown code: expired state only', async () => {
+  it('unknown code: invalid state only', async () => {
     await open('NOPE')
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Esta invitación ya no funciona' }),
+      await screen.findByRole('heading', { level: 1, name: 'No encontramos esta invitación' }),
     ).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Probar con un código' }).getAttribute('href')).toBe(
       '/comunidades',

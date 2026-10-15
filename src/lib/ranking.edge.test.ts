@@ -459,7 +459,7 @@ describe('numeric helpers', () => {
   test('minus uses U+2212 and never signs the sign twice', () => {
     expect(minus(3)).toBe('−3')
     expect(minus(-3)).toBe('−3')
-    expect(minus(0)).toBe('−0')
+    expect(minus(0)).toBe('0')
   })
 
   test.each([

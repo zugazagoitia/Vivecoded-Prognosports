@@ -3,14 +3,17 @@ import { loginLocation } from '@/router/guards'
 
 /** Pure helpers of the invitation page (H7). */
 
-export type InvitationState = 'valid' | 'expired' | 'member'
+export type InvitationState = 'valid' | 'invalid' | 'expired' | 'member'
 
-/** member -> «Ya eres miembro»; no community for the code -> expired; otherwise valid. */
+/**
+ * member -> «Ya eres miembro»; no community for the code -> invalid (the API cannot tell a wrong
+ * code from a renewed one); `expired` is only set by the page when the join is rejected.
+ */
 export function invitationState(input: {
   community: Pick<Community, 'userIsMember'> | undefined | null
   isMember?: boolean
 }): InvitationState {
-  if (!input.community) return 'expired'
+  if (!input.community) return 'invalid'
   if (input.isMember || input.community.userIsMember) return 'member'
   return 'valid'
 }

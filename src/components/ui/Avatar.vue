@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { initials as initialsOf } from '@/lib/communities'
 import { computed } from 'vue'
 
 export type AvatarSize = 24 | 32 | 40 | 56
@@ -15,14 +16,7 @@ const props = withDefaults(
 )
 
 /** First letters of the first two words, upper case. */
-const initials = computed(() =>
-  props.name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join(''),
-)
+const initials = computed(() => initialsOf(props.name))
 
 const sizes: Record<AvatarSize, string> = {
   24: 'size-6 text-[10px]',

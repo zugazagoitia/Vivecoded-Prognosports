@@ -144,6 +144,7 @@ const summaryClass =
           :total-rounds="detail.totalRounds.value"
           :sprint="w.sprint.value"
           :weekend="w.weekendState.value"
+          :no-results="!w.vms.value.some((v) => v.state === 'scored')"
           :subtitle="subtitle"
           :previous="detail.previous.value"
           :next="detail.next.value"

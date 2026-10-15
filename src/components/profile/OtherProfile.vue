@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { initials as initialsOf } from '@/lib/communities'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
@@ -146,14 +147,7 @@ const photo = computed(() =>
     ? apiUrl(`/v2/user/${encodeURIComponent(String(props.user.id))}/image`)
     : undefined,
 )
-const initials = computed(() =>
-  name.value
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join(''),
-)
+const initials = computed(() => initialsOf(name.value))
 
 const kpis = computed(() => {
   const played = gpIds.value.length

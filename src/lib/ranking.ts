@@ -235,7 +235,7 @@ export function formatDec(v: number, digits = 1): string {
 }
 
 /** U+2212 minus: «−12». */
-export const minus = (v: number): string => `−${Math.abs(v)}`
+export const minus = (v: number): string => (v === 0 ? '0' : `−${Math.abs(v)}`)
 
 /** «▲ 2 desde el GP anterior» / «▼ 1 …» / «= sin cambios». */
 export function formatMovement(prev: number, cur: number): string {

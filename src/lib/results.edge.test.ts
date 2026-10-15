@@ -342,9 +342,9 @@ describe('rows, sorting and ranks', () => {
     expect(by.carla).toMatchObject({ points: 10, total: 10 })
     expect(by.ana!.rank).toBe('1.º')
     expect(by.beto!.rank).toBe('1.º')
-    expect(by.carla!.rank).toBe('3.º')
+    expect(by.carla!.rank).toBe('2.º')
     expect(by.Álvaro!.rank).toBe('—')
-    expect(sessionRank(rows, 3)).toBe('3.º')
+    expect(sessionRank(rows, 3)).toBe('2.º')
     expect(sessionRank(rows, 99)).toBeUndefined()
     expect(sessionRank(rows, undefined)).toBeUndefined()
     expect(winnersOf(rows)).toEqual({ names: ['ana', 'beto'], points: 25 })
@@ -386,9 +386,7 @@ describe('rows, sorting and ranks', () => {
     ])
   })
 
-  // TODO(#163): players with a prediction but unknown points (no API points and no rules) get
-  // «0.º» instead of a real place.
-  test.fails('rankWithTies never yields 0.º when points are unknown', () => {
+  test('rankWithTies never yields 0.º when points are unknown', () => {
     expect(rankWithTies([{ hasPick: true }, { hasPick: true }])).toEqual(['1.º', '1.º'])
   })
 

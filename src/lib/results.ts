@@ -373,17 +373,20 @@ export function sortRows<
 }
 
 /**
- * Ranks of players ALREADY sorted by points: `i + 1` only when the points change, so equal points
- * share the place (even with different exact hits). No prediction -> «—».
+ * Ranks of players ALREADY sorted by points. Dense ranking (1, 2, 2, 3, decision 121): equal
+ * points share the place and the next distinct value takes the following one. Unknown points
+ * (`undefined`) count as one value, so they share a real place, never «0.º». No prediction -> «—».
  */
 export function rankWithTies(rows: readonly { hasPick: boolean; points?: number }[]): string[] {
   let rank = 0
   let last: number | undefined
-  return rows.map((r, i) => {
+  let started = false
+  return rows.map((r) => {
     if (!r.hasPick) return '—'
-    if (r.points !== last) {
-      rank = i + 1
+    if (!started || r.points !== last) {
+      rank += 1
       last = r.points
+      started = true
     }
     return ordinal(rank)
   })

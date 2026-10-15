@@ -222,7 +222,7 @@ describe('standings', () => {
   test('gapText and dotIfZero', () => {
     expect(gapText(null)).toBe('—')
     expect(gapText(12)).toBe('−12')
-    expect(gapText(0)).toBe('−0')
+    expect(gapText(0)).toBe('0')
     expect(dotIfZero(0)).toBe('·')
     expect(dotIfZero(7)).toBe('7')
     expect(dotIfZero(-3)).toBe('-3')

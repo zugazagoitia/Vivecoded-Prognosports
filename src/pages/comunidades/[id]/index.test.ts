@@ -191,7 +191,7 @@ describe('Community home (H5)', () => {
     await open(own)
     const button = await screen.findByRole('button', { name: 'Salir de la comunidad' })
     expect((button as HTMLButtonElement).disabled).toBe(true)
-    expect(screen.getByText(/Eres el creador: transfiere o elimina/)).toBeTruthy()
+    expect(screen.getByText(/Eres el creador de la comunidad y no puedes salir/)).toBeTruthy()
     expect(button.getAttribute('aria-describedby')).toBe(
       screen.getByText(/Eres el creador/).getAttribute('id'),
     )

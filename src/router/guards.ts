@@ -26,6 +26,9 @@ export function loginLocation(fullPath: string, expired = false): string {
  * The admin guard implies `auth` so an anonymous visitor on an admin route lands on
  * login, never on the 404.
  */
+/** `?aviso=` value that makes `/comunidades` explain why the user was sent there. */
+export const NO_COMMUNITY_NOTICE = 'sin-comunidad'
+
 export function evaluateGuards(
   to: Pick<RouteLocationNormalized, 'fullPath'>,
   declared: readonly GuardName[],
@@ -43,7 +46,8 @@ export function evaluateGuards(
         if (user && !user.verified) return '/verificar'
         break
       case 'community':
-        if (user && !user.hasCommunity) return '/comunidades'
+        if (user && !user.hasCommunity)
+          return { path: '/comunidades', query: { aviso: NO_COMMUNITY_NOTICE } }
         break
       case 'admin':
         if (!user?.isAdmin) return '/404'
