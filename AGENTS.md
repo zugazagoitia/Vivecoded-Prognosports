@@ -33,7 +33,7 @@ Antes de dar algo por terminado: `pnpm typecheck`, `pnpm lint`, `pnpm test` y lo
 
 ## CI (`.github/workflows/ci.yml`)
 
-Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size`, `e2e` (workflow reutilizable `.github/workflows/e2e.yml`, matriz completa en cada PR y push) y `ci-ok` (agrega todos; es el único check obligatorio, también para master). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde. `deploy.yml` arranca cuando CI termina, así que el despliegue espera también a los e2e (~6-8 min).
+Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size`, `e2e` (workflow reutilizable `.github/workflows/e2e.yml`, matriz completa en cada PR y push) y `ci-ok` (agrega todos; es el único check obligatorio, también para master). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde. `deploy.yml` arranca cuando CI termina, así que el despliegue espera también a los e2e (~13 min de reloj; WebKit es el más lento).
 
 - Si CI falla, **reproduce en local con las mismas condiciones** antes de tocar nada, y distingue si el fallo lo causa tu rama o ya existía en `develop`.
 - **Variables de CI sin definir llegan como cadena vacía** (`VITE_SENTRY_DSN: ${{ vars.X }}` → `""`). El esquema de `src/env.ts` trata `""` como «no definido» en las variables opcionales; mantén esa norma al añadir variables.

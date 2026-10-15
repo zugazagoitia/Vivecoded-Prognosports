@@ -68,6 +68,15 @@ test.describe('Community home (H5)', () => {
     await expect(page).toHaveURL(/\/comunidades$/)
   })
 
+  test('the creator cannot leave: disabled button described by its reason', async ({
+    authedPage: page,
+  }) => {
+    await page.goto(OWN)
+    const button = page.getByRole('button', { name: 'Salir de la comunidad' })
+    await expect(button).toBeDisabled()
+    await expect(button).toHaveAccessibleDescription(/Eres el creador: transfiere o elimina/)
+  })
+
   test('unknown community shows its own 404, a non-member is redirected', async ({
     authedPage: page,
   }) => {

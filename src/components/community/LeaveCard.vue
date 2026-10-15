@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PButton from '@/components/ui/PButton.vue'
 import PrognoModal from '@/components/ui/PrognoModal.vue'
@@ -17,12 +17,13 @@ defineProps<{ name: string; isOwner?: boolean; leaving?: boolean }>()
 defineEmits<{ leave: [] }>()
 const { t } = useI18n()
 const confirming = ref(false)
+const hintId = useId()
 </script>
 
 <template>
   <CommunityCard :title="t('community.leave.title')">
     <div class="flex flex-col gap-2">
-      <p class="text-muted text-sm">
+      <p :id="hintId" class="text-muted text-sm">
         {{ isOwner ? t('community.leave.owner') : t('community.leave.text') }}
       </p>
       <PButton
@@ -30,6 +31,7 @@ const confirming = ref(false)
         size="sm"
         icon="right-from-bracket"
         :disabled="isOwner"
+        :aria-describedby="hintId"
         :loading="leaving"
         class="text-err! border-err! self-start"
         @click="confirming = true"

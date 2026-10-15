@@ -1,8 +1,8 @@
 // Production build for the E2E suite with every feature flag ON (T6).
 //
 // The flagged ranking screens (R3-R13) can only be tested if their flag is on in the built dist/
-// (production ignores the localStorage overrides on purpose). The deployed production bundle keeps
-// every flag off; that behaviour is covered by `e2e/*.flags-off.spec.ts` against `--flags-off`.
+// (production ignores the localStorage overrides on purpose). The deployed production bundle also has
+// every flag on (.env.production); the all-off behaviour is covered by `e2e/*.flags-off.spec.ts` against `--flags-off`.
 import { spawnSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 

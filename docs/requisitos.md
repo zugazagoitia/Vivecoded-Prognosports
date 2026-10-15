@@ -202,7 +202,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 
 ## 18. Feature flags
 
-- 18.1 Sistema de feature flags solo en frontend: definición tipada de flags, lectura desde configuración por entorno y valor por defecto apagado en producción.
+- 18.1 Sistema de feature flags solo en frontend: definición tipada de flags, lectura desde configuración por entorno y valor por defecto apagado (en producción están todos activados vía `.env.production`).
 - 18.2 Un flag por propuesta con datos: Mi temporada, Palmarés, Gap, Bump, Consistencia, Cara a cara, Distribución, Heatmap de GP y Aciertos por tipo. Logros y Múltiples no tienen flag porque quedan fuera.
 - 18.3 Rutas, enlaces de navegación y bloques de Inicio de cada propuesta se ocultan por completo cuando su flag está apagado, incluidas las peticiones de datos asociadas. El código de la propuesta se carga de forma perezosa, para que no pese en el bundle principal.
 - 18.4 Ninguna propuesta se implementa sin datos de la API v2 (sección 25). Si una propuesta deja de tener datos, se retira en lugar de pedir un cambio de backend.

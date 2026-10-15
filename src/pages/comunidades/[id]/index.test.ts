@@ -191,7 +191,10 @@ describe('Community home (H5)', () => {
     await open(own)
     const button = await screen.findByRole('button', { name: 'Salir de la comunidad' })
     expect((button as HTMLButtonElement).disabled).toBe(true)
-    expect(screen.getByText(/Eres el creador/)).toBeTruthy()
+    expect(screen.getByText(/Eres el creador: transfiere o elimina/)).toBeTruthy()
+    expect(button.getAttribute('aria-describedby')).toBe(
+      screen.getByText(/Eres el creador/).getAttribute('id'),
+    )
   })
 
   it('unknown community (200 + success:false): own 404 with a way out', async () => {
