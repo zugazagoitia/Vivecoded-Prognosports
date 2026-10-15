@@ -14,6 +14,7 @@ import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { useMobileTitle } from '@/composables/useMobileNav'
 import { isEnabled } from '@/flags'
 import { useRanking } from '@/queries/ranking'
+import RankTotalsOnly from './RankTotalsOnly.vue'
 import { EMPTY_OK, screenComponent } from './screens'
 
 /**
@@ -66,6 +67,8 @@ const hideNav = computed(() => mobile.value && code.value === 'R1')
 const empty = computed(
   () => model.value != null && played.value === 0 && !EMPTY_OK.has(code.value ?? ''),
 )
+
+const hasTotals = computed(() => Object.keys(rk.totals.data.value ?? {}).length > 0)
 
 watch(
   () => rk.notMember.value,
@@ -120,6 +123,7 @@ watch(
       <div v-else-if="!model" class="flex flex-col gap-4">
         <Skeleton variant="table" :rows="10" />
       </div>
+      <RankTotalsOnly v-else-if="empty && hasTotals" :totals="rk.totals.data.value!" />
       <section v-else-if="empty" class="bg-surface ring-card-ring rounded-lg p-5 ring-1">
         <EmptyState
           icon="schedule"

@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { apiUrl, request, requestParsed, seg, uploadImage } from './client'
 import { getCommunity } from './communities'
-import { ApiError } from './errors'
 import {
   CircuitSchema,
   CircuitVariantSchema,
@@ -128,20 +127,13 @@ export const getRulesetUsages = (r: Id, signal?: AbortSignal) =>
  * the route (`corrections.contract.ts` fails with instructions when it does).
  */
 export const getCommunityRuleset = async (c: Id, comp: Id, season: Id, signal?: AbortSignal) => {
-  try {
-    return await requestParsed(
-      `/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}`,
-      RuleSetSchema,
-      {
-        signal,
-      },
-    )
-  } catch (e) {
-    if (!(e instanceof ApiError) || e.kind !== 'http' || e.status !== 404) throw e
-    const community = await getCommunity(c, signal)
-    if (!community.defaultRuleSet) throw e
-    return community.defaultRuleSet
-  }
+  // The route 404s everywhere, and every 404 leaves a console error: ask for the community first
+  // and only try the route when it has no default rule set.
+  const community = await getCommunity(c, signal)
+  if (community.defaultRuleSet) return community.defaultRuleSet
+  return requestParsed(`/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}`, RuleSetSchema, {
+    signal,
+  })
 }
 export const getCommunityGpRuleset = (c: Id, comp: Id, season: Id, gp: Id, signal?: AbortSignal) =>
   requestParsed(`/v2/rulesets/${seg(c)}/${seg(comp)}/${seg(season)}/${seg(gp)}`, RuleSetSchema, {

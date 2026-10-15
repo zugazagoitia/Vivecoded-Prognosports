@@ -714,3 +714,23 @@ describe('findCommunityByInvitation', () => {
     expect((await communities.findCommunityByInvitation(code))?.id).toBe(id)
   })
 })
+
+describe('getCommunityRuleset', () => {
+  test('uses the community default rule set without requesting the missing route', async () => {
+    const paths: string[] = []
+    server.use(
+      http.all('*/v2/*', ({ request }) => {
+        paths.push(new URL(request.url).pathname)
+        return ok({
+          name: 'C',
+          open: true,
+          user_is_member: true,
+          defaultRuleSet: { id: 7, public: true },
+        })
+      }),
+    )
+    const rs = await catalog.getCommunityRuleset(5, 1, 9)
+    expect(rs.id).toBe(7)
+    expect(paths).toEqual(['/v2/communities/5'])
+  })
+})
