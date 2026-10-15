@@ -97,7 +97,7 @@ export default defineConfig(({ mode }) => {
       restoreMocks: true,
       coverage: {
         provider: 'v8',
-        reporter: ['text', 'html', 'lcov'],
+        reporter: ['text', 'html', 'lcov', 'cobertura', 'json-summary'],
         // Only domain logic is gated (requisitos §20.2): utils, i18n helpers, api core, env, domain.
         // Endpoint wrappers (src/api/<area>.ts) are thin and covered by the T4 query tests.
         include: [

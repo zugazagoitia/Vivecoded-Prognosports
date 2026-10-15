@@ -36,3 +36,12 @@ Complementa `docs/deploy.md` (despliegue) y `docs/security.md` (cabeceras/CSP). 
 - **Fusionar siempre con «Create a merge commit», nunca squash**: así `develop` y `master` comparten historia y la siguiente PR no arrastra todo otra vez.
 - Requisito de repositorio: Settings > Actions > General > Workflow permissions > **«Allow GitHub Actions to create and approve pull requests»** (a fecha de este PR está activado).
 - Limitación: las PR creadas con `GITHUB_TOKEN` **no disparan workflows** `pull_request`. Aun así `ci-ok` aparece en la PR (y por tanto los e2e): CI también corre en `push` a `develop` y los checks se asocian al SHA, que es el head de la PR `develop -> master`. No hace falta PAT. Si se quiere un run con evento `pull_request`, cerrar y reabrir la PR a mano.
+
+## Cobertura
+
+El job `test` genera `coverage/` (reporters `text`, `html`, `lcov`, `cobertura`, `json-summary`) y lo sube como artefacto. El job `coverage` (depende de `test`, **no** está en `needs` de `ci-ok`, así que nunca bloquea) hace dos cosas, ambas con `continue-on-error`:
+
+- **Subida nativa** a GitHub Code Quality con `actions/upload-code-coverage` (Cobertura XML, `language: TypeScript`, etiqueta `code-coverage/vitest`). Requiere permiso `code-quality: write` (solo en ese job) y **Code Quality activado** en el repo (Settings > Code security). Si no está disponible, la acción avisa en el log y el job sigue en verde. La base de comparación de GitHub es la rama por defecto (`master`), por lo que los pushes a `master` fijan la línea base; los de `develop` también se suben.
+- **Respaldo**: `scripts/coverage-report.sh` escribe los totales y el desglose por carpeta en el resumen del job y mantiene **un** comentario en la PR (marcador `<!-- coverage-report -->`, solo `gh`), con el delta frente al último CI correcto de la rama base (artefacto `coverage`, retención 7 días). Si el comentario nativo de GitHub aparece y resulta redundante, basta con borrar el paso «Informe de cobertura».
+
+No se salta en forks ni en Dependabot (el token es de solo lectura): el job entero se omite. **No se ha creado ninguna regla de ruleset.** Para exigir cobertura más adelante: Settings > Rules > Rulesets > añadir la regla «Restrict code coverage» (mínimo de líneas o caída máxima por PR), o por REST (ver el changelog de GitHub del 2026-09-18). Requiere Code Quality y plan Team/Enterprise Cloud.
