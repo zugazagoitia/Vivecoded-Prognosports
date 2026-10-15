@@ -91,14 +91,14 @@ describe('community logic (H5)', () => {
     expect(formatCreated('nope')).toBe('')
   })
 
-  it('rankDescending shares places on ties (1, 2, 2, 4)', () => {
+  it('rankDescending shares places on ties densely (1, 2, 2, 3)', () => {
     const r = rankDescending([
       { id: 1, value: 10 },
       { id: 2, value: 8 },
       { id: 3, value: 8 },
       { id: 4, value: 1 },
     ])
-    expect([1, 2, 3, 4].map((i) => r.get(i))).toEqual([1, 2, 2, 4])
+    expect([1, 2, 3, 4].map((i) => r.get(i))).toEqual([1, 2, 2, 3])
   })
 
   describe('buildStandings', () => {

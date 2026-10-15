@@ -131,7 +131,7 @@
     "leave": {
       "title": "Zona de riesgo",
       "text": "Si sales, dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.",
-      "owner": "Eres el creador: no puedes salir de tu propia comunidad. Si quieres dejarla, ábrela a otra persona desde los ajustes o contáctanos.",
+      "owner": "Eres el creador: transfiere o elimina la comunidad para poder salir.",
       "action": "Salir de la comunidad",
       "confirm": {
         "title": "¿Salir de {name}?",

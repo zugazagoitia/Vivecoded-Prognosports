@@ -47,15 +47,15 @@ export type PointsMap = Record<string, readonly UserPoints[]>
 
 // --- Places -----------------------------------------------------------------------------
 
-/** Standard competition ranking (1, 2, 2, 4) of values, highest first. Keyed by id. */
+/** Dense ranking (1, 2, 2, 3) of values, highest first: ties share the place and the next one is not skipped (decision of issue 121). Keyed by id. */
 export function rankDescending(entries: readonly { id: number; value: number }[]) {
   const sorted = [...entries].sort((a, b) => b.value - a.value)
   const out = new Map<number, number>()
   let rank = 0
   let last: number | undefined
-  sorted.forEach((e, i) => {
+  sorted.forEach((e) => {
     if (e.value !== last) {
-      rank = i + 1
+      rank = last === undefined ? 1 : rank + 1
       last = e.value
     }
     out.set(e.id, rank)

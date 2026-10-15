@@ -15,7 +15,7 @@ import {
  * Conventions (all «por confirmar» in docs/design/issues/a-confirmar.md):
  * - A GP is «played» when the points map has a row for it (the real API only lists GPs with points).
  * - A member without a row in a played GP counts as 0 points there (and as «not participated»).
- * - Place in a GP = standard competition ranking (1, 2, 2, 4) by `pointsInGP`: ties share the place.
+ * - Place in a GP = dense ranking (1, 2, 2, 3) by `pointsInGP`: ties share the place.
  * - Place in the general table after a GP = same ranking over the accumulated points.
  */
 

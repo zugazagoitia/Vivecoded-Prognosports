@@ -378,6 +378,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ## Ranking y estadísticas ([#7](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/7))
 
+> **Decisión (#121):** los empates usan ranking denso (1, 2, 2, 3) para el puesto en el GP y en la general; «GP disputado» = GP con `UserPoints` presente en `/points`. Slugs en español, textos de vacío y contraste: propuestas aceptadas.
+
 ### [R0] Resumen del ranking ([#51](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/51))
 
 - Forma de la respuesta de `GET .../{season}/points` (puntos por GP y usuario): si trae todos los GP en una llamada o hay que pedir `points/{grandprix}` por cada GP disputado.
