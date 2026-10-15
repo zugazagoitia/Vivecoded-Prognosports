@@ -2,7 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { authApi, notificationsApi, userApi, type AuthToken } from '@/api'
 import { toaster } from '@/composables/useToast'
 import { t } from '@/i18n'
-import { parseTimezones, sortTokens, type PrefChange, type ProfileValues } from '@/lib/account'
+import {
+  parseTimezones,
+  sortTokens,
+  toProfilePatch,
+  type PrefChange,
+  type ProfileValues,
+} from '@/lib/account'
 import { useSessionStore } from '@/stores/session'
 import { keys } from './keys'
 
@@ -72,11 +78,16 @@ export function useRevokeOtherTokens() {
   })
 }
 
-/** `PATCH /user/{id}` with the changed profile fields. */
+/**
+ * `PATCH /user/{id}` with the changed profile fields plus the current password (required by the
+ * API). Errors are shown under «Contraseña actual», so the global toast is silenced.
+ */
 export function useUpdateProfile() {
   const session = useSessionStore()
   return useMutation({
-    mutationFn: (patch: Partial<ProfileValues>) => userApi.updateUser(session.user!.id, patch),
+    mutationFn: (v: { patch: Partial<ProfileValues>; password: string }) =>
+      userApi.updateUser(session.user!.id, toProfilePatch(v.patch, v.password)),
+    meta: { silent: true },
     onSuccess: () => session.refreshUser(),
   })
 }

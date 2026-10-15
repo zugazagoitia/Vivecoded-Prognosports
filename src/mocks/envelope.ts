@@ -18,6 +18,11 @@ export function unauthorized() {
   return HttpResponse.json({ success: false, message: 'No autorizado. Token inválido' })
 }
 
+/** A missing/wrong current password as the real API answers it: HTTP 200 with `success:false`. */
+export function invalidCredentials() {
+  return HttpResponse.json({ success: false, message: 'Credenciales inválidas' })
+}
+
 /** A wrong invitation code as the real API answers it: HTTP 200 with `success:false`, no status. */
 export function invalidInvitation() {
   return HttpResponse.json({ success: false, message: 'No autorizado. Invitación inválida' })

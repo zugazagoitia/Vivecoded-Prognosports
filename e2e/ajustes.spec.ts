@@ -1,4 +1,4 @@
-import { REFERENCE_NOW } from '../src/mocks/fixtures'
+import { MOCK_PASSWORD, REFERENCE_NOW } from '../src/mocks/fixtures'
 import { mockAccountApi } from './support/account'
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures'
 
@@ -108,6 +108,27 @@ test.describe('Account settings (U3)', () => {
     await expect(page.getByText('Cambios guardados.').first()).toBeVisible()
     expect(calls.map((c) => c.path)).toEqual(['preferences'])
     expect(calls[0]!.body).toEqual({ notification: 'INFO', channel: 'TELEGRAM', toggleTo: true })
+  })
+
+  test('profile save: wrong password shows the error, right one saves, axe', async ({
+    authedPage: page,
+    viewport,
+  }) => {
+    test.skip(isPhone(viewport), 'desktop layout')
+    const { calls } = await mockAccountApi(page)
+    await page.goto('/ajustes')
+    await page.getByLabel('Localización').fill('Sevilla')
+    const password = page.getByLabel('Confirma con tu contraseña')
+    await password.fill('mala-clave')
+    await page.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(page.getByText('Credenciales inválidas')).toBeVisible()
+    await expect(password).toHaveAttribute('aria-invalid', 'true')
+    await expectNoSeriousA11yViolations(page)
+    await password.fill(MOCK_PASSWORD)
+    await page.getByRole('button', { name: 'Guardar cambios' }).click()
+    await expect(page.getByText('Cambios guardados.').first()).toBeVisible()
+    expect(calls.map((c) => c.path)).toEqual(['user', 'user'])
+    expect(calls[1]!.body).toEqual({ location: 'Sevilla', password: MOCK_PASSWORD })
   })
 
   test('leaving with unsaved changes asks first', async ({ authedPage: page, viewport }) => {
@@ -227,8 +248,16 @@ test.describe('Account settings (U3)', () => {
       expect(calls.map((c) => c.path)).toEqual(['preferences'])
       await page.getByLabel('Localización').fill('Sevilla')
       await page.getByRole('button', { name: 'Guardar', exact: true }).click()
+      await expect(
+        page.getByText('Escribe tu contraseña actual para confirmar los cambios.'),
+      ).toBeVisible()
+      await page.getByLabel('Confirma con tu contraseña').fill(MOCK_PASSWORD)
+      await page.getByRole('button', { name: 'Guardar', exact: true }).click()
       await expect(page.getByText('Perfil guardado.')).toBeVisible()
-      expect(calls.at(-1)).toMatchObject({ path: 'user', body: { location: 'Sevilla' } })
+      expect(calls.at(-1)).toMatchObject({
+        path: 'user',
+        body: { location: 'Sevilla', password: MOCK_PASSWORD },
+      })
     })
 
     test('security sheet, axe, and closing the other sessions asks first', async ({

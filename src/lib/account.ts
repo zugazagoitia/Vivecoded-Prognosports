@@ -169,6 +169,31 @@ export function diffProfile(
   return out
 }
 
+/**
+ * Body of `PATCH /user/{id}`. The real API requires the current `password` (without it: HTTP 200
+ * «Credenciales inválidas») and keeps the time zone in `preferences['time-zone-id']`, not in
+ * `timeZone`; `birthdate` must be `DD/MM/YYYY` (an ISO date is silently ignored). See
+ * `src/api/README.md`.
+ */
+/** `1991-05-14` -> `14/05/1991` (the only format `PATCH /user/{id}` accepts for `birthdate`). */
+export const toApiDate = (iso: string): string => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso)
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : iso
+}
+
+export function toProfilePatch(
+  patch: Partial<ProfileValues>,
+  password: string,
+): Record<string, unknown> {
+  const { timeZone, birthdate, ...rest } = patch
+  return {
+    ...rest,
+    ...(birthdate === undefined ? {} : { birthdate: toApiDate(birthdate) }),
+    ...(timeZone === undefined ? {} : { preferences: { 'time-zone-id': timeZone } }),
+    password,
+  }
+}
+
 /** `2026-05-14T00:00:00Z` or `1991-05-14` -> `1991-05-14` (for `<input type="date">`). */
 export const toDateInput = (v?: string | null): string => (v ? v.slice(0, 10) : '')
 

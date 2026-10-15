@@ -13,6 +13,8 @@ import { BIO_MAX, type TimezoneOption } from '@/lib/account'
  * (mobile): bio, location and time zone with their own «Guardar» button (`save` event).
  */
 const props = defineProps<{
+  /** Error under «Contraseña actual» (missing or rejected by the API). */
+  passwordError?: string
   errors: Partial<Record<'bio' | 'location' | 'birthdate' | 'timeZone', string>>
   /** There are unsaved changes (enables the mobile «Guardar»). */
   dirty?: boolean
@@ -27,6 +29,7 @@ const bio = defineModel<string>('bio', { default: '' })
 const location = defineModel<string>('location', { default: '' })
 const birthdate = defineModel<string>('birthdate', { default: '' })
 const timeZone = defineModel<string>('timeZone', { default: '' })
+const password = defineModel<string>('password', { default: '' })
 defineEmits<{ save: []; retry: [] }>()
 const { t } = useI18n()
 
@@ -90,6 +93,17 @@ const zoneOptions = computed(() => {
           :label="t('account.profile.timeZone')"
           :help="t('account.profile.timeZoneHelp')"
           :options="zoneOptions"
+        />
+      </div>
+      <div class="sm:col-span-2">
+        <PInput
+          v-model="password"
+          type="password"
+          :label="t('account.profile.currentPassword')"
+          :help="t('account.profile.currentPasswordHelp')"
+          :error="passwordError"
+          autocomplete="current-password"
+          data-testid="profile-password"
         />
       </div>
       <PButton v-if="compact" type="submit" block size="lg" :loading="saving" :disabled="!dirty">
