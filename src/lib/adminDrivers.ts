@@ -7,6 +7,8 @@ import type { Constructor, Driver } from '@/api/schemas'
 /** Two drivers per team. */
 export const SLOTS_PER_TEAM = 2
 
+export type GpDriversBody = Record<number, { id: number }[]>
+
 export interface Slot {
   teamId: number
   /** 0 or 1 inside the team. */
@@ -122,6 +124,16 @@ export function bannerTone(filled: number, total: number, changes: number): Bann
 /** Body of the save: the final list of driver ids (the API replaces the whole list). */
 export const driversPayload = (slots: readonly Slot[]): number[] =>
   slots.filter((s) => s.driverId != null).map((s) => s.driverId!)
+
+/**
+ * Body of `PUT .../drivers`: drivers grouped by constructor, `{ "<constructorId>": [{ id }] }`.
+ * Teams with no driver are left out.
+ */
+export function driversBody(slots: readonly Slot[]): GpDriversBody {
+  const body: GpDriversBody = {}
+  for (const s of slots) if (s.driverId != null) (body[s.teamId] ??= []).push({ id: s.driverId })
+  return body
+}
 
 /** Differences between what is saved and what is edited, for the confirmation texts. */
 export function toApiOps(saved: readonly Slot[], current: readonly Slot[]) {

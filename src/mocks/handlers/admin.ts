@@ -54,7 +54,7 @@ export const adminHandlers = [
   writes('put', '*/v2/gps/:id'),
   writes('put', '*/v2/gps/:c/:s/:gp'),
   writes('post', '*/v2/seasons/:s/gps'),
-  writes('post', '*/v2/gps/:c/:s/:gp/drivers', []),
+  writes('put', '*/v2/gps/:c/:s/:gp/drivers', []),
   writes('post', '*/v2/gps/:c/:s/:gp/sessions', { id: 5 }),
   writes('put', '*/v2/gps/:c/:s/:gp/sessions/:session', { id: 1 }),
   writes('delete', '*/v2/gps/:c/:s/:gp/sessions/:session'),

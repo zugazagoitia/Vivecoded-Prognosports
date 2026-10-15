@@ -22,7 +22,7 @@ import {
   cssColor,
   diffSlots,
   driverFullName,
-  driversPayload,
+  driversBody,
   driverSurname,
   filledCount,
   poolWhere,
@@ -162,7 +162,7 @@ const save = useReplaceGpDrivers(() => ({
   season: seasonId.value,
   gp: gp.value!.id,
 }))
-const onSave = () => save.mutate(driversPayload(slots.value))
+const onSave = () => save.mutate(driversBody(slots.value))
 
 const slotsOf = (teamId: number) =>
   slots.value.map((s, idx) => ({ s, idx })).filter((x) => x.s.teamId === teamId)
