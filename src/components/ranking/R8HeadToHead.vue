@@ -85,27 +85,27 @@ const areaPts = computed(
         type="button"
         :aria-pressed="p.id === rivalId"
         :class="[
-          'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 py-1 text-[13px] aria-pressed:font-semibold',
+          'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 max-w-full cursor-pointer items-center rounded-full border px-3 py-1 text-[13px] aria-pressed:font-semibold',
           focusRing,
         ]"
         @click="rivalId = p.id"
       >
-        {{ p.name }}
+        <span class="truncate">{{ p.name }}</span>
       </button>
     </div>
 
     <div
       role="group"
       :aria-label="t('ranking.r8.scoreboard')"
-      class="bg-surface-muted grid items-center gap-4 rounded-lg px-5 py-4 min-[1001px]:grid-cols-[minmax(0,1fr)_240px_minmax(0,1fr)]"
+      class="bg-surface-muted grid grid-cols-[minmax(0,1fr)] items-center gap-4 rounded-lg px-5 py-4 min-[1001px]:grid-cols-[minmax(0,1fr)_240px_minmax(0,1fr)]"
     >
-      <div class="min-[1001px]:text-right">
+      <div class="min-w-0 min-[1001px]:text-right">
         <span class="text-muted block text-sm">{{
           t('ranking.r8.standing', { pos: me.pos, pts: me.total })
         }}</span>
         <b class="text-heading border-series-you border-b-4 text-[22px]">{{ t('ranking.you') }}</b>
       </div>
-      <div class="flex items-baseline justify-center gap-3">
+      <div class="flex min-w-0 items-baseline justify-center gap-3">
         <b class="text-heading text-[44px] leading-[48px] tabular-nums" data-score="mine">{{
           score.mine
         }}</b>
@@ -118,7 +118,10 @@ const areaPts = computed(
         <span class="text-muted block text-sm">{{
           t('ranking.r8.standing', { pos: rival.pos, pts: rival.total })
         }}</span>
-        <b class="text-heading border-series-2 border-b-4 text-[22px]">{{ rname }}</b>
+        <b
+          class="text-heading border-series-2 inline-block max-w-full truncate border-b-4 align-bottom text-[22px]"
+          >{{ rname }}</b
+        >
       </div>
     </div>
 

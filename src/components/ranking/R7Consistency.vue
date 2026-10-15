@@ -80,11 +80,14 @@ const pointClass = (s: (typeof stats.value)[number]) =>
         {{ table ? t('ranking.viewChart') : t('ranking.viewTable') }}
       </PButton>
     </template>
-    <div v-if="!table" class="grid items-start gap-6 min-[1001px]:grid-cols-[minmax(0,1fr)_280px]">
+    <div
+      v-if="!table"
+      class="grid grid-cols-[minmax(0,1fr)] items-start gap-6 min-[1001px]:grid-cols-[minmax(0,1fr)_280px]"
+    >
       <div
         role="group"
         :aria-label="t('ranking.r7.chartAria')"
-        class="border-axis relative mb-[30px] ml-14 h-[520px] border-b border-l"
+        class="border-axis relative mb-[30px] ml-14 h-[520px] overflow-x-clip border-b border-l"
       >
         <span class="t-up text-muted absolute top-2 right-2.5 text-[11px]">{{
           t('ranking.r7.q.hh')
@@ -159,12 +162,12 @@ const pointClass = (s: (typeof stats.value)[number]) =>
           :aria-label="ariaPoint(s)"
           :aria-pressed="s.p.id === selected"
           :class="[
-            'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 cursor-pointer items-center rounded-full border px-3 text-[13px] aria-pressed:font-semibold',
+            'border-border-input bg-surface text-body hover:bg-surface-muted aria-pressed:bg-tint aria-pressed:border-focus-ring aria-pressed:text-tint-fg inline-flex min-h-8 max-w-full cursor-pointer items-center rounded-full border px-3 text-[13px] aria-pressed:font-semibold',
             focusRing,
           ]"
           @click="selected = s.p.id"
         >
-          {{ s.p.you ? t('ranking.you') : s.name }}
+          <span class="truncate">{{ s.p.you ? t('ranking.you') : s.name }}</span>
         </button>
       </div>
       <aside

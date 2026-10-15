@@ -78,5 +78,19 @@ export const getCommunityPointsInGp = (c: Id, comp: Id, season: Id, gp: Id, sign
   requestParsed(`${base(c, comp, season)}/points/${seg(gp)}`, z.array(UserPointsSchema), { signal })
 export const getTotalUserPoints = (c: Id, comp: Id, season: Id, signal?: AbortSignal) =>
   request(`${base(c, comp, season)}/totaluserpoints`, { signal })
+/** `{ [username]: total }`; anything else (or `{}`) degrades to an empty map. */
+export const getSeasonTotals = async (
+  c: Id,
+  comp: Id,
+  season: Id,
+  signal?: AbortSignal,
+): Promise<Record<string, number>> => {
+  const r = await getTotalUserPoints(c, comp, season, signal)
+  const out: Record<string, number> = {}
+  if (r && typeof r === 'object' && !Array.isArray(r))
+    for (const [k, v] of Object.entries(r))
+      if (typeof v === 'number' && Number.isFinite(v)) out[k] = v
+  return out
+}
 
 export { UserSchema }

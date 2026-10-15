@@ -333,10 +333,14 @@ const ticks = computed(() => {
             <li
               v-for="s in podium"
               :key="s.place"
-              class="flex flex-1 flex-col items-center gap-1.5"
+              class="flex min-w-0 flex-1 flex-col items-center gap-1.5"
             >
-              <span class="text-heading text-sm font-semibold">{{ firstName(s.item.name) }}</span>
-              <span class="text-muted text-xs tabular-nums"
+              <span
+                class="text-heading max-w-full truncate text-sm font-semibold"
+                :title="s.item.name"
+                >{{ firstName(s.item.name) }}</span
+              >
+              <span class="text-muted max-w-full truncate text-xs tabular-nums"
                 >{{ s.item.total }} {{ t('ranking.pts') }}</span
               >
               <span

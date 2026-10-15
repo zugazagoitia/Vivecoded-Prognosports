@@ -257,10 +257,15 @@ export function scatterScales(means: readonly number[], sds: readonly number[]) 
 }
 
 /** Marks from `ceil(x0/step) × step` up to `x1`. */
-export function ticks(x0: number, x1: number, step: number): number[] {
+export function ticks(x0: number, x1: number, step: number, maxTicks = 40): number[] {
+  if (![x0, x1, step].every(Number.isFinite) || step <= 0 || x1 < x0) return []
+  // Widen the step so huge ranges (7-digit points) never produce an unbounded loop.
+  let s = step
+  if ((x1 - x0) / s > maxTicks) s = (Math.ceil((x1 - x0) / maxTicks / step) || 1) * step
   const out: number[] = []
-  for (let v = Math.ceil(x0 / step) * step; v <= x1 + 1e-9; v += step)
-    out.push(Math.round(v * 1e6) / 1e6)
+  const start = Math.ceil(x0 / s)
+  for (let i = start; i * s <= x1 + 1e-9 && out.length <= maxTicks; i++)
+    out.push(Math.round(i * s * 1e6) / 1e6)
   return out
 }
 

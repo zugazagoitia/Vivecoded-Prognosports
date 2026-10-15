@@ -1,5 +1,5 @@
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
-import { useQueries } from '@tanstack/vue-query'
+import { useQuery, useQueries } from '@tanstack/vue-query'
 import { communitiesApi, gpsApi } from '@/api'
 import type { Season } from '@/api/schemas'
 import { gpShortName } from '@/lib/gp'
@@ -70,6 +70,22 @@ export function useRanking(
     })
   })
 
+  // `…/points` can come back empty (`{}`); then the totals give a degraded final table.
+  const pointsEmpty = computed(
+    () => points.data.value != null && Object.keys(points.data.value).length === 0,
+  )
+  const totals = useQuery({
+    queryKey: computed(() => {
+      const a = args.value
+      return keys.totals(a.community, a.competition ?? '', a.season ?? '')
+    }),
+    queryFn: ({ signal }) => {
+      const a = args.value
+      return communitiesApi.getSeasonTotals(a.community, a.competition!, a.season!, signal)
+    },
+    enabled: computed(() => pointsEmpty.value && season.value != null),
+  })
+
   const queries = [detail, seasons, points, members, gps] as const
   const total = computed(() =>
     season.value && seasons.data.value
@@ -84,6 +100,7 @@ export function useRanking(
     season,
     args,
     points,
+    totals,
     members,
     gps,
     communities,
