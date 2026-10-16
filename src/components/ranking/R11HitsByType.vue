@@ -4,9 +4,9 @@ import { useI18n } from 'vue-i18n'
 import PButton from '@/components/ui/PButton.vue'
 import PIcon from '@/components/ui/PIcon.vue'
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
-import { mean } from '@/lib/ranking'
+import { mean, type RankPlayer } from '@/lib/ranking'
 import {
-  attempts,
+  attemptsOf,
   availableKinds,
   bestByKind,
   diffText,
@@ -36,15 +36,17 @@ const views = computed(() =>
   (['count', 'grid', 'me'] as const).map((v) => ({ value: v, label: t(`ranking.r11.views.${v}`) })),
 )
 const avail = computed(() => availableKinds(model.value.players, model.value))
-const tries = computed(() => {
-  const all = attempts(model.value.played, rules.value)
+const triesOf = (p: RankPlayer) => {
+  const all = attemptsOf(p, model.value.played, rules.value)
   return {
     cs: avail.value.cs ? all.cs : 0,
     sp: avail.value.sp ? all.sp : 0,
     q: avail.value.q ? all.q : 0,
     r: avail.value.r ? all.r : 0,
   }
-})
+}
+const hasRules = computed(() => model.value.players.some((p) => sumTries(triesOf(p)) > 0))
+const sumTries = (t: Record<SessionKind, number>) => t.cs + t.sp + t.q + t.r
 const na = computed(() => t('ranking.r11.unavailable'))
 
 // Colour by session type (same as R13).
@@ -60,12 +62,14 @@ const rows = computed(() =>
     .map((p) => {
       const hits = seasonByKind(p, model.value, 'hitsBySession')
       const total = KINDS_R11.reduce((s, k) => s + hits[k], 0)
+      const tries = triesOf(p)
       return {
         p,
         hits,
+        tries,
         total,
-        rate: overallRate(hits, tries.value),
-        rates: KINDS_R11.map((k) => rateOf(hits[k], tries.value[k])),
+        rate: overallRate(hits, tries),
+        rates: KINDS_R11.map((k) => rateOf(hits[k], tries[k])),
       }
     })
     .sort((a, b) => b.total - a.total || a.p.pos - b.p.pos),
@@ -90,8 +94,8 @@ const hitsLabel = (h: Record<SessionKind, number>) =>
   KINDS_R11.map((k) => KIND_SHORT[k] + ' ' + (avail.value[k] ? h[k] : na.value)).join(', ')
 const pct = (r: number | undefined, k: SessionKind) =>
   !avail.value[k] ? na.value : r == null ? '—' : `${Math.round(r * 100)} %`
-const tip = (k: SessionKind, h: number) =>
-  avail.value[k] ? `${KIND_LONG[k]}: ${h} de ${tries.value[k]}` : `${KIND_LONG[k]}: ${na.value}`
+const tip = (k: SessionKind, h: number, tries: Record<SessionKind, number>) =>
+  avail.value[k] ? `${KIND_LONG[k]}: ${h} de ${tries[k]}` : `${KIND_LONG[k]}: ${na.value}`
 const title = computed(() =>
   view.value === 'count' ? 'count' : view.value === 'grid' ? 'grid' : 'me',
 )
@@ -186,7 +190,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
             class="rounded-sm"
             :class="KIND_BG[k]"
             :style="{ width: `${(r.hits[k] / first) * 100}%` }"
-            :title="tip(k, r.hits[k])"
+            :title="tip(k, r.hits[k], r.tries)"
           />
         </span>
         <span class="text-muted text-sm"
@@ -223,7 +227,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
                 ? 'bg-tint font-bold shadow-[inset_0_0_0_2px_var(--color-focus-ring)]'
                 : ''
             "
-            :title="tip(k, r.hits[k])"
+            :title="tip(k, r.hits[k], r.tries)"
           >
             <span
               v-if="r.rates[i] != null"
@@ -304,10 +308,7 @@ const pos = (v: number) => `${Math.min(100, Math.max(0, v)).toFixed(1)}%`
       </ul>
     </div>
 
-    <p
-      v-if="tries.cs + tries.sp + tries.q + tries.r === 0"
-      class="text-muted flex items-center gap-2 text-xs"
-    >
+    <p v-if="!hasRules" class="text-muted flex items-center gap-2 text-xs">
       <PIcon name="circle-info" :size="16" />{{ t('ranking.r11.noRules') }}
     </p>
   </RankCard>

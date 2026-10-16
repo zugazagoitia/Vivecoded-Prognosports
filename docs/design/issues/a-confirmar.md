@@ -379,6 +379,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ## Ranking y estadísticas ([#7](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/7))
 
 > **Decisión (#121):** los empates usan ranking denso (1, 2, 2, 3) para el puesto en el GP y en la general; «GP disputado» = GP con `UserPoints` presente en `/points`. Slugs en español, textos de vacío y contraste: propuestas aceptadas.
+>
+> **Decisión (#179):** un jugador sin pronóstico en un GP (sin fila en `/points`, `present = false`) cuenta **0 puntos** en ese GP y **se excluye de las medias de aciertos** (R7 en modo aciertos, R11: sus intentos no incluyen ese GP), en lugar de contar como 0 aciertos. En R8/R9 los puntos siguen siendo 0.
 
 ### [R0] Resumen del ranking ([#51](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/51))
 

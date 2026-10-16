@@ -6,7 +6,15 @@ import PTag from '@/components/ui/PTag.vue'
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import { focusRing } from '@/components/ui/styles'
 import { firstName, mean } from '@/lib/ranking'
-import { bySd, formatDec1, quadrant, scatterScales, seriesStats, ticks } from '@/lib/rankingStats'
+import {
+  bySd,
+  formatDec1,
+  quadrant,
+  scatterScales,
+  seriesStats,
+  ticks,
+  whenPresent,
+} from '@/lib/rankingStats'
 import type { Ranking } from '@/queries/ranking'
 import RankCard from './RankCard.vue'
 
@@ -26,7 +34,7 @@ const stats = computed(() =>
   model.value.players.map((p) => ({
     p,
     name: p.name,
-    ...seriesStats(measure.value === 'pts' ? p.pts : p.hits),
+    ...seriesStats(measure.value === 'pts' ? p.pts : whenPresent(p.hits, p.present)),
   })),
 )
 const meanX = computed(() => mean(stats.value.map((s) => s.mean)))

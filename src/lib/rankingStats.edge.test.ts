@@ -4,6 +4,7 @@ import type { RankGp, RankModel, RankPlayer } from './ranking'
 import {
   altRanking,
   attempts,
+  attemptsOf,
   availableKinds,
   axisMax,
   barColorPct,
@@ -50,6 +51,7 @@ import {
   tRank,
   ticks,
   tiesText,
+  whenPresent,
   type SeasonStanding,
 } from './rankingStats'
 
@@ -610,5 +612,55 @@ describe('R13 stacks and shares', () => {
     expect(altRanking(rows, 'q', 1)).toHaveLength(1)
     expect(altRanking([], 'q')).toEqual([])
     expect(altRanking(rows, 'q', 0)).toEqual([])
+  })
+})
+
+describe('player without a prediction (#179)', () => {
+  const rules = { predictedPositions: { '1': 10, '2': 10 } } as unknown as RuleSetData
+
+  test('whenPresent drops the GPs without a row; hit averages ignore them', () => {
+    const hits = [4, 0, 6]
+    const present = [true, false, true]
+    expect(whenPresent(hits, present)).toEqual([4, 6])
+    expect(seriesStats(whenPresent(hits, present)).mean).toBe(5)
+    // Counting the missing GP as 0 hits would give 3.33.
+    expect(seriesStats(hits).mean).toBeCloseTo(3.33, 2)
+  })
+
+  test('all GPs without a prediction: empty series, no NaN', () => {
+    const s = seriesStats(whenPresent([0, 0], [false, false]))
+    expect(s).toEqual({ mean: 0, sd: 0, min: 0, max: 0, n: 0 })
+  })
+
+  test('a single GP played', () => {
+    expect(whenPresent([7], [true])).toEqual([7])
+    expect(whenPresent([0], [false])).toEqual([])
+  })
+
+  test('missing `present` entries count as present (older models)', () => {
+    expect(whenPresent([1, 2], [])).toEqual([1, 2])
+  })
+
+  test('attemptsOf skips GPs without a row so the rate is not diluted', () => {
+    const p = player({ present: [true, false] })
+    const tries = attemptsOf(p, [normal, normal], rules)
+    expect(tries).toEqual(attempts([normal], rules))
+    expect(overallRate({ cs: 0, sp: 0, q: 5, r: 5 }, tries)).toBe(50)
+  })
+
+  test('no prediction in any GP: no attempts, rate undefined (shown as «—»)', () => {
+    const p = player({ present: [false, false] })
+    const tries = attemptsOf(p, [normal, sprint], rules)
+    expect(tries).toEqual({ cs: 0, sp: 0, q: 0, r: 0 })
+    expect(overallRate({ cs: 0, sp: 0, q: 0, r: 0 }, tries)).toBeUndefined()
+  })
+
+  test('points: the missing GP still counts 0 for the player', () => {
+    const me = player({ pts: [30, 0], gpPlaces: [1, 2] })
+    const rows = mySeasonRows(
+      { played: [normal, sprint], players: [me] } as unknown as RankModel,
+      me,
+    )
+    expect(rows.map((r) => r.pts)).toEqual([30, 0])
   })
 })

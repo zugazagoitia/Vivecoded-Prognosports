@@ -213,6 +213,14 @@ export interface SeriesStats {
   n: number
 }
 
+/**
+ * Values of the GPs in which the member has a row. A player without a prediction counts 0 points
+ * but is left out of hit averages (not «0 hits»), see a-confirmar.md (#121, #179).
+ */
+export function whenPresent(values: readonly number[], present: readonly boolean[]): number[] {
+  return values.filter((_, g) => present[g] !== false)
+}
+
 export function seriesStats(values: readonly number[]): SeriesStats {
   return {
     mean: mean(values),
@@ -556,6 +564,18 @@ export function attempts(
   const out = zero()
   for (const gp of gps) for (const k of KINDS_R11) out[k] += predictedIn(gp, k, rules)
   return out
+}
+
+/** Attempts of a player: only the GPs where they have a row (no prediction = no attempts). */
+export function attemptsOf(
+  p: Pick<RankPlayer, 'present'>,
+  gps: readonly Pick<RankGp, 'sessions'>[],
+  rules: RuleSetData | undefined,
+): ByKind {
+  return attempts(
+    gps.filter((_, g) => p.present[g] !== false),
+    rules,
+  )
 }
 
 /** `round(total / Σ attempts × 100)`; `undefined` when there are no attempts. */
