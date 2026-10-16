@@ -101,6 +101,7 @@ describe('GP selection', () => {
     expect(picked).toHaveLength(5)
     expect(picked[0]?.id).toBe(8)
     expect(gpsWithPoints(gps, Date.parse('2012-01-01'))).toHaveLength(2)
+    expect(gpsWithPoints(gps, Date.parse('2030-01-01'), Infinity)).toHaveLength(8)
   })
   it('pickVariant falls back to the first', () => {
     const v = [{ id: 1 }, { id: 2 }]

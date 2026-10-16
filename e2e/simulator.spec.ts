@@ -1,14 +1,16 @@
 import type { Page } from '@playwright/test'
 import { WEEKEND_GP, WEEKEND_NOW, WEEKEND_SEASON, WEEKEND_SESSIONS } from '../src/mocks/fixtures/gp'
+import { hideSessionResults } from './support/api'
 import { expect, expectNoSeriousA11yViolations, test } from './support/fixtures'
 
-// Sprint weekend (src/mocks/fixtures/gp.ts) at a fixed time: the sprint is closed with results
-// (community visible), the race is still open (only your own prediction can be compared).
+// Sprint weekend (src/mocks/fixtures/gp.ts) at a fixed time: the sprint is closed (its official
+// result is hidden with `hideSessionResults`, the simulator only works before it; community visible), the race is still open (only your own prediction can be compared).
 const PATH = (session: number, query = '') =>
   `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/${session}${query}`
 
-async function freeze(page: Page) {
+async function freeze(page: Page, { hideSprint = true } = {}) {
   await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+  if (hideSprint) await hideSessionResults(page, WEEKEND_SESSIONS.sprint)
 }
 
 async function noHorizontalScroll(page: Page) {
@@ -42,7 +44,7 @@ test.describe('Simulator (G6)', () => {
       })
 
       test('before closing the general is locked', async ({ authedPage: page }) => {
-        await freeze(page)
+        await freeze(page, { hideSprint: false })
         await page.goto(PATH(WEEKEND_SESSIONS.race))
         await expect(page.getByText('La general se simula al cierre')).toBeVisible()
         await expect(page.getByRole('button', { name: 'Como el sprint' })).toBeVisible()
@@ -80,11 +82,26 @@ test.describe('Simulator (G6)', () => {
     await expect(page.getByTestId('sim-announce')).toContainText('Tus puntos: 15')
   })
 
-  test('without your prediction: empty state and link to predict', async ({ authedPage: page }) => {
+  test('with the official result the simulator is blocked', async ({ authedPage: page }) => {
+    await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+    await page.goto(PATH(WEEKEND_SESSIONS.sprint))
+    await expect(page.getByText('Esta sesión ya tiene resultado oficial')).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Ver resultados' })).toBeVisible()
+    await expectNoSeriousA11yViolations(page)
+  })
+
+  test('without a grid yet the simulator is blocked', async ({ authedPage: page }) => {
     await freeze(page)
+    await page.route(/\/sessions\/\d+\/grid/, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        headers: { 'access-control-allow-origin': '*' },
+        body: JSON.stringify({ success: true, status: 200, code: 0, message: 'OK', result: [] }),
+      }),
+    )
     await page.goto(PATH(WEEKEND_SESSIONS.q))
-    await expect(page.getByText('Aún no tienes pronóstico en esta sesión')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Ir a pronosticar' })).toBeVisible()
+    await expect(page.getByText('Aún no hay parrilla')).toBeVisible()
     await expectNoSeriousA11yViolations(page)
   })
 

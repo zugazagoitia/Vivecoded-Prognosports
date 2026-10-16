@@ -78,6 +78,17 @@
       "sessionText": "Este Gran Premio no tiene la sesión que buscas.",
       "action": "Ver los Grandes Premios"
     },
-    "noGrid": "Esta sesión no tiene parrilla: parte de tu pronóstico o del orden de los pilotos."
+    "blocked": {
+      "official": {
+        "title": "Esta sesión ya tiene resultado oficial",
+        "text": "El simulador solo está disponible hasta que se publica el resultado oficial. Consulta los puntos reales en los resultados.",
+        "action": "Ver resultados"
+      },
+      "noGrid": {
+        "title": "Aún no hay parrilla",
+        "text": "El simulador se activa en cuanto se publica la parrilla de esta sesión. Vuelve entonces.",
+        "action": "Volver al Gran Premio"
+      }
+    }
   }
 }

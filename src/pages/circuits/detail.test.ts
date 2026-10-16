@@ -66,19 +66,13 @@ describe('circuit detail', () => {
     expect(screen.queryByRole('tablist')).toBeNull()
   })
 
-  it('signed in: winners, history, averages and predict button', async () => {
+  it('signed in: winners column, no personal history card', async () => {
     await open(`/circuits/${TWO_VARIANT_CIRCUIT}`, { signedIn: true })
-    expect(await screen.findByText('Tu historial aquí')).toBeTruthy()
     expect(
       await screen.findByRole('columnheader', { name: 'Ganador de la comunidad' }),
     ).toBeTruthy()
-    // current season GP is still pending at REFERENCE_NOW
-    expect(await screen.findByText('Este fin de semana')).toBeTruthy()
-    expect(screen.getByRole('link', { name: /Pronosticar Singapur 2026/ })).toBeTruthy()
-    expect(await screen.findByRole('img', { name: '2025: 38 puntos' })).toBeTruthy()
-    expect(screen.getByText('Tu media en la temporada')).toBeTruthy()
-    expect(await screen.findByText('38,4 pts')).toBeTruthy()
-    expect(screen.getByRole('img', { name: '2026: pendiente' })).toBeTruthy()
+    expect(screen.queryByText('Tu historial aquí')).toBeNull()
+    expect(screen.queryByText(/Los .* Grandes Premios más recientes/)).toBeNull()
   })
 
   it('unknown circuit (200 + success:false) shows the own 404', async () => {

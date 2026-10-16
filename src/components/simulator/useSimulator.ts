@@ -309,6 +309,13 @@ export function useSimulator(
     calcError: computed(() => calc.isError.value),
     loadingInitial,
     initialised,
-    noGrid: computed(() => ready.value && !available.value.grid),
+    /**
+     * Simulating is allowed from the moment the grid exists until the official result:
+     * `official` (session already scored) and `noGrid` (grid not published yet) block it.
+     */
+    blocked: computed<'official' | 'noGrid' | null>(() => {
+      if (r.moment.value === 'res') return 'official'
+      return ready.value && !available.value.grid ? 'noGrid' : null
+    }),
   }
 }

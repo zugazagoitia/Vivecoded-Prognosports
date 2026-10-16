@@ -46,27 +46,42 @@ describe('roles and permissions', () => {
   })
 
   test.each([
-    ['owner without member row', 1, undefined, { recreateInvitation: true, settings: true }],
-    ['plain player', 2, member(2, 'b'), { recreateInvitation: false, settings: false }],
+    [
+      'owner without member row',
+      1,
+      undefined,
+      { recreateInvitation: true, editImage: true, settings: true },
+    ],
+    [
+      'plain player',
+      2,
+      member(2, 'b'),
+      { recreateInvitation: false, editImage: false, settings: false },
+    ],
     [
       'can recreate',
       2,
       member(2, 'b', { canRecreateInvitation: true }),
-      { recreateInvitation: true, settings: true },
+      { recreateInvitation: true, editImage: false, settings: true },
     ],
     [
       'can kick only',
       2,
       member(2, 'b', { canKickUsers: true }),
-      { recreateInvitation: false, settings: true },
+      { recreateInvitation: false, editImage: false, settings: true },
     ],
     [
       'can modify permissions only',
       2,
       member(2, 'b', { canModifyPermissions: true }),
-      { recreateInvitation: false, settings: true },
+      { recreateInvitation: false, editImage: false, settings: true },
     ],
-    ['anonymous', undefined, undefined, { recreateInvitation: false, settings: false }],
+    [
+      'anonymous',
+      undefined,
+      undefined,
+      { recreateInvitation: false, editImage: false, settings: false },
+    ],
   ])('permissionsOf: %s', (_n, uid, m, expected) => {
     expect(permissionsOf(community, m, uid)).toEqual(expected)
   })

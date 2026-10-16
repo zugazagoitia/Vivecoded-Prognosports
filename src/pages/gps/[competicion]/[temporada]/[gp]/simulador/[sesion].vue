@@ -119,10 +119,33 @@ const blocking = computed(() => r.detail.notFound.value || r.sessionNotFound.val
           :error="r.error.value"
           @retry="r.refetch()"
         />
-        <div v-else-if="r.loading.value || (s.hasMine.value && !s.initialised.value)" class="grid2">
+        <div
+          v-else-if="
+            !s.blocked.value && (r.loading.value || (s.hasMine.value && !s.initialised.value))
+          "
+          class="grid2"
+        >
           <PCard :padded="true"><Skeleton variant="table" :rows="8" /></PCard>
           <PCard :padded="true"><Skeleton variant="table" :rows="12" /></PCard>
         </div>
+
+        <PCard v-else-if="s.blocked.value" :padded="false">
+          <EmptyState
+            icon="edit_calendar"
+            :title="t(`simulator.blocked.${s.blocked.value}.title`)"
+            :text="t(`simulator.blocked.${s.blocked.value}.text`)"
+          >
+            <PButton
+              v-if="s.blocked.value === 'official'"
+              :to="sessionPath(gp, 'resultados', session)"
+              icon="flag-checkered"
+              >{{ t('simulator.blocked.official.action') }}</PButton
+            >
+            <PButton v-else :to="gpPath(gp)" icon="flag-checkered">{{
+              t('simulator.blocked.noGrid.action')
+            }}</PButton>
+          </EmptyState>
+        </PCard>
 
         <PCard v-else-if="!s.hasMine.value" :padded="false">
           <EmptyState
@@ -138,7 +161,6 @@ const blocking = computed(() => r.detail.notFound.value || r.sessionNotFound.val
 
         <template v-else>
           <PrognoAlert v-if="s.calcError.value" variant="warn" :title="t('simulator.error.calc')" />
-          <p v-if="s.noGrid.value" class="text-muted text-[13px]">{{ t('simulator.noGrid') }}</p>
           <div class="grid2 items-start">
             <ResultCard
               :rows="s.rowsVm.value"

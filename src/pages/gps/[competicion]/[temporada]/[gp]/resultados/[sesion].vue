@@ -179,7 +179,6 @@ const crumbs = computed(() => [
             :near="r.near.value"
             :rules="r.rules.value"
             :bonus="r.bonus.value"
-            :simulator-to="sessionPath(gp, 'simulador', session)"
             :caption="t('results.breakdown.caption', { session: sessionName })"
           />
 

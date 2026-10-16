@@ -111,7 +111,7 @@ describe('Results (G5)', () => {
     expect(screen.queryByText('Resultado real')).toBeNull()
   })
 
-  it('«Tu desglose»: KPIs, rows and simulator link; toggles use aria-pressed', async () => {
+  it('«Tu desglose»: KPIs, rows; toggles use aria-pressed', async () => {
     const user = userEvent.setup()
     await open(path(WEEKEND_SESSIONS.sprint))
     const community = await screen.findByRole('button', { name: 'Comunidad' })
@@ -129,9 +129,7 @@ describe('Results (G5)', () => {
     expect(screen.getByText('Lo pusiste 1 más arriba')).toBeTruthy()
     expect(screen.getAllByText('A dos posiciones').length).toBeGreaterThan(0)
     expect(screen.getByText('Más puntos en el GP')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Abrir el simulador' }).getAttribute('href')).toBe(
-      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/${WEEKEND_SESSIONS.sprint}`,
-    )
+    expect(screen.queryByRole('link', { name: 'Abrir el simulador' })).toBeNull()
   })
 
   it('«Tu desglose» in the URL falls back to the community view without results', async () => {

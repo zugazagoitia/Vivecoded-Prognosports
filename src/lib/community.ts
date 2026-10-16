@@ -117,6 +117,8 @@ export function roleOf(community: Pick<Community, 'owner'>, userId: number): Rol
 
 export interface Permissions {
   recreateInvitation: boolean
+  /** Edits the community picture: only the creator (no `can_*` covers it). */
+  editImage: boolean
   /** Shows «Ajustes»: owner or anyone with a delegated `can_*` permission. */
   settings: boolean
 }
@@ -129,7 +131,11 @@ export function permissionsOf(
   const owner = isOwner(community, userId)
   const any =
     !!member && (member.canRecreateInvitation || member.canModifyPermissions || member.canKickUsers)
-  return { recreateInvitation: owner || !!member?.canRecreateInvitation, settings: owner || any }
+  return {
+    recreateInvitation: owner || !!member?.canRecreateInvitation,
+    editImage: owner,
+    settings: owner || any,
+  }
 }
 
 // --- Standings --------------------------------------------------------------------------

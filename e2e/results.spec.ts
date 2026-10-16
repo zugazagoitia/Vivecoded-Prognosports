@@ -56,13 +56,12 @@ test.describe('Results (G5)', () => {
         await noHorizontalScroll(page)
       })
 
-      test('«Tu desglose»: KPIs, table, bonus and simulator link', async ({ authedPage: page }) => {
+      test('«Tu desglose»: KPIs, table and bonus', async ({ authedPage: page }) => {
         await freeze(page)
         await page.goto(PATH(WEEKEND_SESSIONS.sprint, '?vista=desglose'))
         await expect(page.getByText('Puntos de la sesión')).toBeVisible()
         await expect(page.getByText('Lo pusiste 1 más arriba')).toBeVisible()
         await expect(page.getByText('Más puntos en el GP')).toBeVisible()
-        await expect(page.getByRole('link', { name: 'Abrir el simulador' })).toBeVisible()
         await expect(page.getByRole('button', { name: 'Tu desglose' })).toHaveAttribute(
           'aria-pressed',
           'true',

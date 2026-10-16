@@ -40,14 +40,12 @@ test.describe('circuit detail (P4)', () => {
         expect(authedRequests).toEqual([])
       })
 
-      test('signed in: history and winners, axe', async ({ authedPage: page }) => {
+      test('signed in: winners and no personal history, axe', async ({ authedPage: page }) => {
         await page.goto(PATH)
-        await expect(page.getByRole('heading', { name: 'Tu historial aquí' })).toBeVisible()
         await expect(
           page.getByRole('columnheader', { name: 'Ganador de la comunidad' }),
         ).toBeVisible()
-        await expect(page.getByText('Tu media en la temporada')).toBeVisible()
-        await expect(page.getByText('38,4 pts')).toBeVisible()
+        await expect(page.getByText('Tu historial aquí')).toHaveCount(0)
         await expectNoSeriousA11yViolations(page)
         await noHorizontalScroll(page)
       })
@@ -55,8 +53,9 @@ test.describe('circuit detail (P4)', () => {
       test('snapshot', async ({ authedPage: page, browserName }) => {
         test.skip(browserName !== 'chromium', 'screenshots are Chromium-only')
         await page.goto(PATH)
-        await expect(page.getByRole('heading', { name: 'Tu historial aquí' })).toBeVisible()
-        await expect(page.getByRole('img', { name: /^2025: \d+ puntos$/ })).toBeVisible()
+        await expect(
+          page.getByRole('columnheader', { name: 'Ganador de la comunidad' }),
+        ).toBeVisible()
         if (scheme === 'light')
           await expect(page).toHaveScreenshot(`circuit-detail-${scheme}.png`, {
             fullPage: true,
