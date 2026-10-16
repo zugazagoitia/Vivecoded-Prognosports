@@ -7,7 +7,9 @@ import PCard from '@/components/ui/PCard.vue'
 import PCheckbox from '@/components/ui/PCheckbox.vue'
 import PSelect from '@/components/ui/PSelect.vue'
 import PTag from '@/components/ui/PTag.vue'
-import type { Driver, RaceSession } from '@/api/schemas'
+import PublicFillPanel from '@/components/admin/PublicFillPanel.vue'
+import type { Driver, GrandPrix, RaceSession } from '@/api/schemas'
+import type { Prefill } from '@/lib/publicData'
 import { driverOption } from '@/lib/adminDrivers'
 import {
   gridComplete,
@@ -30,6 +32,7 @@ const props = defineProps<{
   args: { comp: string; season: string; gp: number }
   sessions: RaceSession[]
   drivers: Driver[]
+  gp?: GrandPrix
   selectedId?: number
 }>()
 const emit = defineEmits<{ select: [id: number]; dirty: [v: boolean] }>()
@@ -77,6 +80,15 @@ watch(
 const dirty = computed(() => snapshot(rows.value) !== base.value)
 watch(dirty, (v) => emit('dirty', v))
 
+/** Public data only fills the form (unsaved changes); «Publicar parrilla» is still needed. */
+function applyPublic(p: Prefill) {
+  rows.value = rows.value.map((r, i) => ({
+    ...r,
+    driverId: p.drivers[i] ?? null,
+    isFromPit: p.isFromPit[i] === true,
+  }))
+}
+
 const notify = ref(true)
 const publish = usePublishGrid(() => props.args)
 function onPublish() {
@@ -118,7 +130,19 @@ const options = computed(() => [
         <PTag color="warn">{{ t('admin.sessions.grid.draft') }}</PTag>
       </div>
     </header>
-    <div class="p-4">
+    <div class="flex flex-col gap-3 p-4">
+      <PublicFillPanel
+        v-if="session && gridQ.data.value"
+        :key="session.id"
+        purpose="grid"
+        :session="session"
+        :sessions="sessions"
+        :gp="gp"
+        :drivers="drivers"
+        :current="rows.map((r) => r.driverId)"
+        :count="n"
+        @apply="applyPublic"
+      />
       <ErrorState v-if="gridQ.isError.value" :error="gridQ.error.value" @retry="gridQ.refetch()" />
       <Skeleton v-else-if="!gridQ.data.value" variant="table" :rows="10" />
       <div v-else class="tw">

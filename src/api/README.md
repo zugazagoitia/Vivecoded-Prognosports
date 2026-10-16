@@ -54,6 +54,10 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 - Ganador de la comunidad: `points/{grandprix}` es una petición por GP y exige sesión. Se piden todos los GP disputados de la variante con concurrencia limitada (`POINTS_CONCURRENCY`) y caché (`staleTime`). «Tu historial aquí» se omitió (decisión del propietario, #188).
 - Mapa: no hay tiles propios; se usan teselas raster de CARTO (ver `docs/security.md`).
 
+## Datos públicos de F1 (fuera de la API v2)
+
+`src/lib/publicData/` consulta Jolpica F1 (`https://api.jolpi.ca/ergast/f1`, principal; caché propia de 10 min) y OpenF1 (`https://api.openf1.org/v1`, respaldo; límite de 3 peticiones/s, por eso cola con concurrencia ≤ 2 y reintentos tras `429`) para rellenar parrilla y resultados en M5. No pasan por `src/api/client.ts`; sus respuestas se validan con los esquemas Zod de `src/lib/publicData/schemas.ts` (formas reales: en Jolpica los números llegan como cadenas). Jolpica no tiene clasificación sprint: la parrilla del sprint sale del `grid` de los resultados del sprint o, si aún no se ha disputado, de OpenF1. OpenF1 no aporta vuelta rápida. Atribución visible en la vista previa.
+
 ## URL base
 
 `VITE_API_BASE_URL` es solo el origen (`https://api.prognosports.com`, sin `/v2`): las rutas de los envoltorios ya empiezan por `/v2` (igual que en la spec). La validación de entorno rechaza una URL que termine en `/v2` (evita peticiones a `/v2/v2/...`). Los mocks (MSW y `e2e/support/api.ts`) interceptan `*/v2/**` y no dependen del origen.

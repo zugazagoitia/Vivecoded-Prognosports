@@ -407,6 +407,32 @@
       "submit": "Añadir",
       "cancel": "Cancelar"
     },
+    "publicData": {
+      "button": "Rellenar con datos públicos",
+      "loading": "Consultando datos públicos…",
+      "error": "No se han podido obtener los datos públicos. El formulario no se ha modificado.",
+      "empty": "Todavía no hay datos públicos para esta sesión.",
+      "retry": "Reintentar",
+      "previewTitle": "Vista previa de datos públicos",
+      "source": "Fuente: {source} · {time}",
+      "attribution": "Datos de {source}",
+      "sources": { "jolpica": "Jolpica F1", "openf1": "OpenF1" },
+      "noChanges": "Los datos públicos coinciden con el formulario.",
+      "changes": "{n} cambio respecto al formulario | {n} cambios respecto al formulario",
+      "change": "P{n}: {from} → {to}",
+      "emptySlot": "vacío",
+      "pitLane": "{n} salida desde el pit lane | {n} salidas desde el pit lane",
+      "fastLap": "Vuelta rápida: {driver}",
+      "unmatched": "Sin emparejar (se dejan vacíos): {list}",
+      "warnings": {
+        "circuit": "El circuito del GP público no coincide con el de este GP. Revisa los datos antes de aplicarlos.",
+        "fallbackQualifying": "Aún no hay parrilla definitiva: se usa el orden de la clasificación."
+      },
+      "apply": "Aplicar al formulario",
+      "applyHint": "Se rellena como cambios sin guardar.",
+      "discard": "Descartar",
+      "notAvailable": "Esta sesión no tiene equivalente en los datos públicos."
+    },
     "grid": {
       "title": "Parrilla de salida · {session}",
       "subtitle": "Según la clasificación. Marca quién sale desde el pit lane y añade una nota si hay sanción.",

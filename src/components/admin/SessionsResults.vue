@@ -7,7 +7,9 @@ import PCard from '@/components/ui/PCard.vue'
 import PSelect from '@/components/ui/PSelect.vue'
 import PrognoAlert from '@/components/ui/PrognoAlert.vue'
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
-import type { Driver, RaceSession, RuleSet } from '@/api/schemas'
+import PublicFillPanel from '@/components/admin/PublicFillPanel.vue'
+import type { Driver, GrandPrix, RaceSession, RuleSet } from '@/api/schemas'
+import type { Prefill } from '@/lib/publicData'
 import { driverOption } from '@/lib/adminDrivers'
 import {
   hasDuplicates,
@@ -30,6 +32,7 @@ const props = defineProps<{
   sessions: RaceSession[]
   drivers: Driver[]
   rulesets: RuleSet[]
+  gp?: GrandPrix
   selectedId?: number
   now: number
 }>()
@@ -100,6 +103,11 @@ function clearAll() {
   rows.value = rows.value.map(() => null)
   fast.value = null
 }
+/** Public data only fills the form (unsaved changes); «Guardar y calcular» is still needed. */
+function applyPublic(p: Prefill) {
+  rows.value = p.drivers.slice(0, count.value)
+  if (p.fast != null) fast.value = p.fast
+}
 const set = (i: number, v: string | number) => (rows.value[i] = v === '' ? null : Number(v))
 </script>
 
@@ -121,6 +129,18 @@ const set = (i: number, v: string | number) => (rows.value[i] = v === '' ? null 
       />
     </header>
     <div class="flex flex-col gap-3 p-4">
+      <PublicFillPanel
+        v-if="session && resultsQ.data.value"
+        :key="session.id"
+        purpose="results"
+        :session="session"
+        :sessions="sessions"
+        :gp="gp"
+        :drivers="drivers"
+        :current="rows"
+        :count="count"
+        @apply="applyPublic"
+      />
       <ErrorState
         v-if="resultsQ.isError.value"
         :error="resultsQ.error.value"

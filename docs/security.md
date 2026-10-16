@@ -18,11 +18,12 @@ Se sirven desde `public/_headers` (bloque `/*`; Vite lo copia a `dist/_headers`)
 
 ### CSP
 
-`default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com https://*.basemaps.cartocdn.com; connect-src 'self' https://api.prognosports.com; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`
+`default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com https://*.basemaps.cartocdn.com; connect-src 'self' https://api.prognosports.com https://api.jolpi.ca https://api.openf1.org; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`
 
 - Sin `unsafe-inline` ni `unsafe-eval`. Vite emite el JS y el CSS como ficheros; no hay scripts en línea. `style-src 'self'` basta: los gráficos son SVG propios (no hay ECharts ni MapLibre).
 - Zod comprueba `new Function('')` para su JIT y eso se reporta como violación `script-src eval` aunque se capture; `src/lib/zod-csp.ts` fija `z.config({ jitless: true })` y se importa primero en `main.ts`.
 - Fuentes: el sistema de diseño usa la pila del sistema en la app (los `preview.html` de `docs/design` cargan Inter de Google Fonts solo como maqueta). Si se adopta Inter, autoalojarla (`@fontsource`, `font-src 'self'`) en lugar de abrir Google Fonts.
+- **Datos públicos de F1** (admin M5, «Rellenar con datos públicos»): `connect-src` admite `https://api.jolpi.ca` (Jolpica, principal) y `https://api.openf1.org` (OpenF1, respaldo). Solo lecturas, sin credenciales; la capa vive en `src/lib/publicData/` y se carga de forma perezosa. OpenF1 responde `429` por encima de 3 peticiones/s: cola con concurrencia ≤ 2 y reintentos con espera.
 - **API**: el origen está fijado a `https://api.prognosports.com` en `public/_headers`. Si la API de otro entorno usa otro origen (`VITE_API_BASE_URL`), hay que editar `img-src`/`connect-src` en ese despliegue.
 - **Servicios opcionales (hoy inactivos; al activarlos hay que ampliar la CSP en la misma línea de `_headers`)**:
   - Sentry (se activa con `VITE_SENTRY_DSN`): su origen de ingest (p. ej. `https://*.ingest.sentry.io`) en `connect-src`.
