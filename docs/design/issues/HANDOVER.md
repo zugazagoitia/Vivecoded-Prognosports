@@ -1,3 +1,5 @@
+> **Documento histórico (completado).** Las 89 issues (9 épicas + 80 issues) ya se crearon y casi todas están implementadas; el mapa código → número está en `issue-map.json`. Se conserva como referencia del método. Estado actual del proyecto: [`README.md`](../../../README.md) y [`docs/README.md`](../../README.md). Decisiones tomadas sobre los «a confirmar»: [`a-confirmar.md`](a-confirmar.md).
+
 # Handover: crear las issues de GitHub
 
 Objetivo: crear en `zugazagoitia/Vivecoded-Prognosports` 89 issues (9 épicas + 80 issues) a partir de este directorio, con `gh`. Ya se hizo el diseño, el plan y la redacción; falta solo crearlas.

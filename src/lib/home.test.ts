@@ -109,9 +109,9 @@ describe('movement and KPI text', () => {
     expect(formatAvg(38)).toBe('38,0')
     expect(formatAvg(37.647, true)).toBe('38')
   })
-  it('behind the leader: «Vas líder» instead of 0, true minus on phones', () => {
+  it('behind the leader: «Eres líder» instead of 0, true minus on phones', () => {
     expect(behindText(12)).toBe('a 12 del líder')
-    expect(behindText(0)).toBe('Vas líder')
+    expect(behindText(0)).toBe('Eres líder')
     expect(behindText(12, true)).toBe('−12 del líder')
   })
 })

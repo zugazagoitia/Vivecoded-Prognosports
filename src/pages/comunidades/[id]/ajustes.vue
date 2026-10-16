@@ -14,7 +14,7 @@ import PTitle from '@/components/ui/PTitle.vue'
 import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { useMobileBackHref, useMobileTitle } from '@/composables/useMobileNav'
 import { toaster } from '@/composables/useToast'
-import { SETTINGS_SECTIONS } from '@/lib/community-settings'
+import { visibleSections } from '@/lib/community-settings'
 import {
   useCommunityDetail,
   useCommunityMembers,
@@ -38,7 +38,8 @@ import { useSessionStore } from '@/stores/session'
  * name, description, access or rules).
  *
  * Access: needs a session and `permissions.settings` (the creator or a member with a delegated
- * `can_*`). Not a member -> `/comunidades`; a member without permission -> back to the community
+ * `can_*`). Each section follows its permission: Imagen only for the creator, Invitación for
+ * `recreateInvitation`; Datos, Reglas and Miembros are read-only for anyone with access. Not a member -> `/comunidades`; a member without permission -> back to the community
  * (H5) with an info toast; an unknown id shows an own 404. Anchors: `#imagen`, `#invitacion`,
  * `#datos`, `#reglas`, `#miembros`.
  */
@@ -90,6 +91,7 @@ const known = computed(
   () => !!community.value && (members.isSuccess.value || members.isError.value),
 )
 const allowed = computed(() => perms.value.settings)
+const sections = computed(() => visibleSections(perms.value))
 watch(
   () => [detail.notMember.value, known.value, allowed.value, members.isSuccess.value] as const,
   ([notMember, isKnown, ok, membersOk]) => {
@@ -190,7 +192,7 @@ watch(
           <ul
             class="m-0 flex list-none gap-1 overflow-x-auto p-0 max-[900px]:pb-1 min-[901px]:flex-col min-[901px]:gap-0.5"
           >
-            <li v-for="s in SETTINGS_SECTIONS" :key="s">
+            <li v-for="s in sections" :key="s">
               <RouterLink
                 :to="{ hash: `#${s}` }"
                 replace
@@ -204,7 +206,7 @@ watch(
         </nav>
 
         <div class="flex min-w-0 flex-col gap-6">
-          <section id="imagen" class="scroll-mt-20">
+          <section v-if="perms.editImage" id="imagen" class="scroll-mt-20">
             <CommunityImageCard
               :id="community.id ?? id"
               v-model:cropping="cropping"
@@ -217,7 +219,7 @@ watch(
               @remove="remove.mutate()"
             />
           </section>
-          <section id="invitacion" class="scroll-mt-20">
+          <section v-if="perms.recreateInvitation" id="invitacion" class="scroll-mt-20">
             <SettingsInviteCard
               :invitation="community.invitation"
               :open="community.open"

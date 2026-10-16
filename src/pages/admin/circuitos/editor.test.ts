@@ -1,6 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { http } from 'msw'
+import { toaster } from '@/composables/useToast'
+import { fail } from '@/mocks/envelope'
 import { adminCalls } from '@/mocks/handlers/admin'
+import { server } from '@/mocks/server'
 import { openAdmin } from '@/test/admin'
 import Edit from './[circuit].vue'
 import New from './nuevo.vue'
@@ -68,6 +72,52 @@ describe('admin circuit edit (M7)', () => {
       path: '/v2/circuits/18',
       body: { name: 'Layout nuevo', distance: 4.5, turns: 12 },
     })
+  })
+
+  it('deletes a variant after confirming', async () => {
+    const { user } = await edit()
+    await user.click(await screen.findByRole('button', { name: 'Eliminar variante Layout actual' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(adminCalls).toHaveLength(0)
+    await user.click(within(dialog).getByRole('button', { name: 'Eliminar' }))
+    await waitFor(() => expect(adminCalls).toHaveLength(1))
+    expect(adminCalls[0]).toMatchObject({ method: 'DELETE' })
+    expect(adminCalls[0]?.path).toMatch(/^\/v2\/circuits\/18\/\d+$/)
+  })
+
+  it('deletes the circuit after confirming and does not delete when cancelled', async () => {
+    const { user } = await edit()
+    await user.click(await screen.findByRole('button', { name: 'Eliminar circuito' }))
+    let dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'Cancelar' }))
+    expect(adminCalls).toHaveLength(0)
+    await user.click(screen.getByRole('button', { name: 'Eliminar circuito' }))
+    dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'Eliminar' }))
+    await waitFor(() => expect(adminCalls).toHaveLength(1))
+    expect(adminCalls[0]).toEqual({ method: 'DELETE', path: '/v2/circuits/18', body: undefined })
+  })
+
+  it('shows the backend error when the circuit is still in use', async () => {
+    server.use(
+      http.delete('*/v2/circuits/:id', () => fail(409, 'El circuito tiene Grandes Premios.')),
+    )
+    const error = vi.spyOn(toaster, 'error')
+    const { user } = await edit()
+    await user.click(await screen.findByRole('button', { name: 'Eliminar circuito' }))
+    const dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'Eliminar' }))
+    await waitFor(() => expect(error).toHaveBeenCalled())
+    expect(String(error.mock.calls[0]?.[0])).toContain('No se ha podido eliminar el circuito')
+    expect(screen.getByLabelText<HTMLInputElement>('Nombre').value).toBe(
+      'Marina Bay Street Circuit',
+    )
+  })
+
+  it('hides the delete button in create mode', async () => {
+    await openAdmin(New, { route: '/admin/circuitos/nuevo', pattern: '/admin/circuitos/nuevo' })
+    await screen.findByRole('heading', { level: 1, name: 'Nuevo circuito' })
+    expect(screen.queryByRole('button', { name: 'Eliminar circuito' })).toBeNull()
   })
 })
 

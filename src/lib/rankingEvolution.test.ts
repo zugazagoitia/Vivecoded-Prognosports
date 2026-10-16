@@ -9,6 +9,7 @@ import {
   focusSet,
   formatGap,
   gapScale,
+  gpCap,
   gridLabels,
   highlightSet,
   leaderChanges,
@@ -82,6 +83,9 @@ describe('R6 bump', () => {
     expect(toggleCustom([1, 2, 3, 4, 5], 6, 9)).toEqual([2, 3, 4, 5, 6])
     expect(toggleCustom([1, 2], 2, 9)).toEqual([1])
     expect(toggleCustom([1, 2], 9, 9)).toEqual([1, 2])
+    const all = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    expect(toggleCustom(all, 12, 99)).toEqual([8, 9, 10, 11, 12])
+    expect(toggleCustom(all, 3, 99)).toEqual([7, 8, 9, 10, 11])
   })
   it('y for a rank follows the mockup scale', () => {
     expect(yForRank(1, 12)).toBe(18)
@@ -173,9 +177,15 @@ describe('R12 title race', () => {
   it('needs and difficulty tiers, no division by zero', () => {
     expect(needPerGp(300, 200, 10, 5)).toBe(50)
     expect(needPerGp(300, 200, 10, 0)).toBeUndefined()
-    expect(difficulty(80, 40)).toBe('impossible')
-    expect(difficulty(60, 40)).toBe('veryHard')
-    expect(difficulty(50, 40)).toBe('hard')
-    expect(difficulty(41, 40)).toBe('possible')
+    expect(difficulty(80, 40, 70)).toBe('impossible')
+    expect(difficulty(60, 40, 70)).toBe('veryHard')
+    expect(difficulty(50, 40, 70)).toBe('hard')
+    expect(difficulty(41, 40, 70)).toBe('possible')
+    expect(difficulty(80, 40, 120)).toBe('veryHard')
+  })
+  it('gpCap follows the rules maximum or the best real GP, never a fixed 70', () => {
+    const gp = { sessions: [] }
+    expect(gpCap([gp], [{ pts: [10, 150] }], undefined)).toBe(150)
+    expect(gpCap([], [], undefined)).toBe(1)
   })
 })

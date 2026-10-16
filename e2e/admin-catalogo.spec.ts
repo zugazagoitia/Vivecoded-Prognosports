@@ -76,4 +76,40 @@ test.describe('Admin · catálogo (M6-M9)', () => {
       body: { name: 'Circuito Nuevo' },
     })
   })
+  test('deleting a circuit asks for confirmation, deletes it and returns to the list', async ({
+    authedPage: page,
+    viewport,
+  }) => {
+    test.skip(isPhone(viewport), 'desktop layout')
+    const calls = await openAdminPage(page, '/admin/circuitos/18')
+    await page.getByRole('button', { name: 'Eliminar circuito' }).click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByText('¿Eliminar este circuito?')).toBeVisible()
+    await expectNoSeriousA11yViolations(page)
+    expect(calls).toHaveLength(0)
+    await dialog.getByRole('button', { name: 'Eliminar' }).click()
+    await expect.poll(() => calls.length).toBe(1)
+    expect(calls[0]).toMatchObject({ method: 'DELETE', path: '/circuits/18' })
+    await expect(page).toHaveURL(/\/admin\/circuitos$/)
+  })
+
+  test('removing a driver from the season asks for confirmation first', async ({
+    authedPage: page,
+    viewport,
+  }) => {
+    test.skip(isPhone(viewport), 'desktop layout')
+    const calls = await openAdminPage(page, '/admin/pilotos')
+    await expect(page.getByRole('combobox', { name: 'Temporada' })).toBeVisible()
+    await page
+      .getByRole('button', { name: /^Quitar a / })
+      .first()
+      .click()
+    const dialog = page.getByRole('dialog')
+    await expect(dialog.getByText('¿Quitar este piloto de la temporada?')).toBeVisible()
+    await expectNoSeriousA11yViolations(page)
+    await dialog.getByRole('button', { name: 'Quitar' }).click()
+    await expect.poll(() => calls.length).toBe(1)
+    expect(calls[0]).toMatchObject({ method: 'DELETE' })
+    expect(calls[0]?.path).toMatch(/^\/seasons\/\d+\/drivers\/\d+$/)
+  })
 })

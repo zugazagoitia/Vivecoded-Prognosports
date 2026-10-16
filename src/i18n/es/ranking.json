@@ -39,7 +39,7 @@
       "avg": "Media por GP",
       "wins": "GP ganados",
       "toLeader": "a {n} del líder",
-      "isLeader": "Lideras la clasificación",
+      "isLeader": "Eres líder",
       "betterThan": "mejor que el {pct} % de la comunidad",
       "aheadOf": "por delante de {n} de {total} jugadores",
       "ofPlayed": "de {n} disputados",
@@ -332,7 +332,7 @@
         "min": "Mínimo",
         "median": "Mediana",
         "max": "Máximo",
-        "above": "GP por encima de 40"
+        "above": "GP por encima de {n}"
       },
       "axisEnd": "{n} pts"
     },

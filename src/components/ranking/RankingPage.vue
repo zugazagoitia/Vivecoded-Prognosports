@@ -4,7 +4,7 @@ import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import RankNav from '@/components/layout/RankNav.vue'
-import { findView, type SeasonOption } from '@/components/layout/rankNav'
+import { findView, offeredSeasons, type SeasonOption } from '@/components/layout/rankNav'
 import { useRankNav } from '@/components/layout/useRankNav'
 import { EmptyState, ErrorState, Skeleton } from '@/components/states'
 import PButton from '@/components/ui/PButton.vue'
@@ -13,7 +13,7 @@ import { toaster } from '@/composables/useToast'
 import { MOBILE_QUERY, useMediaQuery } from '@/composables/useMediaQuery'
 import { useMobileTitle } from '@/composables/useMobileNav'
 import { isEnabled } from '@/flags'
-import { useRanking } from '@/queries/ranking'
+import { useRanking, useSeasonsWithPoints } from '@/queries/ranking'
 import RankTotalsOnly from './RankTotalsOnly.vue'
 import { EMPTY_OK, screenComponent } from './screens'
 
@@ -51,10 +51,24 @@ const communities = computed(() => {
   }
   return list
 })
-const seasons = computed<SeasonOption[]>(() => {
+const withPoints = useSeasonsWithPoints(() => rk.args.value)
+const allSeasons = computed<SeasonOption[]>(() => {
   const all = [...(rk.seasons.data.value ?? [])]
   const newest = all[0]?.id
   return all.map((s) => ({ id: s.id, label: s.name ?? String(s.id), current: s.id === newest }))
+})
+/** Only seasons with points (the open one is always offered while the rest are still loading). */
+const offered = computed(() => {
+  if (!withPoints.value) {
+    const open = allSeasons.value.filter((s) => s.id === rk.season.value?.id)
+    return { seasons: open, fallback: false }
+  }
+  return offeredSeasons(allSeasons.value, withPoints.value)
+})
+const seasons = computed(() => {
+  const list = offered.value.seasons
+  const open = allSeasons.value.find((s) => s.id === rk.season.value?.id)
+  return open && !list.some((s) => s.id === open.id) ? [open, ...list] : list
 })
 const model = computed(() => rk.model.value)
 const played = computed(() => model.value?.played.length ?? 0)
@@ -99,6 +113,7 @@ watch(
         :community-id="numeric(communityId)"
         :seasons="seasons"
         :season-id="rk.season.value.id"
+        :seasons-fallback="offered.fallback"
         :competition="competitionName"
         :played="played"
         :total="rk.total.value"

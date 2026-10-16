@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import AppLogo from '@/components/ui/AppLogo.vue'
 import PTag from '@/components/ui/PTag.vue'
 import { focusRing } from '@/components/ui/styles'
+import { useSessionStore } from '@/stores/session'
 import { formatDate } from '@/utils/dates'
 import { NAV_PATHS } from './useNavLinks'
 
 const { t } = useI18n()
+const session = useSessionStore()
 const isBeta = import.meta.env.MODE === 'beta'
 
 const build = t('nav.footer.build', {
@@ -17,14 +20,15 @@ const build = t('nav.footer.build', {
 })
 
 // «Contacto» points to the FAQ until a contact page exists (open question, N1).
-const columns = [
+const columns = computed(() => [
   {
     title: 'nav.footer.game',
     links: [
       ['nav.links.rules', NAV_PATHS.rules],
       ['nav.links.circuits', NAV_PATHS.circuits],
       ['nav.footer.calendar', NAV_PATHS.gps],
-      ['nav.footer.openCommunities', NAV_PATHS.explore],
+      // N1: the open-communities list is only offered to signed-in users.
+      ...(session.isSignedIn ? [['nav.footer.openCommunities', NAV_PATHS.explore] as const] : []),
     ],
   },
   {
@@ -42,7 +46,7 @@ const columns = [
       ['nav.footer.privacy', NAV_PATHS.privacy],
     ],
   },
-] as const
+])
 </script>
 
 <template>

@@ -2,9 +2,16 @@ import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 import { useQueries, useQuery } from '@tanstack/vue-query'
 import { catalogApi, communitiesApi, type GrandPrix } from '@/api'
 import { useCommunityStore } from '@/stores/community'
+import { createLimiter } from '@/utils/limiter'
 import { keys } from './keys'
 
 type Id = string | number
+
+/** `points/{gp}` is one request per GP: at most this many in flight at once. */
+export const POINTS_CONCURRENCY = 3
+/** Points of a finished GP barely change: reuse them for this long before refetching. */
+const POINTS_STALE_MS = 10 * 60_000
+const limitPoints = createLimiter(POINTS_CONCURRENCY)
 
 // Circuit and variant GPs are public (no token).
 
@@ -27,8 +34,8 @@ export function useVariantGps(
 }
 
 /**
- * Community points of each given GP (one request per GP; the caller limits the list, see
- * `POINTS_GP_LIMIT`). Needs a session and an active community; keys start with the community's
+ * Community points of each given GP (one request per GP, at most `POINTS_CONCURRENCY` at once and
+ * cached for `POINTS_STALE_MS`). Needs a session and an active community; keys start with the community's
  * `points` key so a community switch invalidates them. Result order = input order.
  */
 export function useGpPointsList(
@@ -44,7 +51,18 @@ export function useGpPointsList(
         return {
           queryKey: [...keys.points(community.activeId ?? '', comp, season), 'gp', gp.id] as const,
           queryFn: ({ signal }: { signal: AbortSignal }) =>
-            communitiesApi.getCommunityPointsInGp(community.activeId!, comp, season, gp.id, signal),
+            limitPoints(
+              () =>
+                communitiesApi.getCommunityPointsInGp(
+                  community.activeId!,
+                  comp,
+                  season,
+                  gp.id,
+                  signal,
+                ),
+              signal,
+            ),
+          staleTime: POINTS_STALE_MS,
           enabled:
             toValue(enabled) &&
             community.activeId != null &&

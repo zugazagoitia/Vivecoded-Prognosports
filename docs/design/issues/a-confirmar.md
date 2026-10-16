@@ -2,6 +2,32 @@
 
 Lista agrupada por épica. Cada punto está también en la sección «⚠️ A confirmar» de su issue.
 
+> **Estado a 2026-10-16.** Esta lista se generó de las 80 issues de diseño originales y ya no es un backlog: varias decisiones se han tomado y están marcadas en línea con «✅ Decidido», «Decidido» o «Decisión». Antes de nada lee el resumen de abajo; lo que no aparece como decidido sigue **por confirmar** con el propietario (seguimiento en los issues #99, #106, #109, #116-#118, #121, #122 y #127).
+
+## Decisiones tomadas (resumen)
+
+| Tema                                                     | Decisión                                                                                                                                  | Issue / PR                  |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| Campana de avisos                                        | **Oculta** (AppNav y barras móviles) hasta que el backend tenga histórico y leído/no leído; las preferencias siguen en Ajustes › Notificaciones. U4 queda bloqueada. | #176, #181                  |
+| «N de M han pronosticado»                                | **No se muestra** antes del cierre (no hay forma documentada de saberlo).                                                                  | #177, #183                  |
+| Texto del bonus                                          | **«más puntos»** en todas partes (`pointsByTopScorer`: 5 pts a quien más puntos suma en el GP).                                            | #178, #183                  |
+| Explorar comunidades                                     | **Sin pestaña «Cerradas»**: las cerradas solo aparecen en «Mis comunidades» y se entra con código de invitación.                           | #180, #183                  |
+| Jugador sin pronóstico                                   | Cuenta **0 puntos** en ese GP y **se excluye de las medias de aciertos**.                                                                  | #179, #182                  |
+| Empates en el ranking                                    | **Ranking denso** (1, 2, 2, 3), en el puesto del GP y en la general; «GP disputado» = GP presente en `/points`.                            | #121, #151                  |
+| Salir de una comunidad siendo el creador                 | **No puede** (el backend no transfiere la propiedad): «Salir» deshabilitado con aviso «Eres el creador: transfiere o elimina la comunidad…» (redacción por confirmar). | #103, #151                  |
+| Feature flags en producción                              | Los 12 **activados** en `.env.production` (igual que beta).                                                                                | #151                        |
+| Sesión y navegación                                      | «Mantener sesión» desmarcado = `sessionStorage`; con sesión `/recuperar` redirige a `/home`; usuario sin verificar solo ve «Cerrar sesión»; Telegram oculto; pie con «Comunidades abiertas» solo con sesión; sin el texto «Tus pronósticos son los mismos…». | #185, #189                  |
+| Ranking y gráficos                                       | Escalas derivadas del máximo real; RankNav solo con temporadas con puntos (máx. 5 últimas en selección manual); «Eres líder», sin signo si la diferencia es 0; umbral «≥ 5 GP ganados» como constante. | #186, #191                  |
+| Perfil                                                   | Telegram, nivel/XP y «Campeón/a» como «Próximamente»; username completo; categorías sin datos «No disponible» en vez de 0.                 | #147-#149, #150             |
+| Administración v1                                        | **Sin estado Borrador**, solo «Suspendido»; borrado de circuito/piloto/equipo con confirmación; formularios de variante y equipo; M12 (aviso manual) y M13 (recálculo) «aún no disponible» (la API no los tiene); **no** se edita ni borra a usuarios (la API no lo permite). | #114, #187, #190            |
+| Comunidades y pronósticos                                | Ajustes por permisos (creador, `can_recreate_invitation`, `can_modify_permissions`, `can_kick_users`); se omite «Tu historial aquí»; ganador por GP con concurrencia limitada y caché; simulador «Caos» = aleatorio reproducible (semilla); Alt+↑/↓ reordena; «Pronto» = menos de 24 h. | #188, #192                  |
+| Fuera de alcance (descartado)                            | Logros y Múltiples (sin datos en la API); vueltas rápidas solo se muestran, no se pronostican ni puntúan; gestión de cuentas por un admin.   | `docs/requisitos.md` §17    |
+| Textos legales (`/terms`, `/privacy`)                    | **Provisionales** (borrador): falta la revisión legal.                                                                                     | #106                        |
+| Imagen hero de la landing                                | **Pendiente**: falta confirmar la licencia de la imagen.                                                                                   | #106                        |
+| Tema por defecto / zona horaria de visitantes            | Tema = el del sistema; zona horaria de visitantes = la del navegador; la pestaña Ranking de la TabBar móvil abre R1 y escritorio R0.       | #176                        |
+
+Aún **por confirmar** con producto (lista viva en #106, #116-#118): KPI de pronósticos y reglas de «Próximas tareas» del panel (M1), visibilidad Publicado/Borrador y zona horaria del circuito (M2/M3/M5/M7), formularios de piloto/equipo y «Imagen del trazado» (M7/M8), y las preguntas de cada sección de abajo que no llevan marca de decisión.
+
 ## Base técnica ([#1](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/1))
 
 ### [T1] Scaffold Vue 3.5 + Vite + TS estricto + pnpm ([#65](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/65))
@@ -109,7 +135,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - **Avisos**: la API v2 no tiene histórico ni leído/no leído (ver U4, bloqueada). El punto rojo y el menú «Hoy» no tienen datos. **Decidido ([#176](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/176)):** se oculta la campana (y su punto/menú «Hoy») hasta que el backend tenga histórico (U4). Las preferencias siguen en Ajustes › Notificaciones.
 - «Contacto» enlaza a FAQ en el mockup: ¿hay página de contacto (§13.4)?
-- Columna «Comunidades abiertas» (H3) para visitantes: ¿H3 es pública?
+- Enlace «Comunidades abiertas» del pie: **decidido (#185)**, solo se muestra con sesión iniciada.
 
 ### [N2] TabBar + MobileBar ([#87](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/87))
 
@@ -154,6 +180,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [P4] Detalle de circuito ([#26](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/26))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): se omite «Tu historial aquí»; el ganador se pide para todos los GP con concurrencia limitada y caché.
+
 - a confirmar en API: ruta de `GET .../gps` por variante y por circuito, y del layout de la variante (25.1).
 - a confirmar en API: «Sentido» del trazado no existe en `CircuitVariant`; se propone ocultarlo.
 - Distancia de carrera: el mockup no cuadra con longitud × vueltas (306,1 frente a 306,3). Confirmar fórmula o fuente.
@@ -180,8 +208,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ### [A1] Iniciar sesión ([#29](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/29))
 
 - a confirmar en API: cuerpo de `POST /v2/auth/login` (correo o usuario) y códigos de error para credenciales incorrectas y cuenta no verificada.
-- «Continuar con Telegram» no tiene endpoint de login en la API v2; propuesta: ocultarlo.
-- «Mantener la sesión iniciada en este dispositivo» no tiene parámetro en la API; propuesta: `sessionStorage` si se desmarca.
+- «Continuar con Telegram» no tiene endpoint de login en la API v2. **Decidido (#185):** sigue oculto.
+- «Mantener la sesión iniciada en este dispositivo» no tiene parámetro en la API; **Decidido (#185):** `sessionStorage` si se desmarca (cubierto por tests).
 - Texto del aviso de retorno para destinos que no son un pronóstico de GP.
 - Panel lateral: datos del próximo GP sin sesión y textos para otros plazos o sin próximo GP; «Tus amigos ya han pronosticado» como texto fijo.
 - Textos de validación por campo (correo vacío o inválido, contraseña vacía).
@@ -198,7 +226,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - a confirmar en API: cuerpo y respuestas de `POST /v2/auth/forgotpassword` (en especial el código cuando el correo no existe).
 - Caducidad del código (el mockup dice 30 minutos).
-- Comportamiento con sesión iniciada.
+- Comportamiento con sesión iniciada: **decidido (#185)**, `/recuperar` redirige a `/home`.
 
 ### [A4] Nueva contraseña ([#32](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/32))
 
@@ -213,7 +241,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Duración de la cuenta atrás de reenvío y límite de reenvíos del backend.
 - Texto del botón de reenvío habilitado y del toast tras reenviar.
 - Si el indicador de pasos se actualiza al verificar.
-- Variante de AppNav para un usuario con token pero sin verificar.
+- Variante de AppNav para un usuario con token pero sin verificar: **decidido (#185)**, solo «Cerrar sesión».
 - Destino tras verificar si ya tiene comunidad o había `redirect`.
 
 ## Inicio y comunidades ([#5](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/5))
@@ -278,6 +306,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [H6] Ajustes de la comunidad ([#21](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/21))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): acceso por creador, `can_recreate_invitation`, `can_modify_permissions` o `can_kick_users`; cada sección según su permiso (Imagen solo el creador, Invitación con `can_recreate_invitation`; Datos, Reglas y Miembros de solo lectura).
+
 - Ruta `/comunidades/:id/ajustes` y permiso exacto que da acceso (creador, `can_recreate_invitation`, `can_modify_permissions`).
 - Destino sin permiso (404 o H5).
 - Texto del campo «Acceso» para comunidades abiertas y si la invitación aplica a abiertas.
@@ -326,6 +356,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [G3] Pronosticar ([#10](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/10))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): Alt+↑/↓ reordena el hueco enfocado, orden por apellido asc/desc en «Pilotos» y «Pronto» = menos de 24 h.
+
 - Forma del cuerpo de `POST .../sessions/{session}/tipps/{community}` (lista de `Prediction` con `driver` y `position`) y de la respuesta.
 - Cómo se obtiene N por sesión desde `RuleSetData.predictedPositions` (¿mapa por sesión?).
 - Endpoint concreto de «pilotos del GP» (25.1 lo lista sin ruta exacta) para la lista y la validación.
@@ -366,6 +398,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Si se muestra la vuelta rápida (position 0) en algún lugar de esta pantalla (decisión: solo se muestra).
 
 ### [G6] Simulador de puntos ([#15](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/15))
+
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): «Caos» es un orden aleatorio reproducible (semilla `?semilla=`); se simula desde que hay parrilla hasta el resultado oficial (antes: «Aún no hay parrilla»; después: enlace a los resultados).
 
 - Ruta `/simulador/:sesion` y migas (falta «Grandes Premios»).
 - Si `POST .../calculations` devuelve los puntos de todos los jugadores o solo los del usuario; forma de `pointsByPosition`.

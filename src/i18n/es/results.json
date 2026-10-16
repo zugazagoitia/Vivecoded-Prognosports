@@ -94,11 +94,6 @@
       "pending": "Pendiente de confirmar",
       "provisional": "Provisional"
     },
-    "sim": {
-      "title": "Simula otro resultado",
-      "text": "¿Y si el resultado hubiera sido otro? Prueba escenarios sin guardar nada.",
-      "action": "Abrir el simulador"
-    },
     "error": { "gp": "el Gran Premio", "data": "los resultados" },
     "notFound": {
       "gpTitle": "Gran Premio no encontrado",

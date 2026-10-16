@@ -1,13 +1,25 @@
 # Capa de acceso a la API v2
 
-Única vía de acceso al backend. Ninguna pantalla importa `fetch`; se usan estas funciones desde las queries (T4).
+> Contexto: el backend (`Cadiducho/PrognoSports`) **no se modifica desde este repositorio**; aquí se documenta cómo difiere la API real de la spec y cómo lo resuelve el cliente. Cómo reportar al backend: [`AGENTS.md`](../../AGENTS.md#reportar-problemas-del-backend-o-del-contrato-de-la-api). Pruebas de contrato: [`docs/contract-tests.md`](../../docs/contract-tests.md). Backend local: [`docs/local-backend.md`](../../docs/local-backend.md).
+
+## Estado de los reportes al backend
+
+| Backend                      | Tema                                                                                                                                           | Estado  |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `Cadiducho/PrognoSports#226` | La spec OpenAPI no coincide con las respuestas reales (p. ej. `verified_at` frente a `verified`).                                              | Abierto |
+| `Cadiducho/PrognoSports#227` | Privacidad de `tipps` (se envían los ajenos antes del cierre), `PATCH /user`, guardado de pilotos (500) e `invitation` expuesto en el listado. | Abierto |
+| `Cadiducho/PrognoSports#230` | Endpoint para resolver un código de invitación en su comunidad.                                                                                | Abierto |
+
+En este repo se hace seguimiento en los issues #99 (contrato), #100 (hallazgos), #121/#122 (ranking) y #127 (mocks). Todas las discrepancias de abajo están **resueltas en el cliente** (el cliente acepta ambas formas y normaliza) salvo las marcadas como «pendiente de backend», que son workarounds retirables cuando el backend corrija (la suite `corrections.contract.ts` avisa).
+
+Única vía de acceso al backend. Ninguna pantalla importa `fetch`; se usan estas funciones desde las queries (`src/queries`).
 
 - `client.ts`: cliente `fetch` propio (ver decisión abajo). Desenvuelve `ApiResponse` y devuelve solo `result`; convierte errores a `ApiError`; timeout (15 s) y `AbortSignal`.
 - `schemas.ts`: esquemas Zod de las respuestas críticas. `User` nunca contiene `hashedPassword` (se descarta al parsear).
-- `events.ts`: `onSessionExpired` (401, lo consume T3/T4) y `onContractError` (para T14).
-- `config.ts`: formato del header de autenticación en un único sitio (`Authorization: Bearer <token>`, según `securitySchemes.BearerAuth` de la especificación; pendiente de confirmar con el backend).
+- `events.ts`: `onSessionExpired` (sesión caducada; lo consumen el router y el store de sesión) y `onContractError` (desajuste de contrato; lo recoge la observabilidad, solo ruta y campos, nunca valores).
+- `config.ts`: formato del header de autenticación en un único sitio (`Authorization: Bearer <token>`, según `securitySchemes.BearerAuth` de la especificación; confirmado contra la API real).
 - `schema.d.ts`: tipos generados con `pnpm api:types` desde `api/openapi.json` (copia versionada). `pnpm api:types:fetch` actualiza la copia desde `https://api.prognosports.com/openapi`.
-- El store de sesión (T4) debe llamar a `setTokenProvider(() => token)`.
+- El store de sesión llama a `setTokenProvider(() => token)`.
 
 ## Decisión: cliente propio frente a `openapi-fetch`
 
@@ -39,7 +51,7 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 - `GET /v2/circuits/{id}` es público y trae `latitude`/`longitude` y `variants[]` (`distance` en km, `turns`, `hasLayoutImage`). Un id inexistente devuelve HTTP 200 con `{"success":false,"message":"Circuito inválido"}` (sin `status`): el cliente lo convierte en `ApiError` con `status` 200; la pantalla lo trata como 404 propia.
 - `GET /v2/circuits/{id}/{variant}/gps` es público y trae todas las ediciones (varias temporadas) con `season`, `laps`, `lastSessionDate`, `sessions[]` y `variant` (sin `hasLayoutImage`). Un mismo GP conserva su `id` entre temporadas: la temporada hay que tomarla de `season.id`.
 - No hay campo de sentido de giro ni de forma corta del nombre: la fila «Sentido» se oculta y la miga usa `Circuit.name`.
-- Ganador de la comunidad / historial: `points/{grandprix}` es una petición por GP y exige sesión. Se limita a los 5 GP disputados más recientes de la variante (`POINTS_GP_LIMIT`); el resto muestra «—». La media de la temporada sale de `…/resume` (`average`) de la temporada en curso.
+- Ganador de la comunidad: `points/{grandprix}` es una petición por GP y exige sesión. Se piden todos los GP disputados de la variante con concurrencia limitada (`POINTS_CONCURRENCY`) y caché (`staleTime`). «Tu historial aquí» se omitió (decisión del propietario, #188).
 - Mapa: no hay tiles propios; se usan teselas raster de CARTO (ver `docs/security.md`).
 
 ## URL base

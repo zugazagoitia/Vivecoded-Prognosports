@@ -22,8 +22,9 @@ const community = useCommunityStore()
 const theme = useThemeStore()
 const links = useNavLinks()
 
-// An unverified account (A5) gets the visitor variant, see `isSignedIn`.
+// An unverified account (A5) only gets «Cerrar sesión», see `isSignedIn`.
 const signedIn = computed(() => session.isSignedIn)
+const unverified = computed(() => session.isAuthenticated && !session.isSignedIn)
 const homeTo = computed(() => (signedIn.value ? NAV_PATHS.home : '/'))
 
 // The effective theme (system mode included) lives on <html>.
@@ -84,6 +85,11 @@ async function onUser(value: string) {
   }
 }
 
+async function logout() {
+  await session.logout()
+  await router.push('/sesion-cerrada')
+}
+
 const linkClass = [
   'text-body hover:bg-surface-muted hover:text-heading inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium no-underline',
   'aria-[current=page]:bg-tint aria-[current=page]:text-tint-fg',
@@ -112,7 +118,7 @@ const linkClass = [
         <AppLogo :size="28" />
       </RouterLink>
 
-      <nav :aria-label="t('nav.main')" class="flex gap-0.5 max-[900px]:hidden">
+      <nav v-if="!unverified" :aria-label="t('nav.main')" class="flex gap-0.5 max-[900px]:hidden">
         <RouterLink
           v-for="l in links"
           :key="l.key"
@@ -126,7 +132,13 @@ const linkClass = [
 
       <span class="flex-1" />
 
-      <template v-if="!signedIn">
+      <template v-if="unverified">
+        <PButton variant="ghost" size="sm" icon="right-from-bracket" @click="logout">
+          {{ t('nav.user.logout') }}
+        </PButton>
+      </template>
+
+      <template v-else-if="!signedIn">
         <PTooltip :content="t('nav.theme')">
           <PButton
             variant="ghost"

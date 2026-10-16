@@ -31,7 +31,8 @@ const cells = computed(() => [
     key: 'points',
     label: t('home.kpi.points'),
     value: formatNumber(k.value.total ?? 0, 1),
-    detail: behindText(k.value.behind, props.compact),
+    // Mobile: the gap to the leader is already in the DiffArea card below.
+    detail: props.compact ? '' : behindText(k.value.behind),
     detailClass: 'text-muted',
   },
   {
@@ -80,7 +81,7 @@ const cells = computed(() => [
         <dd class="text-heading m-0 text-[28px] leading-[34px] font-bold tabular-nums">
           {{ c.value }}
         </dd>
-        <dd class="m-0 text-xs" :class="c.detailClass">{{ c.detail }}</dd>
+        <dd v-if="c.detail" class="m-0 text-xs" :class="c.detailClass">{{ c.detail }}</dd>
       </div>
     </dl>
   </section>

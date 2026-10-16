@@ -8,11 +8,14 @@ import { EmptyState, ErrorState, Skeleton } from '@/components/states'
 import PButton from '@/components/ui/PButton.vue'
 import PCard from '@/components/ui/PCard.vue'
 import PInput from '@/components/ui/PInput.vue'
+import PSelect from '@/components/ui/PSelect.vue'
 import PTabs from '@/components/ui/PTabs.vue'
 import PrognoModal from '@/components/ui/PrognoModal.vue'
 import { iconFor } from '@/components/ui/icons'
 import { driverFullName, sortDrivers, tabFromQuery, teamColor, cssColor } from '@/lib/adminDrivers'
 import {
+  useRemoveSeasonConstructor,
+  useRemoveSeasonDriver,
   useSaveSeasonConstructor,
   useSaveSeasonDriver,
   useSeasonConstructors,
@@ -20,11 +23,13 @@ import {
   useSeasonDrivers,
 } from '@/queries/admin'
 import { DEFAULT_COMPETITION, useCurrentSeason } from '@/queries/circuits'
+import { useCompetitionSeasons } from '@/queries/gps'
 
 /**
  * M8 · Pilotos y equipos (`/admin/pilotos?tab=equipos`): season catalogue. The forms are not drawn
- * in the mock-up: modals with the fields the API takes (see `queries/admin.ts`). Deleting and
- * changing a driver's team are por confirmar.
+ * in the mock-up: modals with the fields the API takes (see `queries/admin.ts`). «Quitar» removes
+ * the driver/team from the season after a confirmation (the global record stays); changing a
+ * driver's team is por confirmar. The season is chosen with `?temporada=` (default: current).
  */
 definePage({ meta: { title: 'route.adminDrivers' } })
 
@@ -32,7 +37,27 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const seasonQ = useCurrentSeason(DEFAULT_COMPETITION)
-const seasonId = computed(() => seasonQ.data.value?.id)
+const seasons = useCompetitionSeasons(DEFAULT_COMPETITION)
+const wanted = computed(() => {
+  const v = route.query.temporada
+  return typeof v === 'string' && v ? v : undefined
+})
+const seasonId = computed(() => wanted.value ?? seasonQ.data.value?.id)
+const seasonOptions = computed(() =>
+  (seasons.data.value ?? (seasonQ.data.value ? [seasonQ.data.value] : [])).map((s) => ({
+    value: String(s.id),
+    label: s.name ?? String(s.id),
+  })),
+)
+const seasonName = computed(
+  () =>
+    seasonOptions.value.find((o) => o.value === String(seasonId.value))?.label ??
+    seasonQ.data.value?.name ??
+    '',
+)
+function onSeason(v: string | number) {
+  void router.replace({ query: { ...route.query, temporada: String(v) } })
+}
 const driversQ = useSeasonDrivers(seasonId)
 const teamsQ = useSeasonConstructors(seasonId)
 const teamOfQ = useSeasonDriverTeams(DEFAULT_COMPETITION, seasonId)
@@ -43,7 +68,9 @@ const tabs = [
   { value: 'equipos', label: t('admin.drivers.tabs.equipos') },
 ]
 const setTab = (v: string) =>
-  void router.replace({ query: v === 'equipos' ? { tab: 'equipos' } : {} })
+  void router.replace({
+    query: { ...route.query, tab: v === 'equipos' ? 'equipos' : undefined },
+  })
 
 const drivers = computed(() =>
   sortDrivers(driversQ.data.value ?? []).map((d) => ({
@@ -154,6 +181,22 @@ async function onSave() {
     // The mutation toasted the error; the modal keeps what was typed.
   }
 }
+// --- removal -------------------------------------------------------------------------------
+const removeDriver = useRemoveSeasonDriver(seasonId)
+const removeTeam = useRemoveSeasonConstructor(seasonId)
+const toRemove = ref<{ kind: Kind; id: number; name: string } | undefined>()
+const confirmRemove = computed({
+  get: () => toRemove.value != null,
+  set: (v) => {
+    if (!v) toRemove.value = undefined
+  },
+})
+function onRemove() {
+  const r = toRemove.value
+  if (!r) return
+  if (r.kind === 'driver') removeDriver.mutate(r.id)
+  else removeTeam.mutate(r.id)
+}
 const loading = computed(
   () => seasonQ.isLoading.value || driversQ.isLoading.value || teamsQ.isLoading.value,
 )
@@ -171,12 +214,16 @@ const retry = () => {
   <div class="flex flex-col gap-6">
     <AdminHeader
       :title="t('admin.drivers.title')"
-      :subtitle="
-        seasonQ.data.value
-          ? t('admin.drivers.subtitle', { year: seasonQ.data.value.name })
-          : undefined
-      "
+      :subtitle="seasonName ? t('admin.drivers.subtitle', { year: seasonName }) : undefined"
     >
+      <div class="w-auto">
+        <PSelect
+          :model-value="seasonId != null ? String(seasonId) : ''"
+          :options="seasonOptions"
+          :aria-label="t('admin.drivers.season')"
+          @update:model-value="onSeason"
+        />
+      </div>
       <PButton variant="outline" :icon="iconFor('add')" @click="openTeam()">{{
         t('admin.drivers.newTeam')
       }}</PButton>
@@ -251,6 +298,16 @@ const retry = () => {
                     >
                       {{ t('admin.drivers.edit') }}
                     </PButton>
+                    <PButton
+                      variant="ghost"
+                      size="sm"
+                      :aria-label="
+                        t('admin.drivers.driversTable.removeAria', { name: driverFullName(d) })
+                      "
+                      @click="toRemove = { kind: 'driver', id: d.id, name: driverFullName(d) }"
+                    >
+                      {{ t('admin.drivers.remove') }}
+                    </PButton>
                   </td>
                 </tr>
               </tbody>
@@ -311,6 +368,14 @@ const retry = () => {
                     >
                       {{ t('admin.drivers.edit') }}
                     </PButton>
+                    <PButton
+                      variant="ghost"
+                      size="sm"
+                      :aria-label="t('admin.drivers.teamsTable.removeAria', { name: c.name ?? '' })"
+                      @click="toRemove = { kind: 'team', id: c.id, name: c.name ?? '' }"
+                    >
+                      {{ t('admin.drivers.remove') }}
+                    </PButton>
                   </td>
                 </tr>
               </tbody>
@@ -319,6 +384,31 @@ const retry = () => {
         </PCard>
       </template>
     </PTabs>
+
+    <PrognoModal
+      v-model:open="confirmRemove"
+      destructive
+      :title="
+        t(
+          toRemove?.kind === 'team'
+            ? 'admin.drivers.removeTeamTitle'
+            : 'admin.drivers.removeDriverTitle',
+        )
+      "
+      :description="
+        t(
+          toRemove?.kind === 'team'
+            ? 'admin.drivers.removeTeamBody'
+            : 'admin.drivers.removeDriverBody',
+          {
+            name: toRemove?.name ?? '',
+            year: seasonName,
+          },
+        )
+      "
+      :confirm-label="t('admin.drivers.remove')"
+      @confirm="onRemove"
+    />
 
     <PrognoModal
       v-model:open="open"
@@ -362,7 +452,7 @@ const retry = () => {
             :error="
               hexBad || (touched && !f.color.trim()) ? t('admin.drivers.form.errors.color') : ''
             "
-            :help="t('admin.drivers.form.teamHelp')"
+            :help="t('admin.drivers.form.colorDriverHelp')"
           />
         </template>
         <template v-else>

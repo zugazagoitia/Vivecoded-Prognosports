@@ -46,6 +46,9 @@ describe('guards', () => {
     expect(evaluateGuards(to('/'), ['home'], base)).toBe('/home')
     expect(evaluateGuards(to('/'), ['home'], null)).toBe(true)
   })
+  it('home guard also covers /recuperar for an unverified session', () => {
+    expect(evaluateGuards(to('/recuperar'), ['home'], unverified)).toBe('/home')
+  })
 })
 
 describe('sanitizeRedirect', () => {
