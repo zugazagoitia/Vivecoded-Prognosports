@@ -461,6 +461,52 @@ export function useSaveVariant(circuit: MaybeRefOrGetter<Id>) {
   })
 }
 
+/**
+ * Deletions of the catalogue. The backend refuses to delete what is still in use: that error is
+ * shown with the API's own message, prefixed with what could not be deleted.
+ */
+function deleteFailed(what: string) {
+  return (error: unknown) => {
+    reportError(error, 'mutation')
+    toaster.error(t('admin.delete.failed', { what, reason: messageFor(error) }))
+  }
+}
+
+export function useDeleteCircuit() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: Id) => catalogApi.deleteCircuit(id),
+    onSuccess: async () => {
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: ['admin', 'circuit'] }),
+        qc.invalidateQueries({ queryKey: adminKeys.circuits() }),
+        qc.invalidateQueries({ queryKey: ['season-circuits'] }),
+        qc.invalidateQueries({ queryKey: ['circuit'] }),
+      ])
+      toaster.success(t('admin.circuitEdit.toast.deleted'))
+    },
+    onError: deleteFailed(t('admin.delete.whatCircuit')),
+    meta: { silent: true },
+  })
+}
+
+export function useDeleteVariant(circuit: MaybeRefOrGetter<Id>) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (variant: Id) => catalogApi.deleteCircuitVariant(toValue(circuit), variant),
+    onSuccess: async () => {
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: adminKeys.circuit(toValue(circuit)) }),
+        qc.invalidateQueries({ queryKey: adminKeys.circuits() }),
+        qc.invalidateQueries({ queryKey: ['circuit'] }),
+      ])
+      toaster.success(t('admin.circuitEdit.toast.variantDeleted'))
+    },
+    onError: deleteFailed(t('admin.delete.whatVariant')),
+    meta: { silent: true },
+  })
+}
+
 export function useCreateRuleset() {
   const qc = useQueryClient()
   return useMutation({
@@ -617,5 +663,33 @@ export function useSaveSeasonConstructor(season: MaybeRefOrGetter<Id | undefined
       await refreshRoster(qc)
       toaster.success(t('admin.drivers.toast.teamSaved'))
     },
+  })
+}
+
+/** Removes a driver from the season (`DELETE /v2/seasons/{s}/drivers/{d}`); the global driver stays. */
+export function useRemoveSeasonDriver(season: MaybeRefOrGetter<Id | undefined>) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => catalogApi.removeSeasonDriver(toValue(season)!, id),
+    onSuccess: async () => {
+      await refreshRoster(qc)
+      toaster.success(t('admin.drivers.toast.driverRemoved'))
+    },
+    onError: deleteFailed(t('admin.delete.whatDriver')),
+    meta: { silent: true },
+  })
+}
+
+/** Removes a team from the season (`DELETE /v2/seasons/{s}/constructors/{c}`). */
+export function useRemoveSeasonConstructor(season: MaybeRefOrGetter<Id | undefined>) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => catalogApi.removeSeasonConstructor(toValue(season)!, id),
+    onSuccess: async () => {
+      await refreshRoster(qc)
+      toaster.success(t('admin.drivers.toast.teamRemoved'))
+    },
+    onError: deleteFailed(t('admin.delete.whatTeam')),
+    meta: { silent: true },
   })
 }

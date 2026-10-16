@@ -24,13 +24,19 @@ import {
   variantSchema,
 } from '@/lib/adminCatalog'
 import { circuitTimeZone } from '@/lib/gp'
-import { useAdminCircuit, useSaveCircuit, useSaveVariant } from '@/queries/admin'
+import {
+  useAdminCircuit,
+  useDeleteCircuit,
+  useDeleteVariant,
+  useSaveCircuit,
+  useSaveVariant,
+} from '@/queries/admin'
 import { useQueryClient } from '@tanstack/vue-query'
 
 /**
  * M7 · Circuito (alta y edición): datos, imagen del trazado y variantes. The API has no time zone
- * for a circuit (the select is read-only and deduced from the country), nor circuit/variant
- * deletion in the mock-up. «Imagen del trazado» uploads the layout of the first variant.
+ * for a circuit (the select is read-only and deduced from the country). Circuit and variant
+ * deletion ask for confirmation and show the backend's error when still in use. «Imagen del trazado» uploads the layout of the first variant.
  */
 const props = defineProps<{ circuit?: string }>()
 const { t } = useI18n()
@@ -42,6 +48,8 @@ const q = useAdminCircuit(() => props.circuit)
 const c = computed(() => (isNew.value ? undefined : q.data.value))
 const save = useSaveCircuit(() => props.circuit)
 const saveVariant = useSaveVariant(() => props.circuit ?? '')
+const delVariant = useDeleteVariant(() => props.circuit ?? '')
+const delCircuit = useDeleteCircuit()
 
 interface Form {
   name: string
@@ -167,6 +175,29 @@ function openVariant(v?: {
   vTouched.value = false
   modal.value = true
 }
+// deletions (confirmed in a modal; the backend refuses what is still in use)
+const confirmCircuit = ref(false)
+const variantToDelete = ref<{ id: number; name: string } | undefined>()
+const confirmVariant = computed({
+  get: () => variantToDelete.value != null,
+  set: (v) => {
+    if (!v) variantToDelete.value = undefined
+  },
+})
+function onDeleteCircuit() {
+  if (!props.circuit) return
+  // The page is going away: do not ask «unsaved changes» on the way out.
+  delCircuit.mutate(props.circuit, {
+    onSuccess: () => {
+      Object.assign(form, base.value)
+      void router.replace('/admin/circuitos')
+    },
+  })
+}
+function onDeleteVariant() {
+  const v = variantToDelete.value
+  if (v) delVariant.mutate(v.id)
+}
 async function onVariant() {
   vTouched.value = true
   if (!vParsed.value.success) return
@@ -274,6 +305,17 @@ async function onVariant() {
             </div>
           </div>
           <div class="border-border col-span-full flex justify-end gap-3 border-t pt-3">
+            <PButton
+              v-if="!isNew"
+              variant="outline"
+              size="sm"
+              type="button"
+              class="mr-auto"
+              :icon="iconFor('delete')"
+              :loading="delCircuit.isPending.value"
+              @click="confirmCircuit = true"
+              >{{ t('admin.circuitEdit.delete.button') }}</PButton
+            >
             <PButton variant="outline" size="sm" to="/admin/circuitos">{{
               t('admin.circuitEdit.data.cancel')
             }}</PButton>
@@ -326,6 +368,14 @@ async function onVariant() {
                   >
                     {{ t('admin.circuitEdit.variants.edit') }}
                   </PButton>
+                  <PButton
+                    variant="ghost"
+                    size="sm"
+                    :aria-label="t('admin.circuitEdit.variants.deleteAria', { name: v.name ?? '' })"
+                    @click="variantToDelete = { id: v.id, name: v.name ?? '' }"
+                  >
+                    {{ t('admin.circuitEdit.variants.delete') }}
+                  </PButton>
                 </td>
               </tr>
             </tbody>
@@ -375,6 +425,24 @@ async function onVariant() {
         }}</PButton>
       </template>
     </PrognoModal>
+    <PrognoModal
+      v-model:open="confirmCircuit"
+      destructive
+      :title="t('admin.circuitEdit.delete.title')"
+      :description="t('admin.circuitEdit.delete.body', { name: c?.name ?? '' })"
+      :confirm-label="t('admin.delete.confirm')"
+      @confirm="onDeleteCircuit"
+    />
+    <PrognoModal
+      v-model:open="confirmVariant"
+      destructive
+      :title="t('admin.circuitEdit.variants.deleteTitle')"
+      :description="
+        t('admin.circuitEdit.variants.deleteBody', { name: variantToDelete?.name ?? '' })
+      "
+      :confirm-label="t('admin.delete.confirm')"
+      @confirm="onDeleteVariant"
+    />
     <ConfirmLeaveDialog :open="guard.open.value" @stay="guard.stay" @leave="guard.leave" />
   </div>
 </template>

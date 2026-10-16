@@ -1,6 +1,10 @@
 import { screen, waitFor, within } from '@testing-library/vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { http } from 'msw'
+import { toaster } from '@/composables/useToast'
+import { fail } from '@/mocks/envelope'
 import { adminCalls } from '@/mocks/handlers/admin'
+import { server } from '@/mocks/server'
 import { openAdmin } from '@/test/admin'
 import Page from './pilotos.vue'
 
@@ -67,5 +71,41 @@ describe('admin drivers and teams (M8)', () => {
     expect(adminCalls[0]?.method).toBe('PUT')
     expect(adminCalls[0]?.path).toMatch(/^\/v2\/seasons\/10\/drivers\/\d+$/)
     expect(adminCalls[0]?.body).toMatchObject({ number: 77 })
+  })
+
+  it('removes a driver from the season only after confirming', async () => {
+    const { user } = await open()
+    await screen.findByRole('table', { name: 'Pilotos de la temporada' })
+    await user.click(screen.getAllByRole('button', { name: /^Quitar a / })[0]!)
+    const dialog = await screen.findByRole('dialog')
+    await user.click(within(dialog).getByRole('button', { name: 'Cancelar' }))
+    expect(adminCalls).toHaveLength(0)
+    await user.click(screen.getAllByRole('button', { name: /^Quitar a / })[0]!)
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', { name: 'Quitar' }),
+    )
+    await waitFor(() => expect(adminCalls).toHaveLength(1))
+    expect(adminCalls[0]?.method).toBe('DELETE')
+    expect(adminCalls[0]?.path).toMatch(/^\/v2\/seasons\/10\/drivers\/\d+$/)
+  })
+
+  it('removes a team and shows the backend error when it is still in use', async () => {
+    server.use(
+      http.delete('*/v2/seasons/:s/constructors/:c', () => fail(409, 'El equipo tiene pilotos.')),
+    )
+    const error = vi.spyOn(toaster, 'error')
+    const { user } = await open('/admin/pilotos?tab=equipos')
+    await screen.findByRole('table', { name: 'Equipos de la temporada' })
+    await user.click(screen.getAllByRole('button', { name: /^Quitar / })[0]!)
+    await user.click(
+      within(await screen.findByRole('dialog')).getByRole('button', { name: 'Quitar' }),
+    )
+    await waitFor(() => expect(error).toHaveBeenCalled())
+    expect(String(error.mock.calls[0]?.[0])).toContain('No se ha podido eliminar el equipo')
+  })
+
+  it('offers a season selector and loads the chosen season', async () => {
+    await open('/admin/pilotos?temporada=9')
+    expect(await screen.findByRole('combobox', { name: 'Temporada' })).toBeTruthy()
   })
 })

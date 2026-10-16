@@ -83,15 +83,19 @@ export const adminHandlers = [
   writes('put', '*/v2/circuits/:id', { id: 1 }),
   writes('post', '*/v2/circuits/:id', {}),
   writes('put', '*/v2/circuits/:id/:variant', { id: 1 }),
+  writes('delete', '*/v2/circuits/:id'),
+  writes('delete', '*/v2/circuits/:id/:variant'),
   http.get('*/v2/sessions', () => ok(adminCatalogSessions)),
   http.get('*/v2/drivers', () => ok(adminSeasonDrivers)),
   writes('post', '*/v2/drivers', {}),
   writes('post', '*/v2/seasons/:s/drivers'),
   writes('put', '*/v2/seasons/:s/drivers/:d'),
+  writes('delete', '*/v2/seasons/:s/drivers/:d'),
   http.get('*/v2/constructors/', () => ok(adminConstructors)),
   writes('post', '*/v2/constructors', {}),
   writes('post', '*/v2/seasons/:s/constructors'),
   writes('put', '*/v2/seasons/:s/constructors/:c'),
+  writes('delete', '*/v2/seasons/:s/constructors/:c'),
   http.post('*/v2/rulesets', async ({ request }) => {
     await record(request)
     const body = (await request.json()) as { displayname?: string }

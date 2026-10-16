@@ -199,8 +199,6 @@
   "gpEdit": {
     "title": "Gran Premio de {name} {year}",
     "titleNew": "Nuevo Gran Premio",
-    "published": "Publicado",
-    "draft": "Borrador",
     "viewAsUser": "Ver como usuario",
     "prevAria": "GP anterior: {name}",
     "nextAria": "GP siguiente: {name}",
@@ -501,7 +499,11 @@
       "modalEdit": "Editar variante",
       "distance": "Longitud (km)",
       "save": "Guardar variante",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "deleteAria": "Eliminar variante {name}",
+      "deleteTitle": "¿Eliminar esta variante?",
+      "deleteBody": "Se eliminará la variante «{name}». Si algún Gran Premio la usa, el servidor no lo permitirá."
     },
     "errors": {
       "name": "Escribe el nombre.",
@@ -513,7 +515,14 @@
     },
     "toast": {
       "saved": "Circuito guardado",
-      "variantSaved": "Variante guardada"
+      "variantSaved": "Variante guardada",
+      "deleted": "Circuito eliminado",
+      "variantDeleted": "Variante eliminada"
+    },
+    "delete": {
+      "button": "Eliminar circuito",
+      "title": "¿Eliminar este circuito?",
+      "body": "Se eliminará «{name}» con todas sus variantes. Si algún Gran Premio lo usa, el servidor no lo permitirá."
     }
   },
   "drivers": {
@@ -533,14 +542,16 @@
       "code": "Código",
       "team": "Equipo",
       "actions": "Acciones",
-      "editAria": "Editar {name}"
+      "editAria": "Editar {name}",
+      "removeAria": "Quitar a {name} de la temporada"
     },
     "teamsTable": {
       "caption": "Equipos de la temporada",
       "team": "Equipo",
       "car": "Coche",
       "fullname": "Nombre completo",
-      "editAria": "Editar {name}"
+      "editAria": "Editar {name}",
+      "removeAria": "Quitar {name} de la temporada"
     },
     "edit": "Editar",
     "emptyDrivers": "Todavía no hay pilotos en esta temporada.",
@@ -561,19 +572,27 @@
       "teamName": "Nombre del equipo",
       "car": "Coche",
       "fullname": "Nombre completo",
-      "teamHelp": "Por confirmar: el equipo de un piloto no se puede cambiar desde estos formularios.",
       "save": "Guardar",
       "cancel": "Cancelar",
       "errors": {
         "required": "Este campo es obligatorio.",
         "number": "Escribe un número entero.",
         "color": "Escribe un color hexadecimal, por ejemplo #ff8000."
-      }
+      },
+      "colorDriverHelp": "Color propio del piloto. La barra de la tabla usa el color del equipo y, si no hay, este."
     },
     "toast": {
       "driverSaved": "Piloto guardado",
-      "teamSaved": "Equipo guardado"
-    }
+      "teamSaved": "Equipo guardado",
+      "driverRemoved": "Piloto quitado de la temporada",
+      "teamRemoved": "Equipo quitado de la temporada"
+    },
+    "season": "Temporada",
+    "remove": "Quitar",
+    "removeDriverTitle": "¿Quitar este piloto de la temporada?",
+    "removeDriverBody": "{name} saldrá del catálogo de la temporada {year}. El piloto no se borra de la base de datos.",
+    "removeTeamTitle": "¿Quitar este equipo de la temporada?",
+    "removeTeamBody": "{name} saldrá del catálogo de la temporada {year}. Si tiene pilotos o Grandes Premios asignados, el servidor no lo permitirá."
   },
   "rules": {
     "title": "Reglas de puntuación",
@@ -747,5 +766,14 @@
       "running": "En curso"
     },
     "error": "los Grandes Premios"
+  },
+  "delete": {
+    "failed": "No se ha podido eliminar {what}: {reason}",
+    "whatCircuit": "el circuito",
+    "whatVariant": "la variante",
+    "whatDriver": "el piloto",
+    "whatTeam": "el equipo",
+    "cancel": "Cancelar",
+    "confirm": "Eliminar"
   }
 }
