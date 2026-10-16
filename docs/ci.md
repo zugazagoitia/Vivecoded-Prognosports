@@ -6,7 +6,7 @@ Complementa [`deploy.md`](deploy.md) (despliegue), [`security.md`](security.md) 
 
 | Workflow                   | Cuándo corre                                              | Qué hace                                                                                     |
 | -------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `ci.yml`                   | Cada PR y cada push a `develop`/`master`                  | Jobs `lint`, `typecheck`, `test`, `coverage`, `audit`, `build (beta\|production)`, `size`, `e2e` y `ci-ok`. |
+| `ci.yml`                   | Cada PR y cada push a `develop`/`master`                  | Jobs `changes`, `lint`, `typecheck`, `test`, `coverage`, `audit`, `build (beta\|production)`, `size`, `e2e` y `ci-ok`. |
 | `e2e.yml`                  | Llamado desde `ci.yml` (`workflow_call`), no tiene triggers | `e2e build` + matriz completa de Playwright. Parte de `ci-ok`.                              |
 | `codeql.yml`               | PR, push a `develop`/`master`, lunes y a mano             | Escaneo de seguridad (CodeQL).                                                                |
 | `deploy.yml`               | `workflow_run`: al terminar CI con éxito                  | Preview de PR, beta (`develop`) y producción (`master`, con aprobación).                      |
@@ -33,7 +33,7 @@ Variables de CI sin definir llegan como cadena vacía (`VITE_SENTRY_DSN: ${{ var
 - Los secretos (`CLOUDFLARE_*`) solo existen en los jobs de deploy y en el paso de wrangler; `SENTRY_AUTH_TOKEN` solo en el paso `vite build` de CI (vacío en forks).
 - `deploy-preview-cleanup.yml` usa `pull_request_target` (necesario para secretos al cerrar una PR) pero solo hace checkout de la rama base y nunca ejecuta código de la PR.
 - **Acción compuesta** `.github/actions/setup`: pnpm + Node (`.nvmrc`) + `pnpm install --frozen-lockfile` (opciones `install: 'false'` y `ignore-scripts: 'true'`). Se llama tras `actions/checkout`. Con `install: 'false'` no se activa `cache: pnpm` (ver AGENTS.md).
-- No se usa `paths-ignore` en CI ni e2e: `ci-ok` es el check obligatorio y un workflow omitido por rutas deja el check «pendiente» para siempre. Si hace falta ahorrar minutos en cambios de solo documentación, hay que hacerlo dentro de los jobs, manteniendo `ci-ok`.
+- No se usa `paths-ignore` a nivel de workflow: `ci-ok` es el check obligatorio y un workflow omitido por rutas lo deja «pendiente» para siempre. En su lugar, el job `changes` de `ci.yml` detecta los PR/push que **solo tocan `docs/**` o ficheros `*.md`**: en ese caso se omiten `typecheck`, `test`, `coverage`, `audit`, `size` y `e2e` (siguen `lint`/`format:check`, `build`, necesario para el despliegue, y `ci-ok`, que acepta los jobs omitidos). Cualquier otro fichero (incluidos `.env*`, `.github/**`, `src/**`) ejecuta CI completo.
 
 ## E2E dentro de CI
 
