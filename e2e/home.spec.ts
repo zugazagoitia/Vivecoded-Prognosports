@@ -17,6 +17,8 @@ for (const scheme of ['light', 'dark'] as const) {
         await expect(page.getByRole('timer')).toBeVisible()
         await expect(page.getByRole('heading', { name: 'Diferencia con el líder' })).toBeVisible()
         await expect(page.getByText('Tu entorno', { exact: true })).toBeVisible()
+        // The gap to the leader lives only in the DiffArea card, not repeated under the points KPI.
+        await expect(page.getByText(/^−?[\d,]+ del líder$/)).toHaveCount(0)
       } else {
         await expect(
           page.getByRole('heading', { name: 'Tu diferencia con el líder' }),
