@@ -215,7 +215,7 @@ export interface SeriesStats {
 
 /**
  * Values of the GPs in which the member has a row. A player without a prediction counts 0 points
- * but is left out of hit averages (not «0 hits»), see a-confirmar.md (#121, #179).
+ * but is left out of hit averages (not «0 hits»), see a-confirmar.md (issue 179).
  */
 export function whenPresent(values: readonly number[], present: readonly boolean[]): number[] {
   return values.filter((_, g) => present[g] !== false)
