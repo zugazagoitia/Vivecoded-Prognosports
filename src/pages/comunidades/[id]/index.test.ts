@@ -117,7 +117,7 @@ describe('Community home (H5)', () => {
       'Anterior de la anterior (2 más arriba)',
       'Piloto del podio que acaba fuera del podio',
       'Piloto que no está en los resultados',
-      'Bonus al que más aciertos consigue en el GP',
+      'Bonus al que más puntos consigue en el GP',
       'Máximo por sesión (sin bonus)',
     ]) {
       expect(within(rules).getByText(label)).toBeTruthy()

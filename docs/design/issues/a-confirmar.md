@@ -137,7 +137,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [P2] Cómo se puntúa ([#24](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/24))
 
-- Bonus del GP: el mockup y el requisito 8.5 dicen «más aciertos»; la decisión de producto dice `pointsByTopScorer` = 5 pts a quien más puntos suma en el GP. Se especifica el texto con «más puntos»; confirmar redacción final.
+- ✅ Decidido (#178): el bonus del GP dice «más puntos» en todas partes (`pointsByTopScorer` = 5 pts a quien más puntos suma en el GP).
 - a confirmar en API: lectura sin sesión de un conjunto de reglas (`GET /v2/rulesets` / `GET /v2/rulesets/{id}`) y cuál es «el más habitual» («Clásica 2026»).
 - a confirmar en API: forma de `RuleSetData.predictedPositions` y de los puntos por sesión (M9 habla de 8 conceptos × 4 sesiones).
 - Orden exacto de evaluación en backend (`Calculations.java`): si «podio fuera del podio» se evalúa antes o después de ±1/±2. El mockup lo evalúa después.
@@ -224,7 +224,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Nombre de pila para el saludo: el esquema `User` solo tiene `username`.
 - Imagen del bloque del GP: imagen promocional del GP o layout de la variante.
 - Endpoint del pronóstico propio por sesión (`…/tipps/{community}/{user}`) no listado en 25.1.
-- «{n} de {m} miembros ya han pronosticado» y sus avatares: no hay forma documentada de saber quién ha pronosticado antes del cierre (req. 6.8).
+- «{n} de {m} miembros ya han pronosticado» y sus avatares: no hay forma documentada de saber quién ha pronosticado antes del cierre (req. 6.8). ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Umbral de tiempo para «Cierra pronto» y comportamiento de una sesión cerrada pero aún no terminada (entre cierre y resultados).
 - Texto de «a {n} del líder» cuando eres el líder, y de la diferencia en «Tu entorno» con empate («−0»).
 - Modo «Con el de delante» cuando eres 1.º (el mockup compara con el 2.º).
@@ -250,7 +250,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Endpoint de unión a una comunidad abierta sin invitación (`POST …/{community}/join`): la sección 25.1 solo nombra `POST …/{invitation}`.
 - Filtro, orden y paginación en servidor o en cliente; tamaño de página.
 - «Tengo un código»: destino (H7 necesita un código en la URL; quizá abrir el formulario de H2 o un modal).
-- Contradicción: H4 dice que una cerrada «No aparece en el buscador», pero Explorar tiene la pestaña «Cerradas» (req. 4.1).
+- ✅ Decidido (#180): se quita la pestaña «Cerradas» de Explorar; las comunidades cerradas no se listan nunca (solo las propias, en «Mis comunidades»); se entra con código de invitación.
 - Color de las comunidades sin imagen.
 
 ### [H4] Crear comunidad ([#19](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/19))
@@ -267,7 +267,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ### [H5] Comunidad ([#20](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/20))
 
 - Redirección si el usuario no es miembro.
-- Quién ha pronosticado cada sesión antes del cierre (columna «{GP}» y «Han pronosticado el {sesión}»).
+- Quién ha pronosticado cada sesión antes del cierre (columna «{GP}» y «Han pronosticado el {sesión}»). ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Puesto de cada jugador en cada GP para la forma (calcular desde `pointsInGP`).
 - Roles posibles además de «Creador» y «Jugador».
 - Visibilidad del bloque Invitar para miembros sin permiso de regenerar.
@@ -314,7 +314,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - Endpoint de detalle de un GP (la sección 25 solo lista `GET /v2/gps/{competition}/{season}` y `/next`).
 - Zona horaria del circuito: la API no la tiene (solo `latitude`/`longitude`).
-- Cuántos miembros han pronosticado una sesión aún abierta (los pronósticos ajenos solo son visibles tras el cierre, 6.8).
+- Cuántos miembros han pronosticado una sesión aún abierta (los pronósticos ajenos solo son visibles tras el cierre, 6.8). ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Distancia total: el mockup dice 306,1 km pero 4,940 × 62 = 306,3; y unidad de `CircuitVariant.distance`.
 - Forma de `pointsByPosition` en `.../calculations` para los puntos por posición de tu pronóstico.
 - Ruta de la parrilla (`/{session}/grid` vs `/sessions/{session}/grid`, 24.7) y cómo usar `defineGridOf`.
@@ -336,13 +336,13 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Umbral del tag «Pronto» y formato del subtítulo de pestaña para cierres a más de un día.
 - Orden por apellido y dirección asc/desc del requisito 7.3 (el mockup solo tiene Equipo/Parrilla/Dorsal).
 - Atajo de teclado de reordenación sobre el hueco enfocado (Alt+↑/↓) además de los botones.
-- Recuento «8 de 12 ya han pronosticado» antes del cierre (pronósticos ajenos privados hasta el cierre).
+- Recuento «8 de 12 ya han pronosticado» antes del cierre (pronósticos ajenos privados hasta el cierre). ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Posición de salida («sale P{n}») cuando aún no hay parrilla publicada.
 
 ### [G4] Parrilla y consenso ([#13](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/13))
 
 - Segmento de ruta (`/consenso/:sesion`).
-- Origen de «9 de 12 ya han pronosticado» antes del cierre.
+- Origen de «9 de 12 ya han pronosticado» antes del cierre. ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Denominador del consenso: miembros de la comunidad o solo quienes pronosticaron.
 - Desempates en el recuento de votos y en «Apuesta más original».
 - Piloto seleccionado por defecto en «Por piloto».
@@ -356,11 +356,11 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - Ruta `/resultados/:sesion` y parámetro de vista.
 - Segmentado «Momento»: el mockup lo usa para enseñar estados; en la app se deriva de los datos.
-- Bonus del GP: el mockup habla de «más aciertos» y la decisión de producto es `pointsByTopScorer` = más puntos; redacción final de etiqueta, valor y frase.
+- ✅ Decidido (#178): bonus del GP con «más puntos» en etiqueta, valor y frase.
 - Endpoint para exactos por sesión y puntos por posición (`UserPoints.hitsBySession` vs `.../calculations` → `pointsByPosition`, `hits`).
 - La tabla «Tu desglose» evalúa por piloto real y puede no sumar los puntos de la sesión; usar puntos de la API e incluir reglas 8.2.
 - Texto del banner con empate de ganadores (8.4).
-- Origen del recuento «N de 12 ya han pronosticado» en `pre`.
+- Origen del recuento «N de 12 ya han pronosticado» en `pre`. ✅ Decidido (#177): no se muestra «N de M han pronosticado» antes del cierre.
 - Vista «Tu desglose» en `pre`/`open`.
 - Ejemplo fijo «¿Y si VER hubiera acabado 2.º?».
 - Si se muestra la vuelta rápida (position 0) en algún lugar de esta pantalla (decisión: solo se muestra).
