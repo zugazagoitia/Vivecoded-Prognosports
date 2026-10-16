@@ -27,7 +27,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ### [T5] i18n (es) y fechas/números con Intl ([#69](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/69))
 
 - Nombre corto de cada sesión («Clasif. sprint»): la API solo trae `RaceSession.name`; el mapa por `key`/`code` se define en el cliente.
-- Zona horaria por defecto para visitantes sin sesión (navegador frente a Europe/Madrid).
+- ~~Zona horaria por defecto para visitantes sin sesión~~ **Decidido:** la del navegador (`browserTimeZone()`).
 
 ### [T6] Feature flags VITE_FF_* (12) ([#70](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/70))
 
@@ -82,7 +82,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ### [F1] Tokens y tema (claro/oscuro) ([#80](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/80))
 
 - Nombres finales de los tokens de datos: el canvas usa `--c-you`, `--hit-ex`, `--hit-1`; el README usa `series-you`, `hit-exact`, `hit-near`. Propuesta: nombres del README en Tailwind.
-- Tema por defecto: sistema (como el canvas) o claro (como la app actual).
+- ~~Tema por defecto~~ **Decidido:** el del sistema (`system`).
 
 ### [F2] Tipografía, iconos y layout ([#81](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/81))
 
@@ -107,15 +107,15 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [N1] AppNav + SiteFooter ([#86](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/86))
 
-- **Avisos**: la API v2 no tiene histórico ni leído/no leído (ver U4, bloqueada). El punto rojo y el menú «Hoy» no tienen datos. Propuesta: el icono lleva a Ajustes › Notificaciones (preferencias) sin punto, hasta que se decida U4.
+- **Avisos**: la API v2 no tiene histórico ni leído/no leído (ver U4, bloqueada). El punto rojo y el menú «Hoy» no tienen datos. **Decidido ([#176](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/176)):** se oculta la campana (y su punto/menú «Hoy») hasta que el backend tenga histórico (U4). Las preferencias siguen en Ajustes › Notificaciones.
 - «Contacto» enlaza a FAQ en el mockup: ¿hay página de contacto (§13.4)?
 - Columna «Comunidades abiertas» (H3) para visitantes: ¿H3 es pública?
 
 ### [N2] TabBar + MobileBar ([#87](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/87))
 
 - Volver: ¿siempre al `backHref` fijo de cada pantalla, o al historial si existe?
-- Ranking en la TabBar abre Clasificación (R1) y no el Resumen (R0) como en escritorio: confirmar.
-- Avisos en móvil: mismo problema de datos que N1/U4.
+- ~~Ranking en la TabBar~~ **Decidido:** en móvil abre Clasificación (R1) y en escritorio el Resumen (R0).
+- Avisos en móvil: **decidido** (#176), campana oculta igual que en N1 hasta U4.
 
 ### [N3] RankNav ([#88](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/88))
 
@@ -556,7 +556,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - No existe endpoint de histórico de notificaciones ni de estado leído/no leído en la API v2 (14.2, 14.5): la pantalla queda bloqueada.
 - Ruta `/notificaciones`.
 - Grupos de fecha posteriores a «Esta semana».
-- Ocultar enlaces a Notificaciones mientras no haya datos.
+- Ocultar enlaces a Notificaciones mientras no haya datos: **decidido** (#176), la campana de AppNav y MobileBar ya está oculta.
 
 ## Administración ([#9](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/9))
 
