@@ -32,7 +32,7 @@ const filler = Array.from({ length: 9 }, (_, i) =>
   mockCommunity({
     id: 300 + i,
     name: `Liga ${i + 1}`,
-    open: i % 2 === 0,
+    open: true,
     owner: users[1]!,
     members_amount: 3 + i,
     user_is_member: false,
@@ -53,7 +53,7 @@ const send = (route: Route, result: unknown) =>
     body: JSON.stringify({ success: true, status: 200, code: 0, message: 'OK', result }),
   })
 
-/** Public list of 12 communities; joining «Oficina F1» works (registered after mockApi). */
+/** Public list of 12 communities (the closed one is not listed); joining «Oficina F1» works (registered after mockApi). */
 async function mockExplore(page: Page) {
   let joined = false
   await page.route('**/v2/**', async (route) => {
@@ -93,9 +93,9 @@ test.describe('Explorar comunidades (H3)', () => {
         await expect(
           page.getByRole('heading', { level: 1, name: 'Explorar comunidades' }),
         ).toBeVisible()
-        await expect(page.getByRole('tab', { name: 'Todas 12' })).toBeVisible()
+        await expect(page.getByRole('tab', { name: 'Todas 11' })).toBeVisible()
         await expect(
-          page.getByText('Mostrando de 1 a 10 de un total de 12 resultados'),
+          page.getByText('Mostrando de 1 a 10 de un total de 11 resultados'),
         ).toBeVisible()
         await expect(page.getByRole('link', { name: 'Abrir Peña Paddock' })).toBeVisible()
         await expect(page.getByText('mar 2022')).toBeVisible()
@@ -134,18 +134,19 @@ test.describe('Explorar comunidades (H3)', () => {
   }) => {
     await mockExplore(page)
     await page.goto('/comunidades/explorar')
-    await page.getByRole('tab', { name: /^Cerradas/ }).click()
-    await expect(page).toHaveURL(/tab=cerradas/)
-    await expect(page.getByText('Oficina F1')).toHaveCount(0)
-    await page.getByRole('searchbox', { name: 'Buscar comunidad' }).fill('amigos')
-    await expect(page).toHaveURL(/q=amigos/)
+    await expect(page.getByRole('tab', { name: /^Cerradas/ })).toHaveCount(0)
+    await expect(page.getByText('Amigos del paddock')).toHaveCount(0)
+    await page.getByRole('tab', { name: /^Abiertas/ }).click()
+    await expect(page).toHaveURL(/tab=abiertas/)
+    await page.getByRole('searchbox', { name: 'Buscar comunidad' }).fill('oficina')
+    await expect(page).toHaveURL(/q=oficina/)
     await expect(page.getByText('Mostrando de 1 a 1 de un total de 1 resultados')).toBeVisible()
     await page.getByRole('tab', { name: /^Todas/ }).click()
-    await expect(page.getByRole('searchbox', { name: 'Buscar comunidad' })).toHaveValue('amigos')
+    await expect(page.getByRole('searchbox', { name: 'Buscar comunidad' })).toHaveValue('oficina')
     await page.getByRole('searchbox', { name: 'Buscar comunidad' }).fill('')
-    await expect(page.getByText('de un total de 12 resultados')).toBeVisible()
+    await expect(page.getByText('de un total de 11 resultados')).toBeVisible()
     await page.getByRole('button', { name: 'Siguiente' }).click()
-    await expect(page.getByText('Mostrando de 11 a 12 de un total de 12 resultados')).toBeVisible()
+    await expect(page.getByText('Mostrando de 11 a 11 de un total de 11 resultados')).toBeVisible()
   })
 
   test('joining an open community goes to it', async ({ authedPage: page }) => {

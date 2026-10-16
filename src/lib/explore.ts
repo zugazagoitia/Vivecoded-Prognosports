@@ -5,7 +5,7 @@ import type { Community } from '@/api/schemas'
  * (no server-side filter, sort or paging that we know of): all of it is done on the client.
  */
 
-export const EXPLORE_TABS = ['todas', 'abiertas', 'cerradas', 'mias'] as const
+export const EXPLORE_TABS = ['todas', 'abiertas', 'mias'] as const
 export type ExploreTab = (typeof EXPLORE_TABS)[number]
 export const EXPLORE_SORTS = ['jugadores', 'recientes', 'nombre'] as const
 export type ExploreSort = (typeof EXPLORE_SORTS)[number]
@@ -20,11 +20,12 @@ export function parseSort(v: unknown): ExploreSort {
 
 type Row = Pick<Community, 'name' | 'owner' | 'open' | 'userIsMember'>
 
+/** Closed communities are never listed (one joins them with an invitation code), except your own. */
+const isListed = (c: Row) => c.open || c.userIsMember
+
 const inTab = (c: Row, tab: ExploreTab) =>
-  tab === 'todas' ||
-  (tab === 'abiertas' && c.open) ||
-  (tab === 'cerradas' && !c.open) ||
-  (tab === 'mias' && c.userIsMember)
+  isListed(c) &&
+  (tab === 'todas' || (tab === 'abiertas' && c.open) || (tab === 'mias' && c.userIsMember))
 
 /** Counters of the tabs, over the whole list (search not applied). */
 export function tabCounts(list: readonly Row[]): Record<ExploreTab, number> {
