@@ -1,4 +1,6 @@
-# Despliegue (T12)
+# Despliegue
+
+Ver también [`ci.md`](ci.md) (workflows y promoción a `master`) y [`security.md`](security.md) (CSP y cabeceras). Esta guía incluye la configuración única del propietario (secciones «Cloudflare», «GitHub»); los pasos 1-3 ya están hechos en este repositorio, se conservan por si hay que repetirlos.
 
 Cloudflare Workers con Static Assets, plan gratuito, URLs `workers.dev`, sin DNS (docs/requisitos.md §22).
 
@@ -13,7 +15,7 @@ Los despliegues nunca reconstruyen: descargan el artefacto `dist-beta` (PR y `de
 
 ## Cómo funciona y por qué es seguro
 
-- **E2E y despliegue**: los e2e son parte de CI (`ci-ok`), así que `deploy.yml` (que se dispara cuando CI termina con éxito) espera a que pasen todos los e2e (~13 min extra (matriz completa; WebKit es el más lento)) antes de previews, beta y producción. Se eligió esperar en lugar de desacoplar: un único gate, sin lógica nueva en `deploy.yml` ni cambios en artefactos/nombres, y producción exige e2e verde por construcción. Si el retraso de beta molestara, la alternativa sería un workflow `Build` ligero como disparador de `workflow_run`, a costa de que beta pudiera desplegarse con e2e en rojo.
+- **E2E y despliegue**: los e2e son parte de CI (`ci-ok`), así que `deploy.yml` (que se dispara cuando CI termina con éxito) espera a que pasen todos los e2e (~13 min de reloj extra: matriz completa; WebKit es el más lento) antes de previews, beta y producción. Se eligió esperar en lugar de desacoplar: un único gate, sin lógica nueva en `deploy.yml` ni cambios en artefactos/nombres, y producción exige e2e verde por construcción. Si el retraso de beta molestara, la alternativa sería un workflow `Build` ligero como disparador de `workflow_run`, a costa de que beta pudiera desplegarse con e2e en rojo.
 - `deploy.yml` se dispara con `workflow_run` al terminar CI con éxito. Corre con el YAML de la rama por defecto y tiene acceso a secretos, por eso no ejecuta código de la PR: instala dependencias del lockfile de la rama por defecto (PR) o de la rama desplegada (`develop`/`master`), con `--ignore-scripts`, y solo despliega el `dist/` ya construido.
 - Previews solo si `head_repository == repository`: las PRs de forks nunca reciben secretos ni preview.
 - Los secretos se inyectan solo en el paso de wrangler, vía entornos de GitHub. Permisos mínimos por job; `permissions: {}` a nivel de workflow.
@@ -33,7 +35,7 @@ Workers Static Assets admite `_headers` (verificado en local con `wrangler dev` 
 - `/` y `/index.html`: `no-cache`.
 - Rutas profundas (fallback SPA): Static Assets les pone `public, max-age=0, must-revalidate` por defecto (equivalente en la práctica a `no-cache`; no hay regla que case con ellas sin afectar a `/assets/*`).
 - Las cabeceras de `_headers` solo se aplican a respuestas de assets. Sin Worker propio es suficiente.
-- **Seguridad (T13)**: el bloque `/*` de `public/_headers` lleva CSP y demás cabeceras de seguridad; ver `docs/security.md`. Límites: 100 reglas, 2.000 caracteres por línea. Si una cabecera de `/*` coincide con otra de una regla específica, Cloudflare las une (no las sustituye): evitar duplicar `Cache-Control` en `/*`.
+- **Seguridad **: el bloque `/*` de `public/_headers` lleva CSP y demás cabeceras de seguridad; ver `docs/security.md`. Límites: 100 reglas, 2.000 caracteres por línea. Si una cabecera de `/*` coincide con otra de una regla específica, Cloudflare las une (no las sustituye): evitar duplicar `Cache-Control` en `/*`.
 
 ## Configuración única (propietario)
 
@@ -46,11 +48,11 @@ Workers Static Assets admite `_headers` (verificado en local con `wrangler dev` 
    - Account → **Workers Scripts** → **Edit**
    - Account Resources: Include → solo esta cuenta. Sin permisos de Zone ni User. Sin TTL excesivo (rotar cada 6-12 meses).
    - No usar la plantilla «Edit Cloudflare Workers» (incluye KV, rutas, zonas y más).
-   - Por verificar en el primer despliegue real: si Wrangler falla por un permiso que falta (p. ej. al habilitar `workers.dev`), el error indica cuál; añadir solo ese.
+   - Si Wrangler falla por un permiso que falta (p. ej. al habilitar `workers.dev`), el error indica cuál; añadir solo ese.
 
 ### 2. GitHub: ramas
 
-El repositorio hoy solo tiene `master`. Crear `develop` desde `master` (`git branch develop master && git push -u origin develop`). `develop` es la rama de integración (→ beta); `master` es producción.
+`develop` (integración → beta) y `master` (producción) existen ya. Si hubiera que recrear `develop`: `git branch develop master && git push -u origin develop`.
 
 Protección de ramas (Settings → Branches o Rulesets) para `develop` y `master`:
 
@@ -78,9 +80,11 @@ Notas:
 
 ### 4. Primer despliegue
 
-1. Fusionar este trabajo en `master` y crear `develop`.
+Ya realizado (Cloudflare, protección de ramas con `ci-ok` y entornos configurados). Para repetirlo en otra cuenta:
+
+1. Fusionar el trabajo en `master` y crear `develop`.
 2. Push/PR a `develop` → `prognosports-beta` se crea solo. URL: `https://prognosports-beta.<subdominio>.workers.dev`.
-3. PR de `develop` a `master` → tras CI aparece el job `production` esperando aprobación; aprobar en la pestaña Actions.
+3. PR de `develop` a `master` (la mantiene `promote-to-master.yml`, se fusiona con **merge commit**) → tras CI, incluidos los e2e, aparece el job `production` esperando aprobación; aprobar en la pestaña Actions.
 
 ## Rollback
 
@@ -102,7 +106,7 @@ Notas:
 - El mensaje de cada versión lleva el SHA del commit (`production @ <sha>`).
 - El rollback no cambia git: abrir un PR de revert en `master` para que el siguiente despliegue no vuelva a publicar la versión mala. Un nuevo push a `master` despliega de nuevo lo que haya en `master`.
 - Los rollbacks de assets son inmediatos; la caché `immutable` no afecta porque los nombres con hash cambian.
-- **Pendiente (T12)**: probar el procedimiento una vez en beta tras el primer despliegue y anotar la fecha aquí.
+- **Pendiente**: probar el procedimiento una vez en beta y anotar aquí la fecha (aún no hay constancia de una prueba).
 
 ## Verificación manual tras desplegar
 
@@ -114,15 +118,15 @@ scripts/smoke-deploy.sh https://prognosports-beta.<subdominio>.workers.dev
 
 Solo Workers con Static Assets, `wrangler deploy`, `workers.dev` y GitHub Actions. No usar KV, D1, R2, Durable Objects, Queues ni Workers Paid; sin dominio propio. Las peticiones a assets estáticos son gratuitas e ilimitadas; no hay código de Worker, así que no se consumen las 100.000 peticiones diarias de Workers.
 
-## Observabilidad y presupuesto de rendimiento (T14)
+## Observabilidad y presupuesto de rendimiento
 
 ### Errores (Sentry, inerte por defecto)
 
 - Se activa solo si `VITE_SENTRY_DSN` está definido (el DSN es público) y el modo no es `development`/`test`. `@sentry/browser` se carga con `import()` perezoso: sin DSN no entra nada en el bundle principal ni se hace ninguna petición.
 - Configuración: `dataCollection` sin usuario, cookies, cabeceras, cuerpos ni query params (equivale a `sendDefaultPii: false`, retirado en el SDK v11), `release = VITE_GIT_SHA`, `environment = modo` (`beta`/`production`), sin trazas. `beforeSend` elimina usuario, cookies, cabeceras y cuerpos de petición y limpia emails, JWT, `Bearer` y parámetros `token=`/`code=` (`src/lib/scrub.ts`).
-- Integración: `setErrorReporter` (ErrorBoundary y `reportError` de T7) y el evento `contract-error` de T2 (solo ruta y códigos/rutas de issue, nunca valores).
+- Integración: `setErrorReporter` (ErrorBoundary y `reportError`) y el evento `contract-error` de `src/api/events.ts` (solo ruta y códigos/rutas de issue, nunca valores).
 - Source maps: en CI, con `SENTRY_AUTH_TOKEN` (secreto) y `SENTRY_ORG`/`SENTRY_PROJECT` (variables), Vite genera maps `hidden`, el plugin los sube y los borra de `dist/`. Sin token no se generan maps.
-- CSP (T13): `connect-src` debe permitir el host de ingestión del DSN (p. ej. `https://*.ingest.sentry.io`, o `https://*.ingest.de.sentry.io` en la región UE).
+- CSP: `connect-src` debe permitir el host de ingestión del DSN (p. ej. `https://*.ingest.sentry.io`, o `https://*.ingest.de.sentry.io` en la región UE).
 
 ### Métricas
 
@@ -134,13 +138,13 @@ Tras `pnpm build`, `pnpm size` ejecuta:
 
 | Control | Umbral | Dónde cambiarlo |
 | --- | --- | --- |
-| JS inicial `dist/assets/index-*.js` (gzip) | 150 kB (hoy ~105 kB) | `.size-limit.json` |
-| CSS inicial (gzip) | 20 kB (hoy ~1 kB) | `.size-limit.json` |
+| JS inicial `dist/assets/index-*.js` (gzip) | 150 kB (medir con `pnpm size` tras `pnpm build`) | `.size-limit.json` |
+| CSS inicial (gzip) | 20 kB (medir con `pnpm size`) | `.size-limit.json` |
 | Cada chunk de ruta (gzip) | 80 kB | `ROUTE_LIMIT` en `scripts/bundle-budget.ts` |
-| Chunks cuyo nombre contenga `echarts`/`maplibre`/`zrender` | 250 kB | `HEAVY_LIMIT` en `scripts/bundle-budget.ts` |
+| Chunks cuyo nombre contenga `echarts`/`maplibre`/`zrender` (hoy no hay ninguno: los gráficos son SVG propios) | 250 kB | `HEAVY_LIMIT` en `scripts/bundle-budget.ts` |
 | ECharts/MapLibre en el grafo inicial (index.html + modulepreload) | prohibido | `HEAVY_CODE` en `scripts/bundle-budget.ts` |
 
-Los umbrales son la propuesta de §20.8 (pendiente de confirmar); suben o bajan editando esos ficheros en un PR revisado. `pnpm analyze` genera `reports/bundle.html` (treemap); CI lo sube como artefacto `bundle-report-<modo>`.
+Los umbrales son la propuesta de §20.8 (siguen sin confirmar por producto); suben o bajan editando esos ficheros en un PR revisado. `pnpm analyze` genera `reports/bundle.html` (treemap); CI lo sube como artefacto `bundle-report-<modo>`.
 
 ### Imágenes
 

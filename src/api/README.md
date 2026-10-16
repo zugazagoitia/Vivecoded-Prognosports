@@ -1,13 +1,25 @@
 # Capa de acceso a la API v2
 
-Única vía de acceso al backend. Ninguna pantalla importa `fetch`; se usan estas funciones desde las queries (T4).
+> Contexto: el backend (`Cadiducho/PrognoSports`) **no se modifica desde este repositorio**; aquí se documenta cómo difiere la API real de la spec y cómo lo resuelve el cliente. Cómo reportar al backend: [`AGENTS.md`](../../AGENTS.md#reportar-problemas-del-backend-o-del-contrato-de-la-api). Pruebas de contrato: [`docs/contract-tests.md`](../../docs/contract-tests.md). Backend local: [`docs/local-backend.md`](../../docs/local-backend.md).
+
+## Estado de los reportes al backend
+
+| Backend                      | Tema                                                                                                                                           | Estado  |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `Cadiducho/PrognoSports#226` | La spec OpenAPI no coincide con las respuestas reales (p. ej. `verified_at` frente a `verified`).                                              | Abierto |
+| `Cadiducho/PrognoSports#227` | Privacidad de `tipps` (se envían los ajenos antes del cierre), `PATCH /user`, guardado de pilotos (500) e `invitation` expuesto en el listado. | Abierto |
+| `Cadiducho/PrognoSports#230` | Endpoint para resolver un código de invitación en su comunidad.                                                                                | Abierto |
+
+En este repo se hace seguimiento en los issues #99 (contrato), #100 (hallazgos), #121/#122 (ranking) y #127 (mocks). Todas las discrepancias de abajo están **resueltas en el cliente** (el cliente acepta ambas formas y normaliza) salvo las marcadas como «pendiente de backend», que son workarounds retirables cuando el backend corrija (la suite `corrections.contract.ts` avisa).
+
+Única vía de acceso al backend. Ninguna pantalla importa `fetch`; se usan estas funciones desde las queries (`src/queries`).
 
 - `client.ts`: cliente `fetch` propio (ver decisión abajo). Desenvuelve `ApiResponse` y devuelve solo `result`; convierte errores a `ApiError`; timeout (15 s) y `AbortSignal`.
 - `schemas.ts`: esquemas Zod de las respuestas críticas. `User` nunca contiene `hashedPassword` (se descarta al parsear).
-- `events.ts`: `onSessionExpired` (401, lo consume T3/T4) y `onContractError` (para T14).
-- `config.ts`: formato del header de autenticación en un único sitio (`Authorization: Bearer <token>`, según `securitySchemes.BearerAuth` de la especificación; pendiente de confirmar con el backend).
+- `events.ts`: `onSessionExpired` (sesión caducada; lo consumen el router y el store de sesión) y `onContractError` (desajuste de contrato; lo recoge la observabilidad, solo ruta y campos, nunca valores).
+- `config.ts`: formato del header de autenticación en un único sitio (`Authorization: Bearer <token>`, según `securitySchemes.BearerAuth` de la especificación; confirmado contra la API real).
 - `schema.d.ts`: tipos generados con `pnpm api:types` desde `api/openapi.json` (copia versionada). `pnpm api:types:fetch` actualiza la copia desde `https://api.prognosports.com/openapi`.
-- El store de sesión (T4) debe llamar a `setTokenProvider(() => token)`.
+- El store de sesión llama a `setTokenProvider(() => token)`.
 
 ## Decisión: cliente propio frente a `openapi-fetch`
 

@@ -1,5 +1,7 @@
 # PrognoSports: requisitos y decisiones técnicas para el rediseño en Vue
 
+> **Estado (2026-10-16).** Documento de planificación inicial: las issues y épicas ya están creadas e implementadas. Úsalo para entender el porqué de las decisiones; para el estado vigente consulta [`README.md`](../README.md), el [índice de docs](README.md) y [`design/issues/a-confirmar.md`](design/issues/a-confirmar.md) (decisiones de producto tomadas). Desviaciones respecto a lo escrito aquí: previews por PR con un Worker por PR en vez de `versions upload` (§22.3, ver [`deploy.md`](deploy.md)); `_headers` es suficiente para cabeceras (§22.6); los gráficos son SVG propios (no se usó ECharts ni MapLibre, §19); los e2e forman parte de CI y de `ci-ok` (§21); en producción están activados los 12 flags (§18).
+
 Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-Prognosports`. Está basado en la lectura de los dos repos de referencia (`PrognoSports` backend Java y `PrognoSports-frontend` Vue), que no se han modificado. Cada requisito indica entre paréntesis el archivo de origen para trazabilidad.
 
 ## 0. Contexto y supuestos
@@ -9,7 +11,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 - Idioma: toda la UI en español, con tuteo y frases en sentence case.
 - Estilo: aplicar el sistema de diseño de referencia (Inter, paleta `brand`, radios, sombras, modo oscuro con clase `dark`, iconos Font Awesome 6.2). Sus componentes `P*` son documentación visual, no código reutilizable.
 - Diseño de referencia: el canvas `35438527-…` contiene unos 40 artboards. Algunos describen funciones que hoy **no existen** en la app (Logros, Palmarés, Gap, Bump, Cara a cara, Consistencia, Mi temporada, Distribución). Regla vigente: ninguna propuesta entra sin datos en la API v2. Las que tienen datos están en el alcance con feature flags (sección 18). Logros y Múltiples quedan fuera (sección 25).
-- Repo destino `Vivecoded-Prognosports`: hoy solo tiene `README.md` (un título) y `.gitignore`.
+- Repo destino `Vivecoded-Prognosports`: en el momento de redactar el documento solo tenía un `README.md` con un título; hoy contiene el frontend completo.
 - Despliegue: Cloudflare Workers con Static Assets, en plan gratuito, desplegado desde GitHub Actions. Operará en paralelo a la web actual, con URLs `workers.dev` (sección 22).
 
 ## 1. Fundaciones técnicas
@@ -287,10 +289,10 @@ Configuración:
 
 - 22.1 `wrangler.jsonc` con `assets.directory: "./dist"` y `assets.not_found_handling: "single-page-application"`. Así las rutas profundas devuelven `index.html` sin invocar el Worker, y no consumen peticiones dinámicas.
 - 22.2 Sin código de Worker propio, salvo que se necesite lógica de cabeceras (ver 22.6).
-- 22.3 Previews por PR: cada PR sube una versión con `wrangler versions upload` (que no cambia producción) y publica su URL de preview en un comentario del PR. **Verificar al implantar que la URL de preview de versión está disponible en el plan Free.** Si no lo está, la alternativa es un Worker de preview por PR con nombre `prognosports-pr-<número>`, con borrado al cerrar el PR.
+- 22.3 Previews por PR: cada PR sube una versión con `wrangler versions upload` (que no cambia producción) y publica su URL de preview en un comentario del PR. **Resuelto:** se usa la alternativa, un Worker de preview por PR con nombre `prognosports-pr-<número>` y borrado al cerrar el PR (ver `docs/deploy.md`).
 - 22.4 Beta: la rama `develop` hace `wrangler deploy` a un Worker `prognosports-beta` en `workers.dev`. Beta sigue usando la API de producción, según `AGENTS.md`.
 - 22.5 Producción paralela: la rama `master` hace `wrangler deploy` a `prognosports` en `workers.dev`, tras aprobación en el entorno `production`. No hay DNS que mover: el dominio actual sigue en el servidor actual. El corte de dominio se decide cuando la web nueva esté validada.
-- 22.6 Cabeceras de seguridad y caché: se configuran en un Worker mínimo con `assets` y `run_worker_first` solo para `/*` si hace falta CSP y `Cache-Control`. Alternativa sin Worker: `_headers` si Workers Static Assets lo admite en la versión de Wrangler fijada. **Verificar al implantar.**
+- 22.6 Cabeceras de seguridad y caché: se configuran en un Worker mínimo con `assets` y `run_worker_first` solo para `/*` si hace falta CSP y `Cache-Control`. **Resuelto:** `public/_headers` funciona con Workers Static Assets, sin Worker propio (ver `docs/deploy.md` y `docs/security.md`).
 - 22.7 Caché: los ficheros con hash de Vite llevan `Cache-Control: public, max-age=31536000, immutable`. `index.html` va con `no-cache`.
 - 22.8 Rollback: `wrangler rollback` o reactivar una versión anterior desde el panel. El procedimiento queda documentado en el repositorio.
 - 22.9 Limpieza: eliminar las versiones y Workers de previews de PRs cerradas, con un job al cerrar el PR, para no acumular recursos.
@@ -311,7 +313,7 @@ Configuración:
 
 ## 24. Riesgos y puntos a verificar
 
-- 24.1 Confirmar al implantar dos detalles del plan gratuito: la URL de preview por versión en Workers (22.3) y la compatibilidad de `_headers` con Static Assets (22.6). Ambos tienen alternativa documentada.
+- 24.1 (Resuelto, ver 22.3 y 22.6) Confirmar al implantar dos detalles del plan gratuito: la URL de preview por versión en Workers (22.3) y la compatibilidad de `_headers` con Static Assets (22.6). Ambos tienen alternativa documentada.
 - 24.2 La especificación OpenAPI en `api.prognosports.com/swagger` debe ser accesible para generar tipos y para los tests de contrato. Si no lo es, se generan tipos desde una copia versionada.
 - 24.3 Las propuestas del canvas sin datos en la API (sección 18.4) quedarán bloqueadas hasta que se decida si se amplía la API.
 - 24.4 El comportamiento ante 401 global (2.8) y el alcance de la privacidad (3.4) y de los equipos (3.7) se verifican contra la app en vivo antes de crear los issues.
