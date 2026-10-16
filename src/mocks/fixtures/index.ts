@@ -66,7 +66,7 @@ export function toWireUser(u: UserInput): Record<string, unknown> {
     last_activity: lastActivity ?? u.created,
     updated: u.created,
     hasProfileImage: hasProfileImage ?? false,
-    current_community: currentCommunity,
+    currentCommunity,
   }
 }
 
@@ -122,6 +122,9 @@ export const competition = defineFixture('competition', CompetitionSchema, {
   code: 'f1',
   name: 'F1',
   fullname: 'Fórmula 1',
+  // Real API: the current season (id and name) and the rules text (markdown) come with it.
+  currentSeason: { id: 10, name: '2026', totalEvents: 24 },
+  rules: '### 1. Sobre sanciones en la clasificación\nSe toman como válidos los tiempos de Q3.',
 })
 
 export const season = defineFixture('season', SeasonSchema, {
@@ -137,6 +140,7 @@ export function mockCommunity(overrides: Partial<CommunityInput> = {}): Communit
     description: 'Comunidad de referencia con 12 jugadores.',
     competition,
     open: false,
+    hasImage: false,
     invitation: 'PADDOCK26',
     owner: users[0],
     // snake_case + isPublic + nested pointsByEqualsPosition: the real wire shapes (README).
@@ -154,11 +158,13 @@ export function mockCommunity(overrides: Partial<CommunityInput> = {}): Communit
         pointsByEqualsPosition: {
           '1': { '1': 20, '2': 16, '3': 12, '4': 10 },
           '2': { '1': 25, '2': 20, '3': 18 },
+          '3': { '1': 20, '2': 16, '3': 12, '4': 10 },
+          '4': { '1': 25, '2': 20, '3': 18 },
         },
-        pointsByNextPosition: { '1': 2, '2': 2 },
-        pointsByNextOfFollowingPosition: { '1': 1, '2': 1 },
-        pointsByPreviousPosition: { '1': 2, '2': 2 },
-        pointsByPreviousOfPreviousPosition: { '1': 1, '2': 1 },
+        pointsByNextPosition: { '1': 2, '2': 2, '3': 2, '4': 2 },
+        pointsByNextOfFollowingPosition: { '1': 1, '2': 1, '3': 1, '4': 1 },
+        pointsByPreviousPosition: { '1': 2, '2': 2, '3': 2, '4': 2 },
+        pointsByPreviousOfPreviousPosition: { '1': 1, '2': 1, '3': 1, '4': 1 },
         pointsIfIsNotInPodium: {},
         pointsIfIsNotInResults: {},
       },
@@ -208,6 +214,9 @@ export const circuits = CIRCUIT_DATA.map(([name, locality, country], i) =>
     name,
     locality,
     country,
+    // Real API: coordinates come with every circuit of the lists.
+    latitude: 40 + (i % 7),
+    longitude: -3 + (i % 11),
     hasLogoImage: false,
     variants: [
       {
@@ -229,20 +238,18 @@ const FIRST_RACE = Date.parse('2026-03-08T14:00:00Z')
 export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> = {}) {
   const race = FIRST_RACE + (round - 1) * 7 * DAY
   const sprint = SPRINT_ROUNDS.includes(round)
+  // Real API: no `key`, and the ids are the shared catalogue ones (1 Q, 2 R, 3 SQ, 4 SR).
   const sessions = [
-    { key: 1, name: 'QUALIFY', code: 'Q', at: race - DAY - 2 * HOUR },
+    { id: 1, name: 'QUALIFY', code: 'Q', at: race - DAY - 2 * HOUR },
     ...(sprint
       ? [
           // Real API: sprint weekends list a single `SR` (SPRINT_RACE) session (README).
-          { key: 4, name: 'SPRINT_RACE', code: 'SR', at: race - DAY - 6 * HOUR },
+          { id: 4, name: 'SPRINT_RACE', code: 'SR', at: race - DAY - 6 * HOUR },
         ]
       : []),
-    { key: 2, name: 'RACE', code: 'R', at: race },
-  ].map((s, i) => ({
-    id: round * 10 + i,
-    // Real API: no `key`, and the id is the shared catalogue one (1 Q, 2 R, 3 SQ, 4 SR). The mock
-    // keeps unique ids per GP and `key` as the bridge to the rule sets (pending, README).
-    key: s.key,
+    { id: 2, name: 'RACE', code: 'R', at: race },
+  ].map((s) => ({
+    id: s.id,
     name: s.name,
     code: s.code,
     date: new Date(s.at).toISOString(),
@@ -258,7 +265,13 @@ export function mockGrandPrix(round: number, overrides: Partial<GrandPrixInput> 
     season,
     circuit: circuits[(round - 1) % circuits.length],
     // The GP's own variant carries no `hasLayoutImage` in the real API.
-    variant: { id: 1, circuitId: ((round - 1) % circuits.length) + 1, name: 'GrandPrix' },
+    variant: {
+      id: 1,
+      circuitId: ((round - 1) % circuits.length) + 1,
+      name: 'GrandPrix',
+      distance: 5.3,
+      turns: 16,
+    },
     sessions,
     lastSessionDate: new Date(race).toISOString(),
     suspended: false,

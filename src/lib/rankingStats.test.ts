@@ -5,6 +5,7 @@ import { SAMPLE } from './rankingFixture'
 import {
   altRanking,
   attempts,
+  availableKinds,
   barColorPct,
   barHeight,
   bestByKind,
@@ -343,5 +344,25 @@ describe('R11 and R13', () => {
     expect(altRanking(rows, 'sp')[0]!.id).toBe(3)
     expect(altRanking(rows, 'r', 2)).toHaveLength(2)
     expect([3, -2, 0].map(moveText)).toEqual(['▲3', '▼2', ''])
+  })
+})
+
+describe('R11 availableKinds', () => {
+  it('marks types without hit data as unavailable instead of zero', () => {
+    const played = [
+      {
+        sessions: [
+          { id: 1, key: 1, code: 'Q' },
+          { id: 2, key: 2, code: 'R' },
+        ],
+      },
+    ]
+    const players = [{ hitsBySession: [{ '1': 3, '2': 1 }] }]
+    expect(availableKinds(players, { played } as never)).toEqual({
+      cs: false,
+      sp: false,
+      q: true,
+      r: true,
+    })
   })
 })

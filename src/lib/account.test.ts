@@ -7,6 +7,7 @@ import {
   channelStates,
   diffPreferences,
   diffProfile,
+  toProfilePatch,
   emptyMatrix,
   notificationTypeLabel,
   NOTIFICATION_TYPES,
@@ -103,6 +104,19 @@ describe('profile', () => {
   it('diffProfile keeps only the changed fields', () => {
     expect(diffProfile(base, base)).toEqual({})
     expect(diffProfile(base, { ...base, bio: 'hola', location: '' })).toEqual({ bio: 'hola' })
+  })
+
+  it('toProfilePatch adds the password and moves the time zone to preferences', () => {
+    expect(toProfilePatch({ bio: 'hola' }, 'pw')).toEqual({ bio: 'hola', password: 'pw' })
+    expect(toProfilePatch({ birthdate: '1991-05-14' }, 'pw')).toEqual({
+      birthdate: '14/05/1991',
+      password: 'pw',
+    })
+    expect(toProfilePatch({ timeZone: 'Europe/Madrid', location: 'x' }, 'pw')).toEqual({
+      location: 'x',
+      preferences: { 'time-zone-id': 'Europe/Madrid' },
+      password: 'pw',
+    })
   })
 
   it('parseTimezones sorts by offset and labels with the UTC offset', () => {

@@ -7,6 +7,13 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  /* `sr-only` is absolute: inside a table that scrolls on its own it must be positioned against its
+     cell, otherwise it widens the whole page (long names, big numbers). */
+  td,
+  th {
+    position: relative;
+  }
+
   *,
   ::before,
   ::after {

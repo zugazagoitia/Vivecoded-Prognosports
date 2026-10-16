@@ -60,7 +60,7 @@ test.describe('GP detail (G2)', () => {
       }) => {
         test.skip(isMobile, 'desktop timeline')
         await freeze(page)
-        await page.goto(`${PATH}?sesion=61`)
+        await page.goto(`${PATH}?sesion=4`)
         await expect(page.getByRole('tab', { name: /^Sprint/ })).toHaveAttribute(
           'aria-selected',
           'true',
@@ -86,7 +86,7 @@ test.describe('GP detail (G2)', () => {
     await freeze(page)
     await page.goto(PATH)
     await page.getByRole('tab', { name: /^Carrera/ }).click()
-    await expect(page).toHaveURL(/sesion=62/)
+    await expect(page).toHaveURL(/sesion=2/)
     await expect(page.getByRole('link', { name: 'Editar pronóstico' })).toBeVisible()
     await page.getByRole('tab', { name: /^Carrera/ }).press('ArrowLeft')
     await expect(page.getByRole('tab', { name: /^Clasificación/ })).toHaveAttribute(

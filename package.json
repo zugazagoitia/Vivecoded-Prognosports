@@ -23,7 +23,7 @@
     "build": "pnpm typecheck && vite build",
     "preview": "vite preview",
     "check:dist": "bash scripts/check-dist-secrets.sh",
-    "build:e2e": "jiti scripts/build-e2e.ts && jiti scripts/build-e2e.ts --flags-off",
+    "build:e2e": "jiti scripts/build-e2e.ts && jiti scripts/build-e2e.ts --flags-off && jiti scripts/build-e2e.ts --panel",
     "e2e": "pnpm typecheck && pnpm build:e2e && playwright test",
     "e2e:ci": "playwright test",
     "e2e:fast": "pnpm typecheck && pnpm build:e2e && playwright test --project=chromium --project=mobile",
@@ -53,7 +53,7 @@
     "@fontsource-variable/inter": "^5.3.0",
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@sentry/browser": "^11.6.0",
-    "@tanstack/vue-query": "^5.104.1",
+    "@tanstack/vue-query": "^5.104.2",
     "@tanstack/vue-table": "^9.2.8",
     "@vueuse/core": "^15.0.0",
     "date-fns": "^4.4.0",
@@ -65,7 +65,7 @@
     "vue-i18n": "^11.4.14",
     "vue-router": "^5.4.0",
     "vue-sonner": "^2.0.9",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -74,7 +74,7 @@
     "@sentry/vite-plugin": "^5.4.1",
     "@size-limit/file": "^14.2.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@tanstack/vue-query-devtools": "^6.3.1",
+    "@tanstack/vue-query-devtools": "^6.3.2",
     "@testing-library/user-event": "^14.6.7",
     "@testing-library/vue": "^8.1.0",
     "@types/node": "^26.6.5",

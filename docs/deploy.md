@@ -13,6 +13,7 @@ Los despliegues nunca reconstruyen: descargan el artefacto `dist-beta` (PR y `de
 
 ## Cómo funciona y por qué es seguro
 
+- **E2E y despliegue**: los e2e son parte de CI (`ci-ok`), así que `deploy.yml` (que se dispara cuando CI termina con éxito) espera a que pasen todos los e2e (~13 min extra (matriz completa; WebKit es el más lento)) antes de previews, beta y producción. Se eligió esperar en lugar de desacoplar: un único gate, sin lógica nueva en `deploy.yml` ni cambios en artefactos/nombres, y producción exige e2e verde por construcción. Si el retraso de beta molestara, la alternativa sería un workflow `Build` ligero como disparador de `workflow_run`, a costa de que beta pudiera desplegarse con e2e en rojo.
 - `deploy.yml` se dispara con `workflow_run` al terminar CI con éxito. Corre con el YAML de la rama por defecto y tiene acceso a secretos, por eso no ejecuta código de la PR: instala dependencias del lockfile de la rama por defecto (PR) o de la rama desplegada (`develop`/`master`), con `--ignore-scripts`, y solo despliega el `dist/` ya construido.
 - Previews solo si `head_repository == repository`: las PRs de forks nunca reciben secretos ni preview.
 - Los secretos se inyectan solo en el paso de wrangler, vía entornos de GitHub. Permisos mínimos por job; `permissions: {}` a nivel de workflow.

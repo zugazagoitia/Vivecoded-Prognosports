@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { messageFor } from '@/api/messages'
 import { RouterLink, useRoute } from 'vue-router'
 import EmailChangeForm from '@/components/account/EmailChangeForm.vue'
 import NotificationsCard from '@/components/account/NotificationsCard.vue'
@@ -94,16 +95,21 @@ const updatePrefs = useUpdatePreferences()
 const saving = computed(() => updateProfile.isPending.value || updatePrefs.isPending.value)
 
 async function saveAll() {
-  if (!(await profile.validate()).valid) return
-  try {
-    await Promise.all([
-      profile.count.value ? updateProfile.mutateAsync(profile.patch.value) : undefined,
-      prefChanges.value.length ? updatePrefs.mutateAsync(prefChanges.value) : undefined,
-    ])
+  if (!(await profile.validateAll())) return
+  const results = await Promise.allSettled([
+    profile.count.value
+      ? updateProfile.mutateAsync({ patch: profile.patch.value, password: profile.password.value })
+      : undefined,
+    prefChanges.value.length ? updatePrefs.mutateAsync(prefChanges.value) : undefined,
+  ])
+  // A rejected profile (usually a wrong password) is shown under the field; other errors were
+  // already toasted by the global handler. The bar stays visible.
+  const [profileResult] = results
+  if (profileResult.status === 'rejected')
+    profile.passwordError.value = messageFor(profileResult.reason)
+  if (results.every((r) => r.status === 'fulfilled')) {
     saved.value = true
     toaster.success(t('account.saveBar.saved'))
-  } catch {
-    // the global mutation handler already toasted the error; the bar stays visible
   }
 }
 function discard() {
@@ -122,10 +128,14 @@ function toggle(type: NotificationTypeId, channel: ChannelId) {
 }
 
 async function saveProfileMobile() {
-  if (!(await profile.validate()).valid) return
-  updateProfile.mutate(profile.patch.value, {
-    onSuccess: () => toaster.success(t('account.profile.saved')),
-  })
+  if (!(await profile.validateAll())) return
+  updateProfile.mutate(
+    { patch: profile.patch.value, password: profile.password.value },
+    {
+      onSuccess: () => toaster.success(t('account.profile.saved')),
+      onError: (e) => (profile.passwordError.value = messageFor(e)),
+    },
+  )
 }
 
 // --- Photo -----------------------------------------------------------------------------------
@@ -192,7 +202,9 @@ watch(
         v-model:bio="profile.bio.value"
         v-model:location="profile.location.value"
         v-model:time-zone="profile.timeZone.value"
+        v-model:password="profile.password.value"
         compact
+        :password-error="profile.passwordError.value"
         :errors="profile.errors.value"
         :dirty="profile.count.value > 0"
         :timezones="timezones.data.value"
@@ -287,6 +299,8 @@ watch(
             v-model:location="profile.location.value"
             v-model:birthdate="profile.birthdate.value"
             v-model:time-zone="profile.timeZone.value"
+            v-model:password="profile.password.value"
+            :password-error="profile.passwordError.value"
             :errors="profile.errors.value"
             :username="user.username"
             :timezones="timezones.data.value"

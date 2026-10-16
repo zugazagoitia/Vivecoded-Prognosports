@@ -1,0 +1,26 @@
+# Preparación común de los workflows: pnpm + Node (de .nvmrc) + dependencias.
+# Se usa DESPUÉS de `actions/checkout` (una acción local necesita el repositorio ya descargado).
+# Las acciones de terceros se fijan por SHA aquí, en un único sitio.
+name: Preparar pnpm y Node
+description: Instala pnpm y Node y, opcionalmente, las dependencias del lockfile.
+inputs:
+  install:
+    description: "'true' instala dependencias (y activa la caché de pnpm); 'false' solo pnpm y Node."
+    default: 'true'
+  ignore-scripts:
+    description: "'true' añade --ignore-scripts (jobs de deploy con secretos)."
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version-file: .nvmrc
+        # Sin instalación no hay almacén de pnpm: la caché haría fallar el post-step (AGENTS.md).
+        cache: ${{ inputs.install == 'true' && 'pnpm' || '' }}
+    - if: ${{ inputs.install == 'true' }}
+      shell: bash
+      env:
+        IGNORE_SCRIPTS: ${{ inputs.ignore-scripts == 'true' && '--ignore-scripts' || '' }}
+      run: pnpm install --frozen-lockfile $IGNORE_SCRIPTS

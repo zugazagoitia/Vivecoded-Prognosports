@@ -36,6 +36,12 @@ describe('AppNav links by role', () => {
     expect(screen.getByRole('link', { name: 'Registrarse' })).toBeTruthy()
   })
 
+  it('desktop Ranking opens Resumen (R0), not Clasificación (R1)', async () => {
+    await renderNav({ user: mockUser() })
+    const href = within(nav()).getByRole('link', { name: 'Ranking' }).getAttribute('href')
+    expect(href).toBe(`/ranking/1/${new Date().getFullYear()}`)
+  })
+
   it('player sees game links and never "Administración"', async () => {
     await renderNav({ user: mockUser() })
     const names = within(nav())
@@ -100,11 +106,9 @@ describe('user menu', () => {
     await vi.waitFor(() => expect(router.currentRoute.value.path).toBe('/sesion-cerrada'))
   })
 
-  it('notification bell links to settings > notifications preferences', async () => {
+  it('has no notification bell (hidden until the backend has history)', async () => {
     await renderNav({ user: mockUser() })
-    expect(screen.getByRole('link', { name: 'Notificaciones' }).getAttribute('href')).toBe(
-      '/ajustes#avisos',
-    )
+    expect(screen.queryByRole('link', { name: 'Notificaciones' })).toBeNull()
   })
 })
 

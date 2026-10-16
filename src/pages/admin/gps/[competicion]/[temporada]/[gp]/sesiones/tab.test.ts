@@ -48,7 +48,7 @@ describe('admin sessions (M5) · calendar', () => {
     expect(screen.getByText('Ninguna comunidad la usa.')).toBeTruthy()
     await user.click(screen.getByRole('button', { name: 'Guardar sesión' }))
     await waitFor(() => expect(adminCalls).toHaveLength(1))
-    expect(adminCalls[0]).toMatchObject({ method: 'PUT', path: '/v2/gps/1/10/6/sessions/61' })
+    expect(adminCalls[0]).toMatchObject({ method: 'PUT', path: '/v2/gps/1/10/6/sessions/4' })
     expect((adminCalls[0]!.body as { date: string }).date).toMatch(/^2026-04-/)
     await user.click(screen.getByRole('button', { name: 'Eliminar' }))
     const dialog = await screen.findByRole('dialog')
@@ -57,7 +57,7 @@ describe('admin sessions (M5) · calendar', () => {
     await waitFor(() =>
       expect(adminCalls.at(-1)).toMatchObject({
         method: 'DELETE',
-        path: '/v2/gps/1/10/6/sessions/61',
+        path: '/v2/gps/1/10/6/sessions/4',
       }),
     )
   })

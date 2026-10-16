@@ -82,7 +82,7 @@ const rows = computed<Row[]>(() =>
           <div class="min-w-0">
             <RouterLink
               :to="`/comunidades/${r.id}`"
-              class="text-heading font-semibold break-words"
+              class="text-heading font-semibold wrap-anywhere"
               :class="focusRing"
             >
               {{ r.name }}

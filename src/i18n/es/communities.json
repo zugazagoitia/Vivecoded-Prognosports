@@ -1,6 +1,7 @@
 {
   "communities": {
     "title": "Comunidades",
+    "noCommunityNotice": "Esa pantalla necesita una comunidad. Únete a una o crea la tuya para verla.",
     "home": "Inicio",
     "intro": "Juegas en {count}. La activa es la que ves en Inicio y en el ranking.",
     "introNone": "Todavía no juegas en ninguna comunidad.",

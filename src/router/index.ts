@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type Router } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalized,
+  type Router,
+} from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import './meta'
 import { installFocusManagement } from './a11y'
@@ -16,8 +21,22 @@ const legacyRedirects = [
   { path: '/reset-password', redirect: '/restablecer' },
   { path: '/verify', redirect: '/verificar' },
   { path: '/communities', redirect: '/comunidades' },
-  { path: '/communities/:id', redirect: '/comunidades/:id' },
-  { path: '/user/:usuario', redirect: '/u/:usuario' },
+  {
+    path: '/communities/:id',
+    redirect: (to: RouteLocationNormalized) => ({
+      path: `/comunidades/${String((to.params as Record<string, string>).id)}`,
+      query: to.query,
+      hash: to.hash,
+    }),
+  },
+  {
+    path: '/user/:usuario',
+    redirect: (to: RouteLocationNormalized) => ({
+      path: `/u/${String((to.params as Record<string, string>).usuario)}`,
+      query: to.query,
+      hash: to.hash,
+    }),
+  },
 ]
 
 const CHUNK_RELOAD_KEY = 'prognosports:chunk-reloaded'

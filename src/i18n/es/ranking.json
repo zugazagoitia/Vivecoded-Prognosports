@@ -16,6 +16,10 @@
       "text": "Es posible que el enlace sea incorrecto o que la vista ya no esté disponible.",
       "action": "Ir a mis comunidades"
     },
+    "totalsOnly": {
+      "title": "Clasificación total",
+      "text": "El detalle por Gran Premio no está disponible para esta temporada; se muestran solo los puntos totales."
+    },
     "empty": {
       "title": "Aún no hay Grandes Premios con puntos",
       "text": "En cuanto se puntúe el primer Gran Premio de la temporada aparecerá aquí."
@@ -375,6 +379,7 @@
       "legend": "Tipos de sesión",
       "tableCaption": "Aciertos por tipo de sesión",
       "gridNote": "Tamaño del círculo = % de acierto. Recuadro: el mejor de la comunidad en esa sesión.",
+      "unavailable": "No disponible",
       "diff": "Diferencia",
       "avgTitle": "Media de la comunidad",
       "legendYou": "Tu % de acierto",

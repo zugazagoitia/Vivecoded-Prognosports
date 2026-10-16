@@ -15,7 +15,7 @@ import {
  * Conventions (all «por confirmar» in docs/design/issues/a-confirmar.md):
  * - A GP is «played» when the points map has a row for it (the real API only lists GPs with points).
  * - A member without a row in a played GP counts as 0 points there (and as «not participated»).
- * - Place in a GP = standard competition ranking (1, 2, 2, 4) by `pointsInGP`: ties share the place.
+ * - Place in a GP = dense ranking (1, 2, 2, 3) by `pointsInGP`: ties share the place.
  * - Place in the general table after a GP = same ranking over the accumulated points.
  */
 
@@ -235,7 +235,7 @@ export function formatDec(v: number, digits = 1): string {
 }
 
 /** U+2212 minus: «−12». */
-export const minus = (v: number): string => `−${Math.abs(v)}`
+export const minus = (v: number): string => (v === 0 ? '0' : `−${Math.abs(v)}`)
 
 /** «▲ 2 desde el GP anterior» / «▼ 1 …» / «= sin cambios». */
 export function formatMovement(prev: number, cur: number): string {

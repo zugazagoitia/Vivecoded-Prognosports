@@ -20,5 +20,5 @@ const cls = computed(
 </script>
 
 <template>
-  <component :is="tag" :class="[cls, 'text-heading']"><slot /></component>
+  <component :is="tag" :class="[cls, 'text-heading', 'wrap-anywhere']"><slot /></component>
 </template>

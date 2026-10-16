@@ -5,6 +5,11 @@
       "title": "Perfil de otro usuario",
       "text": "Esta pantalla todavía no está disponible."
     },
+    "soon": {
+      "champion": "Campeón/a · Próximamente",
+      "level": "Nivel y XP · Próximamente",
+      "telegram": "Telegram · Próximamente"
+    },
     "header": {
       "photo": "Foto de {name}",
       "since": "en PrognoSports desde {date}",

@@ -113,7 +113,10 @@ const PR = 150
         {{ table ? t('ranking.viewChart') : t('ranking.viewTable') }}
       </PButton>
     </template>
-    <div v-if="!table" class="grid items-start gap-5 min-[1001px]:grid-cols-[minmax(0,1fr)_250px]">
+    <div
+      v-if="!table"
+      class="grid grid-cols-[minmax(0,1fr)] items-start gap-5 min-[1001px]:grid-cols-[minmax(0,1fr)_250px]"
+    >
       <RankLineChart
         :series="series"
         :x-codes="model.played.map((g) => g.code)"
@@ -149,9 +152,9 @@ const PR = 150
           t('ranking.r5.after', { name: model.played[sel]?.name })
         }}</b>
         <ol class="m-0 flex list-none flex-col gap-1 p-0">
-          <li v-for="r in panel" :key="r.p.id" class="flex items-center gap-2">
+          <li v-for="r in panel" :key="r.p.id" class="flex min-w-0 items-center gap-2">
             <span
-              class="size-2 rounded-full"
+              class="size-2 shrink-0 rounded-full"
               :class="{
                 'bg-series-you': tones.get(r.p.id) === 'you',
                 'bg-series-2': tones.get(r.p.id) === 's2',
@@ -162,8 +165,10 @@ const PR = 150
               }"
               aria-hidden="true"
             />
-            <span class="flex-1">{{ label(r.p) }}</span>
-            <span class="text-heading font-semibold tabular-nums">{{ formatGap(r.v, mode) }}</span>
+            <span class="min-w-0 flex-1 truncate">{{ label(r.p) }}</span>
+            <span class="text-heading shrink-0 font-semibold tabular-nums">{{
+              formatGap(r.v, mode)
+            }}</span>
           </li>
         </ol>
         <span class="text-muted pt-1.5 text-[11px]">{{ t('ranking.r5.hint') }}</span>

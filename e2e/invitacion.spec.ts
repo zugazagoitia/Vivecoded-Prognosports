@@ -77,11 +77,11 @@ test.describe('Invitación (H7)', () => {
         await noHorizontalScroll(page)
       })
 
-      test('expired: axe', async ({ authedPage: page }) => {
+      test('invalid: axe', async ({ authedPage: page }) => {
         await mockInvitations(page)
         await page.goto('/unirse/NOPE')
         await expect(
-          page.getByRole('heading', { level: 1, name: 'Esta invitación ya no funciona' }),
+          page.getByRole('heading', { level: 1, name: 'No encontramos esta invitación' }),
         ).toBeVisible()
         await expectNoSeriousA11yViolations(page)
       })

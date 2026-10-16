@@ -205,6 +205,13 @@ describe('session status', () => {
     expect(sessionStatus({ ...base, state: 'open', closesInMs: 60_000 }).kind).toBe('open')
   })
 
+  it('a suspended GP shows «Suspendida» instead of open, but keeps past states', () => {
+    const open = sessionStatus({ ...base, state: 'open', closesInMs: 1e9, suspended: true })
+    expect(open.kind).toBe('suspended')
+    expect(statusText(open)).toBe('Suspendida')
+    expect(sessionStatus({ ...base, state: 'closed', suspended: true }).kind).toBe('closed')
+  })
+
   it('close-in text', () => {
     expect(formatCloseIn(45)).toBe('45 min')
     expect(formatCloseIn(60)).toBe('1 h 0 min')

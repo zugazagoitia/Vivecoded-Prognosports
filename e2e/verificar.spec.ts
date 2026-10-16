@@ -8,6 +8,9 @@ const noOverflow = (page: Page) =>
 /** Marks the visit as «just registered» (A2 leaves the address in the history state). */
 async function justRegistered(page: Page) {
   await page.goto('/verificar')
+  // Let the app mount before touching history/reloading: in Firefox an early reload aborts with
+  // NS_BINDING_ABORTED while the initial navigation is still settling.
+  await expect(page.getByRole('heading', { level: 1, name: 'Verifica tu correo' })).toBeVisible()
   await page.evaluate(() => history.replaceState({ email: 'nuevo@example.com' }, ''))
   await page.reload()
 }

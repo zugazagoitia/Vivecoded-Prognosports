@@ -30,7 +30,7 @@ import { useSessionStore } from '@/stores/session'
 
 /**
  * Invitation page (H7), `/unirse/:codigo`. Public to view, needs a session to join. Shows ONE of
- * three states: valid (community data + «Unirme»), expired (unknown / rejected code) or already a
+ * three states: valid (community data + «Unirme»), invalid (unknown code), expired (rejected join) or already a
  * member. Without a session a banner sends to `/login?redirect=/unirse/:codigo` (login and
  * register keep the redirect). The community is resolved from the public list by invitation code.
  */
@@ -183,6 +183,24 @@ watch(state, async () => {
         <p class="text-muted text-sm">{{ t('invitation.member.text') }}</p>
         <PButton size="sm" :to="`/comunidades/${community.id}`">{{
           t('invitation.member.open')
+        }}</PButton>
+      </div>
+    </PCard>
+
+    <PCard v-else-if="state === 'invalid'" tag="article" data-state="invalid">
+      <div class="flex flex-col items-center gap-3 py-6 text-center">
+        <PTag color="err" icon="circle-exclamation">{{ t('invitation.invalid.tag') }}</PTag>
+        <span
+          class="bg-err-tint text-err-fg inline-flex size-14 items-center justify-center rounded-full"
+        >
+          <PIcon name="link-slash" :size="24" />
+        </span>
+        <PTitle level="subtitle" as="h1" class="focus:outline-none" tabindex="-1">{{
+          t('invitation.invalid.title')
+        }}</PTitle>
+        <p class="text-muted text-sm">{{ t('invitation.invalid.text') }}</p>
+        <PButton variant="outline" size="sm" to="/comunidades">{{
+          t('invitation.invalid.retry')
         }}</PButton>
       </div>
     </PCard>

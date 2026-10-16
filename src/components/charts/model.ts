@@ -155,13 +155,17 @@ export function altText(
 
 /** "Nice" tick values covering [min, max]. */
 export function niceTicks(min: number, max: number, count = 5): number[] {
+  if (!Number.isFinite(min) || !Number.isFinite(max)) return [0, 1]
   if (max <= min) max = min + 1
   const raw = (max - min) / count
   const pow = 10 ** Math.floor(Math.log10(raw))
   const f = raw / pow
   const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * pow
   const out: number[] = []
-  for (let v = Math.floor(min / step) * step; ; v += step) {
+  const first = Math.floor(min / step)
+  // Bounded on purpose: a non-finite or absurd step must never spin forever.
+  for (let i = first; out.length < 100; i++) {
+    const v = i * step
     out.push(Math.round(v * 1e6) / 1e6)
     if (v >= max) break
   }

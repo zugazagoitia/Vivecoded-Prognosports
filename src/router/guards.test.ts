@@ -19,7 +19,10 @@ describe('guards', () => {
     expect(evaluateGuards(to('/home'), app, unverified)).toBe('/verificar')
   })
   it('without community goes to /comunidades', () => {
-    expect(evaluateGuards(to('/home'), app, noCommunity)).toBe('/comunidades')
+    expect(evaluateGuards(to('/home'), app, noCommunity)).toEqual({
+      path: '/comunidades',
+      query: { aviso: 'sin-comunidad' },
+    })
   })
   it('normal user passes', () => {
     expect(evaluateGuards(to('/home'), app, base)).toBe(true)

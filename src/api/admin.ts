@@ -58,7 +58,7 @@ export async function createGpInSeason(
 /**
  * Edits a GP (verified against a local backend; the spec documents none of this):
  * `PUT /v2/gps/{id}` changes `name` and `code`; `PUT /v2/gps/{comp}/{season}/{id}` changes the
- * season data `round`, `laps`, `circuit` and `variant` (ids as strings). Only what changed is sent.
+ * season data `round`, `laps`, `suspended` (boolean), `circuit` and `variant` (ids as strings). Only what changed is sent.
  */
 export async function updateGpData(
   comp: Id,
@@ -71,6 +71,7 @@ export async function updateGpData(
     laps?: number
     circuit?: Id
     variant?: Id
+    suspended?: boolean
   },
   signal?: AbortSignal,
 ) {
@@ -90,20 +91,21 @@ export async function updateGpData(
 }
 
 /**
- * `POST .../drivers` "replaces the existing list with the one sent" (spec): the whole final list
- * goes in one call, not additions and removals. The body shape is not in the spec ("Drivers
- * list"): an array of `{ id }` is assumed.
+ * Replaces the whole list of drivers of the GP in one call. The OpenAPI says `POST` but the route
+ * is registered as `PUT`, and the body is a dictionary constructor -> drivers,
+ * `{ "<constructorId>": [{ "id": <driverId> }] }` (verified against the backend; see
+ * `src/api/README.md`). An array answers 500 with either method.
  */
 export const replaceGpDrivers = (
   comp: Id,
   season: Id,
   g: Id,
-  driverIds: readonly number[],
+  body: Record<number, { id: number }[]>,
   signal?: AbortSignal,
 ) =>
   request(`${gpScope(comp, season, g)}/drivers`, {
-    method: 'POST',
-    body: driverIds.map((id) => ({ id })),
+    method: 'PUT',
+    body,
     signal,
   })
 
@@ -134,10 +136,10 @@ export const publishGrid = (
     signal,
   })
 
-/** `PATCH .../sessions/{session}/grid/notification`: notifies the players of the grid change. */
+/** `POST .../sessions/{session}/grid/notification` (the spec says PATCH; the backend registers POST, README): notifies the players of the grid change. */
 export const notifyGrid = (comp: Id, season: Id, g: Id, session: Id, signal?: AbortSignal) =>
   request(`${gpScope(comp, season, g)}/sessions/${seg(session)}/grid/notification`, {
-    method: 'PATCH',
+    method: 'POST',
     signal,
   })
 

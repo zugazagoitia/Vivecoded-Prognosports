@@ -113,7 +113,7 @@ const td = 'border-border text-body border-b px-3 py-2.5 whitespace-nowrap group
                 class="text-heading inline-flex min-h-11 items-center gap-2 font-semibold md:min-h-8"
               >
                 <Avatar :name="r.username" :size="24" :you="r.you" aria-hidden="true" />
-                {{ r.username }}
+                <span class="max-w-[28ch] truncate" :title="r.username">{{ r.username }}</span>
                 <span v-if="r.you" class="sr-only">{{ t('community.members.you') }}</span>
               </RouterLink>
             </td>

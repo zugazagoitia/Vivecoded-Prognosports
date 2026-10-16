@@ -27,10 +27,11 @@ const ICON: Record<StatusKind, { name: IconName; box: string }> = {
   closing: { name: 'calendar-check', box: 'bg-warn-tint text-warn-fg' },
   done: { name: 'check', box: 'bg-ok-tint text-ok-fg' },
   open: { name: 'clock', box: 'bg-surface-muted text-muted' },
+  suspended: { name: 'clock', box: 'bg-surface-muted text-muted' },
 }
 
 function cta(s: SessionVm) {
-  if (s.state !== 'open')
+  if (s.state !== 'open' || s.status.kind === 'suspended')
     return { action: 'resultados' as const, label: t('gp.mobile.result'), primary: false }
   if (s.hasPrediction)
     return { action: 'pronosticar' as const, label: t('gp.mobile.edit'), primary: false }

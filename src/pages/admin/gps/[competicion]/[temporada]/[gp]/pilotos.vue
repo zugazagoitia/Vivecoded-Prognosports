@@ -22,7 +22,7 @@ import {
   cssColor,
   diffSlots,
   driverFullName,
-  driversPayload,
+  driversBody,
   driverSurname,
   filledCount,
   poolWhere,
@@ -35,6 +35,7 @@ import {
   useGpDrivers,
   useReplaceGpDrivers,
   useSeasonConstructors,
+  useSeasonDriverTeams,
   useSeasonDrivers,
 } from '@/queries/admin'
 import { useSeasonGps } from '@/queries/circuits'
@@ -58,6 +59,7 @@ const gps = useSeasonGps(comp, seasonId)
 const gp = computed(() => detail.gp.value)
 const teamsQ = useSeasonConstructors(seasonId)
 const poolQ = useSeasonDrivers(seasonId)
+const teamOfQ = useSeasonDriverTeams(comp, seasonId)
 const savedQ = useGpDrivers(comp, seasonId, () => gp.value?.id)
 
 const teams = computed(() => teamsQ.data.value ?? [])
@@ -162,7 +164,7 @@ const save = useReplaceGpDrivers(() => ({
   season: seasonId.value,
   gp: gp.value!.id,
 }))
-const onSave = () => save.mutate(driversPayload(slots.value))
+const onSave = () => save.mutate(driversBody(slots.value))
 
 const slotsOf = (teamId: number) =>
   slots.value.map((s, idx) => ({ s, idx })).filter((x) => x.s.teamId === teamId)
@@ -280,7 +282,7 @@ function retry() {
                 <span class="text-muted w-7 font-bold tabular-nums">#{{ d.number ?? '–' }}</span>
                 <span class="text-heading flex-1">{{ driverFullName(d) }}</span>
                 <span class="text-muted text-xs">{{
-                  poolWhere(slots, d.id, teams) ?? t('admin.gpDrivers.pool.noTeam')
+                  poolWhere(slots, d.id, teams) ?? teamOfQ.data.value?.get(d.id)?.name ?? ''
                 }}</span>
               </button>
             </li>

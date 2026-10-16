@@ -176,8 +176,23 @@ const slotsReadonly = computed(() => vm.readOnlyDraft)
           />
 
           <TabsContent :value="selected" class="outline-none">
+            <!-- Suspended GP: nothing can be predicted -->
+            <PrognoAlert v-if="vm.suspended" variant="warn" :title="t('gp.suspended.title')">
+              <span>{{ t('gp.suspended.text') }}</span>
+              {{ ' ' }}
+              <RouterLink
+                :to="gpPath(vm.gp)"
+                class="text-link inline-flex min-h-11 items-center underline"
+                >{{ t('gp.suspended.toGp') }}</RouterLink
+              >
+            </PrognoAlert>
+
             <!-- Closed (on arrival, or it closed and nothing was being edited) -->
-            <PrognoAlert v-if="vm.closed && !slotsReadonly" variant="info" :title="closedTitle">
+            <PrognoAlert
+              v-else-if="vm.closed && !slotsReadonly"
+              variant="info"
+              :title="closedTitle"
+            >
               <span>{{ closedText }}</span>
               {{ ' ' }}
               <RouterLink

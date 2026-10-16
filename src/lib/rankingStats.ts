@@ -213,6 +213,14 @@ export interface SeriesStats {
   n: number
 }
 
+/**
+ * Values of the GPs in which the member has a row. A player without a prediction counts 0 points
+ * but is left out of hit averages (not «0 hits»), see a-confirmar.md (issue 179).
+ */
+export function whenPresent(values: readonly number[], present: readonly boolean[]): number[] {
+  return values.filter((_, g) => present[g] !== false)
+}
+
 export function seriesStats(values: readonly number[]): SeriesStats {
   return {
     mean: mean(values),
@@ -257,10 +265,15 @@ export function scatterScales(means: readonly number[], sds: readonly number[]) 
 }
 
 /** Marks from `ceil(x0/step) × step` up to `x1`. */
-export function ticks(x0: number, x1: number, step: number): number[] {
+export function ticks(x0: number, x1: number, step: number, maxTicks = 40): number[] {
+  if (![x0, x1, step].every(Number.isFinite) || step <= 0 || x1 < x0) return []
+  // Widen the step so huge ranges (7-digit points) never produce an unbounded loop.
+  let s = step
+  if ((x1 - x0) / s > maxTicks) s = (Math.ceil((x1 - x0) / maxTicks / step) || 1) * step
   const out: number[] = []
-  for (let v = Math.ceil(x0 / step) * step; v <= x1 + 1e-9; v += step)
-    out.push(Math.round(v * 1e6) / 1e6)
+  const start = Math.ceil(x0 / s)
+  for (let i = start; i * s <= x1 + 1e-9 && out.length <= maxTicks; i++)
+    out.push(Math.round(i * s * 1e6) / 1e6)
   return out
 }
 
@@ -504,6 +517,25 @@ export function seasonByKind(
   return out
 }
 
+/**
+ * Session types the backend returns hit data for: at least one player has a `hitsBySession`
+ * entry mapped to the type. The rest are «No disponible», never 0.
+ */
+export function availableKinds(
+  players: readonly Pick<RankPlayer, 'hitsBySession'>[],
+  model: Pick<RankModel, 'played'>,
+): Record<SessionKind, boolean> {
+  const out = { cs: false, sp: false, q: false, r: false }
+  model.played.forEach((gp, g) => {
+    for (const p of players)
+      for (const key of Object.keys(p.hitsBySession[g] ?? {})) {
+        const k = kindOfKey(key, gp.sessions)
+        if (k) out[k] = true
+      }
+  })
+  return out
+}
+
 /** Positions predicted in a session of a GP according to the rule set. */
 export function predictedIn(
   gp: Pick<RankGp, 'sessions'>,
@@ -532,6 +564,18 @@ export function attempts(
   const out = zero()
   for (const gp of gps) for (const k of KINDS_R11) out[k] += predictedIn(gp, k, rules)
   return out
+}
+
+/** Attempts of a player: only the GPs where they have a row (no prediction = no attempts). */
+export function attemptsOf(
+  p: Pick<RankPlayer, 'present'>,
+  gps: readonly Pick<RankGp, 'sessions'>[],
+  rules: RuleSetData | undefined,
+): ByKind {
+  return attempts(
+    gps.filter((_, g) => p.present[g] !== false),
+    rules,
+  )
 }
 
 /** `round(total / Σ attempts × 100)`; `undefined` when there are no attempts. */

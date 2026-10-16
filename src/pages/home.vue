@@ -72,7 +72,9 @@ const subtitle = computed(() => {
   <div v-else class="pg-main flex flex-col gap-6">
     <header class="flex flex-wrap items-end justify-between gap-4">
       <div class="flex min-w-0 flex-col gap-0.5">
-        <h1 class="text-heading m-0 text-[28px] leading-9 font-bold max-[640px]:text-2xl">
+        <h1
+          class="text-heading m-0 text-[28px] leading-9 font-bold wrap-anywhere max-[640px]:text-2xl"
+        >
           {{ greeting }}
         </h1>
         <p class="text-muted m-0">{{ subtitle }}</p>

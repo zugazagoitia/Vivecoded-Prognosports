@@ -95,20 +95,20 @@ describe('GP detail (G2)', () => {
     expect(screen.queryByRole('link', { name: 'Tabla de la comunidad' })).toBeNull()
 
     await user.click(await tab(/^Carrera/))
-    await waitFor(() => expect(router.currentRoute.value.query.sesion).toBe('62'))
+    await waitFor(() => expect(router.currentRoute.value.query.sesion).toBe('2'))
     const edit = await screen.findByRole('link', { name: 'Editar pronóstico' })
-    expect(edit.getAttribute('href')).toBe(`${PATH}/pronosticar/62`)
+    expect(edit.getAttribute('href')).toBe(`${PATH}/pronosticar/2`)
   })
 
   it('honours ?sesion= in the URL and exposes the tabpanel to assistive tech', async () => {
-    await open(`${PATH}?sesion=62`)
+    await open(`${PATH}?sesion=2`)
     expect((await tab(/^Carrera/)).getAttribute('aria-selected')).toBe('true')
     const panel = await screen.findByRole('tabpanel')
     expect(within(panel).getByRole('heading', { name: 'Carrera · tu pronóstico' })).toBeTruthy()
   })
 
   it('scored session: points per position with hit classes, results and consensus links', async () => {
-    await open(`${PATH}?sesion=61`)
+    await open(`${PATH}?sesion=4`)
     const panel = await screen.findByRole('tabpanel')
     await within(panel).findByText('NOR')
     await waitFor(() =>
@@ -128,15 +128,15 @@ describe('GP detail (G2)', () => {
     expect(cells[0]!.getAttribute('title')).toBe('Exacto')
     expect(cells[4]!.getAttribute('aria-label')).toBe('George Russell, Fallo, 0 puntos')
     const results = within(panel).getByRole('link', { name: 'Ver resultados' })
-    expect(results.getAttribute('href')).toBe(`${PATH}/resultados/61`)
+    expect(results.getAttribute('href')).toBe(`${PATH}/resultados/4`)
     expect(
       within(panel).getByRole('link', { name: 'Parrilla y consenso' }).getAttribute('href'),
-    ).toBe(`${PATH}/consenso/61`)
+    ).toBe(`${PATH}/consenso/4`)
     expect(within(panel).getByRole('link', { name: 'Tabla de la comunidad' })).toBeTruthy()
   })
 
   it('grid: staggered columns, pit lane with notes, title by sprint or race', async () => {
-    const { user } = await open(`${PATH}?sesion=61`)
+    const { user } = await open(`${PATH}?sesion=4`)
     expect(await screen.findByRole('heading', { name: 'Parrilla de salida · sprint' })).toBeTruthy()
     await waitFor(() => expect(document.querySelector('[data-grid-col=left]')).toBeTruthy())
     const left = document.querySelector<HTMLElement>('[data-grid-col=left]')!
@@ -249,7 +249,7 @@ describe('GP detail (G2)', () => {
 
   it('a session closed without results says so and offers no points', async () => {
     server.use(http.get('*/v2/gps/:c/:s/:gp/sessions/:session/results', () => ok([])))
-    await open(`${PATH}?sesion=61`)
+    await open(`${PATH}?sesion=4`)
     const t = await tab(/^Sprint/)
     expect(await within(t).findByText('Cerrada · sin resultados')).toBeTruthy()
     expect(await screen.findByText(/Los puntos llegan en cuanto se publican/)).toBeTruthy()
@@ -259,7 +259,7 @@ describe('GP detail (G2)', () => {
     server.use(
       http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', () => ok({ '1': [] })),
     )
-    await open(`${PATH}?sesion=61`)
+    await open(`${PATH}?sesion=4`)
     expect(await screen.findByText('No pronosticaste esta sesión.')).toBeTruthy()
     const t = await tab(/^Sprint/)
     expect(await within(t).findByText('Terminada · sin pronóstico')).toBeTruthy()
@@ -278,7 +278,7 @@ describe('GP detail on a phone', () => {
     expect(rows).toHaveLength(3)
     expect(await within(rows[0]!).findByRole('link', { name: 'Resultados' })).toBeTruthy()
     expect(within(rows[1]!).getByRole('link', { name: 'Pronosticar' }).getAttribute('href')).toBe(
-      `${PATH}/pronosticar/60`,
+      `${PATH}/pronosticar/1`,
     )
     expect(await within(rows[2]!).findByRole('link', { name: 'Editar' })).toBeTruthy()
     // Not on the phone: breadcrumb, previous/next, rules.
@@ -297,6 +297,6 @@ describe('GP detail on a phone', () => {
     await waitFor(() => expect(within(consensus).getAllByRole('img').length).toBeGreaterThan(0))
     expect(
       within(consensus).getByRole('link', { name: 'Ver parrilla y consenso' }).getAttribute('href'),
-    ).toBe(`${PATH}/consenso/61`)
+    ).toBe(`${PATH}/consenso/4`)
   })
 })

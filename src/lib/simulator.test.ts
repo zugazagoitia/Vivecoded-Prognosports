@@ -136,7 +136,7 @@ describe('sessionPlace', () => {
       { ...base, id: 3, username: 'c', sim: 4, you: true },
       { ...base, id: 4, username: 'd', sim: 0, hasPick: false },
     ]
-    expect(sessionPlace(players, 3)).toBe(3)
+    expect(sessionPlace(players, 3)).toBe(2)
     expect(sessionPlace(players, 2)).toBe(1)
     expect(sessionPlace(players, 4)).toBeUndefined()
   })

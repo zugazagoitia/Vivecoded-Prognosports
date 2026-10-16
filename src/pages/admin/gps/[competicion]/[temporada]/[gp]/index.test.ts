@@ -37,7 +37,7 @@ describe('admin GP edit (M3)', () => {
     expect(await screen.findByText('20 de 22 pilotos')).toBeTruthy()
     const prev = screen.getByRole('link', { name: 'GP anterior: Bakú' }).getAttribute('href')
     expect(prev).toBe('/admin/gps/1/10/17')
-    expect(screen.getByRole('switch', { name: 'Visible para los usuarios' })).toBeTruthy()
+    expect(screen.getByRole('switch', { name: 'Gran Premio suspendido' })).toBeTruthy()
   })
 
   it('lists the sessions with their close time and links to M5', async () => {

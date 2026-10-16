@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { createAccountHandlers } from '@/mocks/handlers/account'
-import { MOCK_TOKEN, toWireUser } from '@/mocks/fixtures'
+import { MOCK_PASSWORD, MOCK_TOKEN, toWireUser } from '@/mocks/fixtures'
 import { accountUser } from '@/mocks/fixtures/account'
 import { server } from '@/mocks/server'
 import { UserSchema } from '@/api/schemas'
@@ -63,9 +63,13 @@ describe('Account settings (U3)', () => {
 
     await fireEvent.click(screen.getByRole('switch', { name: 'Información por Telegram' }))
     await fireEvent.update(screen.getByLabelText('Localización'), 'Sevilla')
+    await fireEvent.update(screen.getByLabelText('Confirma con tu contraseña'), MOCK_PASSWORD)
     await fireEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }))
     await waitFor(() => expect(calls.map((c) => c.path).sort()).toEqual(['preferences', 'user']))
-    expect(calls.find((c) => c.path === 'user')?.body).toEqual({ location: 'Sevilla' })
+    expect(calls.find((c) => c.path === 'user')?.body).toEqual({
+      location: 'Sevilla',
+      password: MOCK_PASSWORD,
+    })
     expect(calls.find((c) => c.path === 'preferences')?.body).toEqual({
       notification: 'INFO',
       channel: 'TELEGRAM',
@@ -75,6 +79,40 @@ describe('Account settings (U3)', () => {
       expect(screen.queryByRole('region', { name: 'Cambios sin guardar' })).toBeNull(),
     )
     expect(await screen.findByText('Cambios guardados.')).toBeTruthy()
+  })
+
+  it('asks for the current password before saving profile changes', async () => {
+    const { calls } = await open()
+    await fireEvent.update(await screen.findByLabelText('Localización'), 'Sevilla')
+    await fireEvent.click(await screen.findByRole('button', { name: 'Guardar cambios' }))
+    expect(
+      await screen.findByText('Escribe tu contraseña actual para confirmar los cambios.'),
+    ).toBeTruthy()
+    expect(calls).toEqual([])
+  })
+
+  it('shows a wrong password under the field and keeps the changes', async () => {
+    const { calls } = await open()
+    await fireEvent.update(await screen.findByLabelText('Localización'), 'Sevilla')
+    await fireEvent.update(screen.getByLabelText('Confirma con tu contraseña'), 'mala-clave')
+    await fireEvent.click(await screen.findByRole('button', { name: 'Guardar cambios' }))
+    expect(await screen.findByText('Credenciales inválidas')).toBeTruthy()
+    expect(calls).toHaveLength(1)
+    expect(screen.getByRole('region', { name: 'Cambios sin guardar' })).toBeTruthy()
+    expect(screen.getByLabelText<HTMLInputElement>('Localización').value).toBe('Sevilla')
+  })
+
+  it('sends the time zone as preferences[time-zone-id]', async () => {
+    const { calls } = await open()
+    await screen.findByRole('option', { name: /Mexico City/ })
+    await fireEvent.update(screen.getByLabelText('Zona horaria'), 'America/Mexico_City')
+    await fireEvent.update(screen.getByLabelText('Confirma con tu contraseña'), MOCK_PASSWORD)
+    await fireEvent.click(await screen.findByRole('button', { name: 'Guardar cambios' }))
+    await waitFor(() => expect(calls).toHaveLength(1))
+    expect(calls[0]?.body).toEqual({
+      preferences: { 'time-zone-id': 'America/Mexico_City' },
+      password: MOCK_PASSWORD,
+    })
   })
 
   it('rejects a bio over 160 characters', async () => {

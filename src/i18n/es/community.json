@@ -73,7 +73,7 @@
       "previousOfPrevious": "Anterior de la anterior (2 más arriba)",
       "notInPodium": "Piloto del podio que acaba fuera del podio",
       "notInResults": "Piloto que no está en los resultados",
-      "bonus": "Bonus al que más aciertos consigue en el GP",
+      "bonus": "Bonus al que más puntos consigue en el GP",
       "max": "Máximo por sesión (sin bonus)",
       "footnote": "Los GP con excepciones de reglas lo indican en su página.",
       "none": "Sin reglas disponibles",
@@ -131,7 +131,7 @@
     "leave": {
       "title": "Zona de riesgo",
       "text": "Si sales, dejarás de ver el ranking y tus pronósticos. Podrás volver con una invitación.",
-      "owner": "Eres el creador: no puedes salir de tu propia comunidad. Si quieres dejarla, ábrela a otra persona desde los ajustes o contáctanos.",
+      "owner": "Eres el creador de la comunidad y no puedes salir de ella.",
       "action": "Salir de la comunidad",
       "confirm": {
         "title": "¿Salir de {name}?",

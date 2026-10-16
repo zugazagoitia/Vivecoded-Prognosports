@@ -21,14 +21,19 @@ export const gpWeekendHandlers = [
     const gp = grandPrixes.find((g) => String(g.id) === params.gp)
     return gp ? ok(gp) : fail(200, 'Gran premio inválido')
   }),
+  // Session ids are shared by every GP (1 Q, 2 R, 4 SR): only the weekend GP has data.
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/results', ({ params }) =>
-    ok(results(Number(params.session))),
+    ok(Number(params.gp) === WEEKEND_GP ? results(Number(params.session)) : []),
   ),
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/grid', ({ params }) =>
-    ok(grid(Number(params.session))),
+    ok(Number(params.gp) === WEEKEND_GP ? grid(Number(params.session)) : []),
   ),
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community/calculations', ({ params }) =>
-    ok(Number(params.session) === WEEKEND_SESSIONS.sprint ? calculations : calculationsFor({}, 0)),
+    ok(
+      Number(params.gp) === WEEKEND_GP && Number(params.session) === WEEKEND_SESSIONS.sprint
+        ? calculations
+        : calculationsFor({}, 0),
+    ),
   ),
   // Own predictions of the weekend GP; other GPs fall through to the calendar handler (G1).
   http.get('*/v2/gps/:c/:s/:gp/sessions/:session/tipps/:community', ({ params }) =>

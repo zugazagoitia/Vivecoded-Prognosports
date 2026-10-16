@@ -31,7 +31,12 @@ const closed = mockCommunity({
   invitation: 'SECRET-CLOSED',
 })
 const many = Array.from({ length: 11 }, (_, i) =>
-  mockCommunity({ id: 200 + i, name: `Liga ${String(i).padStart(2, '0')}`, user_is_member: false }),
+  mockCommunity({
+    id: 200 + i,
+    name: `Liga ${String(i).padStart(2, '0')}`,
+    open: true,
+    user_is_member: false,
+  }),
 )
 
 async function open_(list: unknown[] = [mine, open, closed], path = '/comunidades/explorar') {
@@ -55,29 +60,32 @@ describe('Explorar comunidades', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Explorar comunidades' }),
     ).toBeTruthy()
-    expect(await screen.findByRole('tab', { name: 'Todas 3' })).toBeTruthy()
+    expect(await screen.findByRole('tab', { name: 'Todas 2' })).toBeTruthy()
     expect(screen.getByRole('tab', { name: 'Abiertas 1' })).toBeTruthy()
-    expect(screen.getByRole('tab', { name: 'Cerradas 2' })).toBeTruthy()
+    expect(screen.queryByRole('tab', { name: /Cerradas/ })).toBeNull()
     expect(screen.getByRole('tab', { name: 'Mis comunidades 1' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Abrir Peña Paddock' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Unirme a Oficina F1' })).toBeTruthy()
-    expect(
-      screen.getByRole('link', { name: 'Tengo un código para Amigos del paddock' }),
-    ).toBeTruthy()
+    expect(screen.queryByText('Amigos del paddock')).toBeNull()
     expect(container.textContent).not.toMatch(/SECRET-/)
-    expect(screen.getByText('Mostrando de 1 a 3 de un total de 3 resultados')).toBeTruthy()
+    expect(screen.getByText('Mostrando de 1 a 2 de un total de 2 resultados')).toBeTruthy()
   })
 
   it('filters by tab from the URL and by search (name or creator)', async () => {
-    await open_(undefined, '/comunidades/explorar?tab=cerradas')
-    await screen.findByRole('tab', { name: 'Cerradas 2' })
-    expect(screen.getByRole('tab', { name: 'Cerradas 2', selected: true })).toBeTruthy()
+    await open_(undefined, '/comunidades/explorar?tab=mias')
+    await screen.findByRole('tab', { name: 'Mis comunidades 1' })
+    expect(screen.getByRole('tab', { name: 'Mis comunidades 1', selected: true })).toBeTruthy()
     expect(screen.queryByText('Oficina F1')).toBeNull()
-    expect(screen.getByText('Amigos del paddock')).toBeTruthy()
+    expect(screen.getByText('Peña Paddock')).toBeTruthy()
     const user = userEvent.setup()
-    await user.type(screen.getByRole('searchbox', { name: 'Buscar comunidad' }), 'irene')
+    await user.type(screen.getByRole('searchbox', { name: 'Buscar comunidad' }), 'zzz')
     await waitFor(() => expect(screen.queryByText('Peña Paddock')).toBeNull())
-    expect(screen.getByText('Amigos del paddock')).toBeTruthy()
+  })
+
+  it('ignores the removed «cerradas» tab and never lists closed communities', async () => {
+    await open_(undefined, '/comunidades/explorar?tab=cerradas')
+    expect(await screen.findByRole('tab', { name: 'Todas 2', selected: true })).toBeTruthy()
+    expect(screen.queryByText('Amigos del paddock')).toBeNull()
   })
 
   it('shows the empty state with the zero count', async () => {

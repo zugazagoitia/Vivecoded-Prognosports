@@ -46,7 +46,7 @@ const where = computed(() =>
           <template v-else>{{ previewInitials(name) }}</template>
         </span>
         <div class="flex min-w-0 flex-col">
-          <span class="t-header text-heading break-words" data-testid="preview-name">{{
+          <span class="t-header text-heading wrap-anywhere" data-testid="preview-name">{{
             shownName
           }}</span>
           <span class="text-muted text-sm">{{ t('createCommunity.preview.by', { user }) }}</span>

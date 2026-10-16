@@ -16,6 +16,7 @@ import {
   useSaveSeasonConstructor,
   useSaveSeasonDriver,
   useSeasonConstructors,
+  useSeasonDriverTeams,
   useSeasonDrivers,
 } from '@/queries/admin'
 import { DEFAULT_COMPETITION, useCurrentSeason } from '@/queries/circuits'
@@ -34,6 +35,7 @@ const seasonQ = useCurrentSeason(DEFAULT_COMPETITION)
 const seasonId = computed(() => seasonQ.data.value?.id)
 const driversQ = useSeasonDrivers(seasonId)
 const teamsQ = useSeasonConstructors(seasonId)
+const teamOfQ = useSeasonDriverTeams(DEFAULT_COMPETITION, seasonId)
 
 const tab = computed(() => tabFromQuery(route.query.tab))
 const tabs = [
@@ -43,7 +45,12 @@ const tabs = [
 const setTab = (v: string) =>
   void router.replace({ query: v === 'equipos' ? { tab: 'equipos' } : {} })
 
-const drivers = computed(() => sortDrivers(driversQ.data.value ?? []))
+const drivers = computed(() =>
+  sortDrivers(driversQ.data.value ?? []).map((d) => ({
+    ...d,
+    team: d.team ?? teamOfQ.data.value?.get(d.id) ?? null,
+  })),
+)
 const teams = computed(() =>
   [...(teamsQ.data.value ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '', 'es')),
 )
@@ -230,7 +237,7 @@ const retry = () => {
                         :style="{ background: teamColor(d) }"
                         aria-hidden="true"
                       />
-                      {{ d.team?.name ?? t('admin.drivers.driversTable.noTeam') }}
+                      {{ d.team?.name ?? '—' }}
                     </span>
                   </td>
                   <td class="r">

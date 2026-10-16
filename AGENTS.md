@@ -33,20 +33,19 @@ Antes de dar algo por terminado: `pnpm typecheck`, `pnpm lint`, `pnpm test` y lo
 
 ## CI (`.github/workflows/ci.yml`)
 
-Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size` y `ci-ok` (agrega todos; es el check obligatorio). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde.
-
-Los e2e viven en `.github/workflows/e2e.yml` (matriz por proyecto, construyen su propio `dist/`), **separados de CI a propósito**: `deploy.yml` arranca cuando CI termina y no debe esperar a los e2e. En PR/push a `develop` no bloquean; `e2e-ok` (solo en PR/push a `master`) es el check de producción.
+Jobs: `lint`, `typecheck`, `test`, `audit`, `build (beta|production)`, `size`, `e2e` (workflow reutilizable `.github/workflows/e2e.yml`, matriz completa en cada PR y push) y `ci-ok` (agrega todos; es el único check obligatorio, también para master). CodeQL aparte. Un PR no se fusiona sin `ci-ok` en verde. `deploy.yml` arranca cuando CI termina, así que el despliegue espera también a los e2e (~13 min de reloj; WebKit es el más lento).
 
 - Si CI falla, **reproduce en local con las mismas condiciones** antes de tocar nada, y distingue si el fallo lo causa tu rama o ya existía en `develop`.
 - **Variables de CI sin definir llegan como cadena vacía** (`VITE_SENTRY_DSN: ${{ vars.X }}` → `""`). El esquema de `src/env.ts` trata `""` como «no definido» en las variables opcionales; mantén esa norma al añadir variables.
-- Los jobs que no instalan dependencias no deben usar `cache: pnpm` (el post-step de caché falla).
+- Los jobs que no instalan dependencias no deben usar `cache: pnpm` (el post-step de caché falla). La acción compuesta `.github/actions/setup` (tras `checkout`) ya lo resuelve con `install: 'false'`.
+- Convenciones de workflows, Dependabot y la PR automática `develop -> master` (se fusiona con **merge commit**, no squash): `docs/ci.md`. Las subidas de Playwright exigen actualizar la imagen de `e2e:update:linux` y regenerar capturas.
 
 ## E2E (Playwright)
 
 - Se prueba el `dist/` construido con `vite preview` (nunca el servidor de desarrollo), con la API **siempre mockeada** (`e2e/support/api.ts`, `page.route`). Proyectos: `chromium`, `firefox`, `webkit`, `mobile`.
 - **Las capturas (`toHaveScreenshot`) son solo de Chromium** (proyectos `chromium` y `mobile`, que usa el motor Chromium). En specs que corren en todos los navegadores, salta o devuelve antes de la captura si `browserName !== 'chromium'`.
 - **Las referencias (`e2e/__screenshots__/`) deben generarse en Linux**, igual que CI; las de macOS fallan en CI por fuentes y antialiasing. Usa `pnpm e2e:update:linux` (Docker con `mcr.microsoft.com/playwright:v1.64.0-noble`; la versión debe coincidir con `@playwright/test`). Si el demonio de Docker no está activo, arráncalo (`orbctl start`). Nunca subas referencias generadas en macOS.
-- **CI rápido** (`.github/workflows/e2e.yml`): un job `build` compila `dist/` una vez (flags activos) y lo sube como artefacto `e2e-dist`; los jobs de la matriz lo descargan (no ejecutan `vite build`). PR a develop: solo `chromium` (2 shards `--shard=1/2`, `2/2`) y `mobile`, con `--max-failures=20` y 1 reintento; firefox y webkit solo en push a develop/master, PR a master (necesarios para `e2e-ok`) y cron nocturno. Los navegadores de Playwright se cachean por versión.
+- **CI rápido** (`.github/workflows/e2e.yml`, invocado desde `ci.yml`): un job `build` compila `dist/` una vez (flags activos) y lo sube como artefacto `e2e-dist`; los jobs de la matriz lo descargan (no ejecutan `vite build`). Matriz completa siempre: `chromium` (2 shards `--shard=1/2`, `2/2`), `mobile`, `flags-off`, `firefox` y `webkit`, con 1 reintento y `--max-failures=20` solo en PR. Los navegadores de Playwright se cachean por versión.
 - **Capturas**: en specs con tema claro/oscuro, axe y overflow se comprueban en ambos, pero `toHaveScreenshot` solo en claro (`if (scheme === 'light')`), más oscuro en una pantalla clave por área. Una referencia por estado de pantalla; no añadas capturas oscuras sin motivo.
 - Para validar como CI: `CI=1 pnpm exec playwright test --workers=2` (CI usa 2 workers y 2 reintentos). Bajo carga alta pueden fallar tests de Firefox/WebKit que pasan en solitario; revisa antes de dar un fallo por real.
 - Tras un merge con conflictos en `__screenshots__`, toma cualquiera de las versiones y **regenera todas** en Linux; no resuelvas PNG a mano.

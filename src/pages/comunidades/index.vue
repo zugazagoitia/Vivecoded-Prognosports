@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { Community } from '@/api/schemas'
 import CommunityCard from '@/components/communities/CommunityCard.vue'
 import JoinCommunityForm from '@/components/communities/JoinCommunityForm.vue'
@@ -12,6 +12,7 @@ import PButton from '@/components/ui/PButton.vue'
 import PCard from '@/components/ui/PCard.vue'
 import PIcon from '@/components/ui/PIcon.vue'
 import PTitle from '@/components/ui/PTitle.vue'
+import { NO_COMMUNITY_NOTICE } from '@/router/guards'
 import { useNow } from '@/composables/useNow'
 import { useToast } from '@/composables/useToast'
 import FeatureFlag from '@/flags/FeatureFlag.vue'
@@ -30,6 +31,7 @@ definePage({
 
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const toast = useToast()
 const session = useSessionStore()
 const store = useCommunityStore()
@@ -40,6 +42,12 @@ const now = useNow(60_000)
 const standings = useCommunityStandings(list)
 const pending = useCommunityPending(list, now)
 const slow = useSlowLoading({ isLoading: mine.isLoading })
+
+// A guard sent the user here because the screen they asked for needs a community.
+if (route.query.aviso === NO_COMMUNITY_NOTICE) {
+  toast.info(t('communities.noCommunityNotice'))
+  void router.replace({ path: route.path, query: {} })
+}
 
 const activate = useActivateCommunity()
 const announcement = ref('')

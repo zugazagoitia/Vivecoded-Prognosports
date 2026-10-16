@@ -52,7 +52,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 
 ## 4. Comunidades
 
-- 4.1 Listado con pestañas (Todas, Abiertas, Cerradas, Mis comunidades) y buscador. Ref: `pages/communities/CommunitiesList.vue`, `GET /communities`.
+- 4.1 Listado con pestañas (Todas, Abiertas, Mis comunidades; las cerradas no se listan, #180) y buscador. Ref: `pages/communities/CommunitiesList.vue`, `GET /communities`.
 - 4.2 Crear comunidad: nombre, descripción, imagen, privacidad (abierta o cerrada), competición y reglas (conjunto existente o nuevo). Ref: `pages/communities/CreateCommunity.vue` (697 líneas), `POST /communities`.
 - 4.3 Detalle de comunidad: nombre, creador, fecha de creación, número de usuarios, miembros con buscador y orden ascendente o descendente. Ref: `OneCommunity.vue`, `GET /communities/{community}/members`.
 - 4.4 Unirse: directamente si es abierta, o con código de invitación si es cerrada (`POST /communities/{community}/join` y `/join/{invitation}`). Ref: `InvitationToCommunity.vue`.
@@ -60,7 +60,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 - 4.6 Regenerar la invitación y copiar la URL (`POST .../recreate`, `composables/clipboard.ts`).
 - 4.7 Validación de pertenencia (`GET .../validate`) para los guards.
 - 4.8 Imagen de comunidad: subir, borrar, ver.
-- 4.9 Tabla de reglas y puntos de la comunidad por temporada (`RulesAndPointsTable.vue`): posición exacta, siguiente, anterior, siguiente de la siguiente, anterior de la anterior, no en podio, no en resultados, bonus por más aciertos en el GP, total por sesión.
+- 4.9 Tabla de reglas y puntos de la comunidad por temporada (`RulesAndPointsTable.vue`): posición exacta, siguiente, anterior, siguiente de la siguiente, anterior de la anterior, no en podio, no en resultados, bonus por más puntos en el GP, total por sesión.
 - 4.10 Cambiar la comunidad activa desde la navbar (`CommunitiesDropdown.vue`), recordando la última usada.
 
 ## 5. Competiciones y temporadas
@@ -101,7 +101,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 - 8.2 Puntos por piloto pronosticado en el podio pero fuera del podio real (`pointsIfIsNotInPodium`) y por piloto que no entra en resultados (`pointsIfIsNotInResults`).
 - 8.3 Conteo de aciertos exactos por sesión y porcentaje de aciertos.
 - 8.4 Ganador de sesión: el o los usuarios con máxima puntuación, con empate compartido. Tabla `session_winners`.
-- 8.5 Bonus por más aciertos en el GP (`pointsByTopScorer`, `grandprix_bonus_points`), aplicado al cerrar todas las sesiones.
+- 8.5 Bonus por más puntos en el GP (`pointsByTopScorer`, `grandprix_bonus_points`), aplicado al cerrar todas las sesiones.
 - 8.6 Ganador de GP con puntos y bonus. Tabla `grandprix_winners`.
 - 8.7 Conjuntos de reglas: públicos o privados, con descripción, creador y puntos por sesión. Por temporada y por comunidad, con excepciones por GP (`grand_prix_rule_sets_exceptions`).
 - 8.8 Vista de la regla aplicada a un GP concreto (`FetchRuleSetInGrandPrix`).
@@ -202,7 +202,7 @@ Documento de trabajo para crear issues y sub-issues en `zugazagoitia/Vivecoded-P
 
 ## 18. Feature flags
 
-- 18.1 Sistema de feature flags solo en frontend: definición tipada de flags, lectura desde configuración por entorno y valor por defecto apagado en producción.
+- 18.1 Sistema de feature flags solo en frontend: definición tipada de flags, lectura desde configuración por entorno y valor por defecto apagado (en producción están todos activados vía `.env.production`).
 - 18.2 Un flag por propuesta con datos: Mi temporada, Palmarés, Gap, Bump, Consistencia, Cara a cara, Distribución, Heatmap de GP y Aciertos por tipo. Logros y Múltiples no tienen flag porque quedan fuera.
 - 18.3 Rutas, enlaces de navegación y bloques de Inicio de cada propuesta se ocultan por completo cuando su flag está apagado, incluidas las peticiones de datos asociadas. El código de la propuesta se carga de forma perezosa, para que no pese en el bundle principal.
 - 18.4 Ninguna propuesta se implementa sin datos de la API v2 (sección 25). Si una propuesta deja de tener datos, se retira en lugar de pedir un cambio de backend.

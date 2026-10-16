@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { initials as initialsOf } from '@/lib/communities'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apiUrl, userApi } from '@/api'
@@ -13,14 +14,7 @@ const props = defineProps<{
 }>()
 const { t } = useI18n()
 const failed = ref(false)
-const initials = computed(() =>
-  props.name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join(''),
-)
+const initials = computed(() => initialsOf(props.name))
 const src = computed(() => apiUrl(userApi.userImagePath(props.id)))
 </script>
 

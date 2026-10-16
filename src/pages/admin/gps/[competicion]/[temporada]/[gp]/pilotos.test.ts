@@ -49,9 +49,12 @@ describe('admin GP drivers (M4)', () => {
     await user.click(screen.getByRole('button', { name: 'Guardar pilotos' }))
     await waitFor(() => expect(adminCalls).toHaveLength(1))
     expect(adminCalls[0]?.path).toBe('/v2/gps/1/10/18/drivers')
-    const ids = adminCalls[0]?.body as { id: number }[]
-    expect(ids).toHaveLength(22)
-    expect(ids.every((d) => typeof d.id === 'number')).toBe(true)
+    expect(adminCalls[0]?.method).toBe('PUT')
+    const groups = Object.values(adminCalls[0]?.body as Record<string, { id: number }[]>)
+    expect(groups).toHaveLength(11)
+    expect(groups.every((l) => l.length === 2 && l.every((d) => typeof d.id === 'number'))).toBe(
+      true,
+    )
   })
 
   it('clears a slot, marks it as a change and undoes back to what is saved', async () => {

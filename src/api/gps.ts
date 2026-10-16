@@ -185,7 +185,7 @@ export const notifyGridChanges = (
   g: Id,
   body?: unknown,
   signal?: AbortSignal,
-) => request(`${gp(comp, season, g)}/grid/notification`, { method: 'PATCH', body, signal })
+) => request(`${gp(comp, season, g)}/grid/notification`, { method: 'POST', body, signal })
 export const getGridDriver = (comp: Id, season: Id, g: Id, driver: Id, signal?: AbortSignal) =>
   requestParsed(`${gp(comp, season, g)}/grid/${seg(driver)}`, StartGridPositionSchema, { signal })
 export const updateGridDriverNote = (

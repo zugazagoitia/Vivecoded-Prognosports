@@ -24,6 +24,8 @@ export const keys = {
   gps: (competition: Id, season: Id) => ['gps', competition, season] as const,
   points: (community: Id, competition: Id, season: Id) =>
     ['points', community, competition, season] as const,
+  totals: (community: Id, competition: Id, season: Id) =>
+    ['totals', community, competition, season] as const,
   tipps: (community: Id, competition: Id, season: Id, ...rest: Id[]) =>
     ['tipps', community, competition, season, ...rest] as const,
   userResume: (community: Id, user: Id, competition: Id, season: Id) =>
@@ -49,6 +51,7 @@ export const keys = {
 export const COMMUNITY_AREAS: ReadonlySet<unknown> = new Set([
   'community',
   'points',
+  'totals',
   'tipps',
   'user-resume',
   'members',
