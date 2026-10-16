@@ -64,14 +64,12 @@ describe('TabBar', () => {
 })
 
 describe('MobileBar', () => {
-  it('shows the title and the theme and notification actions, no back at the root', async () => {
+  it('shows the title and the theme action and no bell, no back at the root', async () => {
     await renderWithProviders(MobileBar, { props: { title: 'Inicio' } })
     expect(screen.getByText('Inicio')).toBeTruthy()
     expect(screen.queryByRole('link', { name: 'Volver' })).toBeNull()
     expect(screen.getByRole('button', { name: 'Cambiar tema claro u oscuro' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Notificaciones' }).getAttribute('href')).toBe(
-      '/ajustes#avisos',
-    )
+    expect(screen.queryByRole('link', { name: 'Notificaciones' })).toBeNull()
   })
 
   it('«Volver» goes to the fixed backHref when given', async () => {

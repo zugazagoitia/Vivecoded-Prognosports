@@ -159,18 +159,6 @@ const linkClass = [
           </template>
         </Menu>
 
-        <PTooltip :content="t('nav.notifications')">
-          <PButton
-            variant="ghost"
-            size="sm"
-            icon-only
-            icon="bell"
-            :aria-label="t('nav.notifications')"
-            :to="{ path: NAV_PATHS.settings, hash: '#avisos' }"
-          >
-          </PButton>
-        </PTooltip>
-
         <PTooltip :content="t('nav.theme')">
           <PButton
             variant="ghost"

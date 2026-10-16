@@ -54,17 +54,14 @@ test.describe('mobile navigation', () => {
     expect(mainBottom).toBeLessThanOrEqual(barTop + 1)
   })
 
-  test('the header toggles the theme and links to notification settings', async ({
+  test('the header toggles the theme and has no notification bell', async ({
     authedPage: page,
   }) => {
     await page.emulateMedia({ colorScheme: 'light' })
     await page.goto('/home')
     await page.getByRole('button', { name: 'Cambiar tema claro u oscuro' }).click()
     await expect(page.locator('html')).toHaveClass(/dark/)
-    await expect(page.getByRole('link', { name: 'Notificaciones' })).toHaveAttribute(
-      'href',
-      '/ajustes#avisos',
-    )
+    await expect(page.getByRole('link', { name: 'Notificaciones' })).toHaveCount(0)
   })
 
   for (const scheme of ['light', 'dark'] as const) {

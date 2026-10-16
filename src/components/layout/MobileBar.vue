@@ -6,7 +6,7 @@ import AppLogo from '@/components/ui/AppLogo.vue'
 import PButton from '@/components/ui/PButton.vue'
 import { useThemeStore } from '@/stores/theme'
 
-/** Mobile header (N2): logo or «Volver», view title, theme and notifications. */
+/** Mobile header (N2): logo or «Volver», view title, theme. */
 const props = withDefaults(
   defineProps<{
     title?: string
@@ -72,13 +72,6 @@ function goBack() {
       icon-only
       :aria-label="t('mobileNav.theme')"
       @click="toggleTheme"
-    />
-    <PButton
-      variant="ghost"
-      icon="bell"
-      icon-only
-      to="/ajustes#avisos"
-      :aria-label="t('mobileNav.notifications')"
     />
   </header>
 </template>

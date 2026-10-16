@@ -43,7 +43,7 @@ export function isRootPath(path: string): boolean {
 }
 
 /**
- * Ranking tab target. To confirm (N2): opens Clasificación (R1), not Resumen (R0).
+ * Ranking tab target. Decided (N2): opens Clasificación (R1), not Resumen (R0).
  * Keeps the community/season of the ranking route being viewed; otherwise the active community
  * and the current year (the stores have no "current season" yet).
  */

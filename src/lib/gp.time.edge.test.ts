@@ -219,6 +219,17 @@ describe('time zones', () => {
     ['', ''],
   ])('zoneCity(%j)=%j', (tz, e) => expect(zoneCity(tz)).toBe(e))
 
+  test('visitors without a session use the browser time zone (decided T5)', () => {
+    const spy = vi
+      .spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions')
+      .mockReturnValue({ timeZone: 'Pacific/Auckland' } as never)
+    try {
+      expect(userTimeZone(null)).toBe('Pacific/Auckland')
+    } finally {
+      spy.mockRestore()
+    }
+  })
+
   test('userTimeZone keeps a valid zone and falls back for invalid, empty or missing ones', () => {
     expect(userTimeZone('Asia/Tokyo')).toBe('Asia/Tokyo')
     const browser = Intl.DateTimeFormat().resolvedOptions().timeZone
