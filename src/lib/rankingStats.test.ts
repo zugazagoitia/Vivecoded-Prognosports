@@ -12,7 +12,12 @@ import {
   bestStreak,
   bestWorstGp,
   bucket,
+  aboveThreshold,
+  MIN_WINS_WITHOUT_MEDAL,
+  bucketCount,
   bucketLabel,
+  ridgeAxisEnd,
+  ridgeTicks,
   buildMedals,
   championCard,
   communityMean,
@@ -364,5 +369,38 @@ describe('R11 availableKinds', () => {
       q: true,
       r: true,
     })
+  })
+})
+
+describe('R9 derived scale', () => {
+  it('keeps 13 buckets by default and grows with the real maximum', () => {
+    expect(bucketCount([10, 64])).toBe(13)
+    expect(bucketCount([110])).toBe(23)
+    expect(histogram([110], bucketCount([110]))[22]).toBe(1)
+    expect(ridgeAxisEnd(13)).toBe(65)
+    expect(ridgeAxisEnd(23)).toBe(115)
+  })
+  it('threshold and ticks follow the axis', () => {
+    expect(aboveThreshold(65)).toBe(40)
+    expect(aboveThreshold(115)).toBe(70)
+    expect(ridgeTicks(65)).toEqual([0, 15, 30, 45, 60])
+    expect(ridgeTicks(115)).toEqual([0, 30, 60, 90])
+  })
+})
+
+describe('R4 medal table threshold', () => {
+  const m = (id: number, wins: number, gold = 0) => ({
+    id,
+    name: String(id),
+    you: false,
+    gold,
+    silver: 0,
+    bronze: 0,
+    wins,
+  })
+  it('lets in players with ≥ 5 GP wins even without medals', () => {
+    expect(MIN_WINS_WITHOUT_MEDAL).toBe(5)
+    const out = medalFilter([m(1, 4), m(2, 5), m(3, 0, 1)]).map((x) => x.id)
+    expect(out).toEqual([2, 3])
   })
 })

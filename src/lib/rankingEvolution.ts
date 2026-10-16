@@ -123,15 +123,17 @@ export function focusSet(
     .map((p) => p.id)
 }
 
-/** Click on a chip: remove if present, otherwise append and drop the oldest above 5. You: no-op. */
+/**
+ * Click on a chip: remove if present, otherwise append; the manual selection is always trimmed to
+ * the last 5 (leaving «Todos», which has 11, trims it too). You: no-op.
+ */
 export function toggleCustom(
   hl: readonly number[],
   id: number,
   meId: number | undefined,
 ): number[] {
   if (id === meId) return [...hl]
-  if (hl.includes(id)) return hl.filter((x) => x !== id)
-  const next = [...hl, id]
+  const next = hl.includes(id) ? hl.filter((x) => x !== id) : [...hl, id]
   return next.length > BUMP_MAX ? next.slice(next.length - BUMP_MAX) : next
 }
 
@@ -207,6 +209,20 @@ export function maxGp(gp: Pick<RankGp, 'sessions'>, rules: RuleSetData | undefin
   return total
 }
 
+/**
+ * Scale of «points in one GP»: the highest of the rule maximum of any GP of the calendar and the
+ * best GP actually scored (never below 1), instead of a fixed 70.
+ */
+export function gpCap(
+  calendar: readonly Pick<RankGp, 'sessions'>[],
+  players: readonly { pts: readonly number[] }[],
+  rules: RuleSetData | undefined,
+): number {
+  const byRules = Math.max(0, ...calendar.map((g) => maxGp(g, rules)))
+  const real = Math.max(0, ...players.flatMap((p) => p.pts))
+  return Math.max(1, byRules, real)
+}
+
 /** Pending GPs of the calendar (not played, not suspended). */
 export function pendingGps(model: Pick<RankModel, 'calendar' | 'played'>): RankGp[] {
   const played = new Set(model.played.map((g) => g.id))
@@ -270,7 +286,7 @@ export function needPerGp(leaderTotal: number, total: number, played: number, pe
   return leaderTotal / played + diff / pending
 }
 
-export function difficulty(need: number, avg: number, cap = 70): Difficulty {
+export function difficulty(need: number, avg: number, cap: number): Difficulty {
   if (need > cap) return 'impossible'
   const ratio = avg > 0 ? need / avg : Infinity
   if (ratio > 1.35) return 'veryHard'

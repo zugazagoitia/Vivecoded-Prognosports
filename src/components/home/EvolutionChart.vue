@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from 'vue'
+import { computed, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PSegmentedControl from '@/components/ui/SegmentedControl.vue'
 import { focusRing } from '@/components/ui/styles'
@@ -86,12 +86,16 @@ const subtitle = computed(() =>
     : t(`home.chart.subtitles.${mode.value}`),
 )
 
+/** «Con el de delante» makes no sense for the leader, so the mode is hidden then. */
+const leading = computed(() => !!props.model('rival').rivalBehind)
 const modeOptions = computed(() =>
-  (['leader', 'rival', 'pos'] as const).map((v) => ({
-    value: v,
-    label: t(`home.chart.modes.${v}`),
-  })),
+  (['leader', 'rival', 'pos'] as const)
+    .filter((v) => v !== 'rival' || !leading.value)
+    .map((v) => ({ value: v, label: t(`home.chart.modes.${v}`) })),
 )
+watch(leading, (on) => {
+  if (on && mode.value === 'rival') mode.value = 'leader'
+})
 const viewOptions = computed(() =>
   (['chart', 'table'] as const).map((v) => ({ value: v, label: t(`home.chart.view.${v}`) })),
 )

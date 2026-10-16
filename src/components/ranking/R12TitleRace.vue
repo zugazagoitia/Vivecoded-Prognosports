@@ -9,6 +9,7 @@ import { firstName, minus } from '@/lib/ranking'
 import {
   alive,
   difficulty,
+  gpCap,
   maxRemaining,
   needPerGp,
   pendingGps,
@@ -85,6 +86,7 @@ const grid = computed(() => [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(f * yM
 const pathOf = (acc: number[]) => acc.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}`).join('')
 
 // Needs
+const cap = computed(() => gpCap(model.value.calendar, players.value, rules.value))
 const chasers = computed(() => players.value.slice(1, 11))
 const needs = computed(() =>
   chasers.value
@@ -92,12 +94,11 @@ const needs = computed(() =>
       const need = needPerGp(lead.value, p.total, n.value, pending.value.length)
       return need === undefined
         ? undefined
-        : { p, need, diff: lead.value - p.total, level: difficulty(need, p.avg) }
+        : { p, need, diff: lead.value - p.total, level: difficulty(need, p.avg, cap.value) }
     })
     .filter((r): r is NonNullable<typeof r> => r !== undefined),
 )
 const levelTag = { impossible: 'err', veryHard: 'warn', hard: 'warn', possible: 'ok' } as const
-const cap = 70
 const title = computed(() => view.value)
 </script>
 

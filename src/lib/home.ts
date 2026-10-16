@@ -319,7 +319,7 @@ export function buildKpis(s: Standing, meId: number | undefined, wonCount?: numb
   }
 }
 
-/** «a 12 del líder» / «Vas líder» (the mockup would say «a 0 del líder»). */
+/** «a 12 del líder» / «Eres líder» (the mockup would say «a 0 del líder»). */
 export function behindText(behind: number | undefined, compact = false): string {
   if (behind == null) return ''
   if (behind <= 0) return t('home.kpi.leading')

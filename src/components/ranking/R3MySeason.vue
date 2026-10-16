@@ -104,7 +104,9 @@ const barClass = (r: (typeof rows.value)[number]) =>
         <span class="t-up text-muted">{{ t('ranking.r3.kpi.points') }}</span>
         <b class="text-heading text-[26px] leading-8 tabular-nums">{{ me.total }}</b>
         <span class="text-muted text-xs">{{
-          t('ranking.r0.toLeader', { n: gapToLeader(model, me) })
+          gapToLeader(model, me) === 0
+            ? t('ranking.r0.isLeader')
+            : t('ranking.r0.toLeader', { n: gapToLeader(model, me) })
         }}</span>
       </div>
       <div class="bg-surface-muted flex flex-col gap-0.5 rounded-lg px-4 py-3.5" data-kpi="pct">
