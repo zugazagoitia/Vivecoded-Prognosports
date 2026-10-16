@@ -153,8 +153,11 @@ export function buildMedals(seasons: readonly SeasonStanding[]): Medal[] {
   return [...out.values()]
 }
 
-/** Players with a medal or at least `minWins` GP wins (the mockup uses 5; por confirmar). */
-export function medalFilter(medals: readonly Medal[], minWins = 5): Medal[] {
+/** GP wins needed to enter the medal table without a medal (owner decision, 2026-10-16). */
+export const MIN_WINS_WITHOUT_MEDAL = 5
+
+/** Players with a medal or at least `minWins` GP wins. */
+export function medalFilter(medals: readonly Medal[], minWins = MIN_WINS_WITHOUT_MEDAL): Medal[] {
   return medals.filter((m) => m.gold + m.silver + m.bronze > 0 || m.wins >= minWins)
 }
 
@@ -377,11 +380,32 @@ export function bucketLabel(i: number): string {
   return `${i * BUCKET_SIZE}–${i * BUCKET_SIZE + BUCKET_SIZE - 1}`
 }
 
-export function histogram(values: readonly number[]): number[] {
-  const out = new Array<number>(BUCKETS).fill(0)
-  for (const v of values) out[bucket(v)]!++
+/** Buckets needed so that no value falls into an open last bucket (at least `BUCKETS`). */
+export function bucketCount(values: readonly number[]): number {
+  return Math.max(BUCKETS, Math.floor(Math.max(0, ...values) / BUCKET_SIZE) + 1)
+}
+
+/** Histogram with `buckets` buckets of 5; the last one takes everything above (default 13). */
+export function histogram(values: readonly number[], buckets = BUCKETS): number[] {
+  const out = new Array<number>(buckets).fill(0)
+  for (const v of values) out[Math.min(buckets - 1, Math.max(0, Math.floor(v / BUCKET_SIZE)))]!++
   return out
 }
+
+/** Upper end of the ridge axis for `buckets` buckets (65 by default). */
+export const ridgeAxisEnd = (buckets: number): number => buckets * BUCKET_SIZE
+
+/** Axis marks of the per-player view: every 15 (every 30 on wide scales), below the end mark. */
+export function ridgeTicks(axisEnd: number): number[] {
+  const step = axisEnd <= 90 ? 15 : 30
+  const out: number[] = []
+  for (let v = 0; v < axisEnd - 2; v += step) out.push(v)
+  return out
+}
+
+/** «GP above»: 60 % of the axis end rounded to 5 (40 on the default 65). */
+export const aboveThreshold = (axisEnd: number): number =>
+  Math.round((0.6 * axisEnd) / BUCKET_SIZE) * BUCKET_SIZE
 
 /** `ceil(max / 10) × 10`, at least 10. */
 export function histScale(counts: readonly number[]): number {
@@ -398,8 +422,8 @@ export function playerSummary(values: readonly number[], threshold = 40) {
 }
 
 /** Histogram normalised to its own peak (peak = 1). */
-export function normalisedCurve(values: readonly number[]): number[] {
-  const h = histogram(values)
+export function normalisedCurve(values: readonly number[], buckets = BUCKETS): number[] {
+  const h = histogram(values, buckets)
   const peak = Math.max(...h)
   return h.map((c) => (peak > 0 ? c / peak : 0))
 }

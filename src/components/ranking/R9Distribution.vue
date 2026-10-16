@@ -5,13 +5,16 @@ import PButton from '@/components/ui/PButton.vue'
 import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import { median } from '@/lib/ranking'
 import {
-  BUCKETS,
+  aboveThreshold,
+  bucketCount,
   bucketLabel,
   histogram,
   histScale,
   normalisedCurve,
   playerSummary,
   rangeText,
+  ridgeAxisEnd,
+  ridgeTicks,
 } from '@/lib/rankingStats'
 import type { Ranking } from '@/queries/ranking'
 import RankCard from './RankCard.vue'
@@ -29,8 +32,9 @@ const views = computed(() => [
 
 const all = computed(() => model.value.players.flatMap((p) => p.pts))
 const mine = computed(() => model.value.me?.pts ?? [])
-const hAll = computed(() => histogram(all.value))
-const hMine = computed(() => histogram(mine.value))
+const buckets = computed(() => bucketCount(all.value))
+const hAll = computed(() => histogram(all.value, buckets.value))
+const hMine = computed(() => histogram(mine.value, buckets.value))
 const mx = computed(() => histScale(hAll.value))
 const medAll = computed(() => median(all.value))
 const medMine = computed(() => median(mine.value))
@@ -40,18 +44,23 @@ const H = 340
 const PL = 44
 const PB = 56
 const PT = 24
-const bw = (W - PL - 10) / BUCKETS
-const bx = (i: number) => PL + i * bw
+const bw = computed(() => (W - PL - 10) / buckets.value)
+const bx = (i: number) => PL + i * bw.value
 const y = (c: number) => PT + (1 - c / mx.value) * (H - PT - PB)
-const mxLine = (v: number) => PL + (v / 5) * bw
+const mxLine = (v: number) => PL + (v / 5) * bw.value
 const grid = computed(() => [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(f * mx.value)))
 
+const AX = computed(() => ridgeAxisEnd(buckets.value))
+const threshold = computed(() => aboveThreshold(AX.value))
 const summaries = computed(() =>
-  model.value.players.map((p) => ({ p, ...playerSummary(p.pts), curve: normalisedCurve(p.pts) })),
+  model.value.players.map((p) => ({
+    p,
+    ...playerSummary(p.pts, threshold.value),
+    curve: normalisedCurve(p.pts, buckets.value),
+  })),
 )
-const AX = 65
 const curvePoints = (c: number[]) => {
-  const pts = c.map((v, i) => `${((i * 5 + 2.5) / AX) * 100},${46 - v * 44}`)
+  const pts = c.map((v, i) => `${((i * 5 + 2.5) / AX.value) * 100},${46 - v * 44}`)
   return `0,46 ${pts.join(' ')} 100,46`
 }
 const title = computed(() => (view.value === 'hist' ? 'hist' : 'ridge'))
@@ -93,7 +102,7 @@ const title = computed(() => (view.value === 'hist' ? 'hist' : 'ridge'))
               scope="col"
               class="px-3 py-2.5 text-right"
             >
-              {{ t(`ranking.r9.cols.${c}`) }}
+              {{ t(`ranking.r9.cols.${c}`, { n: threshold }) }}
             </th>
           </tr>
         </thead>
@@ -261,7 +270,7 @@ const title = computed(() => (view.value === 'hist' ? 'hist' : 'ridge'))
         <span />
         <span class="relative h-4" aria-hidden="true">
           <span
-            v-for="v in [0, 15, 30, 45, 60]"
+            v-for="v in ridgeTicks(AX)"
             :key="v"
             class="absolute -translate-x-1/2"
             :style="{ left: `${(v / AX) * 100}%` }"

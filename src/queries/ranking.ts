@@ -121,6 +121,37 @@ export function useRanking(
 export type Ranking = ReturnType<typeof useRanking>
 
 /**
+ * Ids of the competition seasons in which the community has points (RankNav selector). Shares the
+ * `…/points` queries with R4; `undefined` while any of them is still loading.
+ */
+export function useSeasonsWithPoints(args: MaybeRefOrGetter<SeasonArgs>) {
+  const seasons = useCompetitionSeasons(() => toValue(args).competition)
+  const list = computed(() => seasons.data.value ?? [])
+  const pointQueries = useQueries({
+    queries: computed(() =>
+      list.value.map((s) => ({
+        queryKey: keys.points(toValue(args).community, toValue(args).competition ?? '', s.id),
+        queryFn: ({ signal }: { signal: AbortSignal }) =>
+          communitiesApi.getCommunityPoints(
+            toValue(args).community,
+            toValue(args).competition!,
+            s.id,
+            signal,
+          ),
+      })),
+    ),
+  })
+  return computed<Set<number | string> | undefined>(() => {
+    if (!seasons.isSuccess.value || pointQueries.value.some((q) => q.isLoading)) return undefined
+    return new Set(
+      list.value
+        .filter((_, i) => Object.keys(pointQueries.value[i]?.data ?? {}).length > 0)
+        .map((s) => s.id),
+    )
+  })
+}
+
+/**
  * R4: final table of every season of the competition in which the community has points.
  * One `…/points` request per season plus the season GP list of those that have points (to order
  * the GPs by round). `totaluserpoints` is NOT used: the real API keys it by username (README).
