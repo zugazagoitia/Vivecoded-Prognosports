@@ -100,7 +100,7 @@ export function useCommunityPermissions(
           toValue(members)?.find((m) => m.id === uid),
           uid,
         )
-      : { recreateInvitation: false, settings: false }
+      : { recreateInvitation: false, editImage: false, settings: false }
   })
 }
 

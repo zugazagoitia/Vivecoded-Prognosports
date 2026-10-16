@@ -3,9 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { EmptyState } from '@/components/states'
 import Kpi from '@/components/ui/Kpi.vue'
-import PButton from '@/components/ui/PButton.vue'
 import PCard from '@/components/ui/PCard.vue'
-import PTitle from '@/components/ui/PTitle.vue'
 import { formatPoints } from '@/lib/gp'
 import {
   diffHit,
@@ -21,7 +19,7 @@ import {
 
 /**
  * «Tu desglose»: your KPIs, your prediction against the real result position by position, the
- * GP bonus and the access to the simulator (G6). Points come from the API; rules only label them.
+ * GP bonus. Points come from the API; rules only label them.
  */
 const props = defineProps<{
   rows: BreakdownRow[]
@@ -31,7 +29,6 @@ const props = defineProps<{
   near: number
   rules?: Rules
   bonus: Bonus
-  simulatorTo: string
   caption: string
 }>()
 const { t } = useI18n()
@@ -187,15 +184,6 @@ const PILL: Record<string, string> = {
                   : t('results.bonus.textNoAward')
               }}
             </p>
-          </div>
-        </PCard>
-        <PCard tag="section">
-          <div class="flex flex-col gap-3">
-            <PTitle level="header" as="h2">{{ t('results.sim.title') }}</PTitle>
-            <p class="text-muted text-sm">{{ t('results.sim.text') }}</p>
-            <PButton :to="simulatorTo" variant="soft" icon="chart-line">{{
-              t('results.sim.action')
-            }}</PButton>
           </div>
         </PCard>
       </aside>

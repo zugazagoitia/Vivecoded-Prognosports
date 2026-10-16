@@ -207,4 +207,12 @@ describe('drivers', () => {
     expect(byNo[0]!.label).toBe('Por dorsal')
     expect(byNo[0]!.drivers.map((d) => d.number)).toEqual([4, 63, 81])
   })
+  it('surname: one group by surname, ascending or descending', () => {
+    const asc = groupDrivers(list, 'surname', new Map(), '', labels, 'asc')
+    expect(asc).toHaveLength(1)
+    const names = asc[0]!.drivers.map((d) => d.lastname)
+    expect(names).toEqual([...names].sort((a, b) => a!.localeCompare(b!, 'es')))
+    const desc = groupDrivers(list, 'surname', new Map(), '', labels, 'desc')
+    expect(desc[0]!.drivers.map((d) => d.lastname)).toEqual([...names].reverse())
+  })
 })

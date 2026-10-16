@@ -190,7 +190,8 @@ export function isDeadlineError(e: unknown, locallyClosed = false): boolean {
 
 // --- Drivers: sorting and search ---------------------------------------------------------
 
-export type SortMode = 'team' | 'grid' | 'no'
+export type SortMode = 'team' | 'grid' | 'no' | 'surname'
+export type SortDir = 'asc' | 'desc'
 
 export interface DriverGroup {
   id: string
@@ -237,14 +238,16 @@ function teamId(d: Driver): string {
 /**
  * Pool groups: `team` one group per constructor (order of first appearance; empty groups hidden;
  * drivers without team last), `grid` a single group in start order (drivers without a slot
- * last), `no` a single group by number.
+ * last), `no` a single group by number, `surname` a single group by surname (`dir`, Spanish
+ * collation, accents ignored).
  */
 export function groupDrivers(
   drivers: readonly Driver[],
   mode: SortMode,
   grid: ReadonlyMap<number, number>,
   query: string,
-  labels: { grid: string; no: string; noTeam: string },
+  labels: { grid: string; no: string; surname?: string; noTeam: string },
+  dir: SortDir = 'asc',
 ): DriverGroup[] {
   const list = drivers.filter((d) => matchDriver(d, query))
   if (mode === 'grid') {
@@ -257,6 +260,16 @@ export function groupDrivers(
   if (mode === 'no') {
     const sorted = [...list].sort((a, b) => (a.number ?? 999) - (b.number ?? 999))
     return sorted.length ? [{ id: 'no', label: labels.no, drivers: sorted }] : []
+  }
+  if (mode === 'surname') {
+    const sign = dir === 'desc' ? -1 : 1
+    const key = (d: Driver) => d.lastname ?? d.code ?? ''
+    const sorted = [...list].sort(
+      (a, b) =>
+        sign * key(a).localeCompare(key(b), 'es') ||
+        sign * (a.firstname ?? '').localeCompare(b.firstname ?? '', 'es'),
+    )
+    return sorted.length ? [{ id: 'surname', label: labels.surname ?? '', drivers: sorted }] : []
   }
   const groups: DriverGroup[] = []
   for (const d of list) {

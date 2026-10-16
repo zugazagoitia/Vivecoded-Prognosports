@@ -39,7 +39,7 @@ Se usa `fetch` propio. La especificación casi no marca campos como obligatorios
 - `GET /v2/circuits/{id}` es público y trae `latitude`/`longitude` y `variants[]` (`distance` en km, `turns`, `hasLayoutImage`). Un id inexistente devuelve HTTP 200 con `{"success":false,"message":"Circuito inválido"}` (sin `status`): el cliente lo convierte en `ApiError` con `status` 200; la pantalla lo trata como 404 propia.
 - `GET /v2/circuits/{id}/{variant}/gps` es público y trae todas las ediciones (varias temporadas) con `season`, `laps`, `lastSessionDate`, `sessions[]` y `variant` (sin `hasLayoutImage`). Un mismo GP conserva su `id` entre temporadas: la temporada hay que tomarla de `season.id`.
 - No hay campo de sentido de giro ni de forma corta del nombre: la fila «Sentido» se oculta y la miga usa `Circuit.name`.
-- Ganador de la comunidad / historial: `points/{grandprix}` es una petición por GP y exige sesión. Se limita a los 5 GP disputados más recientes de la variante (`POINTS_GP_LIMIT`); el resto muestra «—». La media de la temporada sale de `…/resume` (`average`) de la temporada en curso.
+- Ganador de la comunidad: `points/{grandprix}` es una petición por GP y exige sesión. Se piden todos los GP disputados de la variante con concurrencia limitada (`POINTS_CONCURRENCY`) y caché (`staleTime`). «Tu historial aquí» se omitió (decisión del propietario, #188).
 - Mapa: no hay tiles propios; se usan teselas raster de CARTO (ver `docs/security.md`).
 
 ## URL base

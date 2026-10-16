@@ -77,3 +77,13 @@ export function cropRect(w: number, h: number, zoom: number, x: number, y: numbe
     sy: (h - side) / 2 + (clamp(y) * (h - side)) / 2,
   }
 }
+
+/** Sections of the settings a user sees: image (creator), invitation (`can_recreate_invitation`); the rest are read-only for anyone with access. */
+export function visibleSections(perms: {
+  editImage: boolean
+  recreateInvitation: boolean
+}): SettingsSection[] {
+  return SETTINGS_SECTIONS.filter(
+    (s) => (s !== 'imagen' || perms.editImage) && (s !== 'invitacion' || perms.recreateInvitation),
+  )
+}

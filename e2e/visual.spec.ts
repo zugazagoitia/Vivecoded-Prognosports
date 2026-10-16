@@ -1,4 +1,5 @@
 import { WEEKEND_GP, WEEKEND_NOW, WEEKEND_SEASON } from '../src/mocks/fixtures/gp'
+import { hideSessionResults } from './support/api'
 import { expect, test } from './support/fixtures'
 
 // Visual regression (§20.7): Chromium engine only (user decision), light and dark,
@@ -106,6 +107,7 @@ test.describe('visual regression', () => {
 
       test('simulador', async ({ authedPage: page }) => {
         await page.clock.setFixedTime(new Date(WEEKEND_NOW))
+        await hideSessionResults(page, 4)
         await page.goto(`/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/simulador/4?semilla=7`)
         await expect(page.getByText('La general con este resultado')).toBeVisible()
         await page.waitForLoadState('networkidle')

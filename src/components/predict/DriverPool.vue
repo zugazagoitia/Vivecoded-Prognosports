@@ -9,7 +9,7 @@ import SegmentedControl from '@/components/ui/SegmentedControl.vue'
 import { controlBase, focusRing } from '@/components/ui/styles'
 import { textColorFor } from '@/components/ui/textColor'
 import { teamColor } from '@/lib/gp'
-import { driverCode, driverName, groupDrivers, type SortMode } from '@/lib/predict'
+import { driverCode, driverName, groupDrivers, type SortDir, type SortMode } from '@/lib/predict'
 import { formatOrdinal } from '@/utils/numbers'
 
 /**
@@ -29,18 +29,28 @@ const emit = defineEmits<{ pick: [id: number] }>()
 const { t } = useI18n()
 
 const mode = ref<SortMode>('team')
+const dir = ref<SortDir>('asc')
 const query = ref('')
 const options = computed(() => [
   { value: 'team' as const, label: t('predict.pool.byTeam') },
   { value: 'grid' as const, label: t('predict.pool.byGrid') },
   { value: 'no' as const, label: t('predict.pool.byNumber') },
+  { value: 'surname' as const, label: t('predict.pool.bySurname') },
 ])
 const groups = computed(() =>
-  groupDrivers(props.drivers, mode.value, props.grid, query.value, {
-    grid: t('predict.pool.gridGroup'),
-    no: t('predict.pool.numberGroup'),
-    noTeam: t('predict.pool.noTeam'),
-  }),
+  groupDrivers(
+    props.drivers,
+    mode.value,
+    props.grid,
+    query.value,
+    {
+      grid: t('predict.pool.gridGroup'),
+      no: t('predict.pool.numberGroup'),
+      surname: t('predict.pool.surnameGroup'),
+      noTeam: t('predict.pool.noTeam'),
+    },
+    dir.value,
+  ),
 )
 
 function onDragStart(e: DragEvent, d: Driver) {
@@ -59,6 +69,20 @@ const dorsal = (d: Driver) =>
       <SegmentedControl v-model="mode" :options="options" :label="t('predict.pool.sort')" />
     </template>
     <div class="flex flex-col gap-3 overflow-y-auto p-4 min-[1181px]:max-h-[72vh]">
+      <button
+        v-if="mode === 'surname'"
+        type="button"
+        data-testid="surname-dir"
+        :aria-label="dir === 'asc' ? t('predict.pool.dirAsc') : t('predict.pool.dirDesc')"
+        :class="[
+          'text-body ring-border hover:ring-focus-ring inline-flex min-h-11 items-center gap-2 self-start rounded-md px-3 text-sm ring-1',
+          focusRing,
+        ]"
+        @click="dir = dir === 'asc' ? 'desc' : 'asc'"
+      >
+        <PIcon :name="dir === 'asc' ? 'arrow-down' : 'arrow-up'" :size="16" />
+        {{ dir === 'asc' ? t('predict.pool.asc') : t('predict.pool.desc') }}
+      </button>
       <div class="relative">
         <PIcon
           name="magnifying-glass"

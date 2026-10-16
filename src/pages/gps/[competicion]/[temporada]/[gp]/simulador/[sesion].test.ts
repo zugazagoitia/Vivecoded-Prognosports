@@ -23,7 +23,12 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
-async function open(target: string) {
+const RESULTS = '*/v2/gps/:c/:s/:gp/sessions/:session/results'
+
+/** `official: false` (default) hides the sprint results: closed but not scored, simulable. */
+async function open(target: string, { official = false } = {}) {
+  const hidden = !official && target.includes(`/simulador/${WEEKEND_SESSIONS.sprint}`)
+  if (hidden) server.use(http.get(RESULTS, () => ok([])))
   vi.useFakeTimers({ now: new Date(WEEKEND_NOW), toFake: ['Date'] })
   const result = await renderWithProviders(Page, { route: target, routes: ROUTES })
   const session = useSessionStore(result.pinia)
@@ -42,7 +47,7 @@ const codes = () =>
 const chip = (name: string) => screen.getByRole('button', { name })
 const total = () => document.querySelector('[data-total]')!.textContent.trim()
 
-// Sprint (closed, with results): grid NOR RUS LEC VER PIA..., your pick NOR LEC PIA HAM RUS.
+// Sprint (closed; results hidden by `open` unless `official`): grid NOR RUS LEC VER PIA..., your pick NOR LEC PIA HAM RUS.
 const SPRINT = WEEKEND_SESSIONS.sprint
 
 describe('Simulator (G6)', () => {
@@ -153,13 +158,23 @@ describe('Simulator (G6)', () => {
     expect(chip('Como el sprint')).toBeTruthy()
   })
 
-  it('without your prediction: empty state with a link to predict', async () => {
+  it('without a grid yet: blocked with a link back to the GP', async () => {
+    server.use(http.get('*/v2/gps/:c/:s/:gp/sessions/:session/grid', () => ok([])))
     await open(path(WEEKEND_SESSIONS.q))
-    expect(await screen.findByText('Aún no tienes pronóstico en esta sesión')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Ir a pronosticar' }).getAttribute('href')).toBe(
-      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/pronosticar/${WEEKEND_SESSIONS.q}`,
+    expect(await screen.findByText('Aún no hay parrilla')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Volver al Gran Premio' }).getAttribute('href')).toBe(
+      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}`,
     )
     expect(screen.queryByRole('button', { name: 'Caos' })).toBeNull()
+  })
+
+  it('with the official result: blocked with a link to the results', async () => {
+    await open(path(SPRINT), { official: true })
+    expect(await screen.findByText('Esta sesión ya tiene resultado oficial')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Ver resultados' }).getAttribute('href')).toBe(
+      `/gps/1/${WEEKEND_SEASON}/${WEEKEND_GP}/resultados/${SPRINT}`,
+    )
+    expect(screen.queryByRole('combobox')).toBeNull()
   })
 
   it('unknown session and unknown GP show a not found page', async () => {

@@ -375,3 +375,18 @@ export async function loginAsMockUser(page: Page): Promise<void> {
     [TOKEN_KEY, MOCK_TOKEN],
   )
 }
+
+/**
+ * Hides the official result of a session (empty list): it becomes «closed, not scored», the window
+ * in which the simulator works (from the grid until the official result).
+ */
+export async function hideSessionResults(page: Page, session: number): Promise<void> {
+  await page.route(new RegExp(`/sessions/${session}/results`), (route) =>
+    route.fulfill({
+      status: 200,
+      headers: CORS,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true, status: 200, code: 0, message: 'OK', result: [] }),
+    }),
+  )
+}

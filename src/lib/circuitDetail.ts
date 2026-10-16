@@ -137,13 +137,18 @@ export function isPast(gp: Pick<GrandPrix, 'lastSessionDate'>, now: number | Dat
   return Number.isFinite(last) && last < new Date(now).getTime()
 }
 
-/** Only the N most recent past GPs get one `points/{gp}` request each (documented limit). */
+/** Cap of the GP history card (GP page): one `points/{gp}` request per GP shown. */
 export const POINTS_GP_LIMIT = 5
 
-export function gpsWithPoints(gps: readonly GrandPrix[], now: number | Date): GrandPrix[] {
+/** Past GPs, most recent first; `limit` caps how many (default `POINTS_GP_LIMIT`). */
+export function gpsWithPoints(
+  gps: readonly GrandPrix[],
+  now: number | Date,
+  limit = POINTS_GP_LIMIT,
+): GrandPrix[] {
   return sortGpsDesc(gps)
     .filter((g) => isPast(g, now))
-    .slice(0, POINTS_GP_LIMIT)
+    .slice(0, limit)
 }
 
 // --- Map tiles ---------------------------------------------------------------------------

@@ -154,6 +154,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [P4] Detalle de circuito ([#26](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/26))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): se omite «Tu historial aquí»; el ganador se pide para todos los GP con concurrencia limitada y caché.
+
 - a confirmar en API: ruta de `GET .../gps` por variante y por circuito, y del layout de la variante (25.1).
 - a confirmar en API: «Sentido» del trazado no existe en `CircuitVariant`; se propone ocultarlo.
 - Distancia de carrera: el mockup no cuadra con longitud × vueltas (306,1 frente a 306,3). Confirmar fórmula o fuente.
@@ -278,6 +280,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [H6] Ajustes de la comunidad ([#21](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/21))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): acceso por creador, `can_recreate_invitation`, `can_modify_permissions` o `can_kick_users`; cada sección según su permiso (Imagen solo el creador, Invitación con `can_recreate_invitation`; Datos, Reglas y Miembros de solo lectura).
+
 - Ruta `/comunidades/:id/ajustes` y permiso exacto que da acceso (creador, `can_recreate_invitation`, `can_modify_permissions`).
 - Destino sin permiso (404 o H5).
 - Texto del campo «Acceso» para comunidades abiertas y si la invitación aplica a abiertas.
@@ -326,6 +330,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 ### [G3] Pronosticar ([#10](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/10))
 
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): Alt+↑/↓ reordena el hueco enfocado, orden por apellido asc/desc en «Pilotos» y «Pronto» = menos de 24 h.
+
 - Forma del cuerpo de `POST .../sessions/{session}/tipps/{community}` (lista de `Prediction` con `driver` y `position`) y de la respuesta.
 - Cómo se obtiene N por sesión desde `RuleSetData.predictedPositions` (¿mapa por sesión?).
 - Endpoint concreto de «pilotos del GP» (25.1 lo lista sin ruta exacta) para la lista y la validación.
@@ -366,6 +372,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Si se muestra la vuelta rápida (position 0) en algún lugar de esta pantalla (decisión: solo se muestra).
 
 ### [G6] Simulador de puntos ([#15](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/15))
+
+- ✅ Decidido ([#188](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/188)): «Caos» es un orden aleatorio reproducible (semilla `?semilla=`); se simula desde que hay parrilla hasta el resultado oficial (antes: «Aún no hay parrilla»; después: enlace a los resultados).
 
 - Ruta `/simulador/:sesion` y migas (falta «Grandes Premios»).
 - Si `POST .../calculations` devuelve los puntos de todos los jugadores o solo los del usuario; forma de `pointsByPosition`.

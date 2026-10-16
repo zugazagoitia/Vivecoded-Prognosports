@@ -7,6 +7,7 @@ import {
   MAX_SOURCE_BYTES,
   parseUsages,
   usagesText,
+  visibleSections,
 } from './community-settings'
 
 describe('community settings logic (H6)', () => {
@@ -51,5 +52,23 @@ describe('community settings logic (H6)', () => {
     const big = new File([new Uint8Array(MAX_SOURCE_BYTES + 1)], 'b.png', { type: 'image/png' })
     expect(imageFileSchema.safeParse({ file: big }).success).toBe(false)
     expect(imageFileSchema.safeParse({}).success).toBe(false)
+  })
+})
+
+describe('visibleSections', () => {
+  it('shows image only to the creator and invitation only with the permission', () => {
+    expect(visibleSections({ editImage: true, recreateInvitation: true })).toEqual([
+      'imagen',
+      'invitacion',
+      'datos',
+      'reglas',
+      'miembros',
+    ])
+    expect(visibleSections({ editImage: false, recreateInvitation: false })).toEqual([
+      'datos',
+      'reglas',
+      'miembros',
+    ])
+    expect(visibleSections({ editImage: false, recreateInvitation: true })).toContain('invitacion')
   })
 })

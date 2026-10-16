@@ -226,10 +226,19 @@ describe('community logic (H5)', () => {
   it('permissionsOf: owner or can_* unlock settings; only owner/can_recreate regenerate', () => {
     const c = { owner: u(1, 'ana') }
     const plain = { ...members[0]!, id: 5 }
-    expect(permissionsOf(c, plain, 5)).toEqual({ recreateInvitation: false, settings: false })
-    expect(permissionsOf(c, undefined, 1)).toEqual({ recreateInvitation: true, settings: true })
+    expect(permissionsOf(c, plain, 5)).toEqual({
+      recreateInvitation: false,
+      editImage: false,
+      settings: false,
+    })
+    expect(permissionsOf(c, undefined, 1)).toEqual({
+      recreateInvitation: true,
+      editImage: true,
+      settings: true,
+    })
     expect(permissionsOf(c, { ...plain, canKickUsers: true }, 5)).toEqual({
       recreateInvitation: false,
+      editImage: false,
       settings: true,
     })
     expect(permissionsOf(c, { ...plain, canRecreateInvitation: true }, 5).recreateInvitation).toBe(
