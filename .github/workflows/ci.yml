@@ -21,8 +21,9 @@ concurrency:
 permissions: {}
 
 jobs:
-  # Detecta PR/push que solo tocan documentación: en ese caso se omiten typecheck, test, coverage,
-  # audit, size y e2e (siguen lint/format y build, que necesita el despliegue). `ci-ok` lo tiene en cuenta.
+  # Detecta PR/push que no tocan código (documentación, workflows, ajustes de editor, licencia...):
+  # en ese caso se omiten lint, typecheck, test, coverage, audit, size y e2e (sigue build, que necesita
+  # el despliegue). `ci-ok` lo tiene en cuenta.
   # No se usa `paths-ignore` a nivel de workflow: dejaría `ci-ok` pendiente para siempre (docs/ci.md).
   changes:
     name: changes
@@ -37,7 +38,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Comprobar si hay cambios que no sean documentación
+      - name: Comprobar si hay cambios de código
         id: diff
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -48,7 +49,8 @@ jobs:
           if [ -n "$BASE_SHA" ] && ! echo "$BASE_SHA" | grep -Eq '^0+$' \
             && git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null && git cat-file -e "$HEAD_SHA^{commit}" 2>/dev/null; then
             files="$(git diff --name-only "$BASE_SHA...$HEAD_SHA" || true)"
-            if [ -n "$files" ] && ! echo "$files" | grep -Evq '^(docs/|.*\.md$)'; then
+            # Rutas que no afectan al código ni al build: docs, markdown, .github, editor y licencia.
+            if [ -n "$files" ] && ! echo "$files" | grep -Evq '^(docs/|\.github/|\.vscode/|\.editorconfig$|\.gitignore$|LICENSE|.*\.md$)'; then
               code=false
             fi
             echo "$files"
@@ -58,6 +60,8 @@ jobs:
 
   lint:
     name: lint
+    needs: changes
+    if: ${{ needs.changes.outputs.code == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -261,7 +265,7 @@ jobs:
           CODE: ${{ needs.changes.outputs.code }}
         run: |
           echo "$RESULTS"
-          # Solo documentación: los jobs omitidos a propósito no cuentan como fallo.
+          # Sin cambios de código: los jobs omitidos a propósito no cuentan como fallo.
           if [ "$CODE" = "false" ]; then PATTERN='"(failure|cancelled)"'; else PATTERN='"(failure|cancelled|skipped)"'; fi
           if echo "$RESULTS" | grep -Eq "$PATTERN"; then
             echo "::error::Algún job de CI no terminó correctamente."
