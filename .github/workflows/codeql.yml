@@ -4,8 +4,17 @@ name: CodeQL
 
 on:
   pull_request:
+    paths-ignore: &no-code
+      - 'docs/**'
+      - '.github/**'
+      - '.vscode/**'
+      - '.editorconfig'
+      - '.gitignore'
+      - 'LICENSE*'
+      - '**/*.md'
   push:
     branches: [develop, master]
+    paths-ignore: *no-code
   schedule:
     - cron: '23 4 * * 1' # semanal (lunes), también sobre la rama por defecto
   workflow_dispatch:
