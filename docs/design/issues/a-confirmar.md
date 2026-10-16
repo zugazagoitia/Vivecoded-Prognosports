@@ -109,7 +109,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - **Avisos**: la API v2 no tiene histórico ni leído/no leído (ver U4, bloqueada). El punto rojo y el menú «Hoy» no tienen datos. **Decidido ([#176](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/176)):** se oculta la campana (y su punto/menú «Hoy») hasta que el backend tenga histórico (U4). Las preferencias siguen en Ajustes › Notificaciones.
 - «Contacto» enlaza a FAQ en el mockup: ¿hay página de contacto (§13.4)?
-- Columna «Comunidades abiertas» (H3) para visitantes: ¿H3 es pública?
+- Enlace «Comunidades abiertas» del pie: **decidido (#185)**, solo se muestra con sesión iniciada.
 
 ### [N2] TabBar + MobileBar ([#87](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/87))
 
@@ -182,8 +182,8 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 ### [A1] Iniciar sesión ([#29](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/29))
 
 - a confirmar en API: cuerpo de `POST /v2/auth/login` (correo o usuario) y códigos de error para credenciales incorrectas y cuenta no verificada.
-- «Continuar con Telegram» no tiene endpoint de login en la API v2; propuesta: ocultarlo.
-- «Mantener la sesión iniciada en este dispositivo» no tiene parámetro en la API; propuesta: `sessionStorage` si se desmarca.
+- «Continuar con Telegram» no tiene endpoint de login en la API v2. **Decidido (#185):** sigue oculto.
+- «Mantener la sesión iniciada en este dispositivo» no tiene parámetro en la API; **Decidido (#185):** `sessionStorage` si se desmarca (cubierto por tests).
 - Texto del aviso de retorno para destinos que no son un pronóstico de GP.
 - Panel lateral: datos del próximo GP sin sesión y textos para otros plazos o sin próximo GP; «Tus amigos ya han pronosticado» como texto fijo.
 - Textos de validación por campo (correo vacío o inválido, contraseña vacía).
@@ -200,7 +200,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 
 - a confirmar en API: cuerpo y respuestas de `POST /v2/auth/forgotpassword` (en especial el código cuando el correo no existe).
 - Caducidad del código (el mockup dice 30 minutos).
-- Comportamiento con sesión iniciada.
+- Comportamiento con sesión iniciada: **decidido (#185)**, `/recuperar` redirige a `/home`.
 
 ### [A4] Nueva contraseña ([#32](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/32))
 
@@ -215,7 +215,7 @@ Lista agrupada por épica. Cada punto está también en la sección «⚠️ A c
 - Duración de la cuenta atrás de reenvío y límite de reenvíos del backend.
 - Texto del botón de reenvío habilitado y del toast tras reenviar.
 - Si el indicador de pasos se actualiza al verificar.
-- Variante de AppNav para un usuario con token pero sin verificar.
+- Variante de AppNav para un usuario con token pero sin verificar: **decidido (#185)**, solo «Cerrar sesión».
 - Destino tras verificar si ya tiene comunidad o había `redirect`.
 
 ## Inicio y comunidades ([#5](https://github.com/zugazagoitia/Vivecoded-Prognosports/issues/5))

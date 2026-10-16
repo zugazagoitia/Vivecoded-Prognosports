@@ -112,7 +112,30 @@ describe('user menu', () => {
   })
 })
 
+describe('AppNav unverified user (A5)', () => {
+  it('only offers «Cerrar sesión»', async () => {
+    const r = await renderNav({ user: mockUser() })
+    r.session.user = { ...r.session.user!, verified: '' }
+    expect(await screen.findByRole('button', { name: 'Cerrar sesión' })).toBeTruthy()
+    expect(screen.queryByRole('navigation', { name: 'Principal' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Iniciar sesión' })).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Registrarse' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Cerrar sesión' })).toBeTruthy()
+  })
+})
+
 describe('SiteFooter', () => {
+  it('«Comunidades abiertas» only shows with a session', async () => {
+    const anon = await renderWithProviders(SiteFooter)
+    expect(screen.queryByRole('link', { name: 'Comunidades abiertas' })).toBeNull()
+    anon.unmount()
+    const r = await renderWithProviders(SiteFooter)
+    const session = useSessionStore(r.pinia)
+    session.token = 'tok'
+    session.user = mockUser() as unknown as NonNullable<Session['user']>
+    expect(await screen.findByRole('link', { name: 'Comunidades abiertas' })).toBeTruthy()
+  })
+
   it('is a contentinfo landmark with columns, version and build', async () => {
     await renderWithProviders(SiteFooter)
     const footer = screen.getByRole('contentinfo')

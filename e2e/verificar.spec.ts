@@ -105,16 +105,14 @@ test.describe('Verificar correo (A5)', () => {
     await expect(page.getByRole('button', { name: 'Reenviar código' })).toBeEnabled()
   })
 
-  test('unverified users see the visitor nav and a short code is not sent', async ({
+  test('unverified users only see «Cerrar sesión» in the nav and a short code is not sent', async ({
     page,
-    isMobile,
   }) => {
     await loginAsUnverifiedUser(page)
     await page.goto('/verificar')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Verifica tu correo')
-    if (!isMobile) {
-      await expect(page.getByRole('link', { name: 'Iniciar sesión' }).first()).toBeVisible()
-    }
+    await expect(page.getByRole('button', { name: 'Cerrar sesión' })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Iniciar sesión' })).toHaveCount(0)
     await page.getByLabel('Código de verificación').fill('a4f')
     await page.getByRole('button', { name: 'Verificar', exact: true }).click()
     await expect(page.getByText('Escribe el código de 6 caracteres.')).toBeVisible()
