@@ -246,11 +246,10 @@ const resultList = computed(() =>
 )
 const groups = computed(() => groupResults(resultList.value))
 const resultsKnown = computed(() => sessions.value.every((s) => haveResults.value[s.id] != null))
-// A GP without sessions has no results yet (and nothing to publish): not «saved», not «published».
+// A GP without sessions has no results yet: not «saved».
 const resultsDone = computed(
   () => sessions.value.length > 0 && groups.value.pending.length === 0 && resultsKnown.value,
 )
-const published = computed(() => !form.suspended && sessions.value.length > 0)
 const status = computed(() =>
   gp.value
     ? sectionStatus(
@@ -383,9 +382,6 @@ const sectionClass = 'scroll-mt-20'
     >
       <template v-if="gp" #default>
         <PTag v-if="gp.suspended" color="gray">{{ t('admin.gpEdit.suspended') }}</PTag>
-        <PTag v-else :color="published ? 'ok' : 'gray'">{{
-          t(published ? 'admin.gpEdit.published' : 'admin.gpEdit.draft')
-        }}</PTag>
         <PButton variant="outline" size="sm" :to="gpPath(gp)" :icon="iconFor('visibility')">
           {{ t('admin.gpEdit.viewAsUser') }}
         </PButton>
