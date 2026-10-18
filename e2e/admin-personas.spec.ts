@@ -5,6 +5,7 @@ import {
   openAdminPage,
   expectNoSeriousA11yViolations,
 } from './support/adminSpec'
+import { mockPublicSources } from './support/publicData'
 
 const screens = [
   { name: 'usuarios', path: '/admin/usuarios', h1: 'Usuarios', ready: 'Mostrando 12 de 12' },
@@ -34,6 +35,7 @@ test.describe('Admin · personas y cálculo (M10-M13)', () => {
           browserName,
         }) => {
           test.skip(isPhone(viewport), 'desktop layout')
+          await mockPublicSources(page)
           await openAdminPage(page, s.path)
           await expect(page.getByRole('heading', { level: 1, name: s.h1 })).toBeVisible()
           await expect(page.getByText(s.ready, { exact: false }).first()).toBeVisible()
@@ -76,6 +78,7 @@ test.describe('Admin · personas y cálculo (M10-M13)', () => {
     viewport,
   }) => {
     test.skip(isPhone(viewport), 'desktop layout')
+    await mockPublicSources(page)
     await openAdminPage(page, '/admin/calculos')
     await page.getByRole('button', { name: 'Recalcular', exact: true }).click()
     await page.getByRole('dialog').getByRole('button', { name: 'Recalcular' }).click()
