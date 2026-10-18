@@ -1,3 +1,34 @@
 {
-  "publicCrossCheck": {}
+  "publicCrossCheck": {
+    "diff": "Difiere de la fuente en {n} posiciones",
+    "diffHint": "Solo es un aviso: no se ha cambiado ningún dato. Revisa las posiciones guardadas frente a {source}.",
+    "match": "Coincide con la fuente pública",
+    "checking": "Comparando con la fuente pública…",
+    "sourceError": "No se pudo consultar la fuente pública. Los datos guardados no cambian.",
+    "noSource": "La fuente pública no tiene datos de esta sesión.",
+    "source": "Fuente: {source}",
+    "sources": {
+      "jolpica": "Jolpica (Ergast)",
+      "openf1": "OpenF1"
+    },
+    "availability": {
+      "title": "Resultados en la fuente pública",
+      "subtitle": "Solo para sesiones terminadas sin resultados cargados.",
+      "session": "{session}",
+      "saved": "Resultados ya cargados",
+      "available": "Disponibles en la fuente pública",
+      "unavailable": "No disponibles todavía en la fuente pública",
+      "loading": "Comprobando la fuente pública…",
+      "error": "Fuente pública no disponible ahora"
+    },
+    "tasks": {
+      "title": "Tareas con datos públicos",
+      "resultAvailable": "Resultados de {session} disponibles en la fuente",
+      "resultAvailableDetail": "{gp}: sin resultados cargados.",
+      "gridToday": "Parrilla de {session} de hoy sin cargar",
+      "gridTodayDetail": "{gp}",
+      "sessionNoTime": "{session} sin horario",
+      "sessionNoTimeDetail": "{gp}"
+    }
+  }
 }

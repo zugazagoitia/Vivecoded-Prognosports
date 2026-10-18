@@ -36,6 +36,7 @@ const props = defineProps<{
 const emit = defineEmits<{ select: [id: number]; dirty: [v: boolean] }>()
 // Loaded on demand: the public data layer stays out of the eager bundle.
 const PublicDataFill = defineAsyncComponent(() => import('./PublicDataFill.vue'))
+const PublicCrossCheck = defineAsyncComponent(() => import('./PublicCrossCheck.vue'))
 const { t } = useI18n()
 
 const gridSessions = computed(() => props.sessions.filter((s) => s.hasGrid))
@@ -91,11 +92,20 @@ function applyPublic(p: PublicProposal) {
 
 const notify = ref(true)
 const publish = usePublishGrid(() => props.args)
+// Cross-check after publishing (issue 205): a new key per publish mounts the check, which asks the source once.
+const checkKey = ref(0)
+const checkRows = ref<(number | null)[]>([])
 function onPublish() {
   if (!session.value) return
   publish.mutate(
     { session: session.value.id, grid: gridPayload(rows.value), notify: notify.value },
-    { onSuccess: () => (base.value = snapshot(rows.value)) },
+    {
+      onSuccess: () => {
+        base.value = snapshot(rows.value)
+        checkRows.value = rows.value.map((r) => r.driverId)
+        checkKey.value++
+      },
+    },
   )
 }
 const options = computed(() => [
@@ -140,6 +150,16 @@ const options = computed(() => [
         :slots="n"
         :current="rows.map((r) => r.driverId)"
         @apply="applyPublic"
+      />
+      <PublicCrossCheck
+        v-if="checkKey"
+        :key="checkKey"
+        :args="args"
+        mode="grid"
+        :session="session"
+        :drivers="drivers"
+        :slots="n"
+        :saved="checkRows"
       />
       <ErrorState v-if="gridQ.isError.value" :error="gridQ.error.value" @retry="gridQ.refetch()" />
       <Skeleton v-else-if="!gridQ.data.value" variant="table" :rows="10" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -121,6 +121,9 @@ const input = computed(() =>
 )
 const checks = computed(() => (input.value ? prepChecks(input.value) : []))
 const tasks = computed(() => (input.value ? panelTasks(checks.value, input.value) : []))
+// Public-data tasks (issue 205): loaded on demand so the public data layer stays out of the eager bundle.
+const AdminTasks = defineAsyncComponent(() => import('@/components/admin/AdminTasks.vue'))
+const previousGp = computed(() => gps.data.value?.find((g) => g.id === prevId.value))
 
 const gpPath = computed(() =>
   gp.value ? adminGpPath(gp.value, { competition: gpComp.value, season: gpSeason.value }) : '',
@@ -422,6 +425,13 @@ const rowClass =
             </li>
           </ul>
         </PCard>
+        <AdminTasks
+          :comp="gpComp"
+          :season="gpSeason"
+          :next="gp"
+          :previous="previousGp"
+          :now="now"
+        />
         <PCard>
           <h2 class="t-header text-heading mb-2">{{ t('admin.panel.last.title') }}</h2>
           <!-- There is no calculation log in the API (por confirmar): only the link. -->

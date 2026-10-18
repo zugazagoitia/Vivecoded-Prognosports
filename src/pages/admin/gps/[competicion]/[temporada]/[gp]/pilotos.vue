@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -39,7 +39,14 @@ import {
   useSeasonDrivers,
 } from '@/queries/admin'
 import { useSeasonGps } from '@/queries/circuits'
+import { usePublicRosterGp } from '@/queries/publicRoster'
 import { useGpDetail } from '@/queries/gp'
+import type { RosterDriver, RosterSelection } from '@/lib/publicData/rosterMapping'
+
+// Loaded on demand: the public roster module and its review UI stay out of the eager bundle.
+const PublicRosterFill = defineAsyncComponent(
+  () => import('@/components/admin/PublicRosterFill.vue'),
+)
 
 /**
  * M4 · Pilotos de un GP (`/admin/gps/:competicion/:temporada/:gp/pilotos`): pool of the season's
@@ -89,6 +96,25 @@ const refGp = computed(() => earlier.value.find((g) => g.id === refId.value))
 const refName = computed(() => (refGp.value ? gpShortName(refGp.value) : ''))
 const refSlots = computed(() =>
   refDrivers.data.value ? buildSlots(teams.value, refDrivers.data.value) : [],
+)
+
+// «Rellenar con datos públicos»: the GP entry list (Jolpica results of this round) fills the slots.
+const fillOpen = ref(false)
+const rosterSeason = computed(() => Number(gp.value?.season?.name) || undefined)
+const rosterRound = computed(() => gp.value?.round ?? undefined)
+const entryList = usePublicRosterGp(rosterSeason, rosterRound, {
+  drivers: () => poolQ.data.value ?? [],
+  teams: () => teamsQ.data.value ?? [],
+  enabled: () => fillOpen.value,
+})
+const placeable = (row: RosterDriver) => row.appId != null && row.teamAppId != null
+const skipped = computed(
+  () => (entryList.data.value?.drivers ?? []).filter((d) => !placeable(d)).length,
+)
+const fillNote = computed(() =>
+  [t('publicRoster.gpNote'), skipped.value ? t('publicRoster.gpSkipped', { n: skipped.value }) : '']
+    .filter(Boolean)
+    .join(' '),
 )
 
 const saved = ref<Slot[]>([])
@@ -150,6 +176,18 @@ function place(idx: number) {
   selected.value = null
 }
 const clear = (idx: number) => (slots.value = clearSlot(slots.value, idx))
+/** Applies the reviewed entry list to the slots. Nothing is saved: «Guardar» does that. */
+function onFill(sel: RosterSelection) {
+  const list = sel.drivers.filter(placeable).flatMap((d) => {
+    const driver = byId.value.get(d.appId!)
+    const team = teams.value.find((x) => x.id === d.teamAppId)
+    return driver && team ? [{ ...driver, team }] : []
+  })
+  slots.value = buildSlots(teams.value, list)
+  selected.value = null
+  fillOpen.value = false
+}
+
 function clone() {
   if (!refDrivers.data.value) return
   slots.value = buildSlots(teams.value, refDrivers.data.value)
@@ -217,8 +255,24 @@ function retry() {
         >
           {{ t('admin.gpDrivers.clone') }}
         </PButton>
+        <PButton variant="soft" :disabled="!gp" @click="fillOpen = true">
+          {{ t('publicRoster.open') }}
+        </PButton>
       </div>
     </AdminHeader>
+
+    <PublicRosterFill
+      v-if="fillOpen"
+      :roster="entryList.data.value"
+      :loading="entryList.isFetching.value"
+      :failed="entryList.isError.value"
+      :can-select="(_k, row) => placeable(row as RosterDriver)"
+      :preselect="(_k, row) => placeable(row as RosterDriver)"
+      :note="fillNote"
+      @apply="onFill"
+      @retry="() => void entryList.refetch()"
+      @close="fillOpen = false"
+    />
 
     <Skeleton v-if="!ready || !poolQ.data.value" variant="card" />
     <EmptyState
