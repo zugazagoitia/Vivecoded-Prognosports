@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { TabsContent, TabsRoot } from 'reka-ui'
@@ -36,6 +36,10 @@ definePage({
     backHref: '/gps',
   },
 })
+
+const CircuitOutline = defineAsyncComponent(
+  () => import('@/components/circuits/CircuitOutline.vue'),
+)
 
 const { t } = useI18n()
 const route = useRoute('/gps/[competicion]/[temporada]/[gp]/')
@@ -207,6 +211,13 @@ const summaryClass =
                 @retry="w.communityPoints.refetch()"
               />
               <GpCircuitCard :gp="gp" />
+              <CircuitOutline
+                v-if="gp.circuit"
+                :circuit="gp.circuit.name ?? ''"
+                :country="gp.circuit.country"
+                :latitude="gp.circuit.latitude"
+                :longitude="gp.circuit.longitude"
+              />
               <GpHistoryCard
                 v-if="
                   w.history.value.entries.length ||

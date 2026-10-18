@@ -1,1 +1,7 @@
-{}
+{
+  "f1Media": {
+    "circuitOutline": {
+      "label": "Trazado del circuito de {circuit}"
+    }
+  }
+}
