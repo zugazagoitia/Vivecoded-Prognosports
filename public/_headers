@@ -20,7 +20,7 @@
 # Mapa del circuito (P4): teselas raster de CARTO como <img> (img-src); sin MapLibre ni workers extra.
 # Todo debe quedar en UNA línea (la sintaxis de _headers no admite continuaciones).
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com https://*.basemaps.cartocdn.com; connect-src 'self' https://api.prognosports.com https://api.jolpi.ca https://api.openf1.org; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://api.prognosports.com https://*.basemaps.cartocdn.com https://media.formula1.com; connect-src 'self' https://api.prognosports.com https://api.jolpi.ca https://api.openf1.org; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin

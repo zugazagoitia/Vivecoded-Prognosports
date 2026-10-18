@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, defineAsyncComponent, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { TabsContent, TabsRoot } from 'reka-ui'
@@ -23,6 +23,8 @@ import { useMobileBackHref, useMobileTitle } from '@/composables/useMobileNav'
 import { isSprintWeekend } from '@/lib/circuits'
 import { formatPoints, gpPath, sessionPath, weekendState } from '@/lib/gp'
 import { capitalize } from '@/lib/predict'
+
+const GpFormContext = defineAsyncComponent(() => import('@/components/gp/GpFormContext.vue'))
 
 definePage({
   meta: {
@@ -90,6 +92,7 @@ const closedText = computed(() => {
 
 const failedWhat = computed(() => (vm.failed ? t(`predict.error.${vm.failed.what}`) : ''))
 const slotsReadonly = computed(() => vm.readOnlyDraft)
+const formSeason = computed(() => Number(vm.gp?.season?.name) || undefined)
 </script>
 
 <template>
@@ -219,6 +222,12 @@ const slotsReadonly = computed(() => vm.readOnlyDraft)
                 :shortcuts="vm.shortcuts"
                 @apply="vm.applyShortcut"
               />
+              <GpFormContext
+                v-if="!slotsReadonly"
+                :season="formSeason"
+                :round="vm.gp.round ?? undefined"
+                :drivers="vm.pool"
+              />
               <PrognoAlert variant="info" :title="t('predict.privacy')" />
             </div>
 
@@ -252,6 +261,12 @@ const slotsReadonly = computed(() => vm.readOnlyDraft)
                   v-if="!slotsReadonly"
                   :shortcuts="vm.shortcuts"
                   @apply="vm.applyShortcut"
+                />
+                <GpFormContext
+                  v-if="!slotsReadonly"
+                  :season="formSeason"
+                  :round="vm.gp.round ?? undefined"
+                  :drivers="vm.pool"
                 />
                 <GpRulesCard
                   :ruleset="vm.ruleset.forGp.data"
