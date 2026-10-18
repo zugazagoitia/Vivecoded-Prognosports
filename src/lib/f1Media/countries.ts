@@ -1,5 +1,5 @@
 /**
- * Country names -> ISO 3166-1 alpha-2 codes for the flags (issue #223).
+ * Country names -> ISO 3166-1 alpha-2 codes for the flags (issue 223).
  *
  * The API sends English names (`Circuit.country`, OpenF1) and the mocks and admin use Spanish
  * ones, so both are mapped. Only the countries of the F1 calendar and common driver nationalities

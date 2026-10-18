@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink } from 'vue-router'
 import type { GrandPrix } from '@/api/schemas'
@@ -15,6 +15,9 @@ import {
   type PredictionDots as Dots,
 } from '@/lib/gps'
 import PredictionDots from './PredictionDots.vue'
+
+// Lazy: the flag SVGs stay out of the eager bundle (issue 223).
+const CountryFlag = defineAsyncComponent(() => import('@/components/common/CountryFlag.vue'))
 
 export type GpStatus = 'played' | 'current' | 'upcoming' | 'suspended'
 
@@ -75,7 +78,10 @@ const ariaLabel = computed(() => {
       <PTag v-if="sprint" color="info">{{ t('gps.sprint') }}</PTag>
     </span>
     <b class="text-heading text-xl leading-7 font-bold">{{ gp.name }}</b>
-    <span class="text-muted text-sm break-words">{{ circuitLine }}</span>
+    <span class="text-muted flex min-w-0 items-center gap-2 text-sm">
+      <CountryFlag v-if="gp.circuit?.country" :country="gp.circuit.country" />
+      <span class="break-words">{{ circuitLine }}</span>
+    </span>
 
     <span
       class="border-border mt-auto flex min-h-8 items-center justify-between gap-2 border-t pt-2"

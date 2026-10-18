@@ -10,6 +10,7 @@ import PCard from '@/components/ui/PCard.vue'
 import PInput from '@/components/ui/PInput.vue'
 import PSelect from '@/components/ui/PSelect.vue'
 import PTabs from '@/components/ui/PTabs.vue'
+import { LazyTeamBadge } from '@/components/teams/lazy'
 import PrognoModal from '@/components/ui/PrognoModal.vue'
 import { iconFor } from '@/components/ui/icons'
 import { driverFullName, sortDrivers, tabFromQuery, teamColor, cssColor } from '@/lib/adminDrivers'
@@ -367,10 +368,11 @@ const retry = () => {
                   <td>{{ d.code }}</td>
                   <td>
                     <span class="inline-flex items-center gap-2">
-                      <span
+                      <LazyTeamBadge
                         v-if="d.team"
-                        class="inline-block h-[18px] w-1 rounded-sm"
-                        :style="{ background: teamColor(d) }"
+                        :name="d.team.name ?? ''"
+                        :teamcolor="teamColor(d)"
+                        :size="20"
                         aria-hidden="true"
                       />
                       {{ d.team?.name ?? '—' }}
@@ -438,9 +440,10 @@ const retry = () => {
                 <tr v-for="c in teams" :key="c.id">
                   <td>
                     <span class="inline-flex items-center gap-2">
-                      <span
-                        class="inline-block h-[18px] w-1 rounded-sm"
-                        :style="{ background: cssColor(c.teamcolor) }"
+                      <LazyTeamBadge
+                        :name="c.name ?? ''"
+                        :teamcolor="c.teamcolor"
+                        :size="20"
                         aria-hidden="true"
                       />
                       <b class="text-heading">{{ c.name }}</b>

@@ -33,9 +33,9 @@ interface ImportMetaEnv {
   readonly VITE_FF_COMMUNITY_PERCENTILE?: string
   /** Driver photos from media.formula1.com; off everywhere until the licence is cleared. */
   readonly VITE_FF_PUBLIC_HEADSHOTS?: string
-  /** Circuit outlines from media.formula1.com instead of the open SVG (issue #223). */
+  /** Circuit outlines from media.formula1.com instead of the open SVG (issue 223). */
   readonly VITE_FF_F1_TRACK_ICONS?: string
-  /** F1 team logos from media.formula1.com instead of own badges (issue #223). */
+  /** F1 team logos from media.formula1.com instead of own badges (issue 223). */
   readonly VITE_FF_F1_TEAM_LOGOS?: string
 }
 
