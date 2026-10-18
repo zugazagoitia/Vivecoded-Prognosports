@@ -60,6 +60,8 @@ test.describe('Admin · datos públicos (#201)', () => {
         if (scheme === 'light')
           await expect(page).toHaveScreenshot('admin-public-data-parrilla-light.png', {
             fullPage: true,
+            // → and · fall back to host system fonts, which differ between CI and Docker.
+            mask: [page.getByRole('list').filter({ hasText: /Sin piloto → / })],
           })
       })
 
@@ -80,6 +82,8 @@ test.describe('Admin · datos públicos (#201)', () => {
         if (scheme === 'light')
           await expect(page).toHaveScreenshot('admin-public-data-resultados-light.png', {
             fullPage: true,
+            // → and · fall back to host system fonts, which differ between CI and Docker.
+            mask: [page.getByRole('list').filter({ hasText: /Sin piloto → / })],
           })
       })
     })
