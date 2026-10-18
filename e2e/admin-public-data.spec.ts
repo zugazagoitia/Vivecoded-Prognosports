@@ -98,7 +98,7 @@ test.describe('Admin · datos públicos (#201)', () => {
     await page.getByRole('button', { name: OPEN }).click()
     await expect(page.getByText(SOURCE_JOLPICA, { exact: false })).toBeVisible()
     await expect(page.getByText(/^P1: /).first()).toBeVisible()
-    expect(sources.jolpica.length).toBeGreaterThan(0)
+    expect(sources.jolpica.some((u) => /\/2026\/18\/sprint\.json$/.test(u))).toBe(true)
 
     await page.getByRole('button', { name: 'Aplicar', exact: true }).click()
     const applied = await gridValues(page)

@@ -11,7 +11,10 @@ const CORS = {
   'access-control-allow-methods': '*',
 }
 
-/** Jolpica file by its last path segment (`<season>/<round>/<file>`). */
+/**
+ * Jolpica file by its last path segment (`<season>/<round>/<file>`). The recorded files are one
+ * round (2025 R2) for any season and round: the specs check which season/round was asked for.
+ */
 const JOLPICA_FILES: Record<string, string> = {
   'results.json': 'jolpica-results-2025-r2.json',
   'sprint.json': 'jolpica-sprint-2025-r2.json',
@@ -61,7 +64,7 @@ export async function mockPublicSources(
     const url = route.request().url()
     calls.jolpica.push(url)
     if (jolpica === 'fail') return fail(route)
-    const file = JOLPICA_FILES[url.split('/').pop() ?? '']
+    const file = JOLPICA_FILES[new URL(url).pathname.split('/').pop() ?? '']
     return file ? serve(route, file) : route.fulfill({ status: 404, headers: CORS, body: '{}' })
   })
   await page.route('https://api.openf1.org/**', (route) => {
