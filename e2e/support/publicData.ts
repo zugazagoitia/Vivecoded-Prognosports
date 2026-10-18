@@ -59,6 +59,8 @@ export async function mockPublicSources(
   page: Page,
   { jolpica = 'ok', openf1 = 'ok' }: PublicSourceOptions = {},
 ): Promise<PublicSourceCalls> {
+  // The panel prints «obtenido el <now>»: pin the clock so screenshots do not depend on the run time.
+  await page.clock.setFixedTime(new Date('2026-05-10T12:00:00Z'))
   const calls: PublicSourceCalls = { jolpica: [], openf1: [] }
   await page.route('https://api.jolpi.ca/**', (route) => {
     const url = route.request().url()
