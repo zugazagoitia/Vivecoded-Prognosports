@@ -1,3 +1,15 @@
 {
-  "publicForm": {}
+  "title": "Forma en el campeonato",
+  "intro": "Posición real en el Mundial de Pilotos y últimos resultados tras la ronda {round}. Solo orientativo: no se guarda nada.",
+  "list": "Forma de los pilotos",
+  "position": "{n}.º del campeonato",
+  "points": "{n} pts",
+  "last": "Últimos resultados",
+  "dnf": "Sin clasificar",
+  "noData": "sin datos",
+  "source": "Fuente: Jolpica-F1 (Ergast), datos públicos.",
+  "photoSource": "Fotos: Formula One (OpenF1). Licencia por confirmar.",
+  "loading": "Cargando forma de los pilotos…",
+  "pos": "P{n} · {pts}",
+  "dnfShort": "R"
 }

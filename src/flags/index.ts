@@ -14,6 +14,7 @@ export const FLAG_DEFS = {
   HITS_BY_TYPE: { label: 'Aciertos por tipo' },
   POINTS_BY_SESSION: { label: 'Puntos por sesión' },
   COMMUNITY_PERCENTILE: { label: 'Percentil entre comunidades' },
+  PUBLIC_HEADSHOTS: { label: 'Fotos de pilotos (licencia por confirmar)' },
 } as const
 
 export type FlagName = keyof typeof FLAG_DEFS

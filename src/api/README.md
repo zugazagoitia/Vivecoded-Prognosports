@@ -143,3 +143,8 @@ Datos de F1 que no salen de la API de PrognoSports (`api.prognosports.com`). Có
 - **Jolpica (principal)**: API compatible con Ergast. Se consulta primero y se cachea unos 10 minutos, porque los resultados de carrera cambian poco.
 - **OpenF1 (respaldo)**: se usa cuando Jolpica no responde. Responde HTTP 429 por encima de 3 peticiones por segundo, así que las peticiones pasan por una cola con concurrencia máxima de 2 y reintento con espera exponencial (backoff) ante 429.
 - **Atribución**: los datos de ambas fuentes se muestran en la interfaz con su atribución visible junto a los datos. Las cadenas de atribución van en `src/i18n/es/` (por confirmar su redacción).
+
+### Contexto de forma y fotos (G3, issue #206 ideas 3 y 5)
+
+- **Forma (idea 3)**: la pantalla de pronóstico pide a Jolpica `/{temporada}/{ronda-1}/driverstandings.json` y los `results.json` de las 3 rondas anteriores (4 peticiones, por la cola compartida con concurrencia ≤ 2 y caché TanStack de 30 min). Es perezoso y no bloqueante: si falla, la pantalla funciona igual y el bloque se oculta. Solo informa; no rellena nada.
+- **Fotos (idea 5)**: OpenF1 `drivers?session_key=latest` (`headshot_url`, host `media.formula1.com`), con `VITE_FF_PUBLIC_HEADSHOTS` (activado en beta y producción por decisión del propietario: proyecto no comercial, imágenes consideradas utilizables; alternativa: avatar actual). La correspondencia es por código de tres letras con la última sesión, no por temporada. **Por confirmar**: privacidad (la IP del jugador llega a OpenF1 y a `media.formula1.com`, a diferencia del admin); y el límite de OpenF1 de 3 peticiones/s por IP desde los navegadores de todos los jugadores (hoy 1 petición por sesión de navegador y cola ≤ 2) frente a hacerlo desde el backend.

@@ -11,7 +11,7 @@ function memStorage(initial?: string) {
 }
 
 describe('flags', () => {
-  it('defines 12 flags', () => expect(FLAG_NAMES).toHaveLength(12))
+  it('defines 13 flags', () => expect(FLAG_NAMES).toHaveLength(13))
 
   it('reads env true / false / absent', () => {
     const f = createFlags({

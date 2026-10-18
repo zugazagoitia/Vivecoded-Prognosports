@@ -16,15 +16,20 @@ Doce estadísticas opcionales del ranking se controlan con variables `VITE_FF_<N
 | `VITE_FF_HITS_BY_TYPE`            | Aciertos por tipo                  |
 | `VITE_FF_POINTS_BY_SESSION`       | Puntos por sesión                  |
 | `VITE_FF_COMMUNITY_PERCENTILE`    | Percentil entre comunidades        |
+| `VITE_FF_PUBLIC_HEADSHOTS`        | Fotos de pilotos (pantalla G3)     |
+
+Los 12 primeros son estadísticas del ranking. `VITE_FF_PUBLIC_HEADSHOTS` (issue #206, idea 5) es distinto: muestra fotos de `media.formula1.com` (campo `headshot_url` de OpenF1) en el contexto de forma de la pantalla de pronóstico, con el avatar de iniciales como alternativa si el flag está apagado o la imagen falla.
+
+> **Decisión del propietario (derechos de imagen):** las fotos son de Formula One, pero el proyecto no es comercial y el propietario considera las imágenes utilizables, por lo que el flag está **activado** en `.env.beta` y `.env.production` y apagado en `.env` (`VITE_FF_PUBLIC_HEADSHOTS`). Si la imagen falla se mantiene el avatar de iniciales. Detalle y CSP en [`security.md`](security.md).
 
 ## Valores por entorno
 
 | Entorno              | Valor                                                                                  |
 | -------------------- | -------------------------------------------------------------------------------------- |
 | `.env` (desarrollo)  | Apagados (por defecto); descomenta o usa el panel de flags.                            |
-| `.env.beta`          | Los 12 activados (más `VITE_PREVIEW=true`).                                            |
-| `.env.production`    | Los 12 **activados**.                                                                  |
-| Tests e2e            | `dist/` con los 12 activados y `dist-flags-off/` con todos apagados (`pnpm build:e2e`). |
+| `.env.beta`          | Los 12 de estadísticas activados (más `VITE_PREVIEW=true`); `PUBLIC_HEADSHOTS` también activado. |
+| `.env.production`    | Los 12 de estadísticas **activados**; `PUBLIC_HEADSHOTS` **activado** (decisión del propietario). |
+| Tests e2e            | `dist/` con todos activados (incluido `PUBLIC_HEADSHOTS`) y `dist-flags-off/` con todos apagados (`pnpm build:e2e`). |
 
 Solo el literal `true` activa un flag; ausente o cualquier otro valor es «apagado».
 
