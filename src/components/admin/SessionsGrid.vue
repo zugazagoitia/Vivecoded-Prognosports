@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Skeleton, ErrorState } from '@/components/states'
 import PButton from '@/components/ui/PButton.vue'
@@ -18,6 +18,7 @@ import {
 } from '@/lib/adminSessions'
 import { sessionLabel } from '@/lib/gp'
 import { controlBase } from '@/components/ui/styles'
+import type { PublicProposal } from '@/composables/usePublicDataFill'
 import { usePublishGrid, useSessionGrid, useSessionResults } from '@/queries/admin'
 
 /**
@@ -33,6 +34,9 @@ const props = defineProps<{
   selectedId?: number
 }>()
 const emit = defineEmits<{ select: [id: number]; dirty: [v: boolean] }>()
+// Loaded on demand: the public data layer stays out of the eager bundle.
+const PublicDataFill = defineAsyncComponent(() => import('./PublicDataFill.vue'))
+const PublicCrossCheck = defineAsyncComponent(() => import('./PublicCrossCheck.vue'))
 const { t } = useI18n()
 
 const gridSessions = computed(() => props.sessions.filter((s) => s.hasGrid))
@@ -77,13 +81,31 @@ watch(
 const dirty = computed(() => snapshot(rows.value) !== base.value)
 watch(dirty, (v) => emit('dirty', v))
 
+/** Applies a public proposal to the local rows: unsaved until «Guardar». */
+function applyPublic(p: PublicProposal) {
+  rows.value = rows.value.map((r, i) => ({
+    ...r,
+    driverId: p.driverIds[i] ?? null,
+    isFromPit: p.isFromPit[i] ?? false,
+  }))
+}
+
 const notify = ref(true)
 const publish = usePublishGrid(() => props.args)
+// Cross-check after publishing (issue 205): a new key per publish mounts the check, which asks the source once.
+const checkKey = ref(0)
+const checkRows = ref<(number | null)[]>([])
 function onPublish() {
   if (!session.value) return
   publish.mutate(
     { session: session.value.id, grid: gridPayload(rows.value), notify: notify.value },
-    { onSuccess: () => (base.value = snapshot(rows.value)) },
+    {
+      onSuccess: () => {
+        base.value = snapshot(rows.value)
+        checkRows.value = rows.value.map((r) => r.driverId)
+        checkKey.value++
+      },
+    },
   )
 }
 const options = computed(() => [
@@ -118,7 +140,27 @@ const options = computed(() => [
         <PTag color="warn">{{ t('admin.sessions.grid.draft') }}</PTag>
       </div>
     </header>
-    <div class="p-4">
+    <div class="flex flex-col gap-4 p-4">
+      <PublicDataFill
+        v-if="gridQ.data.value"
+        :args="args"
+        mode="grid"
+        :session="session"
+        :drivers="drivers"
+        :slots="n"
+        :current="rows.map((r) => r.driverId)"
+        @apply="applyPublic"
+      />
+      <PublicCrossCheck
+        v-if="checkKey"
+        :key="checkKey"
+        :args="args"
+        mode="grid"
+        :session="session"
+        :drivers="drivers"
+        :slots="n"
+        :saved="checkRows"
+      />
       <ErrorState v-if="gridQ.isError.value" :error="gridQ.error.value" @retry="gridQ.refetch()" />
       <Skeleton v-else-if="!gridQ.data.value" variant="table" :rows="10" />
       <div v-else class="tw">

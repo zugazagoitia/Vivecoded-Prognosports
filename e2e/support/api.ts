@@ -98,11 +98,40 @@ function invalid(route: Route, message: string) {
   })
 }
 
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1'])
+const blockedHosts = new WeakMap<Page, string[]>()
+
+/** Non-local hosts the page tried to reach (aborted by the `mockApi` guard); should be empty. */
+export function unexpectedHosts(page: Page): string[] {
+  return [...new Set(blockedHosts.get(page) ?? [])]
+}
+
 /**
  * Mocks `/v2/**` with the same fixtures as the MSW handlers (T9), via page.route so it
  * works on the production build. The real API is never reached: unhandled calls get 501.
  */
 export async function mockApi(page: Page): Promise<void> {
+  // Catch-all guard, registered first so every later (more specific) route wins: any
+  // request to a host other than the local preview server is aborted and recorded.
+  const blocked: string[] = []
+  blockedHosts.set(page, blocked)
+  await page.route(
+    // blob:/data: URLs have an empty host and stay in-page (WebKit routes them too).
+    (url) => /^https?:$/.test(url.protocol) && !LOCAL_HOSTS.has(url.hostname),
+    (route) => {
+      blocked.push(new URL(route.request().url()).host)
+      return route.abort()
+    },
+  )
+  // Public sources (G3 form context and headshots) default to «source down» and a blank image;
+  // specs that need data register their own routes later, which win over these.
+  for (const host of ['api.jolpi.ca', 'api.openf1.org'])
+    await page.route(`https://${host}/**`, (route) =>
+      route.fulfill({ status: 500, headers: CORS, contentType: 'application/json', body: '{}' }),
+    )
+  await page.route('https://media.formula1.com/**', (route) =>
+    route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
+  )
   // Map tiles (P4) never hit the network: a blank tile keeps screenshots deterministic.
   await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
     route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),

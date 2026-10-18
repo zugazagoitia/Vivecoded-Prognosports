@@ -1,0 +1,55 @@
+{
+  "publicCalendar": {
+    "open": "Rellenar desde calendario público",
+    "round": "Ronda",
+    "roundPlaceholder": "Elige una ronda",
+    "hint": "Datos de calendario públicos (Jolpica y OpenF1). Nada se guarda hasta pulsar «Guardar».",
+    "loading": "Consultando el calendario público…",
+    "error": "No se pudo consultar el calendario público. El formulario no ha cambiado.",
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "apply": "Aplicar al formulario",
+    "applyHint": "Solo rellena el formulario; no guarda.",
+    "source": "Fuente: {sources} · consultado {time}",
+    "sources": {
+      "jolpica": "Jolpica (Ergast)",
+      "openf1": "OpenF1"
+    },
+    "warnings": {
+      "title": "Avisos",
+      "cancelled": "Según OpenF1, este Gran Premio está cancelado. Revísalo antes de guardar.",
+      "moved": "La carrera figura el {to} en OpenF1 y el {from} en Jolpica. Revisa las fechas.",
+      "timeConflict": "Jolpica y OpenF1 dan horas distintas para {code}. Se propone la de Jolpica.",
+      "openf1Missing": "No se encontró el meeting en OpenF1; solo se usa Jolpica."
+    },
+    "gp": {
+      "title": "Datos del Gran Premio",
+      "changes": "Cambios propuestos",
+      "noChanges": "El formulario ya coincide con el calendario público.",
+      "field": {
+        "name": "Nombre",
+        "round": "Ronda",
+        "circuit": "Circuito"
+      },
+      "change": "{field}: «{from}» → «{to}»",
+      "emptyValue": "(vacío)",
+      "noCircuit": "Sin coincidencia en el catálogo de circuitos (por confirmar: elegir a mano).",
+      "sprint": "Fin de semana sprint: {value}. El flag sprint no se guarda desde aquí (por confirmar).",
+      "sprintYes": "sí",
+      "sprintNo": "no"
+    },
+    "sessions": {
+      "title": "Horarios de sesiones (UTC)",
+      "hint": "Pulsa «Usar hora» para pasar el horario a la sesión seleccionada. Luego guárdala con «Guardar».",
+      "use": "Usar hora",
+      "current": "Actual",
+      "proposed": "Propuesta",
+      "unset": "sin hora",
+      "noAppSession": "Sin sesión en la app",
+      "conflict": "OpenF1: {time}",
+      "empty": "El calendario público no tiene horarios para esta ronda.",
+      "notLoaded": "Consultar horarios",
+      "round": "Ronda {round}"
+    }
+  }
+}

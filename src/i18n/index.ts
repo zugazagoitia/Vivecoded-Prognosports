@@ -8,6 +8,7 @@ import circuits from './es/circuits.json'
 import community from './es/community.json'
 import communitySettings from './es/community-settings.json'
 import common from './es/common.json'
+import f1Media from './es/f1Media.json'
 import communities from './es/communities.json'
 import createCommunity from './es/createCommunity.json'
 import consensus from './es/consensus.json'
@@ -36,6 +37,11 @@ import states from './es/states.json'
 import ui from './es/ui.json'
 import userProfile from './es/userProfile.json'
 import verify from './es/verify.json'
+import publicCalendar from './es/publicCalendar.json'
+import publicRoster from './es/publicRoster.json'
+import publicCircuit from './es/publicCircuit.json'
+import publicCrossCheck from './es/publicCrossCheck.json'
+import publicForm from './es/publicForm.json'
 
 export const i18n = createI18n({
   legacy: false,
@@ -48,6 +54,7 @@ export const i18n = createI18n({
       ...mobilenav,
       ...communities,
       ...explore,
+      ...f1Media,
       admin,
       ...register,
       ...routes,
@@ -80,6 +87,11 @@ export const i18n = createI18n({
       ...simulator,
       userProfile,
       ...verify,
+      publicCalendar,
+      publicRoster,
+      publicCircuit,
+      publicCrossCheck,
+      publicForm,
     },
   },
 })

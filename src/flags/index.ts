@@ -14,6 +14,9 @@ export const FLAG_DEFS = {
   HITS_BY_TYPE: { label: 'Aciertos por tipo' },
   POINTS_BY_SESSION: { label: 'Puntos por sesión' },
   COMMUNITY_PERCENTILE: { label: 'Percentil entre comunidades' },
+  PUBLIC_HEADSHOTS: { label: 'Fotos de pilotos (licencia por confirmar)' },
+  F1_TRACK_ICONS: { label: 'Trazados de circuito de F1 (en lugar del SVG abierto)' },
+  F1_TEAM_LOGOS: { label: 'Logos de equipo de F1 (en lugar de insignias propias)' },
 } as const
 
 export type FlagName = keyof typeof FLAG_DEFS

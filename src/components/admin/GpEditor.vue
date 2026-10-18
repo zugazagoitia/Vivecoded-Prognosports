@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRouter } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -183,6 +183,25 @@ const variantOptions = computed(() => {
 function onCircuit(v: string | number) {
   form.circuit = String(v)
   form.variant = ''
+}
+
+/** «Rellenar desde calendario público» (issue 202): pre-fills the form; «Guardar» saves it. */
+const PublicCalendarFill = defineAsyncComponent(
+  () => import('@/components/admin/PublicCalendarFill.vue'),
+)
+const calendarCurrent = computed(() => ({
+  name: form.name,
+  round: form.round,
+  circuit: circuitOptions.value.find((o) => o.value === form.circuit)?.label ?? '',
+  sessions: [],
+}))
+const calendarCircuits = computed(() =>
+  (circuits.data.value ?? []).map((c) => ({ id: Number(c.id), name: c.name ?? null })),
+)
+function onCalendarApply(change: { name?: string; round?: string; circuitId?: number }) {
+  if (change.name != null) form.name = change.name
+  if (change.round != null) form.round = change.round
+  if (change.circuitId != null) onCircuit(change.circuitId)
 }
 
 function discard() {
@@ -517,6 +536,13 @@ const sectionClass = 'scroll-mt-20'
               />
             </div>
           </form>
+          <PublicCalendarFill
+            class="mt-4"
+            :season="Number(gp?.season?.name) || undefined"
+            :current="calendarCurrent"
+            :circuits="calendarCircuits"
+            @apply="onCalendarApply"
+          />
         </PCard>
 
         <template v-if="gp && !isNew">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { GrandPrix } from '@/api/schemas'
 import PButton from '@/components/ui/PButton.vue'
@@ -28,6 +28,9 @@ const props = defineProps<{
 }>()
 const tz = defineModel<TzMode>('tz', { required: true })
 const { t } = useI18n()
+
+// Lazy: the flag SVGs and their component stay out of the initial bundle (issue 223).
+const CountryFlag = defineAsyncComponent(() => import('@/components/common/CountryFlag.vue'))
 
 const name = computed(() => gpShortName(props.gp))
 const options = computed(() => [
@@ -59,7 +62,10 @@ const label = (g: GrandPrix) => gpShortName(g)
       </div>
       <PTitle v-if="!mobile">{{ t('gp.title', { name }) }}</PTitle>
       <h1 v-else class="sr-only">{{ t('gp.title', { name }) }}</h1>
-      <p class="text-muted" :class="mobile ? 'text-sm' : ''">{{ subtitle }}</p>
+      <p class="text-muted flex min-w-0 items-center gap-2" :class="mobile ? 'text-sm' : ''">
+        <CountryFlag v-if="gp.circuit?.country" :country="gp.circuit.country" />
+        <span>{{ subtitle }}</span>
+      </p>
     </div>
     <div class="flex flex-wrap items-center gap-2" :class="mobile ? 'w-full' : ''">
       <SegmentedControl

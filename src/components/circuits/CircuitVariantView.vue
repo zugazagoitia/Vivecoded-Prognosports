@@ -27,6 +27,7 @@ import { browserTimeZone, formatDate } from '@/utils/dates'
 import { formatNumber } from '@/utils/numbers'
 
 const CircuitMap = defineAsyncComponent(() => import('./CircuitMap.vue'))
+const CircuitOutline = defineAsyncComponent(() => import('./CircuitOutline.vue'))
 
 /** Everything that depends on the selected variant (P4): map, GP table with winners, data and plan. */
 const props = defineProps<{ circuit: Circuit; variant: CircuitVariant }>()
@@ -117,6 +118,13 @@ async function retryGps() {
           :longitude="circuit.longitude!"
           :circuit="circuit.name ?? ''"
           :locality="circuit.locality ?? ''"
+        />
+        <CircuitOutline
+          class="mt-3"
+          :circuit="circuit.name ?? ''"
+          :country="circuit.country"
+          :latitude="circuit.latitude"
+          :longitude="circuit.longitude"
         />
       </PCard>
 

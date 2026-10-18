@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, defineAsyncComponent, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -10,9 +10,11 @@ import PCard from '@/components/ui/PCard.vue'
 import PInput from '@/components/ui/PInput.vue'
 import PSelect from '@/components/ui/PSelect.vue'
 import PTabs from '@/components/ui/PTabs.vue'
+import { LazyTeamBadge } from '@/components/teams/lazy'
 import PrognoModal from '@/components/ui/PrognoModal.vue'
 import { iconFor } from '@/components/ui/icons'
 import { driverFullName, sortDrivers, tabFromQuery, teamColor, cssColor } from '@/lib/adminDrivers'
+import type { RosterDriver, RosterSelection, RosterTeam } from '@/lib/publicData/rosterMapping'
 import {
   useRemoveSeasonConstructor,
   useRemoveSeasonDriver,
@@ -23,6 +25,7 @@ import {
   useSeasonDrivers,
 } from '@/queries/admin'
 import { DEFAULT_COMPETITION, useCurrentSeason } from '@/queries/circuits'
+import { usePublicRosterCatalogue } from '@/queries/publicRoster'
 import { useCompetitionSeasons } from '@/queries/gps'
 
 /**
@@ -62,6 +65,11 @@ const driversQ = useSeasonDrivers(seasonId)
 const teamsQ = useSeasonConstructors(seasonId)
 const teamOfQ = useSeasonDriverTeams(DEFAULT_COMPETITION, seasonId)
 
+// Loaded on demand: the public roster module and its review UI stay out of the eager bundle.
+const PublicRosterFill = defineAsyncComponent(
+  () => import('@/components/admin/PublicRosterFill.vue'),
+)
+
 const tab = computed(() => tabFromQuery(route.query.tab))
 const tabs = [
   { value: 'pilotos', label: t('admin.drivers.tabs.pilotos') },
@@ -100,11 +108,23 @@ const f = reactive({
   fullname: '',
 })
 const touched = ref(false)
+// «Rellenar con datos públicos»: the season catalogue is fetched when one of the two reviews opens.
+const rosterOpen = ref(false)
+const importOpen = ref(false)
+const importing = ref(false)
+const importFailed = ref(false)
+const rosterSeason = computed(() => Number(seasonName.value) || undefined)
+const catalogue = usePublicRosterCatalogue(rosterSeason, {
+  drivers: () => driversQ.data.value ?? [],
+  teams: () => teamsQ.data.value ?? [],
+  enabled: () => rosterOpen.value || importOpen.value,
+})
 const saveDriver = useSaveSeasonDriver(seasonId)
 const saveTeam = useSaveSeasonConstructor(seasonId)
 
 function openDriver(d?: (typeof drivers.value)[number]) {
   kind.value = 'driver'
+  rosterOpen.value = false
   editId.value = d?.id
   Object.assign(f, {
     firstname: d?.firstname ?? '',
@@ -120,6 +140,7 @@ function openDriver(d?: (typeof drivers.value)[number]) {
 }
 function openTeam(c?: (typeof teams.value)[number]) {
   kind.value = 'team'
+  rosterOpen.value = false
   editId.value = c?.id
   Object.assign(f, {
     name: c?.name ?? '',
@@ -147,6 +168,72 @@ const valid = computed(() => {
   return !!f.name.trim() && /^#?[0-9a-f]{6}$/i.test(f.color.trim())
 })
 const withHash = (c: string) => (c.trim().startsWith('#') ? c.trim() : `#${c.trim()}`)
+
+/** Prefills the driver form from a proposal row. Nothing is saved until «Guardar». */
+function onPrefill(sel: RosterSelection) {
+  const d = sel.drivers[0]
+  if (!d) return
+  Object.assign(f, {
+    firstname: d.firstname,
+    lastname: d.lastname,
+    code: d.code ?? f.code,
+    nationality: d.nationality ?? '',
+    birth: d.birth ?? '',
+    number: d.number != null ? String(d.number) : f.number,
+    color: d.color ?? f.color,
+  })
+  rosterOpen.value = false
+}
+
+const importable = (kind: 'driver' | 'team', row: RosterDriver | RosterTeam) =>
+  kind === 'team'
+    ? (row as RosterTeam).appId == null && (row as RosterTeam).color != null
+    : (row as RosterDriver).number != null &&
+      (row as RosterDriver).color != null &&
+      ((row as RosterDriver).appId != null || (row as RosterDriver).code != null)
+
+/**
+ * Saves the reviewed selection. New teams and drivers are created; drivers already in the season
+ * get their number and colour updated. Stops at the first error and keeps the review open.
+ */
+async function onImport(sel: RosterSelection) {
+  importing.value = true
+  importFailed.value = false
+  try {
+    for (const team of sel.teams) {
+      if (team.appId != null || !team.color) continue
+      await saveTeam.mutateAsync({
+        name: team.name,
+        car: '',
+        fullname: team.name,
+        teamcolor: withHash(team.color),
+      })
+    }
+    for (const d of sel.drivers) {
+      if (d.number == null || !d.color) continue
+      await saveDriver.mutateAsync({
+        id: d.appId ?? undefined,
+        number: d.number,
+        color: withHash(d.color),
+        person:
+          d.appId == null && d.code
+            ? {
+                firstname: d.firstname,
+                lastname: d.lastname,
+                code: d.code.toUpperCase(),
+                ...(d.nationality ? { nationality: d.nationality } : {}),
+                ...(d.birth ? { birth: `${d.birth}T00:00:00Z` } : {}),
+              }
+            : undefined,
+      })
+    }
+    importOpen.value = false
+  } catch {
+    importFailed.value = true
+  } finally {
+    importing.value = false
+  }
+}
 
 async function onSave() {
   touched.value = true
@@ -230,6 +317,9 @@ const retry = () => {
       <PButton :icon="iconFor('add')" @click="openDriver()">{{
         t('admin.drivers.newDriver')
       }}</PButton>
+      <PButton variant="soft" @click="importOpen = true">{{
+        t('publicRoster.openSeason')
+      }}</PButton>
     </AdminHeader>
 
     <PTabs
@@ -278,10 +368,11 @@ const retry = () => {
                   <td>{{ d.code }}</td>
                   <td>
                     <span class="inline-flex items-center gap-2">
-                      <span
+                      <LazyTeamBadge
                         v-if="d.team"
-                        class="inline-block h-[18px] w-1 rounded-sm"
-                        :style="{ background: teamColor(d) }"
+                        :name="d.team.name ?? ''"
+                        :teamcolor="teamColor(d)"
+                        :size="20"
                         aria-hidden="true"
                       />
                       {{ d.team?.name ?? '—' }}
@@ -349,9 +440,10 @@ const retry = () => {
                 <tr v-for="c in teams" :key="c.id">
                   <td>
                     <span class="inline-flex items-center gap-2">
-                      <span
-                        class="inline-block h-[18px] w-1 rounded-sm"
-                        :style="{ background: cssColor(c.teamcolor) }"
+                      <LazyTeamBadge
+                        :name="c.name ?? ''"
+                        :teamcolor="c.teamcolor"
+                        :size="20"
                         aria-hidden="true"
                       />
                       <b class="text-heading">{{ c.name }}</b>
@@ -473,6 +565,21 @@ const retry = () => {
           />
         </template>
       </form>
+      <template v-if="kind === 'driver'">
+        <PButton v-if="!rosterOpen" variant="outline" size="sm" @click="rosterOpen = true">
+          {{ t('publicRoster.open') }}
+        </PButton>
+        <PublicRosterFill
+          v-else
+          single
+          :roster="catalogue.data.value"
+          :loading="catalogue.isFetching.value"
+          :failed="catalogue.isError.value"
+          @apply="onPrefill"
+          @retry="() => void catalogue.refetch()"
+          @close="rosterOpen = false"
+        />
+      </template>
       <template #footer>
         <PButton variant="outline" @click="open = false">{{
           t('admin.drivers.form.cancel')
@@ -483,6 +590,27 @@ const retry = () => {
           >{{ t('admin.drivers.form.save') }}</PButton
         >
       </template>
+    </PrognoModal>
+
+    <PrognoModal v-model:open="importOpen" :title="t('publicRoster.openSeason')">
+      <PublicRosterFill
+        v-if="importOpen"
+        show-teams
+        :roster="catalogue.data.value"
+        :loading="catalogue.isFetching.value"
+        :failed="catalogue.isError.value || importFailed"
+        :can-select="(k, row) => importable(k, row)"
+        :preselect="
+          (k, row) =>
+            importable(k, row) && (k === 'team' ? true : (row as RosterDriver).appId == null)
+        "
+        :apply-label="t('admin.drivers.form.save')"
+        :busy="importing"
+        :note="t('publicRoster.backendNote')"
+        @apply="onImport"
+        @retry="() => void catalogue.refetch()"
+        @close="importOpen = false"
+      />
     </PrognoModal>
   </div>
 </template>

@@ -130,3 +130,21 @@ Contrastado endpoint a endpoint con producción (cuenta de prueba, solo GET) y c
 - **Errores de escritura (solo local)**: un `verify-email` con código malo (usuario de prueba) responde HTTP 403 «No autorizado. No tienes permiso para eso» y `send-verify-email` HTTP 500 (cuerpo de Javalin sin envelope); `settings/email|password` con contraseña mala dan HTTP 200 «Credenciales inválidas»; `POST /v2/gps/.../tipps/{community}` correcto responde `{ message:"ok", success:true }` (sin `result`). `POST /v2/auth/register` acepta cualquier cosa (usuario `a`, correo `bad`, contraseña `1`) con 200 y **crea el usuario**; no hay `DELETE /v2/user/{id}`. Los mocks de estos errores siguen con los códigos HTTP supuestos (pendiente, issue).
 - **Campos opcionales**: las fixtures ya envían `currentCommunity` en `user/me` (con `preferences`, que ya iba), `competition.currentSeason|rules`, `hasImage` en comunidades, `latitude`/`longitude` en circuitos, `variant.distance|turns` en el GP, `team.carname|longname` en pilotos, `hitPercentage*` y `standings` en `points` y `pointsIfIsNotIn*` en los rulesets (contrastado con el backend local el 2026-10-15; `pnpm test:contract` pasa con `CONTRACT_API_BASE_URL=http://localhost:8001`). `previousStandings` no aparece en la API real. Los colores (`color`, `teamcolor`) llegan sin `#`.
 - `GET /v2/gps/{c}/{s}/{gp}/sessions/{s}/grid` devuelve `[]` mientras no se publique la parrilla (local) y solo con token.
+
+## Fuentes de datos públicas
+
+Datos de F1 que no salen de la API de PrognoSports (`api.prognosports.com`). Código en `src/lib/publicData/` (pendiente de implementar en #201). Son APIs públicas de solo lectura, sin token; el cliente solo hace `GET`. Sus orígenes están en `connect-src` de `public/_headers` (ver [`docs/security.md`](../../docs/security.md)).
+
+| Fuente  | Origen                   | Papel     | Caché         | Límite                                |
+| ------- | ------------------------ | --------- | ------------- | ------------------------------------- |
+| Jolpica | `https://api.jolpi.ca`   | Principal | ~10 min       | Compatible con Ergast                 |
+| OpenF1  | `https://api.openf1.org` | Respaldo  | Por confirmar | HTTP 429 por encima de 3 peticiones/s |
+
+- **Jolpica (principal)**: API compatible con Ergast. Se consulta primero y se cachea unos 10 minutos, porque los resultados de carrera cambian poco.
+- **OpenF1 (respaldo)**: se usa cuando Jolpica no responde. Responde HTTP 429 por encima de 3 peticiones por segundo, así que las peticiones pasan por una cola con concurrencia máxima de 2 y reintento con espera exponencial (backoff) ante 429.
+- **Atribución**: los datos de ambas fuentes se muestran en la interfaz con su atribución visible junto a los datos. Las cadenas de atribución van en `src/i18n/es/` (por confirmar su redacción).
+
+### Contexto de forma y fotos (G3, issue #206 ideas 3 y 5)
+
+- **Forma (idea 3)**: la pantalla de pronóstico pide a Jolpica `/{temporada}/{ronda-1}/driverstandings.json` y los `results.json` de las 3 rondas anteriores (4 peticiones, por la cola compartida con concurrencia ≤ 2 y caché TanStack de 30 min). Es perezoso y no bloqueante: si falla, la pantalla funciona igual y el bloque se oculta. Solo informa; no rellena nada.
+- **Fotos (idea 5)**: OpenF1 `drivers?session_key=latest` (`headshot_url`, host `media.formula1.com`), con `VITE_FF_PUBLIC_HEADSHOTS` (activado en beta y producción por decisión del propietario: proyecto no comercial, imágenes consideradas utilizables; alternativa: avatar actual). La correspondencia es por código de tres letras con la última sesión, no por temporada. **Por confirmar**: privacidad (la IP del jugador llega a OpenF1 y a `media.formula1.com`, a diferencia del admin); y el límite de OpenF1 de 3 peticiones/s por IP desde los navegadores de todos los jugadores (hoy 1 petición por sesión de navegador y cola ≤ 2) frente a hacerlo desde el backend.

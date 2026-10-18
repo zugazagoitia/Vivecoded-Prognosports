@@ -85,7 +85,8 @@ export default tseslint.config(
   },
 
   {
-    files: ['src/api/**', 'scripts/**'],
+    // Public F1 APIs (Jolpica/OpenF1): no PrognoSports auth, must not use src/api/client.
+    files: ['src/api/**', 'scripts/**', 'src/lib/publicData/**'],
     rules: { 'no-restricted-globals': 'off', 'no-restricted-properties': 'off' },
   },
 
