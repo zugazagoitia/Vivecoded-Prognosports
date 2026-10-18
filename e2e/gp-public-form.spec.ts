@@ -72,7 +72,7 @@ test.describe('Predict form context (G3, #206)', () => {
         await expect(card.getByRole('list', { name: 'Forma de los pilotos' })).toBeVisible()
         expect(calls.jolpica.some((u) => u.includes('driverstandings.json'))).toBe(true)
         await expect(card.locator('img[src^="https://media.formula1.com/"]').first()).toBeVisible()
-        expect(calls.media.length).toBeGreaterThan(0)
+        await expect.poll(() => calls.media.length).toBeGreaterThan(0)
         await expectNoSeriousA11yViolations(page)
         if (scheme === 'light' && browserName === 'chromium')
           await expect(card).toHaveScreenshot('gp-public-form.png', { maxDiffPixelRatio: 0.02 })
