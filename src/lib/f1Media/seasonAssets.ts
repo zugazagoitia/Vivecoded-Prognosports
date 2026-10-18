@@ -1,5 +1,5 @@
 /**
- * Hand-built media.formula1.com URL patterns, per season (issue #223).
+ * Hand-built media.formula1.com URL patterns, per season (issue 223).
  *
  * These paths are undocumented and change between seasons, so they live in one
  * typed map. Every pattern here was checked with `curl -I` (HTTP 200) unless it
@@ -32,7 +32,7 @@ export const SEASON_ASSETS: Record<F1MediaSeason, SeasonAssets> = {
   2026: {
     // Track maps have no season in their path (verified for Japan and Bahrain).
     trackIconPath: TRACK_ICON_PATH,
-    // TODO(#223): `teams/2026/<slug>-logo.png` returned 404 when checked; keep the
+    // TODO(issue 223):`teams/2026/<slug>-logo.png` returned 404 when checked; keep the
     // 2025 folder until F1 publishes the 2026 set, then point this at 2026.
     teamLogoPath: TEAM_LOGO_PATH_2025,
   },

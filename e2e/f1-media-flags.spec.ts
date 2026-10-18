@@ -35,7 +35,8 @@ test.describe('F1 media: country flags (#223)', () => {
         const flag = page.locator('img[src^="data:image/svg"], img[src$=".svg"]')
         await expect(flag).toHaveCount(1)
         await expect(flag).toBeVisible()
-        expect(requested).toEqual([])
+        // Circuit maps may load from F1 (F1_TRACK_ICONS is on in e2e); the flag itself must not.
+        expect(requested.filter((url) => !url.includes('Circuit'))).toEqual([])
         await expectNoSeriousA11yViolations(page)
       })
     })
