@@ -42,6 +42,15 @@ const differences = computed(() =>
   selected.value ? circuitDifferences(props.saved, selected.value) : [],
 )
 const conflicts = computed(() => (selected.value ? sourceConflicts(selected.value) : []))
+/** Third-party link: only https reference pages are rendered as links. */
+const referenceUrl = computed(() => {
+  try {
+    const url = new URL(selected.value?.infoUrl ?? '')
+    return url.protocol === 'https:' ? url.href : undefined
+  } catch {
+    return undefined
+  }
+})
 const options = computed(() => [
   { value: '', label: t('publicCircuit.selectPlaceholder') },
   ...(list.value?.circuits ?? []).map((c) => ({
@@ -153,8 +162,8 @@ function onApplySelected() {
             <dd>{{ coordinate(selected.longitude) }}</dd>
           </dl>
           <a
-            v-if="selected.infoUrl"
-            :href="selected.infoUrl"
+            v-if="referenceUrl"
+            :href="referenceUrl"
             target="_blank"
             rel="noopener noreferrer"
             class="text-accent underline"
