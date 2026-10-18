@@ -36,6 +36,11 @@ import states from './es/states.json'
 import ui from './es/ui.json'
 import userProfile from './es/userProfile.json'
 import verify from './es/verify.json'
+import publicCalendar from './es/publicCalendar.json'
+import publicRoster from './es/publicRoster.json'
+import publicCircuit from './es/publicCircuit.json'
+import publicCrossCheck from './es/publicCrossCheck.json'
+import publicForm from './es/publicForm.json'
 
 export const i18n = createI18n({
   legacy: false,
@@ -80,6 +85,11 @@ export const i18n = createI18n({
       ...simulator,
       userProfile,
       ...verify,
+      publicCalendar,
+      publicRoster,
+      publicCircuit,
+      publicCrossCheck,
+      publicForm,
     },
   },
 })
