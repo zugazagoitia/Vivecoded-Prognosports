@@ -44,7 +44,11 @@ const rows = computed(() =>
     return {
       code: s.code,
       utc: utcLabel(s.utc),
-      current: mine ? (mine.date ? utcLabel(mine.date) : t('publicCalendar.sessions.unset')) : null,
+      current: mine
+        ? mine.date
+          ? utcLabel(mine.date)
+          : t('publicCalendar.publicCalendar.sessions.unset')
+        : null,
       conflict: s.conflictUtc ? utcLabel(s.conflictUtc) : null,
       id: mine?.id ?? null,
       canUse: !!mine && !same,
@@ -62,8 +66,8 @@ const conflictCodes = computed(() =>
 const sourceLine = computed(() => {
   const p = proposal.data.value
   if (!p) return ''
-  return t('publicCalendar.source', {
-    sources: p.sources.map((s) => t(`publicCalendar.sources.${s}`)).join(' + '),
+  return t('publicCalendar.publicCalendar.source', {
+    sources: p.sources.map((s) => t(`publicCalendar.publicCalendar.sources.${s}`)).join(' + '),
     time: new Date(p.fetchedAt).toLocaleString(),
   })
 })
@@ -74,24 +78,29 @@ function open() {
 </script>
 
 <template>
-  <section :aria-label="t('publicCalendar.sessions.title')" class="flex flex-col gap-3 text-sm">
+  <section
+    :aria-label="t('publicCalendar.publicCalendar.sessions.title')"
+    class="flex flex-col gap-3 text-sm"
+  >
     <div class="flex flex-wrap items-center justify-between gap-3">
-      <h3 class="text-heading font-semibold">{{ t('publicCalendar.sessions.title') }}</h3>
+      <h3 class="text-heading font-semibold">
+        {{ t('publicCalendar.publicCalendar.sessions.title') }}
+      </h3>
       <PButton v-if="!requested" variant="outline" size="sm" @click="open">
-        {{ t('publicCalendar.sessions.notLoaded') }}
+        {{ t('publicCalendar.publicCalendar.sessions.notLoaded') }}
       </PButton>
     </div>
 
     <template v-if="requested">
-      <p class="text-muted">{{ t('publicCalendar.sessions.hint') }}</p>
+      <p class="text-muted">{{ t('publicCalendar.publicCalendar.sessions.hint') }}</p>
 
       <p v-if="proposal.isLoading.value" role="status" class="text-muted">
-        {{ t('publicCalendar.loading') }}
+        {{ t('publicCalendar.publicCalendar.loading') }}
       </p>
       <div v-else-if="proposal.isError.value" class="flex flex-wrap items-center gap-3">
-        <p role="alert" class="text-err">{{ t('publicCalendar.error') }}</p>
+        <p role="alert" class="text-err">{{ t('publicCalendar.publicCalendar.error') }}</p>
         <PButton variant="outline" size="sm" @click="proposal.refetch()">
-          {{ t('publicCalendar.retry') }}
+          {{ t('publicCalendar.publicCalendar.retry') }}
         </PButton>
       </div>
 
@@ -100,11 +109,13 @@ function open() {
 
         <ul v-if="conflictCodes.length" class="text-err flex flex-col gap-1">
           <li v-for="code in conflictCodes" :key="code">
-            {{ t('publicCalendar.warnings.timeConflict', { code }) }}
+            {{ t('publicCalendar.publicCalendar.warnings.timeConflict', { code }) }}
           </li>
         </ul>
 
-        <p v-if="!rows.length" class="text-muted">{{ t('publicCalendar.sessions.empty') }}</p>
+        <p v-if="!rows.length" class="text-muted">
+          {{ t('publicCalendar.publicCalendar.sessions.empty') }}
+        </p>
         <ul v-else class="flex flex-col gap-2">
           <li
             v-for="r in rows"
@@ -113,13 +124,15 @@ function open() {
           >
             <div class="flex flex-col gap-0.5 tabular-nums">
               <b class="text-heading">{{ r.code }}</b>
-              <span>{{ t('publicCalendar.sessions.proposed') }}: {{ r.utc }}</span>
+              <span>{{ t('publicCalendar.publicCalendar.sessions.proposed') }}: {{ r.utc }}</span>
               <span v-if="r.current" class="text-muted">
-                {{ t('publicCalendar.sessions.current') }}: {{ r.current }}
+                {{ t('publicCalendar.publicCalendar.sessions.current') }}: {{ r.current }}
               </span>
-              <span v-else class="text-muted">{{ t('publicCalendar.sessions.noAppSession') }}</span>
+              <span v-else class="text-muted">{{
+                t('publicCalendar.publicCalendar.sessions.noAppSession')
+              }}</span>
               <span v-if="r.conflict" class="text-muted">
-                {{ t('publicCalendar.sessions.conflict', { time: r.conflict }) }}
+                {{ t('publicCalendar.publicCalendar.sessions.conflict', { time: r.conflict }) }}
               </span>
             </div>
             <PButton
@@ -128,7 +141,7 @@ function open() {
               size="sm"
               @click="emit('use', { id: r.id, iso: r.iso })"
             >
-              {{ t('publicCalendar.sessions.use') }}
+              {{ t('publicCalendar.publicCalendar.sessions.use') }}
             </PButton>
           </li>
         </ul>

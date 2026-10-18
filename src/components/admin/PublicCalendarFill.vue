@@ -33,7 +33,7 @@ const races = usePublicSeasonRaces(() => (requested.value ? props.season : undef
 const roundOptions = computed(() =>
   (races.data.value ?? []).map((r) => ({
     value: r.round,
-    label: `${t('publicCalendar.sessions.round', { round: r.round })} · ${r.raceName}`,
+    label: `${t('publicCalendar.publicCalendar.sessions.round', { round: r.round })} · ${r.raceName}`,
   })),
 )
 
@@ -70,8 +70,8 @@ const noCircuit = computed(
 const sourceLine = computed(() => {
   const p = proposal.data.value
   if (!p) return ''
-  return t('publicCalendar.source', {
-    sources: p.sources.map((s) => t(`publicCalendar.sources.${s}`)).join(' + '),
+  return t('publicCalendar.publicCalendar.source', {
+    sources: p.sources.map((s) => t(`publicCalendar.publicCalendar.sources.${s}`)).join(' + '),
     time: new Date(p.fetchedAt).toLocaleString(locale.value),
   })
 })
@@ -79,24 +79,25 @@ const sourceLine = computed(() => {
 const warningText = (w: CalendarWarning) => {
   switch (w.kind) {
     case 'cancelled':
-      return t('publicCalendar.warnings.cancelled')
+      return t('publicCalendar.publicCalendar.warnings.cancelled')
     case 'moved':
-      return t('publicCalendar.warnings.moved', { from: w.from, to: w.to })
+      return t('publicCalendar.publicCalendar.warnings.moved', { from: w.from, to: w.to })
     case 'time-conflict':
-      return t('publicCalendar.warnings.timeConflict', { code: w.code })
+      return t('publicCalendar.publicCalendar.warnings.timeConflict', { code: w.code })
     case 'openf1-missing':
-      return t('publicCalendar.warnings.openf1Missing')
+      return t('publicCalendar.publicCalendar.warnings.openf1Missing')
   }
 }
 
 const sprintText = computed(() =>
   proposal.data.value?.gp.sprint
-    ? t('publicCalendar.gp.sprintYes')
-    : t('publicCalendar.gp.sprintNo'),
+    ? t('publicCalendar.publicCalendar.gp.sprintYes')
+    : t('publicCalendar.publicCalendar.gp.sprintNo'),
 )
 
-const fieldLabel = (field: 'name' | 'round' | 'circuit') => t(`publicCalendar.gp.field.${field}`)
-const show = (value: string) => value || t('publicCalendar.gp.emptyValue')
+const fieldLabel = (field: 'name' | 'round' | 'circuit') =>
+  t(`publicCalendar.publicCalendar.gp.field.${field}`)
+const show = (value: string) => value || t('publicCalendar.publicCalendar.gp.emptyValue')
 
 function open() {
   requested.value = true
@@ -125,35 +126,35 @@ function onApply() {
   <div class="flex w-full flex-col gap-3">
     <div class="flex justify-end">
       <PButton variant="outline" size="sm" :disabled="requested" @click="open">
-        {{ t('publicCalendar.open') }}
+        {{ t('publicCalendar.publicCalendar.open') }}
       </PButton>
     </div>
 
     <section
       v-if="requested"
-      :aria-label="t('publicCalendar.gp.title')"
+      :aria-label="t('publicCalendar.publicCalendar.gp.title')"
       class="border-border bg-surface-muted flex flex-col gap-3 rounded-md border p-3 text-sm"
     >
-      <p class="text-muted">{{ t('publicCalendar.hint') }}</p>
+      <p class="text-muted">{{ t('publicCalendar.publicCalendar.hint') }}</p>
 
       <PSelect
         v-model="round"
-        :label="t('publicCalendar.round')"
+        :label="t('publicCalendar.publicCalendar.round')"
         :options="roundOptions"
-        :placeholder="t('publicCalendar.roundPlaceholder')"
+        :placeholder="t('publicCalendar.publicCalendar.roundPlaceholder')"
       />
 
       <p v-if="proposal.isLoading.value" role="status" class="text-muted">
-        {{ t('publicCalendar.loading') }}
+        {{ t('publicCalendar.publicCalendar.loading') }}
       </p>
 
       <div v-else-if="proposal.isError.value" class="flex flex-wrap items-center gap-3">
-        <p role="alert" class="text-err">{{ t('publicCalendar.error') }}</p>
+        <p role="alert" class="text-err">{{ t('publicCalendar.publicCalendar.error') }}</p>
         <PButton variant="outline" size="sm" @click="proposal.refetch()">
-          {{ t('publicCalendar.retry') }}
+          {{ t('publicCalendar.publicCalendar.retry') }}
         </PButton>
         <PButton variant="outline" size="sm" @click="close">
-          {{ t('publicCalendar.close') }}
+          {{ t('publicCalendar.publicCalendar.close') }}
         </PButton>
       </div>
 
@@ -161,19 +162,25 @@ function onApply() {
         <p class="text-muted">{{ sourceLine }}</p>
 
         <div v-if="proposal.data.value.warnings.length" class="flex flex-col gap-1">
-          <h3 class="text-heading font-semibold">{{ t('publicCalendar.warnings.title') }}</h3>
+          <h3 class="text-heading font-semibold">
+            {{ t('publicCalendar.publicCalendar.warnings.title') }}
+          </h3>
           <ul class="text-err flex flex-col gap-1">
             <li v-for="(w, i) in proposal.data.value.warnings" :key="i">{{ warningText(w) }}</li>
           </ul>
         </div>
 
         <div class="flex flex-col gap-1">
-          <h3 class="text-heading font-semibold">{{ t('publicCalendar.gp.changes') }}</h3>
-          <p v-if="!diff.gp.length" class="text-muted">{{ t('publicCalendar.gp.noChanges') }}</p>
+          <h3 class="text-heading font-semibold">
+            {{ t('publicCalendar.publicCalendar.gp.changes') }}
+          </h3>
+          <p v-if="!diff.gp.length" class="text-muted">
+            {{ t('publicCalendar.publicCalendar.gp.noChanges') }}
+          </p>
           <ul v-else class="flex flex-col gap-1 tabular-nums">
             <li v-for="c in diff.gp" :key="c.field">
               {{
-                t('publicCalendar.gp.change', {
+                t('publicCalendar.publicCalendar.gp.change', {
                   field: fieldLabel(c.field),
                   from: show(c.from),
                   to: c.to,
@@ -181,18 +188,22 @@ function onApply() {
               }}
             </li>
           </ul>
-          <p v-if="noCircuit" class="text-muted">{{ t('publicCalendar.gp.noCircuit') }}</p>
-          <p class="text-muted">{{ t('publicCalendar.gp.sprint', { value: sprintText }) }}</p>
+          <p v-if="noCircuit" class="text-muted">
+            {{ t('publicCalendar.publicCalendar.gp.noCircuit') }}
+          </p>
+          <p class="text-muted">
+            {{ t('publicCalendar.publicCalendar.gp.sprint', { value: sprintText }) }}
+          </p>
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-3">
-          <p class="text-muted text-xs">{{ t('publicCalendar.applyHint') }}</p>
+          <p class="text-muted text-xs">{{ t('publicCalendar.publicCalendar.applyHint') }}</p>
           <div class="flex gap-2">
             <PButton variant="outline" size="sm" @click="close">
-              {{ t('publicCalendar.close') }}
+              {{ t('publicCalendar.publicCalendar.close') }}
             </PButton>
             <PButton size="sm" :disabled="!diff.gp.length" @click="onApply">
-              {{ t('publicCalendar.apply') }}
+              {{ t('publicCalendar.publicCalendar.apply') }}
             </PButton>
           </div>
         </div>

@@ -43,15 +43,20 @@ const timeline = computed(() => buildTimeline(props.sessions, props.tz))
 const selected = computed(() => props.sessions.find((s) => s.id === props.selectedId) ?? undefined)
 
 const start = ref('')
-/** A public-calendar time waiting for its session to be selected (issue 202). */
-const pendingFill = ref<{ id: number; iso: string } | null>(null)
+/**
+ * A public-calendar time waiting for its session to be selected (issue 202). It is used by the
+ * next selection only, and only within a few seconds, so a select the parent ignores cannot
+ * leave a stale time behind.
+ */
+const PENDING_MS = 5_000
+const pendingFill = ref<{ id: number; iso: string; until: number } | null>(null)
 watch(
   [selected, () => props.tz],
   () => {
     const p = pendingFill.value
-    if (p && p.id === selected.value?.id) {
+    pendingFill.value = null
+    if (p && p.id === selected.value?.id && Date.now() <= p.until) {
       start.value = toZonedInput(p.iso, props.tz)
-      pendingFill.value = null
     } else {
       start.value = toZonedInput(selected.value?.date, props.tz)
     }
@@ -66,7 +71,7 @@ function onPublicUse(use: { id: number; iso: string }) {
   if (selected.value?.id === use.id) {
     start.value = toZonedInput(use.iso, props.tz)
   } else {
-    pendingFill.value = use
+    pendingFill.value = { ...use, until: Date.now() + PENDING_MS }
     emit('select', use.id)
   }
 }
