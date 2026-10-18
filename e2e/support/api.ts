@@ -123,6 +123,15 @@ export async function mockApi(page: Page): Promise<void> {
       return route.abort()
     },
   )
+  // Public sources (G3 form context and headshots) default to «source down» and a blank image;
+  // specs that need data register their own routes later, which win over these.
+  for (const host of ['api.jolpi.ca', 'api.openf1.org'])
+    await page.route(`https://${host}/**`, (route) =>
+      route.fulfill({ status: 500, headers: CORS, contentType: 'application/json', body: '{}' }),
+    )
+  await page.route('https://media.formula1.com/**', (route) =>
+    route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
+  )
   // Map tiles (P4) never hit the network: a blank tile keeps screenshots deterministic.
   await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
     route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
