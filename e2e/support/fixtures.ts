@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test as base, type Page } from '@playwright/test'
-import { loginAsMockUser, mockApi } from './api'
+import { loginAsMockUser, mockApi, unexpectedHosts } from './api'
 
 /** Fails on `serious` or `critical` violations (requisitos §20.6). */
 export async function expectNoSeriousA11yViolations(page: Page): Promise<void> {
@@ -25,6 +25,7 @@ export const test = base.extend<Fixtures>({
   page: async ({ page }, use) => {
     await mockApi(page)
     await use(page)
+    expect(unexpectedHosts(page), 'requests to non-local hosts (must be mocked)').toEqual([])
   },
   authedPage: async ({ page }, use) => {
     await loginAsMockUser(page)
