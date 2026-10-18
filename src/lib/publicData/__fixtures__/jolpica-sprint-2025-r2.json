@@ -1,0 +1,217 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2025/2/sprint.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "20",
+    "RaceTable": {
+      "season": "2025",
+      "round": "2",
+      "Races": [
+        {
+          "season": "2025",
+          "round": "2",
+          "url": "https://en.wikipedia.org/wiki/2025_Chinese_Grand_Prix",
+          "raceName": "Chinese Grand Prix",
+          "Circuit": {
+            "circuitId": "shanghai",
+            "url": "https://en.wikipedia.org/wiki/Shanghai_International_Circuit",
+            "circuitName": "Shanghai International Circuit",
+            "Location": {
+              "lat": "31.3389",
+              "long": "121.22",
+              "locality": "Shanghai",
+              "country": "China"
+            }
+          },
+          "date": "2025-03-23",
+          "time": "07:00:00Z",
+          "SprintResults": [
+            {
+              "number": "44",
+              "position": "1",
+              "positionText": "1",
+              "points": "8",
+              "Driver": {
+                "driverId": "hamilton",
+                "permanentNumber": "44",
+                "code": "HAM",
+                "url": "http://en.wikipedia.org/wiki/Lewis_Hamilton",
+                "givenName": "Lewis",
+                "familyName": "Hamilton",
+                "dateOfBirth": "1985-01-07",
+                "nationality": "British"
+              },
+              "Constructor": {
+                "constructorId": "ferrari",
+                "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                "name": "Ferrari",
+                "nationality": "Italian"
+              },
+              "grid": "1",
+              "laps": "19",
+              "status": "Finished",
+              "Time": {
+                "millis": "1839965",
+                "time": "30:39.965"
+              },
+              "FastestLap": {
+                "rank": "1",
+                "lap": "2",
+                "Time": {
+                  "time": "1:35.399"
+                }
+              }
+            },
+            {
+              "number": "81",
+              "position": "2",
+              "positionText": "2",
+              "points": "7",
+              "Driver": {
+                "driverId": "piastri",
+                "permanentNumber": "81",
+                "code": "PIA",
+                "url": "http://en.wikipedia.org/wiki/Oscar_Piastri",
+                "givenName": "Oscar",
+                "familyName": "Piastri",
+                "dateOfBirth": "2001-04-06",
+                "nationality": "Australian"
+              },
+              "Constructor": {
+                "constructorId": "mclaren",
+                "url": "https://en.wikipedia.org/wiki/McLaren",
+                "name": "McLaren",
+                "nationality": "British"
+              },
+              "grid": "3",
+              "laps": "19",
+              "status": "Finished",
+              "Time": {
+                "millis": "1846854",
+                "time": "+6.889"
+              },
+              "FastestLap": {
+                "rank": "4",
+                "lap": "7",
+                "Time": {
+                  "time": "1:35.854"
+                }
+              }
+            },
+            {
+              "number": "1",
+              "position": "3",
+              "positionText": "3",
+              "points": "6",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "permanentNumber": "3",
+                "code": "VER",
+                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                "givenName": "Max",
+                "familyName": "Verstappen",
+                "dateOfBirth": "1997-09-30",
+                "nationality": "Dutch"
+              },
+              "Constructor": {
+                "constructorId": "red_bull",
+                "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                "name": "Red Bull",
+                "nationality": "Austrian"
+              },
+              "grid": "2",
+              "laps": "19",
+              "status": "Finished",
+              "Time": {
+                "millis": "1849769",
+                "time": "+9.804"
+              },
+              "FastestLap": {
+                "rank": "2",
+                "lap": "2",
+                "Time": {
+                  "time": "1:35.745"
+                }
+              }
+            },
+            {
+              "number": "27",
+              "position": "19",
+              "positionText": "19",
+              "points": "0",
+              "Driver": {
+                "driverId": "hulkenberg",
+                "permanentNumber": "27",
+                "code": "HUL",
+                "url": "http://en.wikipedia.org/wiki/Nico_H%C3%BClkenberg",
+                "givenName": "Nico",
+                "familyName": "Hülkenberg",
+                "dateOfBirth": "1987-08-19",
+                "nationality": "German"
+              },
+              "Constructor": {
+                "constructorId": "sauber",
+                "url": "https://en.wikipedia.org/wiki/Sauber_Motorsport",
+                "name": "Sauber",
+                "nationality": "Swiss"
+              },
+              "grid": "20",
+              "laps": "19",
+              "status": "Finished",
+              "Time": {
+                "millis": "1896647",
+                "time": "+56.682"
+              },
+              "FastestLap": {
+                "rank": "10",
+                "lap": "4",
+                "Time": {
+                  "time": "1:36.529"
+                }
+              }
+            },
+            {
+              "number": "7",
+              "position": "20",
+              "positionText": "20",
+              "points": "0",
+              "Driver": {
+                "driverId": "doohan",
+                "permanentNumber": "7",
+                "code": "DOO",
+                "url": "http://en.wikipedia.org/wiki/Jack_Doohan",
+                "givenName": "Jack",
+                "familyName": "Doohan",
+                "dateOfBirth": "2003-01-20",
+                "nationality": "Australian"
+              },
+              "Constructor": {
+                "constructorId": "alpine",
+                "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
+                "name": "Alpine F1 Team",
+                "nationality": "French"
+              },
+              "grid": "16",
+              "laps": "19",
+              "status": "Finished",
+              "Time": {
+                "millis": "1910177",
+                "time": "+1:10.212"
+              },
+              "FastestLap": {
+                "rank": "20",
+                "lap": "3",
+                "Time": {
+                  "time": "1:37.686"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

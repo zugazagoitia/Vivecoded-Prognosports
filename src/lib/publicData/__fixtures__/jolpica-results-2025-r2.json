@@ -1,0 +1,195 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2025/2/results.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "20",
+    "RaceTable": {
+      "season": "2025",
+      "round": "2",
+      "Races": [
+        {
+          "season": "2025",
+          "round": "2",
+          "url": "https://en.wikipedia.org/wiki/2025_Chinese_Grand_Prix",
+          "raceName": "Chinese Grand Prix",
+          "Circuit": {
+            "circuitId": "shanghai",
+            "url": "https://en.wikipedia.org/wiki/Shanghai_International_Circuit",
+            "circuitName": "Shanghai International Circuit",
+            "Location": {
+              "lat": "31.3389",
+              "long": "121.22",
+              "locality": "Shanghai",
+              "country": "China"
+            }
+          },
+          "date": "2025-03-23",
+          "time": "07:00:00Z",
+          "Results": [
+            {
+              "number": "81",
+              "position": "1",
+              "positionText": "1",
+              "points": "25",
+              "Driver": {
+                "driverId": "piastri",
+                "permanentNumber": "81",
+                "code": "PIA",
+                "url": "http://en.wikipedia.org/wiki/Oscar_Piastri",
+                "givenName": "Oscar",
+                "familyName": "Piastri",
+                "dateOfBirth": "2001-04-06",
+                "nationality": "Australian"
+              },
+              "Constructor": {
+                "constructorId": "mclaren",
+                "url": "https://en.wikipedia.org/wiki/McLaren",
+                "name": "McLaren",
+                "nationality": "British"
+              },
+              "grid": "1",
+              "laps": "56",
+              "status": "Finished",
+              "Time": {
+                "millis": "5455026",
+                "time": "1:30:55.026"
+              },
+              "FastestLap": {
+                "rank": "3",
+                "lap": "53",
+                "Time": {
+                  "time": "1:35.520"
+                }
+              }
+            },
+            {
+              "number": "4",
+              "position": "2",
+              "positionText": "2",
+              "points": "18",
+              "Driver": {
+                "driverId": "norris",
+                "permanentNumber": "1",
+                "code": "NOR",
+                "url": "http://en.wikipedia.org/wiki/Lando_Norris",
+                "givenName": "Lando",
+                "familyName": "Norris",
+                "dateOfBirth": "1999-11-13",
+                "nationality": "British"
+              },
+              "Constructor": {
+                "constructorId": "mclaren",
+                "url": "https://en.wikipedia.org/wiki/McLaren",
+                "name": "McLaren",
+                "nationality": "British"
+              },
+              "grid": "3",
+              "laps": "56",
+              "status": "Finished",
+              "Time": {
+                "millis": "5464774",
+                "time": "+9.748"
+              },
+              "FastestLap": {
+                "rank": "1",
+                "lap": "53",
+                "Time": {
+                  "time": "1:35.454"
+                }
+              }
+            },
+            {
+              "number": "63",
+              "position": "3",
+              "positionText": "3",
+              "points": "15",
+              "Driver": {
+                "driverId": "russell",
+                "permanentNumber": "63",
+                "code": "RUS",
+                "url": "http://en.wikipedia.org/wiki/George_Russell_(racing_driver)",
+                "givenName": "George",
+                "familyName": "Russell",
+                "dateOfBirth": "1998-02-15",
+                "nationality": "British"
+              },
+              "Constructor": {
+                "constructorId": "mercedes",
+                "url": "https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
+                "name": "Mercedes",
+                "nationality": "German"
+              },
+              "grid": "2",
+              "laps": "56",
+              "status": "Finished",
+              "Time": {
+                "millis": "5466123",
+                "time": "+11.097"
+              },
+              "FastestLap": {
+                "rank": "5",
+                "lap": "55",
+                "Time": {
+                  "time": "1:35.816"
+                }
+              }
+            },
+            {
+              "number": "44",
+              "position": "19",
+              "positionText": "D",
+              "points": "0",
+              "Driver": {
+                "driverId": "hamilton",
+                "permanentNumber": "44",
+                "code": "HAM",
+                "url": "http://en.wikipedia.org/wiki/Lewis_Hamilton",
+                "givenName": "Lewis",
+                "familyName": "Hamilton",
+                "dateOfBirth": "1985-01-07",
+                "nationality": "British"
+              },
+              "Constructor": {
+                "constructorId": "ferrari",
+                "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                "name": "Ferrari",
+                "nationality": "Italian"
+              },
+              "grid": "5",
+              "laps": "0",
+              "status": "Disqualified"
+            },
+            {
+              "number": "10",
+              "position": "20",
+              "positionText": "D",
+              "points": "0",
+              "Driver": {
+                "driverId": "gasly",
+                "permanentNumber": "10",
+                "code": "GAS",
+                "url": "http://en.wikipedia.org/wiki/Pierre_Gasly",
+                "givenName": "Pierre",
+                "familyName": "Gasly",
+                "dateOfBirth": "1996-02-07",
+                "nationality": "French"
+              },
+              "Constructor": {
+                "constructorId": "alpine",
+                "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
+                "name": "Alpine F1 Team",
+                "nationality": "French"
+              },
+              "grid": "16",
+              "laps": "0",
+              "status": "Disqualified"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

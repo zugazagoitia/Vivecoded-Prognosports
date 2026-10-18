@@ -45,6 +45,9 @@ export const keys = {
     ['results', competition, season, gp, session] as const,
   grid: (competition: Id, season: Id, gp: Id, session: Id) =>
     ['grid', competition, season, gp, session] as const,
+  /** Public session data (F1 open data, not community-scoped). */
+  publicSession: (season: Id, round: Id, kind: string) =>
+    ['public-session', season, round, kind] as const,
 }
 
 /** Areas whose keys carry the community id at index 1. */
