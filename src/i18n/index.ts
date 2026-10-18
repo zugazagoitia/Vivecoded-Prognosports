@@ -8,6 +8,7 @@ import circuits from './es/circuits.json'
 import community from './es/community.json'
 import communitySettings from './es/community-settings.json'
 import common from './es/common.json'
+import f1Media from './es/f1Media.json'
 import communities from './es/communities.json'
 import createCommunity from './es/createCommunity.json'
 import consensus from './es/consensus.json'
@@ -53,6 +54,7 @@ export const i18n = createI18n({
       ...mobilenav,
       ...communities,
       ...explore,
+      ...f1Media,
       admin,
       ...register,
       ...routes,
