@@ -28,7 +28,7 @@ describe('Jolpica provider', () => {
       classified: true,
       fastestLapRank: 1,
     })
-    expect(data.entries).toHaveLength(5)
+    expect(data.entries).toHaveLength(20)
   })
 
   it('parses the real race results fixture', async () => {
