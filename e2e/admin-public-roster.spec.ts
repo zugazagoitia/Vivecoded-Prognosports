@@ -74,8 +74,8 @@ test.describe('Admin · plantel público (#203)', () => {
     await page.getByRole('button', { name: 'Usar' }).first().click()
 
     const dialog = page.getByRole('dialog')
-    await expect(dialog.getByLabel('Apellidos')).toHaveValue('Verstappen')
-    await expect(dialog.getByLabel('Código (3 letras)')).toHaveValue('VER')
+    await expect(dialog.getByLabel('Apellidos')).toHaveValue('Albon')
+    await expect(dialog.getByLabel('Código (3 letras)')).toHaveValue('ALB')
     // Nothing is sent until «Guardar».
     expect(calls).toHaveLength(0)
     expect(sources.some((u) => u.includes('drivers.json'))).toBe(true)

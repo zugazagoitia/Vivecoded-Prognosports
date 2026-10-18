@@ -1,42 +1,40 @@
 {
-  "publicRoster": {
-    "open": "Rellenar con datos públicos",
-    "openSeason": "Importar plantel público",
-    "title": "Propuesta de datos públicos",
-    "hint": "Solo propone: nada se guarda hasta pulsar «Guardar». Lo que propongas sustituye a lo que hubiera en el formulario.",
-    "loading": "Consultando Jolpica y OpenF1…",
-    "error": "No se pudo consultar la fuente pública. El formulario conserva lo que escribiste.",
-    "retry": "Reintentar",
-    "close": "Cerrar",
-    "source": "Fuente: {source} · consultado el {time}",
-    "sources": {
-      "jolpica": "Jolpica (pilotos, equipos y resultados)",
-      "openf1": "OpenF1 (colores)"
-    },
-    "noColourSource": "OpenF1 no ha respondido: sin colores. Rellénalos a mano.",
-    "drivers": "Pilotos",
-    "teams": "Equipos",
-    "empty": "La fuente no devuelve pilotos para esta petición.",
-    "use": "Usar",
-    "apply": "Aplicar selección",
-    "gpNote": "Incluye a todos los que corrieron el GP, también a los sustitutos. Aplicar solo rellena las ranuras: la lista se guarda con «Guardar» en esta página.",
-    "gpSkipped": "{n} sin pareja o sin equipo en la app no se han colocado.",
-    "flags": {
-      "unmatched": "Sin pareja en la app",
-      "noColour": "Sin color en la fuente",
-      "noTeam": "Sin equipo en la fuente",
-      "noNumber": "Sin número o color: no se puede guardar"
-    },
-    "teamExists": "Ya existe en la app",
-    "driverExists": "Ya existe: se actualizan número y color",
-    "unmatchedApp": "En la app y no en la fuente (¿baja o alias?)",
-    "backendNote": "Guardar pilotos que ya tienen resultados puede fallar en el backend (#113): por confirmar.",
-    "saveFailed": "No se guardó todo. Revisa los errores y vuelve a guardar la selección.",
-    "fields": {
-      "number": "Número",
-      "driver": "Piloto",
-      "team": "Equipo",
-      "color": "Color"
-    }
+  "open": "Rellenar con datos públicos",
+  "openSeason": "Importar plantel público",
+  "title": "Propuesta de datos públicos",
+  "hint": "Solo propone: nada se guarda hasta pulsar «Guardar». Lo que propongas sustituye a lo que hubiera en el formulario.",
+  "loading": "Consultando Jolpica y OpenF1…",
+  "error": "No se pudo consultar la fuente pública. El formulario conserva lo que escribiste.",
+  "retry": "Reintentar",
+  "close": "Cerrar",
+  "source": "Fuente: {source} · consultado el {time}",
+  "sources": {
+    "jolpica": "Jolpica (pilotos, equipos y resultados)",
+    "openf1": "OpenF1 (colores)"
+  },
+  "noColourSource": "OpenF1 no ha respondido: sin colores. Rellénalos a mano.",
+  "drivers": "Pilotos",
+  "teams": "Equipos",
+  "empty": "La fuente no devuelve pilotos para esta petición.",
+  "use": "Usar",
+  "apply": "Aplicar selección",
+  "gpNote": "Incluye a todos los que corrieron el GP, también a los sustitutos. Aplicar solo rellena las ranuras: la lista se guarda con «Guardar» en esta página.",
+  "gpSkipped": "{n} sin pareja o sin equipo en la app no se han colocado.",
+  "flags": {
+    "unmatched": "Sin pareja en la app",
+    "noColour": "Sin color en la fuente",
+    "noTeam": "Sin equipo en la fuente",
+    "noNumber": "Sin número o color: no se puede guardar"
+  },
+  "teamExists": "Ya existe en la app",
+  "driverExists": "Ya existe: se actualizan número y color",
+  "unmatchedApp": "En la app y no en la fuente (¿baja o alias?)",
+  "backendNote": "Guardar pilotos que ya tienen resultados puede fallar en el backend (#113): por confirmar.",
+  "saveFailed": "No se guardó todo. Revisa los errores y vuelve a guardar la selección.",
+  "fields": {
+    "number": "Número",
+    "driver": "Piloto",
+    "team": "Equipo",
+    "color": "Color"
   }
 }
