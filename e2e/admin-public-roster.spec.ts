@@ -95,6 +95,9 @@ test.describe('Admin · plantel público (#203)', () => {
     await page.route('https://api.jolpi.ca/ergast/f1/**', (route) =>
       route.fulfill({ status: 500, headers: CORS, contentType: 'application/json', body: '{}' }),
     )
+    await page.route('https://api.openf1.org/v1/**', (route) =>
+      route.fulfill({ status: 500, headers: CORS, contentType: 'application/json', body: '{}' }),
+    )
     const calls = await openAdminPage(page, PILOTOS)
     await page.getByRole('button', { name: 'Nuevo piloto' }).click()
     await page.getByRole('dialog').getByLabel('Apellidos').fill('Escrito')
