@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -39,6 +39,10 @@ import { useQueryClient } from '@tanstack/vue-query'
  * deletion ask for confirmation and show the backend's error when still in use. «Imagen del trazado» uploads the layout of the first variant.
  */
 const props = defineProps<{ circuit?: string }>()
+// Public data (issue 204) is loaded on demand: the public data layer stays out of the eager bundle.
+const PublicCircuitFill = defineAsyncComponent(
+  () => import('@/components/admin/PublicCircuitFill.vue'),
+)
 const { t } = useI18n()
 const router = useRouter()
 const qc = useQueryClient()
@@ -77,6 +81,10 @@ watch(
   },
   { immediate: true },
 )
+/** Public values pre-fill the form only; «Guardar» saves them. */
+function applyPublic(fields: Partial<Form>) {
+  Object.assign(form, fields)
+}
 const dirty = computed(() =>
   (Object.keys(form) as (keyof Form)[]).some((k) => form[k] !== base.value[k]),
 )
@@ -303,6 +311,9 @@ async function onVariant() {
                 isNew ? t('admin.circuitEdit.data.needSave') : t('admin.circuitEdit.data.imageHelp')
               }}</span>
             </div>
+          </div>
+          <div class="col-span-full">
+            <PublicCircuitFill :name="form.name" :saved="base" @apply="applyPublic" />
           </div>
           <div class="border-border col-span-full flex justify-end gap-3 border-t pt-3">
             <PButton
