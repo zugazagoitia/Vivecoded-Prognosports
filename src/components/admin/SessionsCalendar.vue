@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PButton from '@/components/ui/PButton.vue'
 import PCard from '@/components/ui/PCard.vue'
@@ -43,11 +43,33 @@ const timeline = computed(() => buildTimeline(props.sessions, props.tz))
 const selected = computed(() => props.sessions.find((s) => s.id === props.selectedId) ?? undefined)
 
 const start = ref('')
+/** A public-calendar time waiting for its session to be selected (issue 202). */
+const pendingFill = ref<{ id: number; iso: string } | null>(null)
 watch(
   [selected, () => props.tz],
-  () => (start.value = toZonedInput(selected.value?.date, props.tz)),
+  () => {
+    const p = pendingFill.value
+    if (p && p.id === selected.value?.id) {
+      start.value = toZonedInput(p.iso, props.tz)
+      pendingFill.value = null
+    } else {
+      start.value = toZonedInput(selected.value?.date, props.tz)
+    }
+  },
   { immediate: true },
 )
+/** «Usar hora» of the public calendar: pre-fills the start only; the panel's «Guardar» saves it. */
+const PublicCalendarSessions = defineAsyncComponent(
+  () => import('@/components/admin/PublicCalendarSessions.vue'),
+)
+function onPublicUse(use: { id: number; iso: string }) {
+  if (selected.value?.id === use.id) {
+    start.value = toZonedInput(use.iso, props.tz)
+  } else {
+    pendingFill.value = use
+    emit('select', use.id)
+  }
+}
 const dayLabel = (iso: string) =>
   new Intl.DateTimeFormat('es-ES', {
     timeZone: props.tz,
@@ -205,6 +227,13 @@ const blockTone = (s: RaceSession) =>
         </li>
       </ul>
       <p class="text-muted mt-2 text-xs">{{ t('admin.sessions.calendar.durationNote') }}</p>
+      <PublicCalendarSessions
+        v-if="sessions.length"
+        class="mt-4"
+        :args="args"
+        :sessions="sessions"
+        @use="onPublicUse"
+      />
     </PCard>
 
     <div class="flex min-w-0 flex-col gap-4">
