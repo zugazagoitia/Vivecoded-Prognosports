@@ -407,6 +407,32 @@
       "submit": "Añadir",
       "cancel": "Cancelar"
     },
+    "publicData": {
+      "open": "Rellenar con datos públicos",
+      "title": "Datos públicos",
+      "hint": "Propone posiciones desde una fuente pública. No guarda nada: revisa los cambios y pulsa «Guardar».",
+      "loading": "Consultando la fuente pública…",
+      "error": "No se pudo consultar la fuente pública. El formulario no ha cambiado.",
+      "retry": "Reintentar",
+      "empty": "La fuente pública no tiene datos para esta sesión.",
+      "source": "Fuente: {source} · obtenido el {time}",
+      "sources": {
+        "jolpica": "Jolpica-F1 (Ergast)",
+        "openf1": "OpenF1"
+      },
+      "noChanges": "Sin cambios respecto al formulario actual.",
+      "changes": "Cambios propuestos",
+      "change": "P{position}: {from} → {to}",
+      "noDriver": "Sin piloto",
+      "fastLap": "Vuelta rápida: {from} → {to}",
+      "unmatched": "Sin coincidencia en la aplicación (quedan sin asignar)",
+      "unmatchedItem": "P{position}: {name}",
+      "unknownPosition": "—",
+      "unknownDriver": "Piloto desconocido",
+      "apply": "Aplicar",
+      "close": "Cerrar",
+      "applyHint": "Aplicar solo cambia el formulario; sigue sin guardarse hasta pulsar «Guardar»."
+    },
     "grid": {
       "title": "Parrilla de salida · {session}",
       "subtitle": "Según la clasificación. Marca quién sale desde el pit lane y añade una nota si hay sanción.",
