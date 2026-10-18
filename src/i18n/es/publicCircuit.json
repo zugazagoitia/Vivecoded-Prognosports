@@ -1,3 +1,32 @@
 {
-  "publicCircuit": {}
+  "open": "Rellenar con datos públicos",
+  "title": "Datos públicos del circuito",
+  "hint": "Temporada {season}. Rellena país, localidad y coordenadas en el formulario; no se guarda nada hasta pulsar «Guardar».",
+  "loading": "Consultando las fuentes públicas…",
+  "error": "No se pudo consultar la fuente pública. El formulario no ha cambiado.",
+  "retry": "Reintentar",
+  "close": "Cerrar",
+  "noMatch": "No hay ningún circuito de {season} con ese nombre. Elige uno de la lista.",
+  "select": "Circuito de referencia",
+  "selectPlaceholder": "Elige un circuito",
+  "applied": "Datos aplicados desde {name}. Revisa antes de guardar.",
+  "apply": "Aplicar al formulario",
+  "fields": {
+    "country": "País",
+    "locality": "Localidad",
+    "latitude": "Latitud",
+    "longitude": "Longitud"
+  },
+  "pending": "por confirmar",
+  "source": "Fuente: {source} · obtenido el {time}",
+  "sources": {
+    "jolpica": "Jolpica-F1 (Ergast)",
+    "openf1": "OpenF1"
+  },
+  "fallback": "Jolpica no responde: se usan los datos de OpenF1, que no traen coordenadas.",
+  "reference": "Ficha de referencia (solo administración)",
+  "differencesTitle": "Diferencias con lo guardado",
+  "differs": "{field}: guardado «{saved}», fuente pública «{source}». Revisa antes de guardar.",
+  "conflict": "Las fuentes no coinciden en el país: Jolpica «{jolpica}», OpenF1 «{openf1}».",
+  "noDifferences": "Coincide con lo guardado."
 }
