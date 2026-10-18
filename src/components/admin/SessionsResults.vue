@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ErrorState, Skeleton } from '@/components/states'
 import PButton from '@/components/ui/PButton.vue'
@@ -18,6 +18,7 @@ import {
   resultsPayload,
 } from '@/lib/adminSessions'
 import { sessionLabel } from '@/lib/gp'
+import type { PublicProposal } from '@/composables/usePublicDataFill'
 import { useSaveResults, useSessionResults } from '@/queries/admin'
 
 /**
@@ -34,6 +35,8 @@ const props = defineProps<{
   now: number
 }>()
 const emit = defineEmits<{ select: [id: number]; dirty: [v: boolean] }>()
+// Loaded on demand: the public data layer stays out of the eager bundle.
+const PublicDataFill = defineAsyncComponent(() => import('./PublicDataFill.vue'))
 const { t } = useI18n()
 
 const predictable = computed(() => props.sessions.filter(hasPrediction))
@@ -96,6 +99,11 @@ const fastOptions = computed(() => [
   { value: '', label: t('admin.sessions.grid.choose') },
   ...props.drivers.map((d) => ({ value: d.id, label: driverOption(d) })),
 ])
+/** Applies a public proposal to the local form: unsaved until «Guardar». */
+function applyPublic(p: PublicProposal) {
+  rows.value = p.driverIds.slice()
+  fast.value = p.fastLap
+}
 function clearAll() {
   rows.value = rows.value.map(() => null)
   fast.value = null
@@ -128,6 +136,16 @@ const set = (i: number, v: string | number) => (rows.value[i] = v === '' ? null 
       />
       <Skeleton v-else-if="!resultsQ.data.value" variant="table" :rows="10" />
       <template v-else>
+        <PublicDataFill
+          :args="args"
+          mode="results"
+          :session="session"
+          :drivers="drivers"
+          :slots="count"
+          :current="rows"
+          :current-fast="fast"
+          @apply="applyPublic"
+        />
         <div v-for="(_, i) in rows" :key="i" class="flex items-center gap-2">
           <span
             class="bg-surface-muted text-heading flex size-8 flex-none items-center justify-center rounded-md text-sm font-bold tabular-nums"
