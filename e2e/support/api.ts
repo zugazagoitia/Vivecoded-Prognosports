@@ -107,6 +107,10 @@ export async function mockApi(page: Page): Promise<void> {
   await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
     route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
   )
+  // e2e must never hit real public F1 APIs. Registered before the specs' own routes,
+  // so specs that mock these hosts still win (Playwright: last registered route wins).
+  await page.route('https://api.jolpi.ca/**', (route) => route.abort())
+  await page.route('https://api.openf1.org/**', (route) => route.abort())
   /** Usernames created through the mocked `POST /auth/register`. */
   const registered = new Set<string>()
   /** Predictions saved through the mocked `POST .../tipps/{community}` (G3), by `gp:session`. */
