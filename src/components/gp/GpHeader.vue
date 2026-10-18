@@ -29,7 +29,7 @@ const props = defineProps<{
 const tz = defineModel<TzMode>('tz', { required: true })
 const { t } = useI18n()
 
-// Lazy: the flag SVGs and their component stay out of the initial bundle (issue #223).
+// Lazy: the flag SVGs and their component stay out of the initial bundle (issue 223).
 const CountryFlag = defineAsyncComponent(() => import('@/components/common/CountryFlag.vue'))
 
 const name = computed(() => gpShortName(props.gp))

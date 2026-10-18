@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LazyTeamBadge } from '@/components/teams/lazy'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Driver } from '@/api/schemas'
@@ -154,6 +155,14 @@ const dorsal = (d: Driver) =>
                 :style="teamColor(d) ? { backgroundColor: teamColor(d) } : undefined"
                 >{{ d.number }}</span
               >
+              <LazyTeamBadge
+                v-if="d.team?.name"
+                :name="d.team.name"
+                :teamcolor="d.team.teamcolor"
+                :size="18"
+                aria-hidden="true"
+                class="shrink-0"
+              />
               <b aria-hidden="true" class="text-heading w-9 shrink-0 text-sm">{{
                 driverCode(d)
               }}</b>

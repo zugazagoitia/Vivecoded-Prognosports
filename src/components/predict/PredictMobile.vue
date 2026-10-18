@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LazyTeamBadge } from '@/components/teams/lazy'
 import { computed, nextTick, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import BottomSheet from '@/components/data/BottomSheet.vue'
@@ -188,6 +189,13 @@ const slotLabel = (i: number) => {
                       ? dr.team.teamcolor
                       : (dr.color ?? 'var(--color-series-rest)'),
                   }"
+                />
+                <LazyTeamBadge
+                  v-if="dr.team?.name"
+                  :name="dr.team.name"
+                  :teamcolor="dr.team.teamcolor"
+                  :size="16"
+                  aria-hidden="true"
                 />
                 {{ driverCode(dr) }}
                 <small class="text-muted text-[10px] font-normal" aria-hidden="true">{{
