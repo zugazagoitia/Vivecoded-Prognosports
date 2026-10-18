@@ -1,4 +1,5 @@
 import { expect, test } from './support/fixtures'
+import { mockPublicSources } from './support/publicData'
 import {
   isPhone,
   noHorizontalScroll,
@@ -42,6 +43,7 @@ test.describe('Admin · catálogo (M6-M9)', () => {
           browserName,
         }) => {
           test.skip(isPhone(viewport), 'desktop layout')
+          await mockPublicSources(page)
           await openAdminPage(page, s.path)
           await expect(page.getByRole('heading', { level: 1, name: s.h1 })).toBeVisible()
           await expect(page.getByText(s.ready, { exact: false }).first()).toBeVisible()
