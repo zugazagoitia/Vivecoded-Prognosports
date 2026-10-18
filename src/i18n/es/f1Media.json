@@ -1,0 +1,10 @@
+{
+  "f1Media": {
+    "circuitOutline": {
+      "label": "Trazado del circuito de {circuit}"
+    },
+    "flag": {
+      "label": "Bandera de {country}"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LazyTeamBadge } from '@/components/teams/lazy'
 import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -356,6 +357,12 @@ function retry() {
               ]"
               :style="{ background: cssColor(team.teamcolor) }"
             >
+              <LazyTeamBadge
+                :name="team.name ?? ''"
+                :teamcolor="team.teamcolor"
+                :size="20"
+                aria-hidden="true"
+              />
               <span>{{ team.name }}</span>
               <span class="font-medium tabular-nums"
                 >{{ slotsOf(team.id).filter((x) => x.s.driverId != null).length }}/{{

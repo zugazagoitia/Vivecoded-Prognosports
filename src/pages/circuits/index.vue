@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import {
@@ -30,6 +30,9 @@ import {
 } from '@/lib/circuits'
 import { useSeasonCircuitRows } from '@/queries/circuits'
 import { useSessionStore } from '@/stores/session'
+
+// Lazy: the flag SVGs stay out of the eager bundle (issue 223).
+const CountryFlag = defineAsyncComponent(() => import('@/components/common/CountryFlag.vue'))
 
 definePage({ meta: { layout: 'app', title: 'route.circuits' } })
 
@@ -192,8 +195,11 @@ const loaded = computed(() => rows.value != null && !error.value)
             </span>
             <span class="flex flex-col gap-1 px-4 py-3.5">
               <span class="text-heading font-bold">{{ r.circuit.name }}</span>
-              <span class="text-muted text-sm">
-                {{ [r.circuit.locality, r.circuit.country].filter(Boolean).join(' · ') }}
+              <span class="text-muted flex min-w-0 items-center gap-2 text-sm">
+                <CountryFlag v-if="r.circuit.country" :country="r.circuit.country" />
+                <span>{{
+                  [r.circuit.locality, r.circuit.country].filter(Boolean).join(' · ')
+                }}</span>
               </span>
               <span class="mt-1 flex flex-wrap gap-2">
                 <PTag v-if="r.round != null" color="gray">

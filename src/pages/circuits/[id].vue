@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { ApiError } from '@/api'
@@ -15,6 +15,9 @@ import { pickVariant } from '@/lib/circuitDetail'
 import { useCircuit } from '@/queries/circuitDetail'
 import { DEFAULT_COMPETITION, useCurrentSeason, useSeasonGps } from '@/queries/circuits'
 import { useSessionStore } from '@/stores/session'
+
+// Lazy: the flag SVGs stay out of the eager bundle (issue 223).
+const CountryFlag = defineAsyncComponent(() => import('@/components/common/CountryFlag.vue'))
 
 definePage({ meta: { layout: 'app', title: 'route.circuit' } })
 
@@ -107,13 +110,14 @@ const homeTo = computed(() => (session.isAuthenticated ? '/home' : '/'))
         <header class="flex flex-wrap items-start justify-between gap-4">
           <div class="flex min-w-0 flex-col gap-0.5">
             <PTitle>{{ circuit.name }}</PTitle>
-            <p class="text-muted">
-              {{
+            <p class="text-muted flex min-w-0 items-center gap-2">
+              <CountryFlag v-if="circuit.country" :country="circuit.country" />
+              <span>{{
                 t('circuits.detail.subtitle', {
                   locality: circuit.locality ?? '',
                   country: circuit.country ?? '',
                 })
-              }}
+              }}</span>
             </p>
           </div>
           <div v-if="seasonGp" class="flex flex-wrap items-center gap-2">
