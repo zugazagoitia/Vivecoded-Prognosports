@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import AdminHeader from '@/components/admin/AdminHeader.vue'
@@ -25,6 +25,10 @@ import { DEFAULT_COMPETITION, useCurrentSeason, useSeasonGps } from '@/queries/c
  * action ends in «aún no disponible» and the history only lists what was launched here.
  */
 definePage({ meta: { title: 'route.adminCalcs' } })
+// Loaded on demand: the public data layer stays out of the eager bundle (issue 205).
+const PublicCrossCheckAvailability = defineAsyncComponent(
+  () => import('@/components/admin/PublicCrossCheckAvailability.vue'),
+)
 
 const { t } = useI18n()
 const route = useRoute()
@@ -158,6 +162,28 @@ const statusColor = { done: 'ok', error: 'err', running: 'info' } as const
         <PButton size="sm" :disabled="!gp" :loading="running" @click="confirm = true">{{
           t('admin.calcs.recalc')
         }}</PButton>
+      </div>
+    </PCard>
+
+    <PCard
+      v-if="gp"
+      :title="t('publicCrossCheck.publicCrossCheck.availability.title')"
+      :padded="false"
+    >
+      <div class="flex flex-col gap-3 p-4">
+        <p class="text-muted text-sm">
+          {{ t('publicCrossCheck.publicCrossCheck.availability.subtitle') }}
+        </p>
+        <PublicCrossCheckAvailability
+          v-for="s in sessions"
+          :key="s.id"
+          :comp="DEFAULT_COMPETITION"
+          :season="String(seasonId ?? '')"
+          :year="Number(seasonQ.data.value?.name) || undefined"
+          :gp="gp"
+          :session="s"
+          :now="now"
+        />
       </div>
     </PCard>
 
