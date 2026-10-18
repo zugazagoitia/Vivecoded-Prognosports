@@ -116,7 +116,8 @@ export async function mockApi(page: Page): Promise<void> {
   const blocked: string[] = []
   blockedHosts.set(page, blocked)
   await page.route(
-    (url) => !LOCAL_HOSTS.has(url.hostname),
+    // blob:/data: URLs have an empty host and stay in-page (WebKit routes them too).
+    (url) => /^https?:$/.test(url.protocol) && !LOCAL_HOSTS.has(url.hostname),
     (route) => {
       blocked.push(new URL(route.request().url()).host)
       return route.abort()
