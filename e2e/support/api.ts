@@ -98,19 +98,34 @@ function invalid(route: Route, message: string) {
   })
 }
 
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1'])
+const blockedHosts = new WeakMap<Page, string[]>()
+
+/** Non-local hosts the page tried to reach (aborted by the `mockApi` guard); should be empty. */
+export function unexpectedHosts(page: Page): string[] {
+  return [...new Set(blockedHosts.get(page) ?? [])]
+}
+
 /**
  * Mocks `/v2/**` with the same fixtures as the MSW handlers (T9), via page.route so it
  * works on the production build. The real API is never reached: unhandled calls get 501.
  */
 export async function mockApi(page: Page): Promise<void> {
+  // Catch-all guard, registered first so every later (more specific) route wins: any
+  // request to a host other than the local preview server is aborted and recorded.
+  const blocked: string[] = []
+  blockedHosts.set(page, blocked)
+  await page.route(
+    (url) => !LOCAL_HOSTS.has(url.hostname),
+    (route) => {
+      blocked.push(new URL(route.request().url()).host)
+      return route.abort()
+    },
+  )
   // Map tiles (P4) never hit the network: a blank tile keeps screenshots deterministic.
   await page.route('**://*.basemaps.cartocdn.com/**', (route) =>
     route.fulfill({ status: 200, headers: CORS, contentType: 'image/png', body: PIXEL }),
   )
-  // e2e must never hit real public F1 APIs. Registered before the specs' own routes,
-  // so specs that mock these hosts still win (Playwright: last registered route wins).
-  await page.route('https://api.jolpi.ca/**', (route) => route.abort())
-  await page.route('https://api.openf1.org/**', (route) => route.abort())
   /** Usernames created through the mocked `POST /auth/register`. */
   const registered = new Set<string>()
   /** Predictions saved through the mocked `POST .../tipps/{community}` (G3), by `gp:session`. */
